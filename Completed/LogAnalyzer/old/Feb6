@@ -1,0 +1,32 @@
+Dear Grigore,
+
+I've updated my current progress on RV meeting. I'll briefly describe in this email.
+
+Things have done this week:
+
+Given the information about events hard coded, my app can generate the specialized 
+log reader which can directly invoke the event methods in monitor library when an event
+in the log file is parsed.
+
+Things plan to do:
+
+Look into the rv-monitor code and try to use it to help me exact the needed information 
+from rvm specification, so that the event signatures can be parsed from the given specification.
+
+
+I'm also going to try some more sophisticated formula for Monpoly and express it using rvm supported logic.
+Many formulas listed in ETH's papers contain equality checks, and I have a rough idea about how to handle it:
+we can have a new logic plugin which support the syntax of equality test (can also support other kinds of test like '>' etc.), and for a formula looks like this:
+
+(p /\ arg = someVal) => (q /\ arg2 = otherVal) where arg, arg2  are the event arguments inside formulas p and q respectively.
+
+Then we can generate constraints from these expressions and use the constraint 'arg = someVal' to judge whether we need to generate monitor at the first place.
+
+If the constraint 'arg = someVal' cannot be satisfied, then the whole property will be automatically satisfied and no further monitoring need to be triggered by the event containing argument 'arg'.
+ 
+Given formula 'q' satisfied,  we also need to check the event containing argument 'arg2', and then we would know whether the property is violated.
+
+I think the constraint like 'arg = someVal' can be easily generated and integrate to log reader so that it can prevent the unnecessary calls of rv-monitor library.
+
+Regards,
+He 

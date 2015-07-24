@@ -1,0 +1,7 @@
+1. a spec may have N parameters, but in an event, maybe only N-M parameters
+are provided (maybe not in the same order as defined in the original map).
+how to retrieve the monitor(s) correctly and efficiently, while adding new monitor
+to the original map if necessary?
+
+2. Given partial parameters, then we might retrieve multiple monitors. 
+And all the retrieved monitors need to be updated by the event.

@@ -1,0 +1,26 @@
+package mop;
+
+enforce myEnforce() {
+	event one(){
+		if ( ! (Thread.currentThread().getName().equals("Thread-1")) ) {
+			return false;
+		}
+		{
+			System.out.println("one");
+		}
+	}
+	event two(){
+		if ( ! (Thread.currentThread().getName().equals("Thread-2")) ) {
+			return false;
+		}
+		{
+			System.out.println("two");
+		}
+	}
+	ere:  one two
+
+	@fail
+	{
+		System.out.println("failed");
+	}
+}

@@ -1,0 +1,29 @@
+package mop;
+
+import java.io.*;
+import java.util.*;
+SafeSyncCollection(Object c, Iterator iter) {
+
+	Object c;
+	creation event sync(Object c){
+		this.c = c;
+	}
+	event syncCreateIter(Object c, Iterator iter){
+	}
+	event asyncCreateIter(Object c, Iterator iter){
+	}
+	event accessIter(Iterator iter){
+		if ( ! (!Thread.holdsLock(this.c)) ) {
+			return false;
+		}
+		{
+		}
+	}
+	ere:  (sync asyncCreateIter)
+	| (sync syncCreateIter accessIter)
+
+	@match
+	{
+		System.out.println("pattern matched!");
+	}
+}

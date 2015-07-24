@@ -1,0 +1,10 @@
+The javamopagent.jar is just an instrumentation tool.
+It will dynamically instrument the original program: 
+i.e. execute the advices associated with all the pointcuts defined in all specs.
+
+Therefore, to compare the performance of the backend "rv-monitor",
+one only needs to switch between the different versions of rv-monitor;
+their frontends are the same~ 
+
+The two branches output similar things:
+My branch's output is slightly more: 100KB more than the branch of Philip's featureRemovalRefactor

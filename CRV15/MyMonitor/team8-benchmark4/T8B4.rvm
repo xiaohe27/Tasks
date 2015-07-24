@@ -1,0 +1,58 @@
+package rvm;
+
+import java.util.concurrent.ConcurrentSkipListSet;
+
+T8B4 (String resource) {
+
+private static HashMap<String, String> conflictMap = new HashMap<>();
+public static ConcurrentSkipListSet<String> granted = new ConcurrentSkipListSet<>();
+
+event conflict(String r1, String r2) {
+ conflictMap.put(r1, r2);
+ conflictMap.put(r2, r1);
+}
+
+event grant(String task, String resource) {
+
+if(granted.contains(resource)) {
+  System.err.println("Property Violated!\nCannot grant the resource " + resource + " multiple times without releasing!");
+  __EXIT;
+} else {
+String conflictR = conflictMap.get(resource);
+
+if(conflictR != null && granted.contains(conflictR)) {
+  System.err.println("Property Violated!\nCannot grant the resource " + resource + " if it will result in a conflict with the resource " 
+  + conflictMap.get(resource) + " which is currently being used!");
+  __EXIT;  
+} else {
+  granted.add(resource);
+}
+}
+
+}
+
+event release(String task, String resource) {
+
+if(!granted.contains(resource)) {
+  System.err.println("Property Violated!\nCannot release the resource " + resource + " if it has not been granted yet!");
+  __EXIT;
+} else {
+  granted.remove(resource);
+}
+
+}
+
+event __END() {
+
+  if(!granted.isEmpty()) {
+      System.err.println("Property Violation!\nSome resource is never released.");
+      System.exit(1);
+  }
+
+}
+
+ltl: true
+@fail
+{}
+
+}

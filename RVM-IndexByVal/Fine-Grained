@@ -1,0 +1,4 @@
+In spec, if a spec param is preceded by a #, then it will be indexed by its val
+
+
+@grosu @pdaian I modified the code a little so that the fine-grained indexing by hashCode is supported. 

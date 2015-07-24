@@ -1,0 +1,26 @@
+a map maintains the conflict mapping.
+
+suppose the event conflict(a,b) is observed,
+then we need to put 
+both (a -> b) and (b -> a) to the map!
+
+a set is responsible for holding all the resources that are currently being granted.
+
+when a task tries to grant a resource 'r', 
+two checks are performed:
+1) whether r is in the resource set.
+2) whether the conflict counterpart of 'r' is in the set.
+
+if either case is confirmed, a violation is found.
+
+
+
+
+
+
+//******************
+Violation will arise if we try to give grant for a resource to any task
+if that resource is currently being used (represented as inserting a 
+duplicate item to a set), or try to release a resource which we do not own 
+(removing an item that does not belong to the set).
+

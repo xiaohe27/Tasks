@@ -1,0 +1,6 @@
+extract the jars and compare the contents inside
+
+Compare method:
+1) same number of files
+2) traverse every file in the actual agent.jar and compare with 
+its counterpart in the expected agent jar.

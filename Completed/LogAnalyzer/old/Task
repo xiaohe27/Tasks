@@ -1,0 +1,10 @@
+Do the following experiments:
+1. Hack into Monpoly and test the amount of events inside
+2. Check the amount of events using my log analyzer, and compare
+
+3. Use grep to check the base execution time of extracting the insert events (whole regex, same as the one
+used in my java prog so that comparison can be made)
+
+4. Write the output directly to file (with ASCII encoding) instead of to std output and then redirect to file 
+
+Use some small eg which can obtain results quickly, and then compare the accuate difference

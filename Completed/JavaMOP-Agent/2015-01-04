@@ -1,0 +1,3 @@
+If we use the same option: -merge in both sides, and just leave the original .aj file unchanged (do not split the monitor classes and aspect classes), then only two aspectj files in the generated jar differ slightly.
+
+***There is no difference in the .aj file generated between the config with -agent and without -agent!

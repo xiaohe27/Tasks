@@ -1,0 +1,3 @@
+ajc alleviate the code size problem a little bit, but not solve it at all!
+user can apply the patch to the ajc 1.7.1 and then rebase if they want to use the latest ajc
+

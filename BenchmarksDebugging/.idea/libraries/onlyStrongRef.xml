@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="onlyStrongRef">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/onlyStrongRef/rv-monitor.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/onlyStrongRef/rv-monitor-rt.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

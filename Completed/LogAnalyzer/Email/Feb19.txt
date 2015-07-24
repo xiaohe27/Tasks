@@ -1,0 +1,24 @@
+I haven't thought of a good name for the repository, but the 
+project is ready to be incorporated to runtimeverification on github now.
+
+https://github.com/xiaohe27/LogAnalyzer
+
+The rvm specification for monitoring the Monpoly's delete-1-2 property
+can be found in directory `examples\ComplexFormula\Delete12`.
+
+The original Monpoly Style formula can be found at 
+`examples\ComplexFormula\Delete12\MonpolyStyleFormula`
+
+It is OK to monitor small log files (like the file `delete.log` 
+in the same directory), but when the log becomes huge, the formula
+with unbounded future temporal operator becomes non-monitorable.
+We cannot decide whether a liveness property is violated until we 
+reach the very end of the log file. Therefore it needs to maintain 
+a large amount of data inside heap, and it will throw memory out of
+bounds exception if the log file is big enough...
+
+Another interesting thing in this example is:
+In order to monitor that Monpoly's property, we need to
+take into account the relationships between the states of 
+multiple monitors. Details about my thoughts can be found 
+at `\LogAnalyzer\limitationOfExisitingLogPlugins\relationsBetweenEventsOnDifferentObjects`

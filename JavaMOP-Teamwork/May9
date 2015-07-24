@@ -1,0 +1,4 @@
+Make the output of JavaMOP in good shape.
+
+From now on, JavaMOP takes a set of mop files/folders as input, and output .aj and .rvm files.
+If the output directory is specified, then the 

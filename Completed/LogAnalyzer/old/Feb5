@@ -1,0 +1,1 @@
+After discussing with @grosu , we think it is more desired to take care of the monitor indexing thing inside RV-Monitor, even though it is also doable via using HashMap to cache the indices at the client application.

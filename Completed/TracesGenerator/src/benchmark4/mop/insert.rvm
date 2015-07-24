@@ -1,0 +1,20 @@
+package rvm;
+
+
+Insert(String user,String db) {
+public static boolean hasViolation;
+
+private String user;
+private String db;
+
+  event insert (String user,String db,String p,String data) {
+	    this.user = user;
+	    this.db = db;
+	}
+
+  raw: 
+	if (this.db.equals("db2") && 
+	    !this.user.equals("script1")) {
+	    hasViolation = true;
+	} 
+}

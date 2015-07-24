@@ -1,0 +1,59 @@
+mapped byte buffer:
+counting num of lines, build string for each line
+
+Is mapped byte buffer direct? true
+Is mbb loaded? false
+There are 9222330 lines
+It took my log analyzer 2802 ms to count all the log entries in the log file.
+
+
+====================
+direct byte buff:
+50kb:
+There are 9222330 lines in the log file
+It took my log analyzer 10351 ms to count all the log entries in the log file.
+
+4KB:
+There are 9222330 lines in the log file
+It took my log analyzer 8282 ms to count all the log entries in the log file.
+
+32:
+14169 ms
+
+
+=============================
+in-direct byte buffer:
+4 kb:
+There are 9222330 lines in the log file
+It took my log analyzer 8452 ms to count all the log entries in the log file.
+
+
+--==============================
+BufferedReader:
+There are 9222330 lines in the log file
+It took my log analyzer 1753 ms to count all the log entries in the log file.
+
+
+There are 93149 log entries in the log file!~!
+It took my log analyzer 16915 ms to count all the log entries in the log file.
+
+
+It took my log analyzer 17 seconds to count all the events in the 9M log ldcc4Monpoly at Idea-Pad using reading line by line approach
+
++====================================================================================================================================
+Files.lines and forEach:
+There are 9222330 log entries in the log file!~!
+It took my log analyzer 1946 ms to count all the log entries in the log file.
+
+forEachOrdered, no noticeable diff
+
+
+----------------------------------------------------------------------------------------------------
+
+Scanner: (so slow!)
+There are 9222330 lines in the log file
+It took my log analyzer 12194 ms to count all the log entries in the log file.
+
+
+
+

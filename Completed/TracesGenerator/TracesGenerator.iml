@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/benchmark2" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/benchmark3" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/benchmark4" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/benchmark5" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/benchmark1" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/share" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/src/benchmark1/mop" />
+      <excludeFolder url="file://$MODULE_DIR$/src/benchmark2/mop" />
+      <excludeFolder url="file://$MODULE_DIR$/src/mop" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="rv-monitor-rt" level="project" />
+  </component>
+</module>

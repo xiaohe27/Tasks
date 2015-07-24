@@ -1,0 +1,8 @@
+Findings:
+Monpoly's typing system is quite weak.
+1) every event name in the log file must appear in the sig file
+2) If the event is not used in the formula, then the tuples of that event in the log file will not be checked at all! I.E. you can omit, or use whatever types and number of args for that event in the log, they do not need to conform to the grammar specified in the signature file!
+3) If the event is used in the formula, then the types of args for that event inside the log file will be checked carefully (at runtime).
+
+Conclusion:
+It does simple static type checking, and rigorous runtime-type checking.

@@ -1,0 +1,3 @@
+The process for gen output may be postponed?
+When the process returns, the output is not ready.
+Then the assertion of output has been gen will fail.

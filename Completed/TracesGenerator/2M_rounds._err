@@ -1,0 +1,10 @@
+Exception in thread "MonitorCleaner" java.lang.OutOfMemoryError: GC overhead limit exceeded
+	at java.util.ArrayList.iterator(ArrayList.java:834)
+	at java.util.Collections$SynchronizedCollection.iterator(Collections.java:2031)
+	at com.runtimeverification.rvmonitor.java.rt.tablebase.TerminatedMonitorCleaner$Runner.updateEntries(TerminatedMonitorCleaner.java:78)
+	at com.runtimeverification.rvmonitor.java.rt.tablebase.TerminatedMonitorCleaner$Runner.run(TerminatedMonitorCleaner.java:62)
+Exception in thread "main" java.lang.OutOfMemoryError: GC overhead limit exceeded
+	at mop.SafeMapIteratorRuntimeMonitor.createIterEvent(SafeMapIteratorRuntimeMonitor.java:702)
+	at mop.SafeMapIteratorMonitorAspect.ajc$afterReturning$mop_SafeMapIteratorMonitorAspect$3$a3ae32d8(SafeMapIteratorMonitorAspect.aj:50)
+	at benchmark1.Main.main(Main.java:130)
+*** java.lang.instrument ASSERTION FAILED ***: "!errorOutstanding" with message can't create byte arrau at JPLISAgent.c line: 813

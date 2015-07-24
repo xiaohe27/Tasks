@@ -1,0 +1,40 @@
+Testing Packages
+
+Before uploading packages to DataMill, running them on your local computer saves time down the road.
+
+Download the virtual worker listed on the homepage.
+Install VirtualBox
+Import the downloaded ova file as an appliance File -> Import Appliance
+Adjust the number of virtual CPUs Settings -> System -> Processor
+Start the virtual machine
+Upload your test package with Dropbox
+Obtain a link for your test package Right Click -> Dropbox -> Share Link
+Follow the instructions for running a test package in the virtual machine
+After the virtual worker reboots from the benchmark to the controller press Alt+F2 to switch to another terminal
+Check for the benchmark results results under /tmp
+Creating an Experiment Package
+
+An experiment package contains the source code for the benchmark and DataMill specifc scripts. The DataMill specific scripts are named setup.sh, run.sh, and collect.sh. They set up, execute, and collect the results from the experiment respectively. To run Coremark on DataMill, the setup script would decompress the source code for Coremark and compile it:
+
+setup.sh
+
+#!/bin/sh
+tar xaf coremark_v1.0.tgz
+make -C coremark_v1.0 compile
+The first line extracts coremark_v1.0.tgz, which is included with the experiment package. The second line compiles the benchmark program with its makefile. In general, the setup script handles decompression, compilation, and dependency installation for the experiment. DataMill also supports the installation of software packages with Gentoo's emerge command.
+
+run.sh
+
+#!/bin/sh
+make -C coremark_v1.0 run1.log
+The run script executes the experiment. This example saves the results for Coremark in run1.log.
+
+collect.sh
+
+#!/bin/sh
+results="coremarkv1.0-$(hostname)-$(date +%Y%m%d_%H%M).tar.gz"
+tar czf $results coremark_v1.0/run1.log > /dev/null 2>&1
+echo $results
+The collect script gathers results that experiment produced. tar czf $results coremark_v1.0/run1.log > /dev/null 2>&1 compresses the results file into a tarball while supressing output from tar czf $results coremark_v1.0/run1.log. The last line echos the path to the results tarball.
+
+Todo include directory structure

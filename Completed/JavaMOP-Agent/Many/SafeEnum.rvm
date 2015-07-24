@@ -1,0 +1,19 @@
+package mop;
+
+import java.io.*;
+import java.util.*;
+full-binding SafeEnum(Vector v, Enumeration e) {
+	event create(Vector v, Enumeration e){
+	}
+	event updatesource(Vector v){
+	}
+	event next(Enumeration e){
+	}
+	ere:  create next* updatesource updatesource* next
+
+	@match
+	{
+		System.out.println("improper enumeration usage at " + __LOC);
+		__RESET;
+	}
+}

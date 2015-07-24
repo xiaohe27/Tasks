@@ -1,0 +1,22 @@
+1. Use MappedByteBuffer to iteratively map different regions of the huge log to the memory (in os level) in seq.
+This kind of DMA approach enables java to directly access the contents in memory without first copying them to JVM's heap.
+Saves both time and space.
+
+The triky part is to analyze the situations of reading items at the boundary.
+I've local buffers to cache the things from the memory. If there is nothing left in local buffer, then reload the buffer from the mappedbytebuffer. If there is nothing left in mappedbytebuffer, then check whether there is more things in the file; if so, then refresh the mappedbytebuffer (I keep an index for the current location of the log file).
+
+
+2. Use a simple FSM to keep the current state, so I know what the next non-terminal should be.
+The process of reading logs is guided by the spec:
+by analyzing the spec of the log, we'll know a lot of useful info about the event that we'll read.
+
+e.g. 
+a. whether it is of our interest, if the next event is not a monitored event, we can safely skip it.
+b. we can get the number of args or type info of the args for that event, and use those info to guide the reading procedure.
+
+Because the contents of the log file is read byte by byte, in most cases, each byte is read only once.
+
+Std java api is not good for reading logs in my scenario for two reasons:
+a. it's hard to match the incomplete trace (a pattern may be broken into two pieces at the boundary of buffers).
+b. java's built-in pattern matcher cannot capture the pattern where a component is repeated indefinite number of times.
+(this will make it unable to read certain types of log files with more complex structure).

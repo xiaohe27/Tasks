@@ -1,0 +1,13 @@
+Even we use the same program and property,
+we cannot guarantee the same effects.
+Because hashCode of the same obj may be different 
+at different runs. 
+
+Using multiple threads and random good/bad patterns
+will also make it more unpredictable.
+
+So the number of events for each type may vary 
+from run to run.
+
+I can make the number of events eq to the required stats though.
+

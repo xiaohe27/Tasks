@@ -1,0 +1,24 @@
+package mop;
+
+import java.io.*;
+import java.util.*;
+full-binding SafeMapIterator(Map map, Collection c, Iterator i) {
+	event createColl(Map map, Collection c){
+		System.out.println("Create collection " + System.identityHashCode(c));
+	}
+	event createIter(Collection c, Iterator i){
+		System.out.println("Create iterator " + System.identityHashCode(i));
+	}
+	event useIter(Iterator i){
+		System.out.println("Use iterator " + System.identityHashCode(i));
+	}
+	event updateMap(Map map){
+		System.out.println("Update map " + System.identityHashCode(map));
+	}
+	ltl:  [](useIter => (not updateMap S createColl))
+
+	@violation
+	{
+		System.out.println("unsafe iterator usage!");
+	}
+}

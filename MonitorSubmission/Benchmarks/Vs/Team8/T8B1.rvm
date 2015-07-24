@@ -1,0 +1,27 @@
+T8B1 (String task, Sring resource) {
+
+public static ConcurrentSkipListSet<String> granted = new ConcurrentSkipListSet<>();
+
+event grant(String task, Sring resource) {
+
+if(granted.contains(resource)) {
+  System.err.println("Property Violated!\nCannot grant the resource " + resource + " multiple times without releasing!");
+  __EXIT;
+} else {
+  granted.add(resource);
+}
+
+}
+
+event release(String task, Sring resource) {
+
+if(!granted.contains(resource)) {
+  System.err.println("Property Violated!\nCannot release the resource " + resource + " if it has not been granted yet!");
+  __EXIT;
+} else {
+  granted.remove(resource);
+}
+
+}
+
+}

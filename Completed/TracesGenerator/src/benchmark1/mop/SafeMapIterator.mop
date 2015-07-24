@@ -1,0 +1,54 @@
+// Copyright (c) 2002-2014 JavaMOP Team. All Rights Reserved.
+package mop;
+
+import java.io.*;
+import java.util.*;
+
+
+// SafeMapIterator is similar to 
+// SafeIterator.  The biggest difference 
+// is that a key set of the map 
+// is used, and the iterator is over 
+// the collection.  
+
+full-binding SafeMapIterator(Map map, Collection c, Iterator i){
+	event createColl after(Map map) 
+              returning(Collection c) : 
+              (call(* Map.values()) 
+              || call(* Map.keySet())) 
+              && target(map) {
+	      System.out.print("createColl," + System.identityHashCode(map) + ", " + c.hashCode() +
+                          ", \r\n");
+	      }
+	event createIter after(Collection c) 
+              returning(Iterator i) : 
+	      call(* Collection.iterator()) 
+              && target(c) {
+		System.out.print("createIter, , " + c.hashCode() + ", " + i.hashCode() + "\r\n");
+	      }
+	event useIter before(Iterator i) : 
+	      call(* Iterator.next()) 
+              && target(i) {
+				System.out.print("useIter, , , " + i.hashCode() + "\r\n");
+	      }
+	event updateMap after(Map map) : 
+	      (call(* Map.put*(..)) 
+              || call(* Map.putAll*(..)) 
+              || call(* Map.clear()) 
+              || call(* Map.remove*(..))) 
+              && target(map) {
+				System.out.print("updateMap, " + System.identityHashCode(map) + ", , \r\n");
+	      }
+
+        ere : createColl updateMap* createIter useIter* updateMap updateMap* useIter
+
+       	@match
+       	{
+       		System.out.println("unsafe iterator usage!");
+       	}
+}
+		
+
+
+
+

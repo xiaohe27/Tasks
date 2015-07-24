@@ -1,0 +1,20 @@
+package mop;
+
+import java.io.*;
+import java.util.*;
+SafeFileWriter(FileWriter f) {
+	event open(FileWriter f){
+	}
+	event write(FileWriter f){
+	}
+	event close(FileWriter f){
+	}
+	cfg:
+	S -> open SafeWrite close write,
+	SafeWrite -> SafeWrite S | SafeWrite write | epsilon
+
+	@match
+	{
+		System.out.println("write after close");
+	}
+}

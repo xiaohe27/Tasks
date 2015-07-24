@@ -1,0 +1,30 @@
+package mop;
+
+import java.io.*;
+import java.util.*;
+SafeHashSet(HashSet t, Object o) {
+
+	int hashcode;
+
+	Object myObj;
+	event add(HashSet t, Object o){
+		hashcode = o.hashCode();
+		myObj = o;
+	}
+	event unsafe_contains(HashSet t, Object o){
+		if ( ! (hashcode != o.hashCode()) ) {
+			return false;
+		}
+		{
+		}
+	}
+	event remove(HashSet t, Object o){
+	}
+	ere:  add unsafe_contains unsafe_contains*
+
+	@match
+	{
+		System.err.println("HashCode changed for Object " + myObj + " while being in a   Hashtable!");
+		System.exit(1);
+	}
+}

@@ -1,0 +1,473 @@
+event, Iterator, bool
+hasNextTrue, 2141179775, true
+hasNextFalse, 2141179775, true
+next, 2141179775, 
+hasNextTrue, 2141179775, true
+hasNextFalse, 2141179775, true
+next, 2141179775, 
+hasNextTrue, 2141179775, true
+hasNextFalse, 2141179775, true
+next, 2141179775, 
+hasNextTrue, 2141179775, true
+hasNextFalse, 2141179775, true
+next, 2141179775, 
+hasNextTrue, 2141179775, false
+hasNextFalse, 2141179775, false
+hasNextTrue, 341748265, true
+hasNextFalse, 341748265, true
+hasNextTrue, 364604394, false
+hasNextFalse, 364604394, false
+next, 341748265, 
+hasNextTrue, 146370526, true
+hasNextFalse, 146370526, true
+hasNextTrue, 758013696, false
+hasNextFalse, 758013696, false
+next, 146370526, 
+hasNextTrue, 1279309678, true
+hasNextFalse, 1279309678, true
+hasNextTrue, 48914743, false
+hasNextFalse, 48914743, false
+next, 1279309678, 
+hasNextTrue, 1106131243, true
+hasNextFalse, 1106131243, true
+hasNextTrue, 510109769, false
+hasNextFalse, 510109769, false
+next, 1106131243, 
+hasNextTrue, 1473611564, true
+hasNextFalse, 1473611564, true
+hasNextTrue, 107456312, false
+hasNextFalse, 107456312, false
+next, 1473611564, 
+hasNextTrue, 921760190, true
+hasNextFalse, 921760190, true
+hasNextTrue, 360067785, false
+hasNextFalse, 360067785, false
+next, 921760190, 
+hasNextTrue, 902478634, true
+hasNextFalse, 902478634, true
+next, 2114444063, 
+hasNextTrue, 294247762, true
+hasNextFalse, 294247762, true
+hasNextTrue, 918312414, false
+hasNextFalse, 918312414, false
+next, 294247762, 
+hasNextTrue, 1448061896, true
+hasNextFalse, 1448061896, true
+hasNextTrue, 382750013, false
+hasNextFalse, 382750013, false
+next, 1448061896, 
+hasNextTrue, 1240232440, true
+hasNextFalse, 1240232440, true
+hasNextTrue, 489349054, false
+hasNextFalse, 489349054, false
+next, 1240232440, 
+hasNextTrue, 915416632, true
+hasNextFalse, 915416632, true
+hasNextTrue, 574434418, false
+hasNextFalse, 574434418, false
+next, 915416632, 
+hasNextTrue, 150268540, true
+hasNextFalse, 150268540, true
+hasNextTrue, 1130894323, false
+hasNextFalse, 1130894323, false
+next, 150268540, 
+hasNextTrue, 1962826816, true
+hasNextFalse, 1962826816, true
+hasNextTrue, 1072410641, false
+hasNextFalse, 1072410641, false
+next, 1962826816, 
+hasNextTrue, 283318938, true
+hasNextFalse, 283318938, true
+hasNextTrue, 320304382, false
+hasNextFalse, 320304382, false
+next, 283318938, 
+hasNextTrue, 361571968, true
+hasNextFalse, 361571968, true
+hasNextTrue, 2005169944, false
+hasNextFalse, 2005169944, false
+next, 361571968, 
+hasNextTrue, 2134607032, true
+hasNextFalse, 2134607032, true
+hasNextTrue, 1470344997, false
+hasNextFalse, 1470344997, false
+next, 2134607032, 
+hasNextTrue, 728115831, true
+hasNextFalse, 728115831, true
+next, 728115831, 
+hasNextTrue, 728115831, true
+hasNextFalse, 728115831, true
+next, 728115831, 
+hasNextTrue, 728115831, true
+hasNextFalse, 728115831, true
+next, 728115831, 
+hasNextTrue, 728115831, true
+hasNextFalse, 728115831, true
+next, 728115831, 
+hasNextTrue, 728115831, false
+hasNextFalse, 728115831, false
+hasNextTrue, 2131670196, true
+hasNextFalse, 2131670196, true
+next, 2131670196, 
+next, 2131670196, 
+next, 2131670196, 
+next, 2131670196, 
+hasNextTrue, 1546908073, true
+hasNextFalse, 1546908073, true
+next, 1546908073, 
+hasNextTrue, 1546908073, true
+hasNextFalse, 1546908073, true
+next, 1546908073, 
+hasNextTrue, 1546908073, true
+hasNextFalse, 1546908073, true
+next, 1546908073, 
+hasNextTrue, 1546908073, true
+hasNextFalse, 1546908073, true
+next, 1546908073, 
+hasNextTrue, 1546908073, false
+hasNextFalse, 1546908073, false
+hasNextTrue, 371439501, true
+hasNextFalse, 371439501, true
+next, 371439501, 
+hasNextTrue, 371439501, true
+hasNextFalse, 371439501, true
+next, 371439501, 
+hasNextTrue, 371439501, true
+hasNextFalse, 371439501, true
+next, 371439501, 
+hasNextTrue, 371439501, true
+hasNextFalse, 371439501, true
+next, 371439501, 
+hasNextTrue, 371439501, false
+hasNextFalse, 371439501, false
+hasNextTrue, 210506412, true
+hasNextFalse, 210506412, true
+hasNextTrue, 210506412, true
+hasNextFalse, 210506412, true
+next, 210506412, 
+hasNextTrue, 210506412, true
+hasNextFalse, 210506412, true
+hasNextTrue, 210506412, true
+hasNextFalse, 210506412, true
+next, 210506412, 
+hasNextTrue, 210506412, true
+hasNextFalse, 210506412, true
+hasNextTrue, 210506412, true
+hasNextFalse, 210506412, true
+next, 210506412, 
+hasNextTrue, 210506412, true
+hasNextFalse, 210506412, true
+hasNextTrue, 210506412, true
+hasNextFalse, 210506412, true
+next, 210506412, 
+hasNextTrue, 210506412, false
+hasNextFalse, 210506412, false
+hasNextTrue, 112049309, true
+hasNextFalse, 112049309, true
+hasNextTrue, 112049309, true
+hasNextFalse, 112049309, true
+next, 112049309, 
+hasNextTrue, 112049309, true
+hasNextFalse, 112049309, true
+hasNextTrue, 112049309, true
+hasNextFalse, 112049309, true
+next, 112049309, 
+hasNextTrue, 112049309, true
+hasNextFalse, 112049309, true
+hasNextTrue, 112049309, true
+hasNextFalse, 112049309, true
+next, 112049309, 
+hasNextTrue, 112049309, true
+hasNextFalse, 112049309, true
+hasNextTrue, 112049309, true
+hasNextFalse, 112049309, true
+next, 112049309, 
+hasNextTrue, 112049309, false
+hasNextFalse, 112049309, false
+hasNextTrue, 1162918744, true
+hasNextFalse, 1162918744, true
+next, 1162918744, 
+hasNextTrue, 1162918744, true
+hasNextFalse, 1162918744, true
+next, 1162918744, 
+hasNextTrue, 1162918744, true
+hasNextFalse, 1162918744, true
+next, 1162918744, 
+hasNextTrue, 1162918744, true
+hasNextFalse, 1162918744, true
+next, 1162918744, 
+hasNextTrue, 1162918744, false
+hasNextFalse, 1162918744, false
+next, 1162918744, 
+hasNextTrue, 1321530272, true
+hasNextFalse, 1321530272, true
+hasNextTrue, 573673894, false
+hasNextFalse, 573673894, false
+next, 1321530272, 
+hasNextTrue, 1226020905, true
+hasNextFalse, 1226020905, true
+hasNextTrue, 156856360, false
+hasNextFalse, 156856360, false
+next, 1226020905, 
+hasNextTrue, 1617550160, true
+hasNextFalse, 1617550160, true
+hasNextTrue, 1325124186, false
+hasNextFalse, 1325124186, false
+next, 1617550160, 
+hasNextTrue, 461160828, true
+hasNextFalse, 461160828, true
+hasNextTrue, 1499867659, false
+hasNextFalse, 1499867659, false
+next, 461160828, 
+hasNextTrue, 2012993836, true
+hasNextFalse, 2012993836, true
+hasNextTrue, 1740797075, false
+hasNextFalse, 1740797075, false
+next, 2012993836, 
+hasNextTrue, 440938038, true
+hasNextFalse, 440938038, true
+hasNextTrue, 1922464006, false
+hasNextFalse, 1922464006, false
+next, 440938038, 
+hasNextTrue, 1536031937, true
+hasNextFalse, 1536031937, true
+hasNextTrue, 1536031937, true
+hasNextFalse, 1536031937, true
+next, 1536031937, 
+hasNextTrue, 1536031937, true
+hasNextFalse, 1536031937, true
+hasNextTrue, 1536031937, true
+hasNextFalse, 1536031937, true
+next, 1536031937, 
+hasNextTrue, 1536031937, true
+hasNextFalse, 1536031937, true
+hasNextTrue, 1536031937, true
+hasNextFalse, 1536031937, true
+next, 1536031937, 
+hasNextTrue, 1536031937, true
+hasNextFalse, 1536031937, true
+hasNextTrue, 1536031937, true
+hasNextFalse, 1536031937, true
+next, 1536031937, 
+hasNextTrue, 1536031937, false
+hasNextFalse, 1536031937, false
+hasNextTrue, 798981583, true
+hasNextFalse, 798981583, true
+hasNextTrue, 798981583, true
+hasNextFalse, 798981583, true
+next, 798981583, 
+hasNextTrue, 798981583, true
+hasNextFalse, 798981583, true
+hasNextTrue, 798981583, true
+hasNextFalse, 798981583, true
+next, 798981583, 
+hasNextTrue, 798981583, true
+hasNextFalse, 798981583, true
+hasNextTrue, 798981583, true
+hasNextFalse, 798981583, true
+next, 798981583, 
+hasNextTrue, 798981583, true
+hasNextFalse, 798981583, true
+hasNextTrue, 798981583, true
+hasNextFalse, 798981583, true
+next, 798981583, 
+hasNextTrue, 798981583, false
+hasNextFalse, 798981583, false
+hasNextTrue, 1954406292, true
+hasNextFalse, 1954406292, true
+hasNextTrue, 1954406292, true
+hasNextFalse, 1954406292, true
+next, 1954406292, 
+hasNextTrue, 1954406292, true
+hasNextFalse, 1954406292, true
+hasNextTrue, 1954406292, true
+hasNextFalse, 1954406292, true
+next, 1954406292, 
+hasNextTrue, 1954406292, true
+hasNextFalse, 1954406292, true
+hasNextTrue, 1954406292, true
+hasNextFalse, 1954406292, true
+next, 1954406292, 
+hasNextTrue, 1954406292, true
+hasNextFalse, 1954406292, true
+hasNextTrue, 1954406292, true
+hasNextFalse, 1954406292, true
+next, 1954406292, 
+hasNextTrue, 1954406292, false
+hasNextFalse, 1954406292, false
+hasNextTrue, 904058452, true
+hasNextFalse, 904058452, true
+hasNextTrue, 29183965, false
+hasNextFalse, 29183965, false
+next, 904058452, 
+hasNextTrue, 1427651360, true
+hasNextFalse, 1427651360, true
+hasNextTrue, 1334042472, false
+hasNextFalse, 1334042472, false
+next, 1427651360, 
+hasNextTrue, 1827725498, true
+hasNextFalse, 1827725498, true
+hasNextTrue, 131635550, false
+hasNextFalse, 131635550, false
+next, 1827725498, 
+hasNextTrue, 319644606, true
+hasNextFalse, 319644606, true
+hasNextTrue, 1118078504, false
+hasNextFalse, 1118078504, false
+next, 319644606, 
+hasNextTrue, 691690486, true
+hasNextFalse, 691690486, true
+hasNextTrue, 1793799654, false
+hasNextFalse, 1793799654, false
+next, 691690486, 
+hasNextTrue, 310623126, true
+hasNextFalse, 310623126, true
+next, 310623126, 
+next, 310623126, 
+next, 310623126, 
+next, 310623126, 
+hasNextTrue, 1961945640, true
+hasNextFalse, 1961945640, true
+next, 1961945640, 
+hasNextTrue, 1961945640, true
+hasNextFalse, 1961945640, true
+next, 1961945640, 
+hasNextTrue, 1961945640, true
+hasNextFalse, 1961945640, true
+next, 1961945640, 
+hasNextTrue, 1961945640, true
+hasNextFalse, 1961945640, true
+next, 1961945640, 
+hasNextTrue, 1961945640, false
+hasNextFalse, 1961945640, false
+hasNextTrue, 258931371, true
+hasNextFalse, 258931371, true
+next, 258931371, 
+hasNextTrue, 258931371, true
+hasNextFalse, 258931371, true
+next, 258931371, 
+hasNextTrue, 258931371, true
+hasNextFalse, 258931371, true
+next, 258931371, 
+hasNextTrue, 258931371, true
+hasNextFalse, 258931371, true
+next, 258931371, 
+hasNextTrue, 258931371, false
+hasNextFalse, 258931371, false
+hasNextTrue, 1008315045, true
+hasNextFalse, 1008315045, true
+next, 1008315045, 
+hasNextTrue, 1008315045, true
+hasNextFalse, 1008315045, true
+next, 1008315045, 
+hasNextTrue, 1008315045, true
+hasNextFalse, 1008315045, true
+next, 1008315045, 
+hasNextTrue, 1008315045, true
+hasNextFalse, 1008315045, true
+next, 1008315045, 
+hasNextTrue, 1008315045, false
+hasNextFalse, 1008315045, false
+hasNextTrue, 860481979, true
+hasNextFalse, 860481979, true
+next, 860481979, 
+hasNextTrue, 860481979, true
+hasNextFalse, 860481979, true
+next, 860481979, 
+hasNextTrue, 860481979, true
+hasNextFalse, 860481979, true
+next, 860481979, 
+hasNextTrue, 860481979, true
+hasNextFalse, 860481979, true
+next, 860481979, 
+hasNextTrue, 860481979, false
+hasNextFalse, 860481979, false
+hasNextTrue, 1083962448, true
+hasNextFalse, 1083962448, true
+next, 1083962448, 
+hasNextTrue, 1083962448, true
+hasNextFalse, 1083962448, true
+next, 1083962448, 
+hasNextTrue, 1083962448, true
+hasNextFalse, 1083962448, true
+next, 1083962448, 
+hasNextTrue, 1083962448, true
+hasNextFalse, 1083962448, true
+next, 1083962448, 
+hasNextTrue, 1083962448, false
+hasNextFalse, 1083962448, false
+hasNextTrue, 953742666, true
+hasNextFalse, 953742666, true
+next, 953742666, 
+next, 953742666, 
+next, 953742666, 
+next, 953742666, 
+hasNextTrue, 1239759990, true
+hasNextFalse, 1239759990, true
+next, 1239759990, 
+hasNextTrue, 1239759990, true
+hasNextFalse, 1239759990, true
+next, 1239759990, 
+hasNextTrue, 1239759990, true
+hasNextFalse, 1239759990, true
+next, 1239759990, 
+hasNextTrue, 1239759990, true
+hasNextFalse, 1239759990, true
+next, 1239759990, 
+hasNextTrue, 1239759990, false
+hasNextFalse, 1239759990, false
+hasNextTrue, 891093184, true
+hasNextFalse, 891093184, true
+next, 891093184, 
+hasNextTrue, 891093184, true
+hasNextFalse, 891093184, true
+next, 891093184, 
+hasNextTrue, 891093184, true
+hasNextFalse, 891093184, true
+next, 891093184, 
+hasNextTrue, 891093184, true
+hasNextFalse, 891093184, true
+next, 891093184, 
+hasNextTrue, 891093184, false
+hasNextFalse, 891093184, false
+hasNextTrue, 708533063, true
+hasNextFalse, 708533063, true
+next, 708533063, 
+hasNextTrue, 708533063, true
+hasNextFalse, 708533063, true
+next, 708533063, 
+hasNextTrue, 708533063, true
+hasNextFalse, 708533063, true
+next, 708533063, 
+hasNextTrue, 708533063, true
+hasNextFalse, 708533063, true
+next, 708533063, 
+hasNextTrue, 708533063, false
+hasNextFalse, 708533063, false
+hasNextTrue, 1438030319, true
+hasNextFalse, 1438030319, true
+next, 1438030319, 
+hasNextTrue, 1438030319, true
+hasNextFalse, 1438030319, true
+next, 1438030319, 
+hasNextTrue, 1438030319, true
+hasNextFalse, 1438030319, true
+next, 1438030319, 
+hasNextTrue, 1438030319, true
+hasNextFalse, 1438030319, true
+next, 1438030319, 
+hasNextTrue, 1438030319, false
+hasNextFalse, 1438030319, false
+hasNextTrue, 902830499, true
+hasNextFalse, 902830499, true
+next, 902830499, 
+hasNextTrue, 902830499, true
+hasNextFalse, 902830499, true
+next, 902830499, 
+hasNextTrue, 902830499, true
+hasNextFalse, 902830499, true
+next, 902830499, 
+hasNextTrue, 902830499, true
+hasNextFalse, 902830499, true
+next, 902830499, 
+hasNextTrue, 902830499, false
+hasNextFalse, 902830499, false

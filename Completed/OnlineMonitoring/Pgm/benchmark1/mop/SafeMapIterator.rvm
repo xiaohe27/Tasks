@@ -1,0 +1,34 @@
+package mop;
+
+import java.io.*;
+import java.util.*;
+full-binding SafeMapIterator(Map map,Collection c,Iterator i){
+        private Map map;
+        private Collection c;
+        private Iterator i;
+
+        event createColl(Map map,Collection c){
+            this.map = map;
+            this.c = c;
+        }
+        event createIter(Collection c,Iterator i){
+            this.c = c;
+            this.i = i;
+        }
+        event useIter(Iterator i){
+            this.i = i;
+        }
+        event updateMap(Map map){
+            this.map = map;
+        }
+
+        ere:createColl updateMap*createIter useIter*updateMap updateMap*useIter
+
+        @match
+        {
+            System.err.println("update map during iteration!\t(map:" + System.identityHashCode(map)
+            + ", collection:" + System.identityHashCode(c) + ", iterator:" + System.identityHashCode
+            (i) + ")");
+
+        }
+}

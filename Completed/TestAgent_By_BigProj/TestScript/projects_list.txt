@@ -1,0 +1,42 @@
+https://github.com/nitsanw/JAQ-InABox.git b0a6b436b746b5fff14454ca255839e860ee691f JAQ-InABox 3570 0
+https://github.com/akquinet/androlog.git 86a019e71ad9f6fdc875f4cdaee664800482370d androlog 2532 0
+https://github.com/apache/commons-cli.git d3d82e7582c61927b161571a4cca0a484cec4cfe commons-cli 6292 0
+http://svn.apache.org/repos/asf/commons/proper/discovery/trunk/  1584512 commons-discovery 2588 0 # works fine
+http://svn.apache.org/repos/asf/commons/proper/fileupload/trunk/ 1584512 commons-fileupload 4316 0 # works fine
+https://github.com/jexp/jpatterns.git 14bb2740fde84b37d6f4a48f839c7a1eef194e97 jpatterns 2604 0
+https://github.com/srt/asterisk-java.git c61bb4c7f7c0b6312b2ca4c9b6217fd4caea0c60 asterisk-java 35659 0 # works fine
+http://svn.apache.org/repos/asf/commons/proper/bcel/trunk/ 1576037 bcel 35827  0 # works fine
+https://github.com/mikiobraun/jblas.git 4ee5b65eca66942b482390d94fe5cc4ffe62adba jblas 12570 0 # works fine
+https://github.com/cloudera/htrace.git 11b9800abce0ee62b3b8b574c73f542667c749e8 htrace 1531 0
+https://github.com/apache/commons-codec.git e199951ded476c2dd988490e90092f8beb1cb9b7 commons-codec 16160 0
+https://github.com/apache/commons-validator.git 555731817d9f1c0ff723efed9eb668784574f508 commons-validator 11982 0
+https://github.com/google/compile-testing.git ea81dbbd96f557209cc2fa56fc9de06f9db6c172 compile-testing 1813 0
+http://svn.apache.org/repos/asf/commons/proper/compress/trunk/ 1584511 compress 28931  0 # works fine
+https://github.com/osiam/connector4java.git 3aeafd397d29bef98ac8b0abcb9f8e6a237d1ed0 connector4java 1928 0 # works fine
+https://github.com/carrotsearch/junit-benchmarks.git 1c67b021a525ad041f5dd3a5ae5045eec1873106 carrot.junit 3313 0
+https://github.com/Cue/greplin-zookeeper-utils.git a2b80474d1cd2e45ebbdc95dbb384bec03c21d96 zookeeper-utils 455 0
+https://github.com/JodaOrg/joda-time.git c3ef36272bddbb08854a4a5939a611668ea68450 joda-time 15382 0 # works fine
+https://github.com/apache/commons-lang.git 0d9b8cb7a7cc5a9ebd3c08029f2d53fa9bcd9a70 apache.commons-lang 23598 0 # works fine
+https://github.com/jhy/jsoup.git 80158d6fa7445506eaaafdeadb1f4dc291ca10a5 jsoup 13556 0 # works fine
+https://github.com/fernandezpablo85/scribe-java.git 26792c063045e9557e79c9e84c3709f5ada22395 scribe-java 5593 0 # works fine
+http://svn.apache.org/repos/asf/commons/proper/collections/trunk 1569017 commons-collections4 52040 0 # works fine
+https://github.com/dooApp/FXForm2.git d152b3412a3a99932ab3f6e40cdbd39e3a1c51d6 FXForm2 5355 0
+http://svn.apache.org/repos/asf/commons/proper/dbcp/trunk/ 1576037 dbcp 18759 0 # works fine
+http://svn.apache.org/repos/asf/commons/proper/functor/trunk 1558421 functor 21688 0 # works fine
+http://svn.apache.org/repos/asf/commons/proper/lang/trunk 1569015 commons-lang3 63425 0 # works fine
+http://svn.apache.org/repos/asf/commons/proper/math/trunk/ 1576037 math 186796 0 # works fine
+http://svn.apache.org/repos/asf/commons/proper/beanutils/trunk/ 1584367 commons-beans 33007 0 # works fine
+https://github.com/junit-team/junit.git 274041d233beb9d4e79e954c7fbaa0711bae58f6 junit 19050 0 # works fine
+https://github.com/ogrisel/pignlproc.git 4167c0e8644bfab94c12fc42a757b7108ff7a3da pignlproc 2296 0 # works fine
+https://github.com/myui/hivemall.git 776482489facd04d3ef0c1ca9a1fb44c11231daf hivemall 5360 0
+https://github.com/bucharest-jug/dropwizard-todo.git 40746322b13335ef6db2d7ec37093c524102e04c dropwizard-todo 796 0
+https://github.com/logstash/logstash-logback-encoder.git a4cd4ea5839bb750ff2db2fb60e3c5e7c90054b3 logback-encoder 637 0
+https://github.com/JSQLParser/JSqlParser.git f82d8316f00c581c635c30828d163d74194a4493 JSqlParser 7786 0
+https://github.com/ogrisel/paper2ebook.git e65778acc528a9ca95174ad02abcc52e56f57414 paper2ebook 142 0
+https://github.com/eclipse/paho.mqtt.java.git f43842538579aab345e6aadda9d081da615900d3 mqtt 11478 0
+https://github.com/zxing/zxing.git 1b43233ba7de7915296d9b45a1a3048303edd4b6 zxing 41991 0 # works fine
+https://github.com/ObjectLayout/ObjectLayout.git 88e6db4fe33dac9cb9c75d107e7f5196d9548c98 ObjectLayout 1305 0
+https://github.com/laforge49/JID.git 1dde11d72a17f3c3c3a690b8b17e3d27f3333e3a laforge49 7245 0 # this has 184417 performance suggestions on the same line
+https://github.com/jline/jline.git 8142f0e65315b52596eaa20429f835d4ce391723 jline 3419 0
+https://github.com/headius/invokebinder.git c35f3ee8314a1bdb5dc7dcf085ae481141c3adb2 invokebinder 2818 0
+https://github.com/apache/commons-imaging.git ad28fdacdf834ca37d48730b500ab844efbbd71b commons-imaging 36657 0

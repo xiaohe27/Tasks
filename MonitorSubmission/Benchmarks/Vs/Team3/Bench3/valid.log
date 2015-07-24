@@ -1,0 +1,6 @@
+ event, timestamp
+ a, 10
+ b, 100
+ a, 200
+ b, 400
+ a, 800

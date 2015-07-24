@@ -1,0 +1,12 @@
+package rvm;
+
+T3B5() {
+public static int numOfB = 0;
+public static boolean begin = false; 
+
+event a(long time) {}
+
+event b(long time) {}
+
+event c(long time) {}
+}

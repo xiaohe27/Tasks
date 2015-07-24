@@ -1,0 +1,33 @@
+Basecase:
+-C
+===== DaCapo 9.12 avrora PASSED in 4580 msec =====
+
+
+===== DaCapo 9.12 lusearch PASSED in 718 msec =====
+
+
+
+
+with stable RV-Monitor (master branch)
+-C
+===== DaCapo 9.12 avrora PASSED in 20871 msec =====
+
+output: 391.4 MB
+
+
+
+//indexByVal branch
+===== DaCapo 9.12 avrora PASSED in 26434 msec =====
+
+
+
+
+//fine-grained indexing:
+-C
+===== DaCapo 9.12 avrora PASSED in 23437 msec ===== 12.3% more
+
+
+===== DaCapo 9.12 lusearch PASSED in 5105 msec =====
+
+
+

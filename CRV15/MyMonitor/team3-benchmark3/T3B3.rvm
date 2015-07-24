@@ -1,0 +1,16 @@
+package rvm;
+
+T3B3(){
+private static int numOfEventsB;
+
+event b (long time) {numOfEventsB++;}
+
+event c (long time) {
+ if(numOfEventsB > 1) {
+  System.err.println("Property Violated.");
+  System.err.println("Not expected to see event c after 2 event b.");
+  System.exit(0);
+ }
+}
+
+}

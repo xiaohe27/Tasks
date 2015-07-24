@@ -1,0 +1,4 @@
+separate the contents and footprint.
+
+To Start, 
+Only keep track of the footprint in the Valid() predicate.

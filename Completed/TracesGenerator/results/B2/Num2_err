@@ -1,0 +1,4 @@
+Violations' indices: [0 ]
+write after close. FileWriter:634540230
+write after close. FileWriter:831236296
+write after close. FileWriter:1016925085

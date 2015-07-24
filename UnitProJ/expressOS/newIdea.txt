@@ -1,0 +1,2 @@
+Make use of seq.
+Use seq<INode> to represent the linkedlist.

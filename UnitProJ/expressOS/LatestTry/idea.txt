@@ -1,0 +1,19 @@
+No need to have the ghost var spine ...
+it is enough to ensure head is valid, given that INode's valid requires its 
+next node is valid...
+
+***
+Each time we ensure a node is valid, add it to a set,
+that set + curNd == curNd.footprint
+
+--------------
+Use lemma!
+head is Valid indicates that all the nodes in its footprint are valid!
+
+Try not to use the spine field...
+
+================================
+lemma:
+in a list of nodes, node i's next is node i+1
+then if node i is valid, then all the nodes after it are valid, and
+are in the footprint of node i

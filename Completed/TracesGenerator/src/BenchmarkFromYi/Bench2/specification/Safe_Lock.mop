@@ -1,0 +1,43 @@
+package mop;
+
+import java.util.*;
+import com.runtimeverification.rvmonitor.java.rt.RVMLogging;
+import com.runtimeverification.rvmonitor.java.rt.RVMLogging.Level;
+
+
+/* A thread should release a lock as many times as it acquires the lock. Otherwise it
+ * may casue deadlock and the program may not terminate. Although the program is non-derministic,
+ * but the veridict is deterministic. And the program will exit when the property is violated. */ 
+
+Safe_Lock(Lock l, Thread t) {
+	int acquire_count , release_count;
+
+	event acquire after(Lock l, Thread t):
+		call(* Lock.lock())&&
+		target(l)&&thread(t){ ++acquire_count; }
+
+	event release after(Lock l, Thread t):
+		call(* Lock.unlock())&&
+		target(l)&&thread(t){ ++release_count; }
+
+	event begin before(Thread t):
+		execution(* *.*(..))&&
+		thread(t)&&!within(Lock+){}
+
+	event end after(Thread t):
+		execution(* *.*(..))&&
+		thread(t)&&!within(Lock+){}
+ 
+	cfg: S -> S begin S end 
+		| S acquire S release 
+		| epsilon
+         
+
+        @fail {
+		if ( acquire_count > release_count ) {
+        		RVMLogging.out.println("too few releases of lock");
+                	System.exit(-1);
+		}
+        }
+}
+

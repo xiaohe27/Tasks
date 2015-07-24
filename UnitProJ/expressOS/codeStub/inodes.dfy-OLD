@@ -1,0 +1,125 @@
+class Data {}
+class INode {
+ghost var tailContents: seq<Data>;
+ghost var footprint: set<object>;
+
+var data: Data;
+var next: INode;
+
+function Valid() : bool
+reads this, footprint;
+{
+    this in footprint 
+	&& (next != null ==> (next in footprint 
+	&& this !in next.footprint && next.footprint < footprint 
+	))
+	&& (next ==null ==> tailContents == [])
+	&& (next != null ==> tailContents == [next.data] + next.tailContents)
+}
+
+constructor init() 
+modifies this;
+ensures Valid();
+ensures fresh(footprint - {this});
+ensures next == null;
+{
+	next := null;
+    tailContents := [];
+	footprint := {this};
+}
+
+}
+
+class INodes {
+  var head: INode;
+
+  ghost var contents: seq<Data>;
+  ghost var spine: set<INode>;
+  ghost var footprint: set<object>;
+
+  function valid(): bool
+reads *;
+{
+this in footprint &&
+spine <= footprint &&
+head != null && head in spine &&
+(forall n :: n in spine ==> 
+(n != null 
+&& n.Valid() 
+&& n.footprint <= footprint)
+&& (n.next != null ==> (n.next in spine)))
+&& contents == head.tailContents
+}
+
+method init()
+modifies this;
+ensures valid() && fresh(footprint - {this});
+ensures |contents| == 0;
+{
+var n := new INode.init();
+head := n;
+contents := n.tailContents;
+
+footprint := {this} + n.footprint;
+spine := {n};
+}
+
+
+method insert(pos: int, d: Data)
+modifies footprint;
+requires valid();
+requires forall node :: node in this.spine ==> (node.Valid());
+requires 0 <= pos <= |contents|;
+ensures valid();
+ensures |contents| == (|old(contents)| + 1);
+ensures forall i :: 0 <= i < pos ==> contents[i] == old(contents[i]);
+ensures contents[pos] == d;
+ensures forall i :: pos < i < |this.contents| ==> contents[i] == old(contents[i - 1]);
+ensures fresh(footprint - old(footprint));
+
+{
+ghost var length := |old(contents)|;
+assume pos == 0;
+
+	assert forall node :: node in spine ==> node.Valid();
+
+if (pos == 0) {
+	var tmp := new INode.init();
+	tmp.data := d;
+	tmp.next := head.next;
+
+	head.next := tmp;
+
+	ghost var oldFtPrintOfHeadNext := {};
+	if (tmp.next == null) {}
+	else {oldFtPrintOfHeadNext := tmp.next.footprint;}
+
+	tmp.footprint := tmp.footprint + oldFtPrintOfHeadNext;
+
+	head.footprint := head.footprint + tmp.footprint; 
+
+	tmp.tailContents := contents;
+
+	head.tailContents := [tmp.data] + tmp.tailContents;
+
+	footprint := footprint + tmp.footprint;
+
+//	ghost var nodesArray := new array[|spine|];
+	parallel (node | node in spine) {
+	assert node.Valid();
+	}
+
+	assert tmp.Valid();  //tmp ftprint ok
+	assert head.Valid(); //head ftprint ok
+
+
+	spine := spine + {tmp};
+	
+	assert forall node :: node in spine ==> node.Valid();
+
+	contents := [d] + contents;
+	
+} 
+
+}
+}

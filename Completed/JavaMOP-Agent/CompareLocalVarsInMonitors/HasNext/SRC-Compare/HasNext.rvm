@@ -1,0 +1,17 @@
+package mop;
+
+import java.io.*;
+import java.util.*;
+HasNext(Iterator i) {
+	event hasnext(Iterator i){
+	}
+	event next(Iterator i){
+	}
+	ere:  (hasnext hasnext* next)*
+
+	@fail
+	{
+		System.err.println("! hasNext() has not been called" + " before calling next() for an" + " iterator");
+		__RESET;
+	}
+}

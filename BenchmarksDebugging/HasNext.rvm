@@ -1,0 +1,25 @@
+package rvm;
+HasNext(Integer iterator) {
+   private Integer iterator;
+public static boolean hasViolation;
+       event hasNextTrue(Integer iterator, boolean b){
+       this.iterator = iterator;
+       if ( ! (b) ) {
+       return false;
+       }
+       }
+       event hasNextFalse(Integer iterator, boolean b){
+         this.iterator = iterator;
+               if ( b ) {
+                return false;
+               }
+        }
+       event next(Integer iterator){
+          this.iterator = iterator;
+        }
+      ltl:  [](next => (*) hasNextTrue)
+      @violation
+        {
+          System.err.println("Violation. Iterator:" + this.iterator);
+        }
+}

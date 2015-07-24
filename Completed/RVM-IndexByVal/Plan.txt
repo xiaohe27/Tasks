@@ -1,0 +1,2 @@
+Bug in RV-Log
+2nd updateMap is NOT called!

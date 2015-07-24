@@ -1,0 +1,6 @@
+Name for the new repository in runtimeverification organization:
+
+tracesmop
+
+gen the log reader, which uses rv-monitor library as backend to monitor logs.
+

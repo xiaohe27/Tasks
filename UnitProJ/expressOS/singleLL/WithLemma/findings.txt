@@ -1,0 +1,10 @@
+Without the assertions, it may not prove things that are obvious to humans.
+
+=========
+damn it.
+A and B are predicate while C is method.
+
+A with B are ok
+A with C are ok
+
+A, B, C together will not prove?!

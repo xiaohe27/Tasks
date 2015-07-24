@@ -1,0 +1,56 @@
+function getFtprint(nd:INode): set<INode>
+reads nd;
+{
+if nd == null then {} else nd.footprint
+}
+
+predicate allV(myNode:INode)
+reads myNode, getFtprint(myNode);
+requires myNode != null && myNode.Valid();
+decreases myNode.footprint;
+ensures allV(myNode);
+ensures forall nd :: nd in myNode.footprint ==> nd != null && nd.Valid();
+{
+
+if (myNode.next == null)
+then myNode.footprint == {myNode}
+else 
+allV(myNode.next)
+}
+
+lemma allValidLemma(myNode:INode)
+requires myNode != null && myNode.Valid();
+requires myNode.next != null ==> myNode.next.Valid();
+decreases myNode.footprint;
+ensures forall nd :: nd in myNode.footprint ==> nd != null && nd.Valid();
+{
+assert allV(myNode);
+}
+
+
+predicate seqV(mySeq: seq<INode>)
+reads *;
+requires forall nd :: nd in mySeq ==> nd != null;
+requires forall i :: 1 <= i < |mySeq| ==> mySeq[i-1].next == mySeq[i];
+requires mySeq != [] ==> mySeq[0].Valid();
+
+ensures seqV(mySeq);
+ensures forall nd :: nd in mySeq ==> nd.Valid(); 
+ensures forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[j] in mySeq[i].footprint;
+{
+mySeq == [] ||
+(seqV(mySeq[1..]))
+}
+
+predicate seqV2(mySeq: seq<INode>)
+reads *;
+requires forall nd :: nd in mySeq ==> nd != null;
+requires forall i :: 1 <= i < |mySeq| ==> mySeq[i-1].next == mySeq[i];
+
+ensures seqV2(mySeq);
+ensures forall i, j :: 0 <= i < j < |mySeq| ==> 
+		(mySeq[i].Valid() ==> mySeq[j].Valid()); 
+{
+mySeq == [] ||
+forall i :: 0 <= i < |mySeq| ==> (mySeq[i].Valid() ==> seqV(mySeq[i..]))
+}

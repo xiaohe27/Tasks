@@ -1,0 +1,24 @@
+package rvm;
+
+T7B1 () {
+
+event data(String time,String x,String y,String z,String pitch,String roll,String yaw,
+String dist,String angle,String ax,String ay,String az,String bump_l,String bump_r,String drop_l,
+String drop_r,String drop_f,String cliff_l,String cliff_fl,String cliff_fr,String cliff_r,
+String lws,String rws,String state) 
+{
+double zVal = Double.parseDouble(z);
+if (zVal >= 0.3) {
+
+double ts = Double.parseDouble(time);
+
+if (ts >= 0 && ts <= 50) {
+
+System.err.println("Property Violated!\nAt time " + time + ", value of z is " + z + ", which is not strictly less than 0.3 !");
+System.exit(0);
+}
+}
+
+}
+
+}

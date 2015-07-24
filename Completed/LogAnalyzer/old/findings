@@ -1,0 +1,11 @@
+when using ocamlc instead of ocamlopt
+the efficiency of execution decreased a lot
+
+ocamlc : produce byte code which will be executed on ocaml's vm
+slower, executable has smaller size
+
+ocamlopt : gen native code object files ~ standalone
+bigger executable, and much faster!
+
+Monpoly read log entry one by one, it cannot detect error in the middle immediately
+The memory consumed by Monpoly is quite small

@@ -1,0 +1,22 @@
+package rvm;
+
+Offline_T3B1(){
+private long time_c;
+
+event c (long ts) {time_c = ts;}
+
+event d (long ts) {
+ if (ts - time_c < 100) {
+   System.err.println("the distance between the first event c and the first event d is less than 100 time units");
+	   System.exit(0);
+ }
+}
+
+ltl:
+d => <*> c
+
+@violation {
+           System.err.println("no event c occurs before the first event d");
+	   System.exit(0);
+        }
+}

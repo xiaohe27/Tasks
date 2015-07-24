@@ -1,0 +1,16 @@
+assert forall nd :: nd in tmpList ==> nd != null && nd.Valid();
+assert forall i :: 1 <= i < |tmpList| ==> tmpList[i-1].next == tmpList[i];
+assert tmpList[|tmpList|-1].next == null;
+assert seqValid2GoodList(tmpList);
+
+2min 30s
+
+
+=====
+no additional assertions in seqV : 3 min 57 s (one time)
+
+has additional assertions in seqV : 2 min (one time), 1 min 33 s (one time)
+
+===
+spine is a seq of INode
+50 seconds to verify the first loop + curNd.next := newNd

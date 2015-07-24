@@ -1,0 +1,7 @@
+Usage: javamopagent <Single-AJ-File> <Top-Dir-To-ClassFiles>  [-n <agent name>] [-excludeJars] [-baseaspect <BaseAspect.aj file path>]
+
+ Options:
+   -n Use the given name to generate agent
+   -excludeJars exclude rv-monitor-rt.jar and aspectjweaver.jar in the generated agent, so user should include those jars manually on CLASSPATH before running the agent
+   -baseaspect use the specified aspect file to filter out pointcuts instead of using the default one
+

@@ -1,0 +1,7 @@
+Analyze:
+
+RVMProcessor 
+
+public String process(RVMSpecFile rvmSpecFile) throws RVMException
+
+to find out what's going on under the hood.

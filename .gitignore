@@ -1,0 +1,9 @@
+JavaMOP-Agent/Many/*.rvm
+JavaMOP-Agent/Many/aj
+JavaMOP-Agent/Many/classes
+*~
+*.bak
+url*
+*.class
+*.dll
+*.pdb

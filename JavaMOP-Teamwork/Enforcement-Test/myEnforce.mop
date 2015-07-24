@@ -1,0 +1,19 @@
+package mop;
+
+enforce myEnforce() {
+    event one before():
+        execution(* *run(..)) && threadName("Thread-1") {
+            System.out.println("one");
+        }
+    event two before():
+        execution(* *run(..)) && threadName("Thread-2") {
+            System.out.println("two");
+        }
+    ere : one two
+
+    @fail {
+        System.out.println("failed");
+    }
+
+
+}

@@ -1,0 +1,57 @@
+package rvm;
+
+import java.util.Set;
+import java.util.HashMap;
+import java.util.concurrent.ConcurrentSkipListSet;
+
+T8B1 (String task, String resource) {
+
+public static HashMap<String, Set<String>> grantMap = new HashMap<>();
+
+event grant(String task, String resource) {
+
+ for (Set rSet : grantMap.values()) {
+  if(rSet.contains(resource)) {
+  System.err.println("Property Violated!\nCannot grant the resource " + resource + " multiple times without releasing!");
+  __EXIT;
+  } 
+ }
+
+  Set<String> mySet = grantMap.get(task);
+  if (mySet == null) {
+  mySet = new ConcurrentSkipListSet<String>();
+  grantMap.put(task, mySet);
+  }
+	
+  mySet.add(resource);
+  
+}
+
+event release(String task, String resource) {
+Set<String> rSet = grantMap.get(task);
+if(rSet == null ||
+!rSet.contains(resource)) {
+  System.err.println("Property Violated!\nTask "
+  + task + " cannot release the resource " + resource +
+  " because it has not been granted that resource before!");
+  __EXIT;
+} else {
+  rSet.remove(resource);
+}
+
+}
+
+event __END() {
+for (Set rSet : grantMap.values()) {
+  if(!rSet.isEmpty()) {
+      System.err.println("Property Violation!\nSome resource is never released.");
+      System.exit(1);
+  }
+}
+}
+
+ltl: true
+@fail
+{}
+
+}

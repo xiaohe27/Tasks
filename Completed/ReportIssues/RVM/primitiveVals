@@ -1,0 +1,3 @@
+Currently, only Objects are allowed to be parameters of spec in RVM.
+After the discussion with Grigore, we think it might be desired to have primitive data types supported.
+This can facilitate the invocation of the event methods from the data gathered from log files.

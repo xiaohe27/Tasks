@@ -1,0 +1,6 @@
+    /**
+     * By default, monitors are indexed by weak reference; but in certain cases, it might be
+     * desired to index monitors via values so that two parametric events will be dispatched to
+     * the same monitor as long as their spec parameter have the same value.
+     */
+    public static boolean indexByVal = false;

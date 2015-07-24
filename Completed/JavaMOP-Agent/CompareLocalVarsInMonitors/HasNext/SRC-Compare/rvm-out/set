@@ -1,0 +1,48 @@
+final class HasNextMonitor_Set extends com.runtimeverification.rvmonitor.java.rt.tablebase.AbstractMonitorSet<HasNextMonitor> {
+
+	HasNextMonitor_Set(){
+		this.size = 0;
+		this.elements = new HasNextMonitor[4];
+	}
+	final void event_hasnext(Iterator i) {
+		int numAlive = 0 ;
+		for(int i_1 = 0; i_1 < this.size; i_1++){
+			HasNextMonitor monitor = this.elements[i_1];
+			if(!monitor.isTerminated()){
+				elements[numAlive] = monitor;
+				numAlive++;
+
+				final HasNextMonitor monitorfinalMonitor = monitor;
+				monitor.Prop_1_event_hasnext(i);
+				if(monitorfinalMonitor.Prop_1_Category_fail) {
+					monitorfinalMonitor.Prop_1_handler_fail();
+				}
+			}
+		}
+		for(int i_1 = numAlive; i_1 < this.size; i_1++){
+			this.elements[i_1] = null;
+		}
+		size = numAlive;
+	}
+	final void event_next(Iterator i) {
+		int numAlive = 0 ;
+		for(int i_1 = 0; i_1 < this.size; i_1++){
+			HasNextMonitor monitor = this.elements[i_1];
+			if(!monitor.isTerminated()){
+				elements[numAlive] = monitor;
+				numAlive++;
+
+				final HasNextMonitor monitorfinalMonitor = monitor;
+				monitor.Prop_1_event_next(i);
+				if(monitorfinalMonitor.Prop_1_Category_fail) {
+					monitorfinalMonitor.Prop_1_handler_fail();
+				}
+			}
+		}
+		for(int i_1 = numAlive; i_1 < this.size; i_1++){
+			this.elements[i_1] = null;
+		}
+		size = numAlive;
+	}
+}
+

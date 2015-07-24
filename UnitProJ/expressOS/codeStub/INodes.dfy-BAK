@@ -1,0 +1,94 @@
+class Data {}
+
+class INode {
+ghost var list: seq<Data>;
+ghost var footprint: set<INode>;
+
+var data: Data;
+var next: INode;
+
+function valid() : bool
+reads this, footprint;
+{
+    this in footprint && null !in footprint
+	&& (next == null ==> list == [data])
+	&& (next != null ==> next in footprint
+	   && next.footprint <= this.footprint
+	   && this !in next.footprint
+	   && list == [data] + next.list
+	   && next.valid() )
+}
+
+constructor init(d: Data) 
+modifies this;
+ensures valid();
+ensures list == [d];
+ensures footprint == {this};
+ensures data == d;
+ensures next == null;
+ensures fresh(footprint - {this});
+{
+    data := d;
+	next := null;
+    list := [d];
+	footprint := {this};
+}
+
+method len() returns (length: int)
+decreases footprint;
+requires valid();
+ensures valid();
+ensures length == |list|;
+{
+  if (next == null) {
+	length := 1;
+  } else {
+	var nxtLen := next.len();
+	length := nxtLen + 1;
+  }
+}
+
+method insert(pos: int, d: Data)
+modifies footprint;
+requires valid();
+requires forall node :: node in this.footprint ==> (node.valid());
+requires 0 <= pos <= |list|;
+ensures valid();
+ensures |list| == (old(|list|) + 1);
+ensures forall i :: 0 <= i < pos ==> list[i] == old(list[i]);
+ensures list[pos] == d;
+ensures forall i :: pos < i < |this.list| ==> list[i] == old(list[i - 1]);
+ensures fresh(footprint - old(footprint));
+
+{
+var length := this.len();
+if (pos == 0) {
+	var tmp := new INode.init(this.data);
+	tmp.next := this.next;
+
+	tmp.footprint := this.footprint - {this} + {tmp};
+	tmp.list := this.list;
+
+    this.data := d;
+    this.next := tmp;
+
+	this.footprint := {this} + tmp.footprint;
+	this.list := [d] + tmp.list;
+} else if (pos == length) {
+  var newLast := new INode.init(d);
+
+  var last := this;
+  var index := 0;
+ 
+
+  last.next := newLast; 
+  last.footprint := last.footprint + {newLast}; 
+  last.list := last.list + [d];
+
+} else {
+
+ }
+
+}
+
+}

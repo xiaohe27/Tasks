@@ -1,0 +1,41 @@
+package mop;
+
+import java.io.*;
+import java.util.*;
+SafeSyncMap(Map syncMap, Set mapSet, Iterator iter) {
+
+	Map c;
+	creation event sync(Map syncMap){
+		this.c = syncMap;
+	}
+	event createSet(Map syncMap, Set mapSet){
+	}
+	event syncCreateIter(Set mapSet, Iterator iter){
+		if ( ! (Thread.holdsLock(c)) ) {
+			return false;
+		}
+		{
+		}
+	}
+	event asyncCreateIter(Set mapSet, Iterator iter){
+		if ( ! (!Thread.holdsLock(c)) ) {
+			return false;
+		}
+		{
+		}
+	}
+	event accessIter(Iterator iter){
+		if ( ! (!Thread.holdsLock(c)) ) {
+			return false;
+		}
+		{
+		}
+	}
+	ere:  sync createSet
+	(asyncCreateIter | (syncCreateIter accessIter))
+
+	@match
+	{
+		System.out.println("synchronized collection accessed in non threadsafe manner!");
+	}
+}

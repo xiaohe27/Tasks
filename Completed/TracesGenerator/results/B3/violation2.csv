@@ -1,0 +1,4 @@
+event, Iterator, bool
+hasNextTrue, 2039810346, false
+hasNextFalse, 2039810346, false
+next, 2039810346, 

@@ -1,0 +1,5 @@
+Method:
+parsing int by reading digit by digit, and *10 each time a new digit is encountered and then plus that digit.
+
+This method is about 16% faster than the approach of building int from string (current approach).
+

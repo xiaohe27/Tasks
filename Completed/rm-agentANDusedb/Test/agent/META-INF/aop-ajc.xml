@@ -1,0 +1,8 @@
+<aspectj>
+<aspects>
+<aspect name="mop.BaseAspect"/>
+<aspect name="mop.HasNextMonitorAspect"/>
+</aspects>
+<weaver options="-nowarn -Xlint:ignore"></weaver>
+</aspectj>
+

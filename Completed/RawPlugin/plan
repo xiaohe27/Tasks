@@ -1,0 +1,3 @@
+Check every spec, compare the starting index of the spec and the monitoring code's starting index.
+
+Then we can figure out which spec's event handlers the monitoring code should be inserted to.

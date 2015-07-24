@@ -1,0 +1,8 @@
+Seems that it is eq to use shorthand compared to multiple vars and
+separate decl and assignment.
+
+Use loop invariant to deduce the post condition!
+
+***
+Should NOT include the formula that
+a seq of INode is a subset of footprint!!!

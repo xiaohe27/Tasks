@@ -1,0 +1,4 @@
+It seems that the directory from which we compile the .aj can affect the contents of the aspects!
+
+Yes, the only thing that matters is the location from which we compile the .aj and .java files!
+

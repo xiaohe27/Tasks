@@ -1,0 +1,17 @@
+0. mkdir MyJavaMOPAgent 
+1. cd MyJavaMOPAgent 
+2. Produce the BaseAspect.aj
+3. javamop X.mop  //get the XMonitorAspect.aj
+4. ajc -1.6 -d MyJavaMOPAgent -outxml BaseAspect.aj XMonitorAspect.aj //this will gen the monitor aspect.
+5. Inside the file META-INF/aop-ajc.xml: 
+insert the line `<weaver options="-nowarn -Xlint:ignore"></weaver>` immediately below the line "</aspects>" and
+above the line "</aspectj>" 
+
+6. extract the contents of aspectjweaver.jar and rv-monitor-rt.jar to directory MyJavaMOPAgent.
+7. Place the META-INF folder into the folder MyJavaMOPAgent. (Can use the one created by javamop -agent...)
+8. In the directory of MyJavaMOPAgent, execute:
+ jar -cfm MyJavaMOPAgent.jar META-INF/MANIFEST.MF .
+
+
+Then the MyJavaMOPAgent.jar will be created, just like the one created by the javamop's -agent option.  
+

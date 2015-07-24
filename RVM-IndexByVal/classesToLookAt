@@ -1,0 +1,22 @@
+package com.runtimeverification.rvmonitor.java.rvj.output.combinedaspect.indexingtree.reftree;
+
+RefTree.getResultType();
+
+package com.runtimeverification.rvmonitor.java.rvj.output.combinedaspect.event.itf;
+WeakReferenceVariables constructor:
+that's where the 
+
+package com.runtimeverification.rvmonitor.java.rvj.output.codedom.helper;
+CodeVariable is generated!
+
+
+package com.runtimeverification.rvmonitor.java.rvj.output.combinedaspect.event.itf;
+EventMethodBody.generateMonitorCreation()
+and generateCacheLookup()
+and getKeyCompareCode()
+
+
+package com.runtimeverification.rvmonitor.java.rvj.output.codedom;
+CodeBinOpExpr.getCode()
+
+That's the impl of D(X) algorithm 1-6

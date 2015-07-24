@@ -1,0 +1,5 @@
+Error occurred during initialization of VM
+agent library failed to init: instrument
+Error opening zip file or JAR manifest missing : agent.jar
+Error occurred during initialization of VM
+agent library failed to init: instrument

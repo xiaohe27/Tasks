@@ -1,0 +1,18 @@
+package mop;
+
+import java.io.*;
+import java.util.*;
+full-binding SafeIterator(Collection c, Iterator i) {
+	event create(Collection c, Iterator i){
+	}
+	event updatesource(Collection c){
+	}
+	event next(Iterator i){
+	}
+	ltl:  [](next => (not updatesource S create))
+
+	@violation
+	{
+		System.out.println("improper iterator usage");
+	}
+}

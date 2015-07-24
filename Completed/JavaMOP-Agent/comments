@@ -1,0 +1,25 @@
+When using rv-monitor to generate monitor libraries, if a directory with multiple hierarchies is provided as 
+argument, then it is very likely that rv-monitor will throw some exception like this:
+
+java.io.IOException
+	at com.runtimeverification.rvmonitor.core.parser.SimpleCharStream.FillBuff(SimpleCharStream.java:117)
+	at com.runtimeverification.rvmonitor.core.parser.SimpleCharStream.readChar(SimpleCharStream.java:196)
+	at com.runtimeverification.rvmonitor.core.parser.RVParser.parseUntilLineMatches(RVParser.java:186)
+	at com.runtimeverification.rvmonitor.core.parser.RVParser.rvmFile(RVParser.java:203)
+	at com.runtimeverification.rvmonitor.core.parser.RVParser.parse(RVParser.java:41)
+	at com.runtimeverification.rvmonitor.java.rvj.JavaParserAdapter.parse(JavaParserAdapter.java:55)
+	at com.runtimeverification.rvmonitor.java.rvj.SpecExtractor.parse(SpecExtractor.java:57)
+	at com.runtimeverification.rvmonitor.java.rvj.Main.processJavaFile(Main.java:114)
+	at com.runtimeverification.rvmonitor.java.rvj.Main.process(Main.java:369)
+	at com.runtimeverification.rvmonitor.java.rvj.Main.process(Main.java:384)
+	at com.runtimeverification.rvmonitor.java.rvj.Main.main(Main.java:517)
+com.runtimeverification.rvmonitor.util.RVMException: RV Monitor Expection:com.runtimeverification.rvmonitor.core.parser.ParseException: Encountered "<EOF>" at line 0, column 0.
+Was expecting:
+    <ID> ...
+
+
+
+
+
+The tool name `javamopagent` is a little confusing, because it is in fact an agent generator.
+

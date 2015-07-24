@@ -1,0 +1,12 @@
+
+A:\Projects\Tasks\UnitProJ\expressOS\singleLL\posLen-OK>echo "12:28:44.60" 
+"12:28:44.60"
+
+A:\Projects\Tasks\UnitProJ\expressOS\singleLL\posLen-OK>Dafny.exe INode.dfy 
+Dafny program verifier version 1.9.5.20511, Copyright (c) 2003-2015, Microsoft.
+
+Dafny program verifier finished with 10 verified, 0 errors
+Compiled assembly into INode.dll
+
+A:\Projects\Tasks\UnitProJ\expressOS\singleLL\posLen-OK>echo "12:58:49.38" 
+"12:58:49.38"

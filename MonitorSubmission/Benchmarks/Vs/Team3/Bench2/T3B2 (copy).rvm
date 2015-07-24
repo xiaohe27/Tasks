@@ -1,0 +1,19 @@
+package rvm;
+
+T3B2(){
+
+event a (long time) {}
+
+event b (long time) {}
+
+event c (long time) {
+T3B2RuntimeMonitor.timeReminder.report(0, time - 1000);
+}
+
+ltl:
+a => <>[0,1000] b
+
+@fail
+{}
+
+}

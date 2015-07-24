@@ -1,0 +1,18 @@
+package rvm;
+
+T3B2(){
+
+event a (long time) {}
+
+event b (long time) {}
+
+event c (long time) {}
+
+ltl:
+a => <>[0,1000] b
+
+@fail
+{}
+
+Scope : [0, 1 c - 1000]
+}

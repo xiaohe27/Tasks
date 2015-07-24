@@ -1,0 +1,3 @@
+add an entry to the end of the file
+then write a property that only validates that entry.
+Then Monpoly will go through all the log entries in between

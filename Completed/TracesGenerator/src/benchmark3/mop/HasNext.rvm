@@ -1,0 +1,29 @@
+package mop;
+
+import java.io.*;
+import java.util.*;
+HasNext(Iterator i) {
+    private Iterator i;
+ 
+	event hasNextTrue(Iterator i, boolean b){
+		this.i = i;
+		if ( ! (b) ) {
+			return false;
+		}
+	}
+	event hasNextFalse(Iterator i, boolean b){
+		this.i = i;
+		if ( b ) {
+			return false;
+		}
+	}
+	event next(Iterator i){
+		this.i = i;
+	}
+	ltl:  [](next => (*) hasNextTrue)
+
+	@violation
+	{
+		System.err.println("Violation. Iterator:" + System.identityHashCode(this.i));
+	}
+}

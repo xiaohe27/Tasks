@@ -1,0 +1,5 @@
+javamop -merge
+rv-monitor -merge
+
+both these two tools should use -merge option when there are multiple spec files
+

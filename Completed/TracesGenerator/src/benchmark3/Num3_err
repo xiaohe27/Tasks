@@ -1,0 +1,14 @@
+Violations' indices: [7 8 3 8 4 ]
+Violation. Iterator:2114444063
+Violation. Iterator:2131670196
+Violation. Iterator:1162918744
+Violation. Iterator:310623126
+Violation. Iterator:953742666
+GoodTests: 
+Test 1: 14
+Test 2: 5
+Test 3: 26
+BadTests: 
+Test 1: 3
+Test 2: 1
+Test 3: 1

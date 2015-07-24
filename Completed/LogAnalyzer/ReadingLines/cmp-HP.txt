@@ -1,0 +1,63 @@
+Use indirect char buf, normal file channel:
+
+Is mapped byte buffer direct? true
+CharBuffer is direct? false
+There are 9222330 lines
+It took my log analyzer 4951 ms to count all the log entries in the log file.
+
+Use direct mapped byte buffer, normal file channel
+Is mapped byte buffer direct? true
+There are 9222330 lines
+It took my log analyzer 4067 ms to count all the log entries in the log file
+
+
++++++++++++++++++++++++
+buf size: 4KB
+There are 9222330 lines
+It took my log analyzer 4861 ms to count all the log entries in the log file.
+
+8KB
+There are 9222330 lines
+It took my log analyzer 4773 ms to count all the log entries in the log file.
+
+80KB
+4512ms
+
+1800KB
+4496ms
+
+================
+direct alloc
+4kb 4715
+40kb 4554
+50kb 4491
+
+========================
+build string and count line number from analyzing bytes:
+
+There are 9222330 lines
+It took my log analyzer 1294 ms to count all the log entries in the log file.
+----------------------------
+read bytes using mapped byte buffer:
+There are 308936698 bytes
+It took my log analyzer 590 ms to count the bytes in the log file.
+
+There are 9222330 lines
+It took my log analyzer 409 ms to count all the lines in the log file.
+
+
+============
+buffered reader:
+There are 9222330 lines
+894 ms to read all the lines to string!
+
+============
+Files.lines and then forEachOrdered
+1065 ms
+There are 9222330 log entries in the log file!~!
+...................................................................
+using forEach (order not preserved, therefore not applicable to 
+gen events correctly)
+There are 9222330 log entries in the log file!~!
+It took my log analyzer 1047 ms to count all the log entries in the log file
+

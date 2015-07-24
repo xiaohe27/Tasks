@@ -1,0 +1,8 @@
+1.compile:
+execute "compile" script in the current directory
+
+2.run:
+execute "run" script in the current directory
+
+3.program:
+Thread 4,5,6 share a lock. Thread 4 acquires the lock one more time than it releases the lock so that it MAY cause deadlock.

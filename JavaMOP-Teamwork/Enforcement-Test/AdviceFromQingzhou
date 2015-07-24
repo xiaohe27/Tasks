@@ -1,0 +1,2 @@
+@xiaohe27 OK, it looks like the change (have a getter) that I proposed for RV-Monitor was never ever implemented . He, if you want to fix the code output as you did manually, 
+you can change printAdviceForNewThread() in EndThread.java.

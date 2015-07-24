@@ -1,0 +1,59 @@
+Dear Ylies,
+
+Thank you for your comments and the prototype!
+
+You understand my problem very accurately. 
+
+Your proposed solution does solve this problem:
+
+indexing by values and by references can coexist;
+
+but in fact, similar mechanism has already been proposed by Philip long time ago, as a quick fix used in his
+
+postfix log example: https://runtimeverification.com/monitor/1.3/docs/runningexamples/#analyzing-logs
+
+The complete code file can be found here:
+https://github.com/runtimeverification/rv-monitor/blob/master/examples/java/FSM/PostfixLog/PostfixLogAdapter.java
+
+In line 71:
+// Get the cached String object representing a particular user
+    private static String getUser(String user) {
+        if (!activeUsers.containsKey(user)) {
+            activeUsers.put(user, user);
+        }
+        return activeUsers.get(user);
+    }
+
+In Philip's temporary solution, an additional map is used to cache the references, indexing by values.
+
+Therefore, using same value will retrieve the same reference, which can be used to find the actual monitor.
+
+This mechanism is quite intuitive, and I also plan to make it a PLAN B :).
+
+Currently, RV-Monitor has very fancy weak referencing mechanism which indexes monitors by weak references. 
+
+With the algorithm for finding monitors that will never be triggered again, together with the specialized weak referencing data structures,
+
+the dead monitors can be garbage collected in a lazy manner.
+
+==
+My current opinion is: The monitoring library code is generated automatically from the rvm-specification by RV-Monitor.
+
+Therefore, we are free to choose the appropriate data structures ourselves based on the application area. 
+
+There are some differences between online monitoring and offline monitoring. 
+
+When monitoring Java programs online, we may need to deal with monitors indexed by complex objects, like Map or Iterator;
+
+However, for log files, the types are typically very primitive, like String or int.
+
+Therefore, instead of finding a generic solution which can handle indexing by ref and indexing by value at the same time, 
+
+we can generate specially optimized monitoring library (E.G. only index the monitors by values), if requested by users. 
+
+As a result, we are able to simplify the data structure to one-level mapping instead of two.
+
+In offline log analysis application, we may directly map from the value of index to the monitor (the generated monitor maintains the states).
+
+Regards,
+He

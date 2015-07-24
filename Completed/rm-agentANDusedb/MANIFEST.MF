@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Implementation-Title: org.aspectj.weaver
+Premain-Class: org.aspectj.weaver.loadtime.Agent
+Implementation-Version: DEVELOPMENT
+Specification-Vendor: aspectj.org
+Can-Redefine-Classes: true
+Name: org/aspectj/weaver/
+Specification-Title: AspectJ Weaver Classes
+Specification-Version: DEVELOPMENT
+Created-By: 1.8.0_20 (Oracle Corporation)
+Implementation-Vendor: aspectj.org
+

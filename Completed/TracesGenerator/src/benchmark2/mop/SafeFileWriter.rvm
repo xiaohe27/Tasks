@@ -1,0 +1,24 @@
+package mop;
+
+import java.io.*;
+import java.util.*;
+SafeFileWriter(FileWriter f) {
+	private FileWriter f;
+	event open(FileWriter f){
+		this.f = f;
+	}
+	event write(FileWriter f){
+		this.f = f;
+	}
+	event close(FileWriter f){
+		this.f = f;
+	}
+	cfg:
+	S -> open SafeWrite close write,
+	SafeWrite -> SafeWrite S | SafeWrite write | epsilon
+
+	@match
+	{
+		System.err.println("write after close. FileWriter:" + System.identityHashCode(this.f));
+	}
+}
