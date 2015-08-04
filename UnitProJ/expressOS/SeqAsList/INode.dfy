@@ -378,13 +378,14 @@ ensures contents == old(contents) + [d];
 }
 */
 
+//16s
 method add2Front(d:Data)
 requires valid();
 requires d != null;
 
 modifies footprint;
 
-//ensures valid();
+ensures valid();
 ensures contents == [d] + old(contents);
 ensures fresh(footprint - old(footprint));
 {
@@ -410,7 +411,8 @@ assert allNdValid2GoodSeqCond(spine);
 
 contents := [d] + contents;
 footprint := footprint + {newHead};
-
+assert contents == ndSeq2DataSeq(spine);
+assert sumAllFtprint(spine) <= footprint - {this};
 }
 
 }

@@ -1,0 +1,56 @@
+package rvm;
+
+import java.util.concurrent.ConcurrentSkipListSet;
+
+T3B5 () {
+public static long startBase = -1;
+public static int startEventCount = 0;
+
+public static long endBase = -1;
+public static final long endOffSet = -100L;
+
+public static final ConcurrentSkipListSet<Long> candidateB = new ConcurrentSkipListSet<>();
+public static final HashMap<Long, Integer> timeEventBMap = new HashMap<>();
+
+public static void check() {
+        int numOfB = 0;
+
+        for(Long time : candidateB) {
+           if(time >= startBase && time <= endBase + endOffSet) {
+            numOfB += timeEventBMap.get(time);
+           }
+        }
+
+        if (numOfB > 5) {
+           System.err.println("Property Violated! In the range [" + startBase
+            + ", " + (endBase+endOffSet) + "], number of event b exceeeds 5.");
+           System.exit(0);
+        }
+        }
+
+event a (long time) {
+        if (++startEventCount == 2) {
+            startBase = time;
+        }
+        }
+
+event b (long time) {
+        candidateB.add(time);
+
+        if (timeEventBMap.get(time) == null) {
+        timeEventBMap.put(time, 1);
+        } else {
+        timeEventBMap.put(time, timeEventBMap.get(time) + 1);
+        }
+
+        }
+
+event c (long time) {
+        if  (startBase != -1) {
+         endBase = time;
+         check();
+        }
+        }
+
+
+}
