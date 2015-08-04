@@ -371,9 +371,9 @@ requires valid();
 
 modifies footprint;
 
-//ensures valid();
+ensures valid();
 ensures fresh(footprint - old(footprint));
-//ensures contents == old(contents) + [d];
+ensures contents == old(contents) + [d];
 {
 var newEnd := new INode.init(d);
 assert newEnd.footprint !! footprint;
@@ -383,6 +383,11 @@ spine := spine + [newEnd];
 assert seqInv(spine);
 
 updateSeq(spine);
+
+contents := contents + [d];
+
+footprint := footprint + {newEnd};
+
 }
 
 
