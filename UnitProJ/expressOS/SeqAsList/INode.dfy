@@ -363,21 +363,30 @@ ensures forall nd :: nd in spine ==> nd.footprint <= footprint - {this};
 {}
 
 //=============================================================================
-/*
+
 method add2End(d:Data)
 requires d != null;
+requires spine != [];
 requires valid();
 
 modifies footprint;
 
-ensures valid();
+//ensures valid();
 ensures fresh(footprint - old(footprint));
-ensures contents == old(contents) + [d];
+//ensures contents == old(contents) + [d];
 {
+var newEnd := new INode.init(d);
+assert newEnd.footprint !! footprint;
 
+spine[|spine|-1].next = newEnd;
+spine := spine + [newEnd];
+assert seqInv(spine);
+
+updateSeq(spine);
 }
-*/
 
+
+/*
 //16s
 method add2Front(d:Data)
 requires valid();
@@ -414,5 +423,6 @@ footprint := footprint + {newHead};
 assert contents == ndSeq2DataSeq(spine);
 assert sumAllFtprint(spine) <= footprint - {this};
 }
+*/
 
 }
