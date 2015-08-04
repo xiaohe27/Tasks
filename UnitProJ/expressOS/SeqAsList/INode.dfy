@@ -363,6 +363,40 @@ ensures forall nd :: nd in spine ==> nd.footprint <= footprint - {this};
 {}
 
 //=============================================================================
+method addInMid(d:Data, pos:int)
+requires d != null;
+requires |spine| >= 2;
+requires 0 < pos < |spine|;
+requires valid();
+
+modifies footprint;
+ensures valid();
+ensures fresh(footprint - old(footprint));
+ensures contents == old(contents[0..pos]) + [d] + old(contents[pos..]);
+{
+var newNd := new INode.init(d);
+assert newNd.footprint !! footprint;
+
+var prevNd := spine[pos-1];
+var posNd := spine[pos];
+
+newNd.next := posNd;
+newNd.tailContents := [posNd.data] + posNd.tailContents;
+newNd.footprint := {newNd} + posNd.footprint;
+
+assert newNd.Valid();
+prevNd.next := newNd;
+
+spine := spine[0..pos] + [newNd] + spine[pos..];
+assert seqInv(spine); //17.5s
+updateSeq(spine); //18s
+
+contents := contents[0..pos] + [d] + contents[pos..];
+
+footprint := footprint + {newNd};
+}
+
+
 
 method add2End(d:Data)
 requires d != null;
