@@ -80,31 +80,6 @@ if mySeq == [] then {} else getFtprint(mySeq[0]) + sumAllFtprint(mySeq[1..])
 }
 
 
-/*
-predicate allV(myNode:INode)
-reads myNode, getFtprint(myNode);
-requires myNode != null && myNode.Valid();
-decreases myNode.footprint;
-ensures allV(myNode);
-ensures forall nd :: nd in myNode.footprint ==> nd != null && nd.Valid();
-{
-
-if (myNode.next == null)
-then myNode.footprint == {myNode}
-else 
-allV(myNode.next)
-}
-
-
-lemma allValidLemma(myNode:INode)
-requires myNode != null && myNode.Valid();
-requires myNode.next != null ==> myNode.next.Valid();
-decreases myNode.footprint;
-ensures forall nd :: nd in myNode.footprint ==> nd != null && nd.Valid();
-{
-assert allV(myNode);
-}
-*/
 
 predicate seqFtprintLemma(mySeq: seq<INode>)
 requires mySeq != [] && null !in mySeq;
@@ -203,7 +178,7 @@ allDiff(mySeq) &&
 				!! mySeq[i].footprint)
 }
 
-/*
+
 predicate stillSeqInv(mySeq:seq<INode>, newNd:INode)
 requires mySeq != [] && seqInv(mySeq);
 requires newNd != null && newNd.Valid() && newNd.next == mySeq[0];
@@ -292,7 +267,7 @@ assert seqV(mySeq);
 assert allNdValid2GoodSeqCond(mySeq);
 assert seqFtprintLemma(mySeq);
 }
-*/
+
 
 lemma setLE(a:set<INode>, b:set<INode>,
 	newA:set<INode>, newB:set<INode>, nd:INode)
@@ -409,7 +384,7 @@ footprint := footprint + {newEnd};
 */
 
 
-
+/*
 method add2Front(d:Data)
 requires valid();
 requires d != null;
@@ -446,7 +421,7 @@ assert contents == ndSeq2DataSeq(spine);
 assert sumAllFtprint(spine) <= footprint - {this};
 ftprintInclusionLemma();
 }
-
+*/
 
 }
 
