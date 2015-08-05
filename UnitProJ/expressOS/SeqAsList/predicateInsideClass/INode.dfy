@@ -384,7 +384,7 @@ footprint := footprint + {newEnd};
 */
 
 
-/*
+
 method add2Front(d:Data)
 requires valid();
 requires d != null;
@@ -421,7 +421,7 @@ assert contents == ndSeq2DataSeq(spine);
 assert sumAllFtprint(spine) <= footprint - {this};
 ftprintInclusionLemma();
 }
-*/
+
 
 }
 
