@@ -1,0 +1,19 @@
+method insert(d:Data, pos:int)
+requires d != null;
+requires 0 <= pos <= |spine|;
+requires valid();
+
+modifies footprint;
+ensures valid();
+ensures fresh(footprint - old(footprint));
+ensures contents[0..pos] == old(contents[0..pos])
+	&& contents[pos] == d 
+	&& contents[(pos+1)..] == old(contents[pos..]);
+{
+if (pos == 0) {
+  add2Front(d);
+} else if (pos == ) {
+
+}
+
+}

@@ -181,91 +181,90 @@ allDiff(mySeq) &&
 
 predicate stillSeqInv(mySeq:seq<INode>, newNd:INode)
 requires mySeq != [] && seqInv(mySeq);
-requires newNd != null && newNd.Valid() && newNd.next == mySeq[0];
-requires {newNd} !! sumAllFtprint(mySeq);
-requires forall nd :: nd in mySeq ==> nd.next != newNd;
+requires newNd != null && newNd.Valid() && mySeq[|mySeq|-1].next == newNd;
+requires newNd.footprint !! sumAllFtprint(mySeq);
 reads mySeq, sumAllFtprint(mySeq), newNd, getFtprint(newNd);
-ensures seqInv([newNd]+mySeq);
+ensures seqInv(mySeq + [newNd]);
 {
 true
 }
 
 
-ghost method updateCurIndex(mySeq:seq<INode>, index:int)
-requires 0 <= index <= |mySeq| - 2;
-requires seqInv(mySeq);
-requires mySeq[|mySeq|-1].next == null;
-requires mySeq[index+1].Valid();
+method updateCurIndex(index:int)
+requires 0 <= index <= |spine| - 2;
+requires seqInv(spine);
+requires spine[|spine|-1].next == null;
+requires spine[index+1].Valid();
 
-requires forall i :: index < i < |mySeq|-1 ==> 
-	(mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents)
- && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint);
+requires forall i :: index < i < |spine|-1 ==> 
+	(spine[i].tailContents == [spine[i+1].data] + spine[i+1].tailContents)
+ && (spine[i].footprint == {spine[i]} + spine[i+1].footprint);
 
-modifies mySeq;
-ensures seqInv(mySeq);
-ensures mySeq[|mySeq|-1].next == null;
-ensures forall i :: index <= i < |mySeq|-1 ==> 
-	(mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents)
- && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint);
-ensures mySeq[index].Valid();
+modifies spine;
+ensures seqInv(spine);
+ensures spine[|spine|-1].next == null;
+ensures forall i :: index <= i < |spine|-1 ==> 
+	(spine[i].tailContents == [spine[i+1].data] + spine[i+1].tailContents)
+ && (spine[i].footprint == {spine[i]} + spine[i+1].footprint);
+ensures spine[index].Valid();
 {
-mySeq[index].tailContents := [mySeq[index+1].data] + mySeq[index+1].tailContents;
+spine[index].tailContents := [spine[index+1].data] + spine[index+1].tailContents;
 
-mySeq[index].footprint := {mySeq[index]} + mySeq[index+1].footprint;
+spine[index].footprint := {spine[index]} + spine[index+1].footprint;
 }
 
 
-ghost method updateSeq(mySeq:seq<INode>)
+method updateSeq()
 
-requires mySeq != [];
-requires seqInv(mySeq);
-requires mySeq[|mySeq|-1].next == null;
-requires mySeq[|mySeq|-1].Valid();
+requires spine != [];
+requires seqInv(spine);
+requires spine[|spine|-1].next == null;
+requires spine[|spine|-1].Valid();
 
-modifies mySeq;
-ensures seqInv(mySeq);
-ensures mySeq[|mySeq|-1].next == null;
-requires mySeq[|mySeq|-1].Valid();
+modifies spine;
+ensures seqInv(spine);
+ensures spine[|spine|-1].next == null;
+requires spine[|spine|-1].Valid();
 
-ensures forall i :: 0 <= i < |mySeq|-1 ==> 
-	(mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents)
- && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint);
+ensures forall i :: 0 <= i < |spine|-1 ==> 
+	(spine[i].tailContents == [spine[i+1].data] + spine[i+1].tailContents)
+ && (spine[i].footprint == {spine[i]} + spine[i+1].footprint);
 
-ensures forall nd :: nd in mySeq ==> nd.Valid();
-ensures validSeqCond(mySeq);
+ensures forall nd :: nd in spine ==> nd.Valid();
+ensures validSeqCond(spine);
 
-ensures mySeq[0].footprint == (set nd | nd in mySeq);
-ensures forall nd :: nd in mySeq ==> nd.footprint <= mySeq[0].footprint;
-ensures forall nd :: nd in mySeq[1..] ==> nd.footprint < mySeq[0].footprint;
+ensures spine[0].footprint == (set nd | nd in spine);
+ensures forall nd :: nd in spine ==> nd.footprint <= spine[0].footprint;
+ensures forall nd :: nd in spine[1..] ==> nd.footprint < spine[0].footprint;
 {
-ghost var index := |mySeq| - 2;
+var index := |spine| - 2;
 
 while(index >= 0)
-invariant -1 <= index <= |mySeq| - 2;
+invariant -1 <= index <= |spine| - 2;
 
-invariant forall i :: index < i < |mySeq|-1 ==> 
-	(mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents)
- && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint);
+invariant forall i :: index < i < |spine|-1 ==> 
+	(spine[i].tailContents == [spine[i+1].data] + spine[i+1].tailContents)
+ && (spine[i].footprint == {spine[i]} + spine[i+1].footprint);
 
-invariant seqInv(mySeq);
-invariant mySeq[|mySeq|-1].next == null;
-invariant mySeq[index+1].Valid();
+invariant seqInv(spine);
+invariant spine[|spine|-1].next == null;
+invariant spine[index+1].Valid();
 {
-updateCurIndex(mySeq, index);
+updateCurIndex(index);
 
 index := index - 1;
 
-assert forall i :: index < i < |mySeq|-1 ==> 
-	(mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents)
- && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint);
+assert forall i :: index < i < |spine|-1 ==> 
+	(spine[i].tailContents == [spine[i+1].data] + spine[i+1].tailContents)
+ && (spine[i].footprint == {spine[i]} + spine[i+1].footprint);
 
-assert seqInv(mySeq);  
-assert mySeq[|mySeq|-1].next == null;
+assert seqInv(spine);  
+assert spine[|spine|-1].next == null;
 }
 
-assert seqV(mySeq);
-assert allNdValid2GoodSeqCond(mySeq);
-assert seqFtprintLemma(mySeq);
+assert seqV(spine);
+assert allNdValid2GoodSeqCond(spine);
+assert seqFtprintLemma(spine);
 }
 
 
@@ -354,7 +353,7 @@ contents := contents[0..pos] + [d] + contents[pos..];
 
 footprint := footprint + {newNd};
 }
-
+*/
 
 method add2End(d:Data)
 requires d != null;
@@ -363,28 +362,37 @@ requires valid();
 
 modifies footprint;
 
-ensures valid();
-ensures fresh(footprint - old(footprint));
-ensures contents == old(contents) + [d];
+//ensures valid();
+//ensures fresh(footprint - old(footprint));
+//ensures contents == old(contents) + [d];
 {
 var newEnd := new INode.init(d);
 assert newEnd.footprint !! footprint;
 
 spine[|spine|-1].next := newEnd;
+
+assert stillSeqInv(spine, newEnd);
+
 spine := spine + [newEnd];
+
 assert seqInv(spine);
 
-updateSeq(spine);
+//updateSeq();
 
+/*
 contents := contents + [d];
 
 footprint := footprint + {newEnd};
 
-}
+assert contents == ndSeq2DataSeq(spine);
+assert sumAllFtprint(spine) <= footprint - {this};
+ftprintInclusionLemma();
 */
+}
 
 
 
+/*
 method add2Front(d:Data)
 requires valid();
 requires d != null;
@@ -421,7 +429,7 @@ assert contents == ndSeq2DataSeq(spine);
 assert sumAllFtprint(spine) <= footprint - {this};
 ftprintInclusionLemma();
 }
-
+*/
 
 }
 
