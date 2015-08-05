@@ -192,6 +192,7 @@ allDiff(mySeq) &&
 				!! mySeq[i].footprint)
 }
 
+/*
 predicate stillSeqInv(mySeq:seq<INode>, newNd:INode)
 requires mySeq != [] && seqInv(mySeq);
 requires newNd != null && newNd.Valid() && newNd.next == mySeq[0];
@@ -202,9 +203,9 @@ ensures seqInv([newNd]+mySeq);
 {
 true
 }
+*/
 
 /////////////////////////////////////////////////////////////////
-/*
 ghost method updateCurIndex(mySeq:seq<INode>, index:int)
 requires 0 <= index <= |mySeq| - 2;
 requires seqInv(mySeq);
@@ -283,7 +284,7 @@ assert seqV(mySeq);
 assert allNdValid2GoodSeqCond(mySeq);
 assert seqFtprintLemma(mySeq);
 }
-*/
+
 
 lemma setLE(a:set<INode>, b:set<INode>,
 	newA:set<INode>, newB:set<INode>, nd:INode)
@@ -355,14 +356,16 @@ spine := [];
 }
 
 //=============================================================================
+/*
 lemma ftprintInclusionLemma()
 requires null !in spine && spine != [];
 requires forall nd :: nd in spine ==> nd.footprint <= spine[0].footprint;
 requires spine[0].footprint <= footprint;
 ensures forall nd :: nd in spine ==> nd.footprint <= footprint - {this};
 {}
-
+*/
 //=============================================================================
+/*
 method addInMid(d:Data, pos:int)
 requires d != null;
 requires |spine| >= 2;
@@ -397,7 +400,6 @@ footprint := footprint + {newNd};
 }
 
 
-
 method add2End(d:Data)
 requires d != null;
 requires spine != [];
@@ -412,7 +414,7 @@ ensures contents == old(contents) + [d];
 var newEnd := new INode.init(d);
 assert newEnd.footprint !! footprint;
 
-spine[|spine|-1].next = newEnd;
+spine[|spine|-1].next := newEnd;
 spine := spine + [newEnd];
 assert seqInv(spine);
 
@@ -423,19 +425,19 @@ contents := contents + [d];
 footprint := footprint + {newEnd};
 
 }
+*/
 
 
 
-//16s
 method add2Front(d:Data)
 requires valid();
 requires d != null;
 
 modifies footprint;
 
-ensures valid();
-ensures contents == [d] + old(contents);
-ensures fresh(footprint - old(footprint));
+//ensures valid();
+//ensures contents == [d] + old(contents);
+//ensures fresh(footprint - old(footprint));
 {
 var newHead := new INode.init(d);
 assert newHead.footprint !! footprint;
@@ -451,16 +453,18 @@ assert newHead.Valid();
 
 spine := [newHead] + spine;
 
-assert stillSeqInv(old(spine), newHead);
-assert seqInv(spine);
-assert forall nd :: nd in spine ==> nd.Valid();
+assert seqV(spine);
 
+assert seqInv(spine);
 assert allNdValid2GoodSeqCond(spine);
 
 contents := [d] + contents;
 footprint := footprint + {newHead};
-assert contents == ndSeq2DataSeq(spine);
+
+//assert contentOK(old(contents), old(spine),contents, spine,newHead, d);
+//assert contents == ndSeq2DataSeq(spine);
 assert sumAllFtprint(spine) <= footprint - {this};
+
 }
 
 
