@@ -355,6 +355,7 @@ footprint := footprint + {newNd};
 }
 */
 
+/*
 method add2End(d:Data)
 requires d != null;
 requires spine != [];
@@ -367,19 +368,19 @@ modifies footprint;
 //ensures contents == old(contents) + [d];
 {
 var newEnd := new INode.init(d);
-assert newEnd.footprint !! footprint;
+//assert newEnd.footprint !! footprint;
 
 spine[|spine|-1].next := newEnd;
 
-assert stillSeqInv(spine, newEnd);
+//assert stillSeqInv(spine, newEnd);
 
 spine := spine + [newEnd];
 
-assert seqInv(spine);
+//assert seqInv(spine);
 
 //updateSeq();
 
-/*
+
 contents := contents + [d];
 
 footprint := footprint + {newEnd};
@@ -387,9 +388,9 @@ footprint := footprint + {newEnd};
 assert contents == ndSeq2DataSeq(spine);
 assert sumAllFtprint(spine) <= footprint - {this};
 ftprintInclusionLemma();
-*/
-}
 
+}
+*/
 
 
 /*
