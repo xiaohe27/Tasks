@@ -18,7 +18,9 @@ this in footprint
 	next.footprint + {this} == footprint && next.acyclic())
 	|| next.Valid())
 	))
+&& forall node :: node in footprint - {this} ==> this !in getFtprint(node)
 }
+
 
 predicate good()
 reads this, footprint;
@@ -45,6 +47,13 @@ reads this, footprint;
 	&& (next != null ==> tailContents == [next.data] + next.tailContents)
 }
 
+predicate ValidLemma()
+requires Valid();
+reads this, footprint;
+ensures forall nd :: nd in footprint ==> nd != null && nd.footprint <= footprint;
+{
+next != null ==> (next.ValidLemma())
+}
 
 constructor init(d:Data) 
 modifies this;
@@ -102,6 +111,76 @@ this.tailContents := [this.next.data] + this.next.tailContents;
 this.footprint := {this} + next.footprint;
 
 }
+
+
+function getFtprint(nd:INode): set<INode>
+reads nd;
+{
+if nd == null then {} else nd.footprint
+}
+
+/*
+predicate valid2Acyclic(nd:INode)
+requires nd != null && nd.Valid();
+reads nd, getFtprint(nd);
+ensures valid2Acyclic(nd);
+ensures nd.acyclic();
+{
+nd.next != null ==> (nd !in nd.next.footprint && nd.next.Valid())
+}
+
+
+predicate myLemma(nd:INode)
+requires nd != null && nd.acyclic();
+reads *;
+ensures myLemma(nd);
+ensures forall node :: node in nd.footprint - {nd} ==> nd !in getFtprint(node);
+{
+next != null ==> (next.acyclic()
+	|| next.Valid())
+}
+
+
+function getLen(nd:INode):int
+requires nd != null && nd.acyclic();
+reads *;
+decreases *;
+{
+if nd.next == null then 1 else 1 + getLen(nd.next)
+}
+*/
+
+/*
+function sumAllFtprint(node: INode): set<INode>
+requires node != null ==> node.acyclic();
+reads *;
+decreases footprint + getFtprint(next);
+ensures node != null ==> (forall nd :: nd in node.footprint ==> 
+	(nd != null ==> nd.footprint <= sumAllFtprint(node)));
+{
+if node == null then {} else node.footprint + sumAllFtprint(node.next)
+}
+
+
+ghost method mkValid()
+requires acyclic();
+modifies footprint;
+ensures Valid();
+{
+if (next != null)
+{
+next.mkValid();
+this.tailContents := [next.data] + next.tailContents;
+this.footprint := {this} + next.footprint;
+}
+
+else {
+this.tailContents := [];
+this.footprint := {this};
+}
+
+}
+*/
 
 }
 
