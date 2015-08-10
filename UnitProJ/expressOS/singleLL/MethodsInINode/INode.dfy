@@ -51,6 +51,7 @@ predicate ValidLemma()
 requires Valid();
 reads this, footprint;
 ensures forall nd :: nd in footprint ==> nd != null && nd.footprint <= footprint;
+ensures forall nd :: nd in footprint - {this} ==> this !in nd.footprint;
 {
 next != null ==> (next.ValidLemma())
 }
