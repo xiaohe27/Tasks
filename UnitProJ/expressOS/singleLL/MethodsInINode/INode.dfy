@@ -249,10 +249,13 @@ allDiff(mySeq) &&
 }
 
 
-function getSeq(nd:INode): seq<INode>
+function method getSeq(nd:INode): seq<INode>
 requires nd != null && nd.Valid();
 reads nd, getFtprint(nd);
 ensures forall node :: node in getSeq(nd) ==> node != null && node.Valid();
+ensures (set node | node in getSeq(nd)) == nd.footprint;
+//ensures allDiff(getSeq(nd));
+//ensures seqInv(getSeq(nd));
 //ensures allNdValid2GoodSeqCond(getSeq(nd));
 //ensures validSeqCond(getSeq(nd));
 {
