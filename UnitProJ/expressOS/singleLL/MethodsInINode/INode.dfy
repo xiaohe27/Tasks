@@ -50,10 +50,19 @@ reads this, footprint;
 predicate ValidLemma()
 requires Valid();
 reads this, footprint;
+ensures Valid();
 ensures forall nd :: nd in footprint ==> nd != null && nd.footprint <= footprint;
 ensures forall nd :: nd in footprint - {this} ==> this !in nd.footprint;
 {
 next != null ==> (next.ValidLemma())
+}
+
+predicate valid2Acyclic()
+requires Valid();
+reads this, footprint;
+ensures acyclic();
+{
+ValidLemma()
 }
 
 constructor init(d:Data) 
@@ -120,17 +129,10 @@ reads nd;
 if nd == null then {} else nd.footprint
 }
 
+
+
+
 /*
-predicate valid2Acyclic(nd:INode)
-requires nd != null && nd.Valid();
-reads nd, getFtprint(nd);
-ensures valid2Acyclic(nd);
-ensures nd.acyclic();
-{
-nd.next != null ==> (nd !in nd.next.footprint && nd.next.Valid())
-}
-
-
 predicate myLemma(nd:INode)
 requires nd != null && nd.acyclic();
 reads *;
