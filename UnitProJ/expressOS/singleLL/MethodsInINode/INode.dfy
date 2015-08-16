@@ -71,26 +71,12 @@ reads this, footprint;
 ensures Valid();
 ensures forall nd :: nd in footprint ==> nd != null && nd.footprint <= footprint;
 ensures forall nd :: nd in footprint - {this} ==> this !in nd.footprint;
+ensures (set nd | nd != null && isAccessible(nd)) == footprint;
+ensures acyclic();
 {
 next != null ==> (next.ValidLemma())
 }
 
-predicate ValidLemma2()
-requires Valid();
-reads this, footprint;
-ensures Valid();
-ensures (set nd | nd != null && isAccessible(nd)) == footprint;
-{
-next != null ==> (next.ValidLemma2())
-}
-
-predicate valid2Acyclic()
-requires Valid();
-reads this, footprint;
-ensures acyclic();
-{
-ValidLemma()
-}
 
 constructor init(d:Data) 
 modifies this;

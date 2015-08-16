@@ -1,0 +1,2 @@
+start from writing lemmas for set
+then adapt them to list
