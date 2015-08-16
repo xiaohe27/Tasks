@@ -135,6 +135,33 @@ this.footprint := {this} + next.footprint;
 
 }
 
+method insertAt(i:int, d:Data)
+requires 0 < i <= |tailContents|;
+requires Valid();
+modifies footprint;
+ensures Valid();
+ensures fresh(footprint - old(footprint));
+{
+var newNd := new INode.init(d);
+
+if (i == 1) {
+newNd.next := next;
+newNd.tailContents := tailContents;
+newNd.footprint := {newNd} + next.footprint;
+assert newNd.Valid();
+
+this.next := newNd;
+}
+
+else {
+next.insertAt(i-1, d);
+}
+
+this.tailContents := [next.data] + next.tailContents;
+this.footprint := {this} + next.footprint;
+}
+
+
 ////////////////////////////////////////////////////////
 
 function getFtprint(nd:INode): set<INode>
