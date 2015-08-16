@@ -165,108 +165,6 @@ ensures forall nd :: nd in mySeq ==>
 if mySeq == [] then {} else getFtprint(mySeq[0]) + sumAllFtprint(mySeq[1..])
 }
 
-/*
-predicate seqFtprintLemma(mySeq: seq<INode>)
-requires mySeq != [] && null !in mySeq;
-requires forall nd :: nd in mySeq ==> nd.Valid();
-requires forall i :: 0 <= i < |mySeq|-1 ==> mySeq[i].next == mySeq[i+1];
-requires mySeq[|mySeq|-1].next == null;
-reads mySeq, sumAllFtprint(mySeq);
-ensures seqFtprintLemma(mySeq);
-ensures mySeq[0].footprint == (set nd | nd in mySeq);
-ensures forall nd :: nd in mySeq ==> nd.footprint <= mySeq[0].footprint;
-ensures forall nd :: nd in mySeq[1..] ==> nd.footprint < mySeq[0].footprint;
-{
-if |mySeq| == 1 then true
-else (
-mySeq[0].footprint == {mySeq[0]} + mySeq[1].footprint &&
-seqFtprintLemma(mySeq[1..]))
-}
-
-predicate seqV(mySeq: seq<INode>)
-requires goodSeqCond(mySeq);
-requires mySeq != [] ==> mySeq[0].Valid();
-
-reads mySeq, sumAllFtprint(mySeq);
-ensures seqV(mySeq);
-ensures goodSeqCond(mySeq);
-ensures forall nd :: nd in mySeq ==> nd.Valid(); 
-{
-mySeq == [] ||
-(seqV(mySeq[1..]))
-}
-
-
-predicate allNdValid2GoodSeqCond(mySeq: seq<INode>)
-requires seqInv(mySeq);
-requires forall nd :: nd in mySeq ==> nd.Valid();
-requires mySeq != [] ==> mySeq[|mySeq|-1].next == null;
-reads mySeq, sumAllFtprint(mySeq);
-ensures allNdValid2GoodSeqCond(mySeq);
-ensures goodSeqCond(mySeq);
-ensures validSeqCond(mySeq);
-{
-if mySeq == [] then true
-else if |mySeq|==1 then mySeq[0].Valid() && mySeq[0].next == null
-else 
-mySeq[0].next == mySeq[1] && seqFtprintLemma(mySeq) &&
-allNdValid2GoodSeqCond(mySeq[1..])
-}
-
-
-predicate goodSeqCond(mySeq: seq<INode>)
-reads mySeq;
-{
-allDiff(mySeq) &&
-(forall nd :: nd in mySeq ==> nd != null && nd in nd.footprint) &&
-(forall i :: 0 <= i < |mySeq|-1 ==> mySeq[i].next == mySeq[i+1]
-	&& (mySeq != [] ==> mySeq[|mySeq|-1].next !in mySeq)
-	&& mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint) 
-&&(forall i :: 0 <= i < |mySeq| ==> (set nd | nd in mySeq[0..i])					
-				!! mySeq[i].footprint)
-}
-
-predicate validSeqCond(mySeq: seq<INode>)
-reads mySeq;
-{
-goodSeqCond(mySeq) &&
-(forall i, j :: 0 <= i < j < |mySeq| ==> 
-	(mySeq[i].footprint > mySeq[j].footprint)) 
-&& (forall nd :: nd in mySeq ==> 
-    (nd.next == null <==> nd == mySeq[|mySeq|-1])
-    && (nd.next != null <==> exists index :: 0 <= index < |mySeq|-1 
-				&& nd == mySeq[index]))
-}
-
-
-//===============================================
-
-predicate allDiff(mySeq:seq<INode>)
-reads mySeq;
-{
-forall index :: 0 <= index < |mySeq| ==> 
-	(forall other :: 0 <= other < |mySeq| && other != index ==>
-	 (mySeq[other] != mySeq[index]))
-}
-
-
-
-
-
-//==seq invariant inside the loop===
-predicate seqInv(mySeq: seq<INode>)
-reads mySeq;
-{
-allDiff(mySeq) &&
-(forall nd :: nd in mySeq ==> nd != null && nd in nd.footprint) &&
-(forall i :: 0 <= i < |mySeq|-1 ==> mySeq[i].next == mySeq[i+1]) &&
-(mySeq != [] ==> mySeq[|mySeq|-1].next !in mySeq) &&
-(forall i :: 0 <= i < |mySeq| ==> (set nd | nd in mySeq[0..i])					
-				!! mySeq[i].footprint)
-}
-
-*/
-
 function method getSeq(nd:INode): seq<INode>
 requires nd != null && nd.Valid();
 reads nd, getFtprint(nd);
@@ -274,10 +172,7 @@ ensures forall node :: node in getSeq(nd) ==> node != null && node.Valid();
 ensures (set node | node in getSeq(nd)) == nd.footprint;
 ensures forall i :: 0 <= i < |getSeq(nd)| - 1 ==> 
 		getSeq(nd)[i].next == getSeq(nd)[i+1];
-//ensures allDiff(getSeq(nd));
-//ensures seqInv(getSeq(nd));
-//ensures allNdValid2GoodSeqCond(getSeq(nd));
-//ensures validSeqCond(getSeq(nd));
+ensures getSeq(nd)[|getSeq(nd)|-1].next == null;
 {
 if nd.next == null then [nd] else [nd] + getSeq(nd.next)
 }
