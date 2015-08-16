@@ -24,6 +24,13 @@ decreases footprint;
 
 }
 
+predicate isAccessible(node:INode)
+requires Valid();
+reads this, footprint;
+{
+this == node || (next != null && next.isAccessible(node))
+}
+
 function len():int
 requires Valid();
 reads this, footprint;
@@ -66,6 +73,15 @@ ensures forall nd :: nd in footprint ==> nd != null && nd.footprint <= footprint
 ensures forall nd :: nd in footprint - {this} ==> this !in nd.footprint;
 {
 next != null ==> (next.ValidLemma())
+}
+
+predicate ValidLemma2()
+requires Valid();
+reads this, footprint;
+ensures Valid();
+ensures (set nd | nd != null && isAccessible(nd)) == footprint;
+{
+next != null ==> (next.ValidLemma2())
 }
 
 predicate valid2Acyclic()
@@ -149,6 +165,7 @@ ensures forall nd :: nd in mySeq ==>
 if mySeq == [] then {} else getFtprint(mySeq[0]) + sumAllFtprint(mySeq[1..])
 }
 
+/*
 predicate seqFtprintLemma(mySeq: seq<INode>)
 requires mySeq != [] && null !in mySeq;
 requires forall nd :: nd in mySeq ==> nd.Valid();
@@ -248,12 +265,15 @@ allDiff(mySeq) &&
 				!! mySeq[i].footprint)
 }
 
+*/
 
 function method getSeq(nd:INode): seq<INode>
 requires nd != null && nd.Valid();
 reads nd, getFtprint(nd);
 ensures forall node :: node in getSeq(nd) ==> node != null && node.Valid();
 ensures (set node | node in getSeq(nd)) == nd.footprint;
+ensures forall i :: 0 <= i < |getSeq(nd)| - 1 ==> 
+		getSeq(nd)[i].next == getSeq(nd)[i+1];
 //ensures allDiff(getSeq(nd));
 //ensures seqInv(getSeq(nd));
 //ensures allNdValid2GoodSeqCond(getSeq(nd));
