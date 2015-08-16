@@ -98,6 +98,7 @@ method preAppend(d:Data) returns (node:INode)
 requires Valid();
 ensures node != null && node.Valid();
 ensures node.data == d && node.next == this;
+ensures node.tailContents == [this.data] + this.tailContents;
 {
 var r := new INode.init(d);
 r.next := this;
@@ -140,6 +141,8 @@ requires 0 < i <= |tailContents|;
 requires Valid();
 modifies footprint;
 ensures Valid();
+ensures this.data == old(this.data);
+ensures tailContents == old(tailContents[0..i-1]) + [d] + old(tailContents[i-1..]);
 ensures fresh(footprint - old(footprint));
 {
 var newNd := new INode.init(d);
@@ -148,6 +151,8 @@ if (i == 1) {
 newNd.next := next;
 newNd.tailContents := tailContents;
 newNd.footprint := {newNd} + next.footprint;
+
+assert newNd.tailContents == old(tailContents[i-1..]);
 assert newNd.Valid();
 
 this.next := newNd;
@@ -158,6 +163,9 @@ next.insertAt(i-1, d);
 }
 
 this.tailContents := [next.data] + next.tailContents;
+
+assert tailContents == old(tailContents[0..i-1]) + [d] + old(tailContents[i-1..]);
+
 this.footprint := {this} + next.footprint;
 }
 
