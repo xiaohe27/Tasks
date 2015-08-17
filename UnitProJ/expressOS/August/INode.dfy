@@ -16,7 +16,7 @@ reads this, footprint;
 this == node || (next != null && next.isAccessible(node))
 }
 
-function len():int
+function method len():int
 requires Valid();
 reads this, footprint;
 ensures len() == |footprint| == |tailContents| + 1;
@@ -121,6 +121,19 @@ modifies footprint;
 var node := new INode.init(d);
 assert node.footprint !! footprint;
 
+var tmpNd := this;
+while(tmpNd.next != null)
+invariant tmpNd != null && tmpNd.Valid();
+decreases tmpNd.footprint;
+{
+tmpNd := tmpNd.next;
+}
+
+tmpNd.next := node;
+
+spine := spine + [node];
+
+assert seqInv(spine);
 }
 
 
@@ -286,8 +299,8 @@ ensures forall nd :: nd in mySeq ==> nd.Valid();
 ensures validSeqCond(mySeq);
 
 ensures mySeq[0].footprint == (set nd | nd in mySeq);
-ensures forall nd :: nd in mySeq ==> nd.footprint <= mySeq[0].footprint;
-ensures forall nd :: nd in mySeq[1..] ==> nd.footprint < mySeq[0].footprint;
+//ensures forall nd :: nd in mySeq ==> nd.footprint <= mySeq[0].footprint;
+//ensures forall nd :: nd in mySeq[1..] ==> nd.footprint < mySeq[0].footprint;
 {
 ghost var index := |mySeq| - 2;
 
