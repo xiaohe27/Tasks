@@ -133,9 +133,11 @@ tmpNd.next := node;
 
 spine := spine + [node];
 
+assert spine[|spine|-1].next == null
+	&& spine[|spine|-1].Valid();
 assert seqInv(spine);
 
-//updateSeq(spine);
+updateSeq(spine);
 
 
 }
