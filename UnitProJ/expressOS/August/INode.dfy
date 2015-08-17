@@ -139,6 +139,8 @@ assert seqInv(spine);
 
 updateSeq(spine);
 
+assert Valid();
+assert perfect();
 
 }
 
