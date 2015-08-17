@@ -98,6 +98,7 @@ ensures node.data == d && node.next == this;
 ensures node.tailContents == [this.data] + this.tailContents;
 {
 var r := new INode.init(d);
+
 r.next := this;
 
 r.footprint := r.footprint + this.footprint;
@@ -164,7 +165,7 @@ allDiff(mySeq) &&
 
 
 
-/*
+
 predicate seqFtprintLemma(mySeq: seq<INode>)
 requires mySeq != [] && null !in mySeq;
 requires forall nd :: nd in mySeq ==> nd.Valid();
@@ -318,7 +319,7 @@ assert allNdValid2GoodSeqCond(mySeq);
 assert seqFtprintLemma(mySeq);
 }
 
-*/
+
 
 }
 
