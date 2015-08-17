@@ -242,7 +242,7 @@ requires mySeq[|mySeq|-1].Valid();
 modifies mySeq;
 ensures seqInv(mySeq);
 ensures mySeq[|mySeq|-1].next == null;
-requires mySeq[|mySeq|-1].Valid();
+ensures mySeq[|mySeq|-1].Valid();
 
 ensures forall i :: 0 <= i < |mySeq|-1 ==> 
 	(mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents)
