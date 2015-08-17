@@ -135,6 +135,9 @@ spine := spine + [node];
 
 assert seqInv(spine);
 
+//updateSeq(spine);
+
+
 }
 
 
@@ -300,8 +303,8 @@ ensures forall nd :: nd in mySeq ==> nd.Valid();
 ensures validSeqCond(mySeq);
 
 ensures mySeq[0].footprint == (set nd | nd in mySeq);
-//ensures forall nd :: nd in mySeq ==> nd.footprint <= mySeq[0].footprint;
-//ensures forall nd :: nd in mySeq[1..] ==> nd.footprint < mySeq[0].footprint;
+ensures forall nd :: nd in mySeq ==> nd.footprint <= mySeq[0].footprint;
+ensures forall nd :: nd in mySeq[1..] ==> nd.footprint < mySeq[0].footprint;
 {
 ghost var index := |mySeq| - 2;
 
@@ -332,7 +335,6 @@ assert seqV(mySeq);
 assert allNdValid2GoodSeqCond(mySeq);
 assert seqFtprintLemma(mySeq);
 }
-
 
 
 }
