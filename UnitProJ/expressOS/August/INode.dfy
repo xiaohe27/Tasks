@@ -134,6 +134,7 @@ tmpNd.next := node;
 spine := spine + [node];
 
 assert seqInv(spine);
+
 }
 
 
