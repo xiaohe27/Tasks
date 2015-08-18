@@ -351,7 +351,7 @@ stillSeqInv(node.next.spine, node) &&
 && (node.footprint == {node} + node.next.footprint)
 }
 
-/*
+
 ghost method updateCurIndex(mySeq:seq<INode>, index:int)
 requires 0 <= index <= |mySeq| - 2;
 requires seqInv(mySeq);
@@ -390,7 +390,7 @@ assert nxtPerfectLemma(mySeq[index]);
 }
 
 
-
+/*
 ghost method updateSeq(mySeq:seq<INode>)
 
 requires mySeq != [];
