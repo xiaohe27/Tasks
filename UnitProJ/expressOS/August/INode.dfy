@@ -21,24 +21,29 @@ if next == null then 1 else 1 + next.len()
 predicate good()
 reads this, footprint;
 {
-    this in footprint 
+    this in footprint && null !in footprint
 	&& (next != null ==> (next in footprint 
 	&& this !in next.footprint 
 	&& next.footprint + {this} == footprint
+	&& spine == [this] + next.spine
 	))
-	&& (next ==null ==> tailContents == [] && footprint == {this})
+	&& (next ==null ==> tailContents == [] && footprint == {this}
+				&& spine == [this])
 	&& (next != null ==> tailContents == [next.data] + next.tailContents)
+
+	&& (forall nd :: nd in spine ==> nd in footprint)
+	&& seqInv(spine)
 }
 
-/*
+
 predicate Valid()
 reads this, footprint;
 {
 good() && (next != null ==> next.Valid())
 }
-*/
 
 
+/*
 predicate Valid()
 reads this, footprint;
 {
@@ -59,6 +64,17 @@ reads this, footprint;
 
 	&& seqInv(spine)
 	&& (set nd | nd in spine) == footprint
+}
+*/
+
+predicate ValidLemma()
+requires Valid();
+reads this, footprint;
+ensures Valid();
+ensures forall nd :: nd in footprint ==> nd != null && nd.footprint <= footprint;
+ensures forall nd :: nd in footprint - {this} ==> this !in nd.footprint;
+{
+next != null ==> (next.ValidLemma())
 }
 
 
@@ -189,7 +205,7 @@ true
 
 
 
-
+/*
 predicate seqFtprintLemma(mySeq: seq<INode>)
 requires mySeq != [] && null !in mySeq;
 requires forall nd :: nd in mySeq ==> nd.Valid();
@@ -298,6 +314,7 @@ requires forall i :: index < i < |mySeq|-1 ==>
  && (mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
 
 modifies mySeq;
+ensures fresh((set nd | nd in mySeq) - old(set nd | nd in mySeq));
 //ensures seqInv(mySeq);
 //ensures mySeq[|mySeq|-1].next == null;
 ensures forall i :: index <= i < |mySeq|-1 ==> 
@@ -323,7 +340,7 @@ assert nxtPerfectLemma(mySeq[index]);
 }
 
 
-/*
+
 ghost method updateSeq(mySeq:seq<INode>)
 
 requires mySeq != [];
