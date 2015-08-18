@@ -36,9 +36,8 @@ reads this, footprint;
 predicate Valid()
 reads this, footprint;
 {
-good()  //&& footprint == (set nd | nd in spine)
-	&& (forall nd :: nd in spine ==> nd in footprint)
-	//&& (forall nd :: nd in footprint ==> nd in spine)
+good()  
+&& (forall nd :: nd in spine ==> nd in footprint)
 && seqInv(spine)
 && (next != null ==> next.Valid())
 }
@@ -190,7 +189,7 @@ ensures seqInv([newNd]+mySeq);
 true
 }
 
-
+/*
 
 
 predicate seqFtprintLemma(mySeq: seq<INode>)
@@ -209,6 +208,7 @@ else (
 mySeq[0].footprint == {mySeq[0]} + mySeq[1].footprint &&
 seqFtprintLemma(mySeq[1..]))
 }
+
 
 predicate seqV(mySeq: seq<INode>)
 requires goodSeqCond(mySeq);
@@ -267,7 +267,7 @@ goodSeqCond(mySeq) &&
 
 
 //===============================================
-/*
+
 predicate nxtPerfectLemma(node:INode) 
 requires node != null && node.next != null;
 requires node.good();
