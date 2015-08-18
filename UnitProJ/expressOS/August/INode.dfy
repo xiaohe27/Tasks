@@ -36,21 +36,23 @@ reads this, footprint;
 predicate Valid()
 reads this, footprint;
 {
-good() && footprint == (set nd | nd in spine)
-	//&& (forall nd :: nd in spine ==> nd in footprint)
+good()  //&& footprint == (set nd | nd in spine)
+	&& (forall nd :: nd in spine ==> nd in footprint)
 	//&& (forall nd :: nd in footprint ==> nd in spine)
-	&& seqInv(spine)
+&& seqInv(spine)
 && (next != null ==> next.Valid())
 }
 
-/*
+
 predicate ValidLemma()
 requires Valid();
 reads this, footprint;
 ensures ValidLemma();
-ensures footprint == (set nd | nd in spine);
 ensures forall nd :: nd in footprint ==> nd != null && nd.footprint <= footprint;
 ensures forall nd :: nd in footprint - {this} ==> this !in nd.footprint;
+
+//ensures footprint == (set nd | nd in spine); //50s
+
 {
 (next == null ==> footprint == {this} && spine == [this])
 &&
@@ -58,7 +60,7 @@ ensures forall nd :: nd in footprint - {this} ==> this !in nd.footprint;
 		&& spine == [this] + next.spine 
 		&& next.ValidLemma()))
 }
-*/
+
 
 
 constructor init(d:Data) 
@@ -79,7 +81,7 @@ ensures fresh(footprint - {this});
     spine := [this];
 }
 
-/*
+
 method preAppend(d:Data) returns (node:INode)
 requires Valid();
 ensures node != null && node.Valid();
@@ -90,13 +92,14 @@ var r := new INode.init(d);
 
 r.next := this;
 
-r.footprint := r.footprint + this.footprint;
+r.footprint := {r} + footprint;
 r.tailContents := [this.data] + this.tailContents;
 r.spine := [r] + spine;
+
 return r;
 }
 
-
+/*
 method append(d:Data)
 requires Valid();
 
@@ -189,7 +192,7 @@ true
 
 
 
-/*
+
 predicate seqFtprintLemma(mySeq: seq<INode>)
 requires mySeq != [] && null !in mySeq;
 requires forall nd :: nd in mySeq ==> nd.Valid();
@@ -285,7 +288,7 @@ stillSeqInv(node.next.spine, node) &&
 }
 
 
-
+/*
 ghost method updateCurIndex(mySeq:seq<INode>, index:int)
 requires 0 <= index <= |mySeq| - 2;
 requires seqInv(mySeq);
