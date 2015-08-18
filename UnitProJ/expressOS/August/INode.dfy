@@ -8,14 +8,6 @@ ghost var footprint: set<INode>;
 var data: Data;
 var next: INode;
 
-/*
-predicate isAccessible(node:INode)
-requires Valid();
-reads this, footprint;
-{
-this == node || (next != null && next.isAccessible(node))
-}
-*/
 
 function method len():int
 requires Valid();
@@ -54,67 +46,26 @@ reads this, footprint;
 	&& (next != null ==> (next in footprint 
 	&& this !in next.footprint 
 	&& next.footprint + {this} == footprint
+		&& spine == [this] + next.spine
+
 	&& next.Valid()
 	))
-	&& (next ==null ==> tailContents == [] && footprint == {this})
-	&& (next != null ==> tailContents == [next.data] + next.tailContents)
-	&& (null !in footprint)
-}
-
-
-
-predicate perfect()
-reads this, footprint;
-{
-	this in footprint 
-	&& (next != null ==> (next in footprint 
-	&& this !in next.footprint 
-	&& next.footprint + {this} == footprint
-	&& spine == [this] + next.spine
-	&& next.perfect()
-	))
 	&& (next ==null ==> tailContents == [] && footprint == {this}
-				&& spine == [this])
+		&& spine == [this])
+
 	&& (next != null ==> tailContents == [next.data] + next.tailContents)
-	
+
+	&& (null !in footprint)
+
 	&& seqInv(spine)
 	&& (set nd | nd in spine) == footprint
 }
 
-/*
-predicate perfect3()
-reads this, footprint;
-{
-	this in footprint 
-	&& (next != null ==> (next in footprint 
-	&& this !in next.footprint 
-	&& next.footprint + {this} == footprint
-	&& spine == [this] + next.spine
-	&& next.perfect()
-	))
-	&& (next ==null ==> tailContents == [] && footprint == {this}
-				&& spine == [this])
-	&& (next != null ==> tailContents == [next.data] + next.tailContents)
 
-	&& (set nd | nd in spine) == footprint
-}
-
-
-predicate ValidLemma()
-requires Valid();
-reads this, footprint;
-ensures Valid();
-ensures forall nd :: nd in footprint ==> nd != null && nd.footprint <= footprint;
-ensures forall nd :: nd in footprint - {this} ==> this !in nd.footprint;
-ensures (set nd | nd != null && isAccessible(nd)) == footprint;
-{
-next != null ==> (next.ValidLemma())
-}
-*/
 
 constructor init(d:Data) 
 modifies this;
-ensures perfect();
+ensures Valid();
 ensures data == d;
 ensures next == null;
 
@@ -131,8 +82,8 @@ ensures fresh(footprint - {this});
 }
 
 method preAppend(d:Data) returns (node:INode)
-requires perfect();
-ensures node != null && node.perfect();
+requires Valid();
+ensures node != null && node.Valid();
 ensures node.data == d && node.next == this;
 ensures node.tailContents == [this.data] + this.tailContents;
 {
@@ -148,7 +99,7 @@ return r;
 
 /*
 method append(d:Data)
-requires perfect();
+requires Valid();
 
 modifies footprint;
 //decreases footprint;
@@ -180,32 +131,13 @@ assert seqInv(spine);
 updateSeq(spine);
 
 //assert Valid();
-//assert perfect();
+//assert Valid();
 
 }
 */
 
-predicate perfectLemma(node:INode)
-requires node != null && node.perfect();
-reads node, getFtprint(node);
-ensures perfectLemma(node);
-ensures node.Valid();
-{
-(node.next == null ==> node.Valid()) &&
-(node.next != null ==> node.good() && perfectLemma(node.next))
-}
 
 
-/*
-predicate perfectLemma()
-requires perfect();
-reads this, footprint;
-ensures Valid();
-{
-(good()) &&
-(next != null ==> next.perfectLemma())
-}
-*/
 
 function getFtprint(nd:INode): set<INode>
 reads nd;
@@ -277,12 +209,12 @@ seqFtprintLemma(mySeq[1..]))
 
 predicate seqV(mySeq: seq<INode>)
 requires goodSeqCond(mySeq);
-requires mySeq != [] ==> mySeq[0].perfect();
+requires mySeq != [] ==> mySeq[0].Valid();
 
 reads mySeq, sumAllFtprint(mySeq);
 ensures seqV(mySeq);
 ensures goodSeqCond(mySeq);
-ensures forall nd :: nd in mySeq ==> nd.perfect(); 
+ensures forall nd :: nd in mySeq ==> nd.Valid(); 
 {
 mySeq == [] ||
 (seqV(mySeq[1..]))
@@ -332,16 +264,17 @@ goodSeqCond(mySeq) &&
 
 
 //===============================================
+
 predicate nxtPerfectLemma(node:INode) 
 requires node != null && node.next != null;
-requires node.Valid();
-requires node.next.perfect();
+requires node.good();
+requires node.next.Valid();
 requires {node} !! sumAllFtprint(node.next.spine);
 requires forall nd :: nd in node.next.spine ==> nd.next != node;
 requires (node.spine == [node] + node.next.spine);
 reads *;
 ensures seqInv(node.spine);
-ensures node.perfect();
+ensures node.Valid();
 {
 seqInv(node.next.spine) &&
 node.next == node.next.spine[0] &&
@@ -351,12 +284,13 @@ stillSeqInv(node.next.spine, node) &&
 && (node.footprint == {node} + node.next.footprint)
 }
 
-/*
+
+
 ghost method updateCurIndex(mySeq:seq<INode>, index:int)
 requires 0 <= index <= |mySeq| - 2;
 requires seqInv(mySeq);
 requires mySeq[|mySeq|-1].next == null;
-requires mySeq[index+1].perfect(); 
+requires mySeq[index+1].Valid(); 
 
 requires forall i :: index < i < |mySeq|-1 ==> 
 	(mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents)
@@ -371,7 +305,7 @@ ensures forall i :: index <= i < |mySeq|-1 ==>
  && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint)
  && (mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
 
-ensures mySeq[index].perfect(); 
+ensures mySeq[index].Valid(); 
 {
 mySeq[index].tailContents := [mySeq[index+1].data] + mySeq[index+1].tailContents;
 
@@ -379,36 +313,35 @@ mySeq[index].footprint := {mySeq[index]} + mySeq[index+1].footprint;
 
 mySeq[index].spine := [mySeq[index]] + mySeq[index+1].spine;
 
-assert perfectLemma(mySeq[index+1]);
-assert mySeq[index].next == mySeq[index+1]
-	&& mySeq[index+1].Valid();
-assert mySeq[index].Valid();
-assert {mySeq[index]} !! sumAllFtprint(mySeq[index+1].spine);
-assert forall nd :: nd in mySeq[index+1].spine ==> nd.next != mySeq[index];
+assert mySeq[index].good();
+
+//make the properties below inside seqInv()
+//assert {mySeq[index]} !! sumAllFtprint(mySeq[index+1].spine);
+//assert forall nd :: nd in mySeq[index+1].spine ==> nd.next != mySeq[index];
 
 assert nxtPerfectLemma(mySeq[index]);
 }
 
 
-
+/*
 ghost method updateSeq(mySeq:seq<INode>)
 
 requires mySeq != [];
 requires seqInv(mySeq);
 requires mySeq[|mySeq|-1].next == null;
-requires mySeq[|mySeq|-1].perfect(); 
+requires mySeq[|mySeq|-1].Valid(); 
 
 modifies mySeq;
 ensures seqInv(mySeq);
 ensures mySeq[|mySeq|-1].next == null;
-ensures mySeq[|mySeq|-1].perfect(); 
+ensures mySeq[|mySeq|-1].Valid(); 
 
 ensures forall i :: 0 <= i < |mySeq|-1 ==> 
 	(mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents)
  && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint)
  && (mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
 
-ensures forall nd :: nd in mySeq ==> nd.perfect(); 
+ensures forall nd :: nd in mySeq ==> nd.Valid(); 
 ensures validSeqCond(mySeq);
 
 ensures mySeq[0].footprint == (set nd | nd in mySeq);
@@ -427,7 +360,7 @@ invariant forall i :: index < i < |mySeq|-1 ==>
 
 invariant seqInv(mySeq);
 invariant mySeq[|mySeq|-1].next == null;
-invariant mySeq[index+1].perfect(); 
+invariant mySeq[index+1].Valid(); 
 {
 updateCurIndex(mySeq, index);
 
