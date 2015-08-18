@@ -30,53 +30,35 @@ reads this, footprint;
 	&& (next ==null ==> tailContents == [] && footprint == {this}
 				&& spine == [this])
 	&& (next != null ==> tailContents == [next.data] + next.tailContents)
-
-	&& (forall nd :: nd in spine ==> nd in footprint)
-	&& seqInv(spine)
 }
 
 
 predicate Valid()
 reads this, footprint;
 {
-good() && (next != null ==> next.Valid())
+good() && footprint == (set nd | nd in spine)
+	//&& (forall nd :: nd in spine ==> nd in footprint)
+	//&& (forall nd :: nd in footprint ==> nd in spine)
+	&& seqInv(spine)
+&& (next != null ==> next.Valid())
 }
-
 
 /*
-predicate Valid()
-reads this, footprint;
-{
-    this in footprint 
-	&& (next != null ==> (next in footprint 
-	&& this !in next.footprint 
-	&& next.footprint + {this} == footprint
-		&& spine == [this] + next.spine
-
-	&& next.Valid()
-	))
-	&& (next ==null ==> tailContents == [] && footprint == {this}
-		&& spine == [this])
-
-	&& (next != null ==> tailContents == [next.data] + next.tailContents)
-
-	&& (null !in footprint)
-
-	&& seqInv(spine)
-	&& (set nd | nd in spine) == footprint
-}
-*/
-
 predicate ValidLemma()
 requires Valid();
 reads this, footprint;
-ensures Valid();
+ensures ValidLemma();
+ensures footprint == (set nd | nd in spine);
 ensures forall nd :: nd in footprint ==> nd != null && nd.footprint <= footprint;
 ensures forall nd :: nd in footprint - {this} ==> this !in nd.footprint;
 {
-next != null ==> (next.ValidLemma())
+(next == null ==> footprint == {this} && spine == [this])
+&&
+(next != null ==> (footprint == {this} + next.footprint
+		&& spine == [this] + next.spine 
+		&& next.ValidLemma()))
 }
-
+*/
 
 
 constructor init(d:Data) 
@@ -97,6 +79,7 @@ ensures fresh(footprint - {this});
     spine := [this];
 }
 
+/*
 method preAppend(d:Data) returns (node:INode)
 requires Valid();
 ensures node != null && node.Valid();
@@ -113,7 +96,7 @@ r.spine := [r] + spine;
 return r;
 }
 
-/*
+
 method append(d:Data)
 requires Valid();
 
@@ -183,13 +166,14 @@ forall index :: 0 <= index < |mySeq| ==>
 predicate seqInv(mySeq: seq<INode>)
 reads mySeq;
 {
-allDiff(mySeq) &&
+mySeq == [] ||
+(allDiff(mySeq) &&
 (forall nd :: nd in mySeq ==> nd != null && nd in nd.footprint) &&
 (forall i :: 0 <= i < |mySeq|-1 ==> mySeq[i].next == mySeq[i+1]) 
 &&
-(mySeq != [] ==> mySeq[|mySeq|-1].next !in mySeq) &&
+(mySeq[|mySeq|-1].next !in mySeq) &&
 (forall i :: 0 <= i < |mySeq| ==> (set nd | nd in mySeq[0..i])					
-				!! mySeq[i].footprint)
+				!! mySeq[i].footprint))
 }
 
 predicate stillSeqInv(mySeq:seq<INode>, newNd:INode)
