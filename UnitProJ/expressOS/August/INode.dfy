@@ -42,10 +42,24 @@ good()
 && (next != null ==> next.Valid())
 }
 
+predicate allV(myNode:INode)
+reads myNode, getFtprint(myNode);
+requires myNode != null && myNode.Valid();
+decreases myNode.footprint;
+ensures allV(myNode);
+ensures forall nd :: nd in myNode.footprint ==> nd != null && nd.Valid();
+{
+
+if (myNode.next == null)
+then myNode.footprint == {myNode}
+else 
+allV(myNode.next)
+}
 
 predicate ValidLemma()
 requires Valid();
 reads this, footprint;
+ensures allV(this);
 ensures ValidLemma();
 ensures forall nd :: nd in footprint ==> nd != null && nd.footprint <= footprint
 	&& (forall nd2 :: nd2 in nd.spine ==> nd2 in footprint);
@@ -191,6 +205,10 @@ seqInvLemma(mySeq[1..])
 )
 }
 
+
+
+
+
 predicate stillSeqInv(mySeq:seq<INode>, newNd:INode)
 requires seqInv(mySeq);
 requires newNd != null && newNd.Valid() && 
@@ -206,6 +224,26 @@ mySeq == [] ||
 (stillSeqInv(mySeq[1..], newNd))
 }
 
+predicate stillSeqInvB(mySeq:seq<INode>, newNd:INode)
+requires seqInv(mySeq);
+requires newNd != null && newNd.Valid() && 
+	(mySeq != [] ==> newNd.next == mySeq[0]);
+
+requires newNd !in mySeq;
+requires forall nd :: nd in mySeq ==> nd.next != newNd;
+reads mySeq, sumAllFtprint(mySeq), newNd, getFtprint(newNd);
+ensures stillSeqInvB(mySeq, newNd);
+ensures seqInv([newNd]+mySeq);
+{
+mySeq == [] ||
+(
+newNd.ValidLemma() &&
+mySeq[|mySeq|-1] in newNd.footprint &&
+mySeq[|mySeq|-1].Valid() &&
+stillSeqInvB(mySeq[0..|mySeq|-1], newNd)
+&& seqInv([newNd]+mySeq[0..|mySeq|-1])
+&& stillSeqInv([newNd] + mySeq[0..|mySeq|-1], mySeq[|mySeq|-1]))
+}
 
 
 predicate seqV(mySeq: seq<INode>)
