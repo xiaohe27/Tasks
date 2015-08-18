@@ -147,7 +147,6 @@ assert seqInv(spine);
 updateSeq(spine);
 
 //assert Valid();
-//assert Valid();
 
 }
 */
@@ -193,6 +192,7 @@ mySeq == [] ||
 				!! mySeq[i].footprint))
 }
 
+/*
 predicate seqInvLemma(mySeq:seq<INode>)
 requires seqInv(mySeq);
 reads mySeq;
@@ -204,6 +204,7 @@ mySeq == [] ||
 seqInvLemma(mySeq[1..])
 )
 }
+*/
 
 
 
@@ -224,26 +225,6 @@ mySeq == [] ||
 (stillSeqInv(mySeq[1..], newNd))
 }
 
-predicate stillSeqInvB(mySeq:seq<INode>, newNd:INode)
-requires seqInv(mySeq);
-requires newNd != null && newNd.Valid() && 
-	(mySeq != [] ==> newNd.next == mySeq[0]);
-
-requires newNd !in mySeq;
-requires forall nd :: nd in mySeq ==> nd.next != newNd;
-reads mySeq, sumAllFtprint(mySeq), newNd, getFtprint(newNd);
-ensures stillSeqInvB(mySeq, newNd);
-ensures seqInv([newNd]+mySeq);
-{
-mySeq == [] ||
-(
-newNd.ValidLemma() &&
-mySeq[|mySeq|-1] in newNd.footprint &&
-mySeq[|mySeq|-1].Valid() &&
-stillSeqInvB(mySeq[0..|mySeq|-1], newNd)
-&& seqInv([newNd]+mySeq[0..|mySeq|-1])
-&& stillSeqInv([newNd] + mySeq[0..|mySeq|-1], mySeq[|mySeq|-1]))
-}
 
 
 predicate seqV(mySeq: seq<INode>)
