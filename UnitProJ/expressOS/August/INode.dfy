@@ -307,11 +307,14 @@ requires forall nd :: nd in node.next.spine ==> nd.next != node;
 requires (node.spine == [node] + node.next.spine);
 reads *;
 ensures seqInv(node.spine);
-//ensures node.perfect();
+ensures node.perfect();
 {
 seqInv(node.next.spine) &&
 node.next == node.next.spine[0] &&
-stillSeqInv(node.next.spine, node)
+stillSeqInv(node.next.spine, node) &&
+
+(set nd | nd in node.next.spine) == node.next.footprint
+&& (node.footprint == {node} + node.next.footprint)
 }
 
 /*
