@@ -300,17 +300,17 @@ goodSeqCond(mySeq) &&
 //===============================================
 predicate nxtPerfectLemma(node:INode) 
 requires node != null && node.next != null;
+requires node.Valid();
 requires node.next.perfect();
 requires {node} !! sumAllFtprint(node.next.spine);
 requires forall nd :: nd in node.next.spine ==> nd.next != node;
-requires (node.tailContents == [node.next.data] + node.next.tailContents)
- && (node.footprint == {node} + node.next.footprint)
- && (node.spine == [node] + node.next.spine);
-reads node, node.footprint;
+requires (node.spine == [node] + node.next.spine);
+reads *;
 ensures seqInv(node.spine);
 //ensures node.perfect();
 {
-node.Valid() &&
+seqInv(node.next.spine) &&
+node.next == node.next.spine[0] &&
 stillSeqInv(node.next.spine, node)
 }
 
