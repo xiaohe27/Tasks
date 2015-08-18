@@ -179,6 +179,18 @@ mySeq == [] ||
 				!! mySeq[i].footprint))
 }
 
+predicate seqInvLemma(mySeq:seq<INode>)
+requires seqInv(mySeq);
+reads mySeq;
+ensures seqInvLemma(mySeq);
+ensures forall i :: 0 <= i < |mySeq| ==> seqInv(mySeq[i..]);
+{
+mySeq == [] ||
+(allDiff(mySeq[1..]) &&
+seqInvLemma(mySeq[1..])
+)
+}
+
 predicate stillSeqInv(mySeq:seq<INode>, newNd:INode)
 requires seqInv(mySeq);
 requires newNd != null && newNd.Valid() && 
