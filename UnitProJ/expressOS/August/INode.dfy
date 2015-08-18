@@ -267,7 +267,7 @@ goodSeqCond(mySeq) &&
 
 
 //===============================================
-
+/*
 predicate nxtPerfectLemma(node:INode) 
 requires node != null && node.next != null;
 requires node.good();
@@ -288,7 +288,7 @@ stillSeqInv(node.next.spine, node) &&
 }
 
 
-/*
+
 ghost method updateCurIndex(mySeq:seq<INode>, index:int)
 requires 0 <= index <= |mySeq| - 2;
 requires seqInv(mySeq);
