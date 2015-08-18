@@ -54,11 +54,36 @@ reads this, footprint;
 predicate perfect()
 reads this, footprint;
 {
-Valid() 
-	&& (set nd | nd in spine) == footprint
-	&& (next == null ==> spine == [this])
-	&& (next != null ==> spine == [this] + next.spine)
+	this in footprint 
+	&& (next != null ==> (next in footprint 
+	&& this !in next.footprint 
+	&& next.footprint + {this} == footprint
+	&& spine == [this] + next.spine
+	&& next.perfect()
+	))
+	&& (next ==null ==> tailContents == [] && footprint == {this}
+				&& spine == [this])
+	&& (next != null ==> tailContents == [next.data] + next.tailContents)
+	
 	&& seqInv(spine)
+	&& (set nd | nd in spine) == footprint
+}
+
+predicate perfect2()
+reads this, footprint;
+{
+	this in footprint 
+	&& (next != null ==> (next in footprint 
+	&& this !in next.footprint 
+	&& next.footprint + {this} == footprint
+	&& spine == [this] + next.spine
+	&& next.perfect()
+	))
+	&& (next ==null ==> tailContents == [] && footprint == {this}
+				&& spine == [this])
+	&& (next != null ==> tailContents == [next.data] + next.tailContents)
+
+	&& (set nd | nd in spine) == footprint
 }
 
 predicate ValidLemma()
@@ -107,7 +132,7 @@ r.spine := [r] + spine;
 return r;
 }
 
-
+/*
 method append(d:Data)
 requires perfect();
 
@@ -133,17 +158,18 @@ tmpNd.next := node;
 
 spine := spine + [node];
 
+
 assert spine[|spine|-1].next == null
 	&& spine[|spine|-1].Valid();
 assert seqInv(spine);
 
 updateSeq(spine);
 
-assert Valid();
-assert perfect();
+//assert Valid();
+//assert perfect();
 
 }
-
+*/
 
 
 
@@ -184,6 +210,17 @@ allDiff(mySeq) &&
 				!! mySeq[i].footprint)
 }
 
+predicate stillSeqInv(mySeq:seq<INode>, newNd:INode)
+requires mySeq != [] && seqInv(mySeq);
+requires newNd != null && newNd.Valid() && newNd.next == mySeq[0];
+requires {newNd} !! sumAllFtprint(mySeq);
+requires forall nd :: nd in mySeq ==> nd.next != newNd;
+reads mySeq, sumAllFtprint(mySeq), newNd, getFtprint(newNd);
+ensures seqInv([newNd]+mySeq);
+{
+true
+}
+
 
 
 
@@ -206,12 +243,12 @@ seqFtprintLemma(mySeq[1..]))
 
 predicate seqV(mySeq: seq<INode>)
 requires goodSeqCond(mySeq);
-requires mySeq != [] ==> mySeq[0].Valid();
+requires mySeq != [] ==> mySeq[0].perfect();
 
 reads mySeq, sumAllFtprint(mySeq);
 ensures seqV(mySeq);
 ensures goodSeqCond(mySeq);
-ensures forall nd :: nd in mySeq ==> nd.Valid(); 
+ensures forall nd :: nd in mySeq ==> nd.perfect(); 
 {
 mySeq == [] ||
 (seqV(mySeq[1..]))
@@ -261,29 +298,53 @@ goodSeqCond(mySeq) &&
 
 
 //===============================================
+predicate nxtPerfectLemma(node:INode) 
+requires node != null && node.next != null;
+requires node.next.perfect();
+requires {node} !! sumAllFtprint(node.next.spine);
+requires forall nd :: nd in node.next.spine ==> nd.next != node;
+requires (node.tailContents == [node.next.data] + node.next.tailContents)
+ && (node.footprint == {node} + node.next.footprint)
+ && (node.spine == [node] + node.next.spine);
+reads node, node.footprint;
+ensures seqInv(node.spine);
+//ensures node.perfect();
+{
+node.Valid() &&
+stillSeqInv(node.next.spine, node)
+}
 
-
+/*
 ghost method updateCurIndex(mySeq:seq<INode>, index:int)
 requires 0 <= index <= |mySeq| - 2;
 requires seqInv(mySeq);
 requires mySeq[|mySeq|-1].next == null;
-requires mySeq[index+1].Valid();
+requires mySeq[index+1].perfect(); 
 
 requires forall i :: index < i < |mySeq|-1 ==> 
 	(mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents)
- && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint);
+ && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint)
+ && (mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
 
 modifies mySeq;
 ensures seqInv(mySeq);
 ensures mySeq[|mySeq|-1].next == null;
 ensures forall i :: index <= i < |mySeq|-1 ==> 
 	(mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents)
- && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint);
-ensures mySeq[index].Valid();
+ && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint)
+ && (mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
+
+//ensures mySeq[index].perfect(); 
+ensures mySeq[index].perfect2(); 
 {
 mySeq[index].tailContents := [mySeq[index+1].data] + mySeq[index+1].tailContents;
 
 mySeq[index].footprint := {mySeq[index]} + mySeq[index+1].footprint;
+
+mySeq[index].spine := [mySeq[index]] + mySeq[index+1].spine;
+
+//assert (set nd | nd in mySeq[index+1].spine) == mySeq[index+1].footprint;
+
 }
 
 
@@ -292,18 +353,19 @@ ghost method updateSeq(mySeq:seq<INode>)
 requires mySeq != [];
 requires seqInv(mySeq);
 requires mySeq[|mySeq|-1].next == null;
-requires mySeq[|mySeq|-1].Valid();
+requires mySeq[|mySeq|-1].perfect(); 
 
 modifies mySeq;
 ensures seqInv(mySeq);
 ensures mySeq[|mySeq|-1].next == null;
-ensures mySeq[|mySeq|-1].Valid();
+ensures mySeq[|mySeq|-1].perfect(); 
 
 ensures forall i :: 0 <= i < |mySeq|-1 ==> 
 	(mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents)
- && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint);
+ && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint)
+ && (mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
 
-ensures forall nd :: nd in mySeq ==> nd.Valid();
+ensures forall nd :: nd in mySeq ==> nd.perfect(); 
 ensures validSeqCond(mySeq);
 
 ensures mySeq[0].footprint == (set nd | nd in mySeq);
@@ -317,11 +379,12 @@ invariant -1 <= index <= |mySeq| - 2;
 
 invariant forall i :: index < i < |mySeq|-1 ==> 
 	(mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents)
- && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint);
+ && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint)
+ && (mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
 
 invariant seqInv(mySeq);
 invariant mySeq[|mySeq|-1].next == null;
-invariant mySeq[index+1].Valid();
+invariant mySeq[index+1].perfect(); 
 {
 updateCurIndex(mySeq, index);
 
@@ -329,7 +392,8 @@ index := index - 1;
 
 assert forall i :: index < i < |mySeq|-1 ==> 
 	(mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents)
- && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint);
+ && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint)
+ && (mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
 
 assert seqInv(mySeq);  
 assert mySeq[|mySeq|-1].next == null;
@@ -339,7 +403,7 @@ assert seqV(mySeq);
 assert allNdValid2GoodSeqCond(mySeq);
 assert seqFtprintLemma(mySeq);
 }
-
+*/
 
 }
 
