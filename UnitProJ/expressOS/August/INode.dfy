@@ -301,7 +301,7 @@ stillSeqInv(node.next.spine, node) &&
 && (node.footprint == {node} + node.next.footprint)
 }
 
-/*
+
 
 ghost method updateCurIndex(mySeq:seq<INode>, index:int)
 requires 0 <= index <= |mySeq| - 2;
@@ -316,14 +316,14 @@ requires forall i :: index < i < |mySeq|-1 ==>
 
 modifies mySeq;
 ensures fresh((set nd | nd in mySeq) - old(set nd | nd in mySeq));
-//ensures seqInv(mySeq);
+ensures seqInv(mySeq);
 //ensures mySeq[|mySeq|-1].next == null;
 ensures forall i :: index <= i < |mySeq|-1 ==> 
 	(mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents)
  && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint)
  && (mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
 
-ensures mySeq[index].Valid(); 
+//ensures mySeq[index].Valid(); 
 {
 mySeq[index].tailContents := [mySeq[index+1].data] + mySeq[index+1].tailContents;
 
@@ -337,11 +337,11 @@ assert mySeq[index].good();
 //assert {mySeq[index]} !! sumAllFtprint(mySeq[index+1].spine);
 //assert forall nd :: nd in mySeq[index+1].spine ==> nd.next != mySeq[index];
 
-assert nxtPerfectLemma(mySeq[index]);
+//assert nxtPerfectLemma(mySeq[index]);
 }
 
 
-
+/*
 ghost method updateSeq(mySeq:seq<INode>)
 
 requires mySeq != [];
