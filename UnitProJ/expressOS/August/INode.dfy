@@ -180,36 +180,21 @@ mySeq == [] ||
 }
 
 predicate stillSeqInv(mySeq:seq<INode>, newNd:INode)
-requires mySeq != [] && seqInv(mySeq);
-requires newNd != null && newNd.Valid() && newNd.next == mySeq[0];
-requires {newNd} !! sumAllFtprint(mySeq);
+requires seqInv(mySeq);
+requires newNd != null && newNd.Valid() && 
+	(mySeq != [] ==> newNd == mySeq[|mySeq|-1].next);
+
+requires newNd !in mySeq;
 requires forall nd :: nd in mySeq ==> nd.next != newNd;
 reads mySeq, sumAllFtprint(mySeq), newNd, getFtprint(newNd);
-ensures seqInv([newNd]+mySeq);
+ensures stillSeqInv(mySeq, newNd);
+ensures seqInv(mySeq+[newNd]);
 {
-true
+mySeq == [] ||
+(stillSeqInv(mySeq[1..], newNd))
 }
 
 
-
-/*
-predicate seqFtprintLemma(mySeq: seq<INode>)
-requires mySeq != [] && null !in mySeq;
-requires forall nd :: nd in mySeq ==> nd.Valid();
-requires forall i :: 0 <= i < |mySeq|-1 ==> mySeq[i].next == mySeq[i+1];
-requires mySeq[|mySeq|-1].next == null;
-reads mySeq, sumAllFtprint(mySeq);
-ensures seqFtprintLemma(mySeq);
-ensures mySeq[0].footprint == (set nd | nd in mySeq);
-ensures forall nd :: nd in mySeq ==> nd.footprint <= mySeq[0].footprint;
-ensures forall nd :: nd in mySeq[1..] ==> nd.footprint < mySeq[0].footprint;
-{
-if |mySeq| == 1 then true
-else (
-mySeq[0].footprint == {mySeq[0]} + mySeq[1].footprint &&
-seqFtprintLemma(mySeq[1..]))
-}
-*/
 
 predicate seqV(mySeq: seq<INode>)
 requires goodSeqCond(mySeq);
@@ -274,7 +259,7 @@ requires node != null && node.next != null;
 requires node.good();
 requires node.next.Valid();
 
-//requires {node} !! sumAllFtprint(node.next.spine);
+requires node !in node.next.footprint;
 requires forall nd :: nd in node.next.spine ==> nd.next != node;
 requires (node.spine == [node] + node.next.spine);
 reads *;
@@ -287,8 +272,6 @@ stillSeqInv(node.next.spine, node) &&
 
 (set nd | nd in node.next.spine) == node.next.footprint
 && (node.footprint == {node} + node.next.footprint)
-&& ValidLemma()
-&& node !in node.next.footprint
 }
 
 
