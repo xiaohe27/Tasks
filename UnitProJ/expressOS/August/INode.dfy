@@ -47,7 +47,8 @@ predicate ValidLemma()
 requires Valid();
 reads this, footprint;
 ensures ValidLemma();
-ensures forall nd :: nd in footprint ==> nd != null && nd.footprint <= footprint;
+ensures forall nd :: nd in footprint ==> nd != null && nd.footprint <= footprint
+	&& (forall nd2 :: nd2 in nd.spine ==> nd2 in footprint);
 ensures forall nd :: nd in footprint - {this} ==> this !in nd.footprint;
 
 //ensures footprint == (set nd | nd in spine); //50s
@@ -189,9 +190,9 @@ ensures seqInv([newNd]+mySeq);
 true
 }
 
+
+
 /*
-
-
 predicate seqFtprintLemma(mySeq: seq<INode>)
 requires mySeq != [] && null !in mySeq;
 requires forall nd :: nd in mySeq ==> nd.Valid();
@@ -208,7 +209,7 @@ else (
 mySeq[0].footprint == {mySeq[0]} + mySeq[1].footprint &&
 seqFtprintLemma(mySeq[1..]))
 }
-
+*/
 
 predicate seqV(mySeq: seq<INode>)
 requires goodSeqCond(mySeq);
@@ -223,7 +224,7 @@ mySeq == [] ||
 (seqV(mySeq[1..]))
 }
 
-
+/*
 predicate allNdValid2GoodSeqCond(mySeq: seq<INode>)
 requires seqInv(mySeq);
 requires forall nd :: nd in mySeq ==> nd.Valid();
@@ -239,7 +240,7 @@ else
 mySeq[0].next == mySeq[1] && seqFtprintLemma(mySeq) &&
 allNdValid2GoodSeqCond(mySeq[1..])
 }
-
+*/
 
 predicate goodSeqCond(mySeq: seq<INode>)
 reads mySeq;
@@ -267,12 +268,13 @@ goodSeqCond(mySeq) &&
 
 
 //===============================================
-
+/*
 predicate nxtPerfectLemma(node:INode) 
 requires node != null && node.next != null;
 requires node.good();
 requires node.next.Valid();
-requires {node} !! sumAllFtprint(node.next.spine);
+
+//requires {node} !! sumAllFtprint(node.next.spine);
 requires forall nd :: nd in node.next.spine ==> nd.next != node;
 requires (node.spine == [node] + node.next.spine);
 reads *;
@@ -285,6 +287,8 @@ stillSeqInv(node.next.spine, node) &&
 
 (set nd | nd in node.next.spine) == node.next.footprint
 && (node.footprint == {node} + node.next.footprint)
+&& ValidLemma()
+&& node !in node.next.footprint
 }
 
 
