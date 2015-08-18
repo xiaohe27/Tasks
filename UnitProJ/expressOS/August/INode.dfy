@@ -164,8 +164,10 @@ function sumAllFtprint(mySeq: seq<INode>): set<INode>
 reads mySeq;
 ensures forall nd :: nd in mySeq ==> 
 	(nd != null ==> nd.footprint <= sumAllFtprint(mySeq));
+ensures sumAllFtprint(mySeq) <= (set nd | nd in mySeq);
 {
-if mySeq == [] then {} else getFtprint(mySeq[0]) + sumAllFtprint(mySeq[1..])
+if mySeq == [] then {} 
+else getFtprint(mySeq[0]) + sumAllFtprint(mySeq[1..])
 }
 
 predicate allDiff(mySeq:seq<INode>)
@@ -175,7 +177,6 @@ forall index :: 0 <= index < |mySeq| ==>
 	(forall other :: 0 <= other < |mySeq| && other != index ==>
 	 (mySeq[other] != mySeq[index]))
 }
-
 
 
 //==seq invariant inside the loop===
@@ -192,7 +193,7 @@ mySeq == [] ||
 				!! mySeq[i].footprint))
 }
 
-/*
+
 predicate seqInvLemma(mySeq:seq<INode>)
 requires seqInv(mySeq);
 reads mySeq;
@@ -204,7 +205,7 @@ mySeq == [] ||
 seqInvLemma(mySeq[1..])
 )
 }
-*/
+
 
 
 
