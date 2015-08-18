@@ -332,7 +332,9 @@ mySeq[index].footprint := {mySeq[index]} + mySeq[index+1].footprint;
 mySeq[index].spine := [mySeq[index]] + mySeq[index+1].spine;
 
 assert mySeq[index].good();
+assert seqInv(mySeq);
 
+assert {mySeq[index]} !! mySeq[index+1].footprint;
 //make the properties below inside seqInv()
 //assert {mySeq[index]} !! sumAllFtprint(mySeq[index+1].spine);
 //assert forall nd :: nd in mySeq[index+1].spine ==> nd.next != mySeq[index];
