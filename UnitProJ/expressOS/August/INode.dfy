@@ -135,16 +135,21 @@ assert spine == oldSpine + [node] && node.data == d;
 
 
 updateSeq(spine);
-assert ValidLemma();
 
+//assert spine == oldSpine + [node]; //&& node.data == d;
+
+//assert ValidLemma();
+
+/*
 assert spine == oldSpine + [node] && node.data == d;
 assert ndSeq2DataSeq(oldSpine) == [oldData] + oldTC;
 assert ndSeq2DataSeq(spine) == [data] + tailContents;
 
+
 assert contentOK(oldData, oldTC, oldSpine,
 		    data, tailContents, spine,
 			node, d);
-
+*/
 }
 */
 
