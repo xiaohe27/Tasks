@@ -183,13 +183,13 @@ mySeq == [] ||
 }
 
 
+
 predicate listCond(mySeq: seq<INode>)
 reads mySeq, (set nd | nd in mySeq);
 {
 null !in mySeq &&
 (forall i :: 0 <= i < |mySeq|-1 ==> mySeq[i].next == mySeq[i+1])
-&& (mySeq != [] ==> mySeq[|mySeq|-1].next == null)
-&& (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint)
+//&& (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint)
 }
 
 predicate goodSeqCond(mySeq: seq<INode>)
@@ -213,11 +213,11 @@ listCond(mySeq) &&
 ghost method updateCurIndex(mySeq:seq<INode>, index:int)
 requires 0 <= index <= |mySeq| - 2;
 requires listCond(mySeq);
-requires index > 0 ==> goodSeqCond(mySeq[0..index]);
-requires validSeqCond(mySeq[index+1..]);
-	
-//requires mySeq[index] !in (mySeq[index+1].footprint);
+requires goodSeqCond(mySeq[0..index]);
+requires mySeq[index+1].Valid();
 
+requires mySeq[index] !in mySeq[index+1].footprint;
+	
 modifies mySeq;
 ensures fresh((set nd | nd in mySeq) - old(set nd | nd in mySeq));
 ensures listCond(mySeq);
