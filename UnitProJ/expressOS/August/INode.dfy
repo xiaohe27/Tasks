@@ -208,29 +208,17 @@ requires index > 0 ==> mySeq[index-1] != mySeq[index]
 	
 requires mySeq[index] !in (mySeq[index+1].footprint);
 
-requires forall i :: index < i < |mySeq|-1 ==> 
-	(mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents)
- && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint)
- && (mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
-
 modifies mySeq;
 ensures fresh((set nd | nd in mySeq) - old(set nd | nd in mySeq));
-//ensures seqInv(mySeq);
-//ensures mySeq[|mySeq|-1].next == null;
-ensures forall i :: index <= i < |mySeq|-1 ==> 
-	(mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents)
- && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint)
- && (mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
+ensures listCond(mySeq);
 
-//ensures mySeq[index].Valid(); 
+ensures mySeq[index].Valid(); 
 {
 mySeq[index].tailContents := [mySeq[index+1].data] + mySeq[index+1].tailContents;
 
 mySeq[index].footprint := {mySeq[index]} + mySeq[index+1].footprint;
 
 mySeq[index].spine := [mySeq[index]] + mySeq[index+1].spine;
-
-assert mySeq[index].Valid();
 
 }
 
