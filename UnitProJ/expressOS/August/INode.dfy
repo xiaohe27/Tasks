@@ -18,6 +18,7 @@ if next == null then 1 else 1 + next.len()
 }
 
 
+
 predicate good()
 reads this, footprint;
 {
@@ -41,9 +42,11 @@ good()
 && listCond(spine)
 && |spine| == |footprint|
 
+/*
 && |tailContents| == |footprint|-1
 && (spine[0].data == data) 
 && (forall i :: 1 <= i < |spine| ==> spine[i].data == tailContents[i-1])
+*/
 
 && (next != null ==> next.Valid())
 }
@@ -51,10 +54,12 @@ good()
 predicate ValidLemma()
 requires Valid();
 reads this, footprint;
-ensures forall nd :: nd in spine ==> nd.Valid();
-ensures validSeqCond(spine);
+ensures ValidLemma();
+ensures |tailContents| == |footprint|-1
+&& (forall i :: 1 <= i < |spine| ==> spine[i].data == tailContents[i-1]);
 {
-allV(this) && (forall nd :: nd in spine ==> nd in footprint)
+(next == null) ||
+(next.ValidLemma())
 }
 
 
@@ -133,7 +138,7 @@ assert listCond(spine);
 assert spine[|spine|-1].spine == spine[|spine|-1..];
 
 updateSeq(spine);
-
+assert ValidLemma();
 
 }
 
