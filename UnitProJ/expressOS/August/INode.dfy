@@ -228,6 +228,7 @@ requires 0 <= index <= |mySeq| - 2;
 requires listCond(mySeq);
 requires goodSeqCond(mySeq[0..index]);
 requires mySeq[index+1].Valid();
+requires mySeq[index+1].spine == mySeq[index+1..];
 
 requires mySeq[index] !in mySeq[index+1].footprint;
 	
@@ -236,7 +237,7 @@ ensures fresh((set nd | nd in mySeq) - old(set nd | nd in mySeq));
 
 ensures listCond(mySeq);
 
-//ensures mySeq[index].Valid(); 
+ensures mySeq[index].Valid(); 
 
 {
 assert (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint);
@@ -247,7 +248,7 @@ mySeq[index].footprint := {mySeq[index]} + mySeq[index+1].footprint;
 
 mySeq[index].spine := [mySeq[index]] + mySeq[index+1].spine;
 
-assert mySeq[index].good();
+assert mySeq[index].spine == mySeq[index..];
 }
 
 
