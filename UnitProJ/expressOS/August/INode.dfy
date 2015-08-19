@@ -51,6 +51,7 @@ reads this, footprint;
 ensures ValidLemma();
 ensures |tailContents| == |footprint|-1 == |spine|-1;
 ensures (forall i :: 1 <= i < |spine| ==> spine[i].data == tailContents[i-1]);
+ensures ndSeq2DataSeq(spine) == [data] + tailContents;
 {
 (next == null) ||
 (next.ValidLemma())
@@ -289,5 +290,16 @@ index := index - 1;
 assert seqV(mySeq);
 }
 
+
+function ndSeq2DataSeq(mySeq:seq<INode>) : seq<Data>
+requires listCond(mySeq);
+reads mySeq;
+ensures |mySeq| == |ndSeq2DataSeq(mySeq)|;
+ensures forall i :: 0 <= i < |mySeq| ==> 
+	ndSeq2DataSeq(mySeq)[i] == mySeq[i].data;
+{
+if mySeq == [] then []
+else [mySeq[0].data] + ndSeq2DataSeq(mySeq[1..])
+}
 
 }
