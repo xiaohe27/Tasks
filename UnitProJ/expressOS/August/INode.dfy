@@ -99,11 +99,16 @@ method append(d:Data)
 requires Valid();
 
 modifies footprint;
-ensures Valid();
+//ensures Valid();
 //ensures (tailContents == old(tailContents) + [d]);
 //ensures this.data == old(this.data);
 //ensures fresh(footprint - old(footprint));
 {
+assert ValidLemma();
+assert ndSeq2DataSeq(spine) == [data] + tailContents;
+
+ghost var oldData, oldTC, oldSpine := data, tailContents, spine;
+
 var node := new INode.init(d);
 assert node.footprint !! footprint;
 
@@ -126,11 +131,22 @@ tmpNd.next := node;
 
 spine := spine + [node];
 
+assert spine == oldSpine + [node] && node.data == d;
+
+
 updateSeq(spine);
 assert ValidLemma();
 
+assert spine == oldSpine + [node] && node.data == d;
+assert ndSeq2DataSeq(oldSpine) == [oldData] + oldTC;
+assert ndSeq2DataSeq(spine) == [data] + tailContents;
+
+assert contentOK(oldData, oldTC, oldSpine,
+		    data, tailContents, spine,
+			node, d);
 
 }
+
 
 
 
@@ -301,8 +317,8 @@ predicate contentOK(oldData:Data, oldTailC:seq<Data>, oldSpine:seq<INode>,
 			newNd:INode, d:Data)
 requires listCond(oldSpine) && listCond(newSpine);
 requires oldData == newData;
-requires [oldData] + oldTailC == ndSeq2DataSeq(oldSpine);
-requires [newData] + newTailC == ndSeq2DataSeq(newSpine);
+requires ndSeq2DataSeq(oldSpine) == [oldData] + oldTailC;
+requires ndSeq2DataSeq(newSpine) == [newData] + newTailC;
 requires newNd != null;
 requires newSpine == oldSpine + [newNd] && newNd.data == d;
 reads *;
