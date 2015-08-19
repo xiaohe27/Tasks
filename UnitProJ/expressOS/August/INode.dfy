@@ -280,14 +280,14 @@ goodSeqCond(mySeq) &&
 
 //===============================================
 
-/*
+
 predicate nxtPerfectLemma(node:INode) 
 requires node != null && node.next != null;
 requires node.good();
 requires node.next.Valid();
 
-requires {node} !! sumAllFtprint(node.next.spine);
-requires forall nd :: nd in node.next.spine ==> nd.next != node;
+requires forall nd :: nd in node.next.spine ==> node !in nd.footprint
+					&&      nd.next != node;
 requires (node.spine == [node] + node.next.spine);
 reads *;
 ensures seqInv(node.spine);
@@ -302,7 +302,7 @@ stillSeqInv(node.next.spine, node) &&
 }
 
 
-
+/*
 ghost method updateCurIndex(mySeq:seq<INode>, index:int)
 requires 0 <= index <= |mySeq| - 2;
 requires seqInv(mySeq);
