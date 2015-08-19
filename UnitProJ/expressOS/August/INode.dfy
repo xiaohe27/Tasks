@@ -203,8 +203,6 @@ requires 0 <= index <= |mySeq| - 2;
 requires listCond(mySeq);
 requires index > 0 ==> goodSeqCond(mySeq[0..index-1]);
 requires validSeqCond(mySeq[index+1..]);
-
-requires index > 0 ==> mySeq[index-1] != mySeq[index]
 	
 requires mySeq[index] !in (mySeq[index+1].footprint);
 
@@ -227,26 +225,30 @@ mySeq[index].spine := [mySeq[index]] + mySeq[index+1].spine;
 ghost method updateSeq(mySeq:seq<INode>)
 
 requires mySeq != [];
-requires seqInv(mySeq);
-requires mySeq[|mySeq|-1].next == null;
-requires mySeq[|mySeq|-1].Valid(); 
+requires listCond(mySeq);
+
+//
+requires |mySeq| > 1 ==> goodSeqCond(mySeq[0..|mySeq|-2]);
+requires validSeqCond(mySeq[|mySeq|-1..]);
+	
+requires mySeq[|mySeq|-2] !in (mySeq[|mySeq|-1].footprint);
 
 modifies mySeq;
-ensures seqInv(mySeq);
-ensures mySeq[|mySeq|-1].next == null;
-ensures mySeq[|mySeq|-1].Valid(); 
 
+/*
 ensures forall i :: 0 <= i < |mySeq|-1 ==> 
 	(mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents)
  && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint)
  && (mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
+*/
 
-ensures forall nd :: nd in mySeq ==> nd.Valid(); 
 ensures validSeqCond(mySeq);
 
+/*
 ensures mySeq[0].footprint == (set nd | nd in mySeq);
 ensures forall nd :: nd in mySeq ==> nd.footprint <= mySeq[0].footprint;
 ensures forall nd :: nd in mySeq[1..] ==> nd.footprint < mySeq[0].footprint;
+*/
 {
 ghost var index := |mySeq| - 2;
 
@@ -258,14 +260,14 @@ invariant forall i :: index < i < |mySeq|-1 ==>
  && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint)
  && (mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
 
-invariant seqInv(mySeq);
-invariant mySeq[|mySeq|-1].next == null;
+invariant listCond(mySeq);
 invariant mySeq[index+1].Valid(); 
 {
 updateCurIndex(mySeq, index);
 
 index := index - 1;
 
+/*
 assert forall i :: index < i < |mySeq|-1 ==> 
 	(mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents)
  && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint)
@@ -273,11 +275,11 @@ assert forall i :: index < i < |mySeq|-1 ==>
 
 assert seqInv(mySeq);  
 assert mySeq[|mySeq|-1].next == null;
+*/
 }
 
 assert seqV(mySeq);
-assert allNdValid2GoodSeqCond(mySeq);
-assert seqFtprintLemma(mySeq);
+
 }
 */
 
