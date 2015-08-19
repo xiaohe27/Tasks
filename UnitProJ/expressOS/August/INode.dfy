@@ -40,6 +40,11 @@ good()
 && (forall nd :: nd in spine ==> nd in footprint)
 && listCond(spine)
 && |spine| == |footprint|
+
+&& |tailContents| == |footprint|-1
+&& (spine[0].data == data) 
+&& (forall i :: 1 <= i < |spine| ==> spine[i].data == tailContents[i-1])
+
 && (next != null ==> next.Valid())
 }
 
@@ -94,8 +99,7 @@ method append(d:Data)
 requires Valid();
 
 modifies footprint;
-//decreases footprint;
-//ensures Valid();
+ensures Valid();
 //ensures (tailContents == old(tailContents) + [d]);
 //ensures this.data == old(this.data);
 //ensures fresh(footprint - old(footprint));
@@ -130,7 +134,6 @@ assert spine[|spine|-1].spine == spine[|spine|-1..];
 
 updateSeq(spine);
 
-//assert Valid();
 
 }
 
