@@ -42,6 +42,15 @@ good()
 && (next != null ==> next.Valid())
 }
 
+predicate ValidLemma()
+requires Valid();
+reads this, footprint;
+ensures forall nd :: nd in spine ==> nd.Valid();
+ensures validSeqCond(spine);
+{
+allV(this) && (forall nd :: nd in spine ==> nd in footprint)
+}
+
 
 constructor init(d:Data) 
 modifies this;
@@ -136,13 +145,19 @@ if mySeq == [] then {} else getFtprint(mySeq[0]) + sumAllFtprint(mySeq[1..])
 
 
 
+predicate allV(myNode:INode)
+reads myNode, getFtprint(myNode);
+requires myNode != null && myNode.Valid();
+decreases myNode.footprint;
+ensures allV(myNode);
+ensures forall nd :: nd in myNode.footprint ==> nd != null && nd.Valid();
+{
 
-
-
-
-
-
-
+if (myNode.next == null)
+then myNode.footprint == {myNode}
+else 
+allV(myNode.next)
+}
 
 predicate seqV(mySeq: seq<INode>)
 requires goodSeqCond(mySeq);
