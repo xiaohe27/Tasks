@@ -226,29 +226,23 @@ listCond(mySeq) &&
 ghost method updateCurIndex(mySeq:seq<INode>, index:int)
 requires 0 <= index <= |mySeq| - 2;
 requires listCond(mySeq);
-requires goodSeqCond(mySeq[0..index]);
 requires mySeq[index+1].Valid();
 requires mySeq[index+1].spine == mySeq[index+1..];
-
-requires mySeq[index] !in mySeq[index+1].footprint;
 	
 modifies mySeq[index];
 ensures fresh((set nd | nd in mySeq) - old(set nd | nd in mySeq));
 
 ensures listCond(mySeq);
 
-ensures mySeq[index].Valid(); 
+ensures mySeq[index].Valid();
 
+ensures mySeq[index].spine == mySeq[index..];
 {
-assert (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint);
-
 mySeq[index].tailContents := [mySeq[index+1].data] + mySeq[index+1].tailContents;
 
 mySeq[index].footprint := {mySeq[index]} + mySeq[index+1].footprint;
 
 mySeq[index].spine := [mySeq[index]] + mySeq[index+1].spine;
-
-assert mySeq[index].spine == mySeq[index..];
 }
 
 
@@ -260,10 +254,8 @@ requires listCond(mySeq);
 
 //
 requires |mySeq| > 1 ==> goodSeqCond(mySeq[0..|mySeq|-2]);
-requires validSeqCond(mySeq[|mySeq|-1..]);
+requires mySeq[|mySeq|-1].Valid();
 	
-requires mySeq[|mySeq|-2] !in (mySeq[|mySeq|-1].footprint);
-
 modifies mySeq;
 
 /*
