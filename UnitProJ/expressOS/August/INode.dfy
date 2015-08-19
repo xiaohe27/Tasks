@@ -126,16 +126,10 @@ tmpNd.next := node;
 
 spine := spine + [node];
 
-assert (spine[|spine|-1].data == d)
-&& (forall nd :: nd in spine[0..|spine|-1] ==> nd.data == old(nd.data));
-
 updateSeq(spine);
 assert ValidLemma();
 
-//assert |tailContents| == |spine| - 1;
-//assert tailContents[|tailContents|-1] == spine[|spine|-1].data == d;
-//assert tailContents[|tailContents|-1] == d;
-//assert tailContents == old(tailContents) + [d];
+
 }
 
 
@@ -301,5 +295,18 @@ ensures forall i :: 0 <= i < |mySeq| ==>
 if mySeq == [] then []
 else [mySeq[0].data] + ndSeq2DataSeq(mySeq[1..])
 }
+
+predicate contentOK(oldData:Data, oldTailC:seq<Data>, oldSpine:seq<INode>,
+		    newData:Data, newTailC:seq<Data>, newSpine:seq<INode>,
+			newNd:INode, d:Data)
+requires listCond(oldSpine) && listCond(newSpine);
+requires oldData == newData;
+requires [oldData] + oldTailC == ndSeq2DataSeq(oldSpine);
+requires [newData] + newTailC == ndSeq2DataSeq(newSpine);
+requires newNd != null;
+requires newSpine == oldSpine + [newNd] && newNd.data == d;
+reads *;
+ensures newTailC == oldTailC + [d];
+{true}
 
 }
