@@ -42,12 +42,6 @@ good()
 && listCond(spine)
 && |spine| == |footprint|
 
-/*
-&& |tailContents| == |footprint|-1
-&& (spine[0].data == data) 
-&& (forall i :: 1 <= i < |spine| ==> spine[i].data == tailContents[i-1])
-*/
-
 && (next != null ==> next.Valid())
 }
 
@@ -55,8 +49,8 @@ predicate ValidLemma()
 requires Valid();
 reads this, footprint;
 ensures ValidLemma();
-ensures |tailContents| == |footprint|-1
-&& (forall i :: 1 <= i < |spine| ==> spine[i].data == tailContents[i-1]);
+ensures |tailContents| == |footprint|-1 == |spine|-1;
+ensures (forall i :: 1 <= i < |spine| ==> spine[i].data == tailContents[i-1]);
 {
 (next == null) ||
 (next.ValidLemma())
@@ -127,19 +121,20 @@ tmpNd := tmpNd.next;
 index := index + 1;
 }
 
-assert tmpNd == spine[|spine|-1];
 tmpNd.next := node;
 
 spine := spine + [node];
 
-
-assert spine[|spine|-1].Valid();
-assert listCond(spine);
-assert spine[|spine|-1].spine == spine[|spine|-1..];
+assert (spine[|spine|-1].data == d)
+&& (forall nd :: nd in spine[0..|spine|-1] ==> nd.data == old(nd.data));
 
 updateSeq(spine);
 assert ValidLemma();
 
+//assert |tailContents| == |spine| - 1;
+//assert tailContents[|tailContents|-1] == spine[|spine|-1].data == d;
+//assert tailContents[|tailContents|-1] == d;
+//assert tailContents == old(tailContents) + [d];
 }
 
 
