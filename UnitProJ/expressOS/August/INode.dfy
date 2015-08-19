@@ -94,7 +94,7 @@ r.spine := [r] + spine;
 return r;
 }
 
-
+/*
 method append(d:Data)
 requires Valid();
 
@@ -146,7 +146,7 @@ assert contentOK(oldData, oldTC, oldSpine,
 			node, d);
 
 }
-
+*/
 
 
 
@@ -260,6 +260,8 @@ ensures listCond(mySeq);
 ensures mySeq[index].Valid();
 
 ensures mySeq[index].spine == mySeq[index..];
+
+ensures mySeq == old(mySeq);
 {
 mySeq[index].tailContents := [mySeq[index+1].data] + mySeq[index+1].tailContents;
 
@@ -282,6 +284,7 @@ modifies mySeq;
 
 ensures validSeqCond(mySeq);
 
+ensures mySeq == old(mySeq);
 {
 ghost var index := |mySeq| - 2;
 
@@ -291,6 +294,8 @@ invariant listCond(mySeq);
 invariant mySeq[index+1].Valid(); 
 invariant mySeq[|mySeq|-1].Valid();
 invariant mySeq[index+1].spine == mySeq[index+1..];
+
+invariant mySeq == old(mySeq);
 {
 updateCurIndex(mySeq, index);
 
