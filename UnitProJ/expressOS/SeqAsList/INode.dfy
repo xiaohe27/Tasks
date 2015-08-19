@@ -91,6 +91,17 @@ ensures forall nd :: nd in myNode.footprint ==> nd != null && nd.Valid();
 {
 assert allV(myNode);
 }
+
+predicate ValidLemma2()
+requires Valid();
+reads this, footprint;
+ensures (set nd | nd in spine) == footprint;
+{
+if next == null then (spine == [this] && footprint == {this})
+else (
+spine == [this] + next.spine && footprint == {this} + next.footprint
+&& next.ValidLemma2())
+}
 */
 
 predicate seqFtprintLemma(mySeq: seq<INode>)
