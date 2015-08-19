@@ -51,16 +51,6 @@ ensures validSeqCond(spine);
 allV(this) && (forall nd :: nd in spine ==> nd in footprint)
 }
 
-predicate ValidLemma2()
-requires Valid();
-reads this, footprint;
-ensures (set nd | nd in spine) == footprint;
-{
-if next == null then (spine == [this] && footprint == {this})
-else (
-spine == [this] + next.spine && footprint == {this} + next.footprint
-&& next.ValidLemma2())
-}
 
 constructor init(d:Data) 
 modifies this;
@@ -182,14 +172,37 @@ mySeq == [] ||
 (seqV(mySeq[1..]))
 }
 
+predicate ValidLemma2(node:INode)
+requires node != null && node.Valid();
+reads node, getFtprint(node);
 
+ensures ValidLemma2(node);
+ensures (set nd | nd in node.spine) == node.footprint;
+
+ensures forall nd :: nd in node.footprint ==> nd.footprint <= node.footprint;
+{
+if node.next == null then (node.spine == [node] && node.footprint == {node})
+else (
+node.spine == [node] + node.next.spine 
+&& node.footprint == {node} + node.next.footprint
+&& ValidLemma2(node.next))
+}
+
+predicate allDiff(mySeq:seq<INode>)
+reads mySeq;
+{
+forall index :: 0 <= index < |mySeq| ==> 
+	(forall other :: 0 <= other < |mySeq| && other != index ==>
+	 (mySeq[other] != mySeq[index]))
+}
 
 predicate listCond(mySeq: seq<INode>)
 reads mySeq, (set nd | nd in mySeq);
 {
 null !in mySeq &&
+allDiff(mySeq) &&
 (forall i :: 0 <= i < |mySeq|-1 ==> mySeq[i].next == mySeq[i+1])
-//&& (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint)
+&& (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint)
 }
 
 predicate goodSeqCond(mySeq: seq<INode>)
@@ -218,18 +231,23 @@ requires mySeq[index+1].Valid();
 
 requires mySeq[index] !in mySeq[index+1].footprint;
 	
-modifies mySeq;
+modifies mySeq[index];
 ensures fresh((set nd | nd in mySeq) - old(set nd | nd in mySeq));
+
 ensures listCond(mySeq);
 
-ensures mySeq[index].Valid(); 
+//ensures mySeq[index].Valid(); 
+
 {
+assert (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint);
+
 mySeq[index].tailContents := [mySeq[index+1].data] + mySeq[index+1].tailContents;
 
 mySeq[index].footprint := {mySeq[index]} + mySeq[index+1].footprint;
 
 mySeq[index].spine := [mySeq[index]] + mySeq[index+1].spine;
 
+assert mySeq[index].good();
 }
 
 
