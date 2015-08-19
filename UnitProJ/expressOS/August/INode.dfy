@@ -235,23 +235,6 @@ mySeq == [] ||
 (seqV(mySeq[1..]))
 }
 
-/*
-predicate allNdValid2GoodSeqCond(mySeq: seq<INode>)
-requires seqInv(mySeq);
-requires forall nd :: nd in mySeq ==> nd.Valid();
-requires mySeq != [] ==> mySeq[|mySeq|-1].next == null;
-reads mySeq, sumAllFtprint(mySeq);
-ensures allNdValid2GoodSeqCond(mySeq);
-ensures goodSeqCond(mySeq);
-ensures validSeqCond(mySeq);
-{
-if mySeq == [] then true
-else if |mySeq|==1 then mySeq[0].Valid() && mySeq[0].next == null
-else 
-mySeq[0].next == mySeq[1] && seqFtprintLemma(mySeq) &&
-allNdValid2GoodSeqCond(mySeq[1..])
-}
-*/
 
 predicate listCond(mySeq: seq<INode>)
 reads mySeq, (set nd | nd in mySeq);
@@ -276,28 +259,6 @@ listCond(mySeq) &&
 
 
 //===============================================
-
-/*
-predicate nxtPerfectLemma(node:INode) 
-requires node != null && node.next != null;
-requires node.good();
-requires node.next.Valid();
-
-requires forall nd :: nd in node.next.spine ==> node !in nd.footprint
-					&&      nd.next != node;
-requires (node.spine == [node] + node.next.spine);
-reads *;
-ensures seqInv(node.spine);
-ensures node.Valid();
-{
-seqInv(node.next.spine) &&
-node.next == node.next.spine[0] &&
-stillSeqInv(node.next.spine, node) &&
-
-(set nd | nd in node.next.spine) == node.next.footprint
-&& (node.footprint == {node} + node.next.footprint)
-}
-*/
 
 
 ghost method updateCurIndex(mySeq:seq<INode>, index:int)
