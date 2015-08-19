@@ -39,6 +39,7 @@ reads this, footprint;
 good()  
 && (forall nd :: nd in spine ==> nd in footprint)
 && listCond(spine)
+&& |spine| == |footprint|
 && (next != null ==> next.Valid())
 }
 
@@ -88,7 +89,7 @@ r.spine := [r] + spine;
 return r;
 }
 
-/*
+
 method append(d:Data)
 requires Valid();
 
@@ -103,28 +104,36 @@ var node := new INode.init(d);
 assert node.footprint !! footprint;
 
 var tmpNd := this;
+ghost var index := 0;
+
 while(tmpNd.next != null)
 invariant tmpNd != null && tmpNd.Valid();
+invariant listCond(spine);
+invariant index == |this.footprint| - |tmpNd.footprint|;
+invariant tmpNd == spine[index];
 decreases tmpNd.footprint;
 {
 tmpNd := tmpNd.next;
+
+index := index + 1;
 }
 
+assert tmpNd == spine[|spine|-1];
 tmpNd.next := node;
 
 spine := spine + [node];
 
 
-assert spine[|spine|-1].next == null
-	&& spine[|spine|-1].Valid();
-assert seqInv(spine);
+assert spine[|spine|-1].Valid();
+assert listCond(spine);
+assert spine[|spine|-1].spine == spine[|spine|-1..];
 
 updateSeq(spine);
 
 //assert Valid();
 
 }
-*/
+
 
 
 
