@@ -160,12 +160,12 @@ allV(myNode.next)
 }
 
 predicate seqV(mySeq: seq<INode>)
-requires goodSeqCond(mySeq);
-requires mySeq != [] ==> mySeq[0].Valid();
+requires listCond(mySeq);
+requires mySeq != [] ==> mySeq[0].Valid()
+		&& (mySeq[|mySeq|-1].Valid());
 
 reads mySeq, sumAllFtprint(mySeq);
 ensures seqV(mySeq);
-ensures goodSeqCond(mySeq);
 ensures forall nd :: nd in mySeq ==> nd.Valid(); 
 {
 mySeq == [] ||
@@ -246,64 +246,36 @@ mySeq[index].spine := [mySeq[index]] + mySeq[index+1].spine;
 }
 
 
-/*
+
 ghost method updateSeq(mySeq:seq<INode>)
 
 requires mySeq != [];
 requires listCond(mySeq);
 
-//
-requires |mySeq| > 1 ==> goodSeqCond(mySeq[0..|mySeq|-2]);
 requires mySeq[|mySeq|-1].Valid();
+requires mySeq[|mySeq|-1].spine == mySeq[|mySeq|-1..];
 	
 modifies mySeq;
 
-/*
-ensures forall i :: 0 <= i < |mySeq|-1 ==> 
-	(mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents)
- && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint)
- && (mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
-*/
-
 ensures validSeqCond(mySeq);
 
-/*
-ensures mySeq[0].footprint == (set nd | nd in mySeq);
-ensures forall nd :: nd in mySeq ==> nd.footprint <= mySeq[0].footprint;
-ensures forall nd :: nd in mySeq[1..] ==> nd.footprint < mySeq[0].footprint;
-*/
 {
 ghost var index := |mySeq| - 2;
 
 while(index >= 0)
 invariant -1 <= index <= |mySeq| - 2;
-
-invariant forall i :: index < i < |mySeq|-1 ==> 
-	(mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents)
- && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint)
- && (mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
-
 invariant listCond(mySeq);
 invariant mySeq[index+1].Valid(); 
+invariant mySeq[|mySeq|-1].Valid();
+invariant mySeq[index+1].spine == mySeq[index+1..];
 {
 updateCurIndex(mySeq, index);
 
 index := index - 1;
-
-/*
-assert forall i :: index < i < |mySeq|-1 ==> 
-	(mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents)
- && (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint)
- && (mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
-
-assert seqInv(mySeq);  
-assert mySeq[|mySeq|-1].next == null;
-*/
 }
 
 assert seqV(mySeq);
-
 }
-*/
+
 
 }
