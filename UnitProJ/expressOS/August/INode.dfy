@@ -42,40 +42,6 @@ good()
 && (next != null ==> next.Valid())
 }
 
-predicate allV(myNode:INode)
-reads myNode, getFtprint(myNode);
-requires myNode != null && myNode.Valid();
-decreases myNode.footprint;
-ensures allV(myNode);
-ensures forall nd :: nd in myNode.footprint ==> nd != null && nd.Valid();
-{
-
-if (myNode.next == null)
-then myNode.footprint == {myNode}
-else 
-allV(myNode.next)
-}
-
-predicate ValidLemma()
-requires Valid();
-reads this, footprint;
-ensures allV(this);
-ensures ValidLemma();
-ensures forall nd :: nd in footprint ==> nd != null && nd.footprint <= footprint
-	&& (forall nd2 :: nd2 in nd.spine ==> nd2 in footprint);
-ensures forall nd :: nd in footprint - {this} ==> this !in nd.footprint;
-
-//ensures footprint == (set nd | nd in spine); //50s
-
-{
-(next == null ==> footprint == {this} && spine == [this])
-&&
-(next != null ==> (footprint == {this} + next.footprint
-		&& spine == [this] + next.spine 
-		&& next.ValidLemma()))
-}
-
-
 
 constructor init(d:Data) 
 modifies this;
@@ -168,57 +134,13 @@ ensures forall nd :: nd in mySeq ==>
 if mySeq == [] then {} else getFtprint(mySeq[0]) + sumAllFtprint(mySeq[1..])
 }
 
-predicate allDiff(mySeq:seq<INode>)
-reads mySeq;
-{
-forall index :: 0 <= index < |mySeq| ==> 
-	(forall other :: 0 <= other < |mySeq| && other != index ==>
-	 (mySeq[other] != mySeq[index]))
-}
-
-
-//==seq invariant inside the loop===
-predicate seqInv(mySeq: seq<INode>)
-reads mySeq;
-{
-mySeq == [] ||
-(allDiff(mySeq) &&
-(forall nd :: nd in mySeq ==> nd != null && nd in nd.footprint) &&
-(forall i :: 0 <= i < |mySeq|-1 ==> mySeq[i].next == mySeq[i+1]) 
-&&
-(mySeq[|mySeq|-1].next !in mySeq) &&
-(forall i :: 0 <= i < |mySeq| ==> (set nd | nd in mySeq[0..i])					
-				!! mySeq[i].footprint))
-}
-
-
-predicate seqInvLemma(mySeq:seq<INode>)
-requires seqInv(mySeq);
-reads mySeq;
-ensures seqInvLemma(mySeq);
-ensures forall i :: 0 <= i < |mySeq| ==> seqInv(mySeq[i..]);
-{
-mySeq == [] ||
-(allDiff(mySeq[1..]) &&
-seqInvLemma(mySeq[1..])
-)
-}
 
 
 
 
 
 
-predicate stillSeqInv(mySeq:seq<INode>, newNd:INode)
-requires mySeq != [] && seqInv(mySeq);
-requires newNd != null && newNd.Valid() && newNd.next == mySeq[0];
-requires forall nd :: nd in mySeq ==> newNd !in nd.footprint
-				&&    nd.next != newNd;
-reads mySeq, sumAllFtprint(mySeq), newNd, getFtprint(newNd);
-ensures seqInv([newNd]+mySeq);
-{
-true
-}
+
 
 
 
