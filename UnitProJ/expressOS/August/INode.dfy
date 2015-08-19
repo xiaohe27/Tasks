@@ -164,10 +164,8 @@ function sumAllFtprint(mySeq: seq<INode>): set<INode>
 reads mySeq;
 ensures forall nd :: nd in mySeq ==> 
 	(nd != null ==> nd.footprint <= sumAllFtprint(mySeq));
-ensures sumAllFtprint(mySeq) <= (set nd | nd in mySeq);
 {
-if mySeq == [] then {} 
-else getFtprint(mySeq[0]) + sumAllFtprint(mySeq[1..])
+if mySeq == [] then {} else getFtprint(mySeq[0]) + sumAllFtprint(mySeq[1..])
 }
 
 predicate allDiff(mySeq:seq<INode>)
@@ -214,7 +212,7 @@ seqInvLemma(mySeq[1..])
 predicate stillSeqInv(mySeq:seq<INode>, newNd:INode)
 requires mySeq != [] && seqInv(mySeq);
 requires newNd != null && newNd.Valid() && newNd.next == mySeq[0];
-requires {newNd} !! sumAllFtprint(mySeq);
+requires forall nd :: nd in mySeq ==> newNd !in nd.footprint;
 requires forall nd :: nd in mySeq ==> nd.next != newNd;
 reads mySeq, sumAllFtprint(mySeq), newNd, getFtprint(newNd);
 ensures seqInv([newNd]+mySeq);
@@ -282,6 +280,7 @@ goodSeqCond(mySeq) &&
 
 //===============================================
 
+/*
 predicate nxtPerfectLemma(node:INode) 
 requires node != null && node.next != null;
 requires node.good();
@@ -344,7 +343,6 @@ assert {mySeq[index]} !! mySeq[index+1].footprint;
 }
 
 
-/*
 ghost method updateSeq(mySeq:seq<INode>)
 
 requires mySeq != [];
