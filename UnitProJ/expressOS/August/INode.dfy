@@ -94,7 +94,7 @@ r.spine := [r] + spine;
 return r;
 }
 
-/*
+
 method append(d:Data)
 requires Valid();
 
@@ -126,12 +126,12 @@ tmpNd.next := node;
 
 spine := spine + [node];
 
-updateSeq(spine);
+updateSeq(spine, |spine|-1);
 assert ValidLemma();
 
 
 }
-*/
+
 
 
 
