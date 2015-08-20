@@ -1,7 +1,7 @@
 class Data {}
 class INode 
 {
-ghost var contents: seq<Data>;
+ghost var tailContents: seq<Data>;
 ghost var spine: seq<INode>;
 ghost var footprint: set<INode>;
 
@@ -12,7 +12,7 @@ var next: INode;
 function method len():int
 requires Valid();
 reads this, footprint;
-ensures len() == |footprint|;
+ensures len() == |footprint| == |tailContents| + 1;
 {
 if next == null then 1 else 1 + next.len()
 }
@@ -28,9 +28,9 @@ reads this, footprint;
 	&& next.footprint + {this} == footprint
 	&& spine == [this] + next.spine
 	))
-	&& (next ==null ==> contents == [this.data] && footprint == {this}
+	&& (next ==null ==> tailContents == [] && footprint == {this}
 				&& spine == [this])
-	&& (next != null ==> contents == [this.data] + next.contents)
+	&& (next != null ==> tailContents == [next.data] + next.tailContents)
 }
 
 
@@ -40,7 +40,7 @@ reads this, footprint;
 good()  
 && (forall nd :: nd in spine ==> nd in footprint)
 && listCond(spine)
-&& |spine| == |footprint| == |contents|
+&& |spine| == |footprint|
 
 && (next != null ==> next.Valid())
 }
@@ -49,9 +49,9 @@ predicate ValidLemma()
 requires Valid();
 reads this, footprint;
 ensures ValidLemma();
-ensures |contents| == |footprint| == |spine|;
-ensures (forall i :: 0 <= i < |spine| ==> spine[i].data == contents[i]);
-ensures ndSeq2DataSeq(spine) == contents;
+ensures |tailContents| == |footprint|-1 == |spine|-1;
+ensures (forall i :: 1 <= i < |spine| ==> spine[i].data == tailContents[i-1]);
+ensures ndSeq2DataSeq(spine) == [data] + tailContents;
 {
 (next == null) ||
 (next.ValidLemma())
@@ -65,13 +65,13 @@ ensures data == d;
 ensures next == null;
 
 ensures footprint == {this};
-ensures contents == [this.data];
+ensures tailContents == [];
 ensures spine == [this];
 ensures fresh(footprint - {this});
 {
     data := d;
 	next := null;
-    contents := [this.data];
+    tailContents := [];
 	footprint := {this};
     spine := [this];
 }
@@ -81,14 +81,14 @@ method preAppend(d:Data) returns (node:INode)
 requires Valid();
 ensures node != null && node.Valid();
 ensures node.data == d && node.next == this;
-ensures node.contents == [node.data] + this.contents;
+ensures node.tailContents == [this.data] + this.tailContents;
 {
 var r := new INode.init(d);
 
 r.next := this;
 
 r.footprint := {r} + footprint;
-r.contents := [r.data] + this.contents;
+r.tailContents := [this.data] + this.tailContents;
 r.spine := [r] + spine;
 
 return r;
@@ -100,8 +100,9 @@ requires Valid();
 
 modifies footprint;
 ensures Valid();
-//ensures (contents == old(contents) + [d]);
-ensures fresh(footprint - old(footprint));
+//ensures (tailContents == old(tailContents) + [d]);
+//ensures this.data == old(this.data);
+//ensures fresh(footprint - old(footprint));
 {
 var node := new INode.init(d);
 assert node.footprint !! footprint;
@@ -126,10 +127,13 @@ tmpNd.next := node;
 spine := spine + [node];
 
 updateSeq(spine);
+assert ValidLemma();
 
-//assert ValidLemma();
 
 }
+
+
+
 
 
 function getFtprint(nd:INode): set<INode>
@@ -225,6 +229,7 @@ listCond(mySeq) &&
 
 //===============================================
 
+
 ghost method updateCurIndex(mySeq:seq<INode>, index:int)
 requires 0 <= index <= |mySeq| - 2;
 requires listCond(mySeq);
@@ -240,7 +245,7 @@ ensures mySeq[index].Valid();
 
 ensures mySeq[index].spine == mySeq[index..];
 {
-mySeq[index].contents := [mySeq[index].data] + mySeq[index+1].contents;
+mySeq[index].tailContents := [mySeq[index+1].data] + mySeq[index+1].tailContents;
 
 mySeq[index].footprint := {mySeq[index]} + mySeq[index+1].footprint;
 
@@ -260,6 +265,7 @@ requires mySeq[|mySeq|-1].spine == mySeq[|mySeq|-1..];
 modifies mySeq;
 
 ensures validSeqCond(mySeq);
+
 {
 ghost var index := |mySeq| - 2;
 
@@ -290,5 +296,17 @@ if mySeq == [] then []
 else [mySeq[0].data] + ndSeq2DataSeq(mySeq[1..])
 }
 
+predicate contentOK(oldData:Data, oldTailC:seq<Data>, oldSpine:seq<INode>,
+		    newData:Data, newTailC:seq<Data>, newSpine:seq<INode>,
+			newNd:INode, d:Data)
+requires listCond(oldSpine) && listCond(newSpine);
+requires oldData == newData;
+requires [oldData] + oldTailC == ndSeq2DataSeq(oldSpine);
+requires [newData] + newTailC == ndSeq2DataSeq(newSpine);
+requires newNd != null;
+requires newSpine == oldSpine + [newNd] && newNd.data == d;
+reads *;
+ensures newTailC == oldTailC + [d];
+{true}
 
 }
