@@ -1,0 +1,5 @@
+1.include prop of contents in updateSeq
+
+2. add more prop in the valid predicate
+
+3. use 'contents' instead of tailContents

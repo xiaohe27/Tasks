@@ -97,6 +97,7 @@ return r;
 /*
 method append(d:Data)
 requires Valid();
+requires ndSeq2DataSeq(spine) == [data] + tailContents;
 
 modifies footprint;
 //ensures Valid();
@@ -104,11 +105,6 @@ modifies footprint;
 //ensures this.data == old(this.data);
 //ensures fresh(footprint - old(footprint));
 {
-assert ValidLemma();
-assert ndSeq2DataSeq(spine) == [data] + tailContents;
-
-ghost var oldData, oldTC, oldSpine := data, tailContents, spine;
-
 var node := new INode.init(d);
 assert node.footprint !! footprint;
 
@@ -120,6 +116,8 @@ invariant tmpNd != null && tmpNd.Valid();
 invariant listCond(spine);
 invariant index == |this.footprint| - |tmpNd.footprint|;
 invariant tmpNd == spine[index];
+invariant forall nd :: nd in spine ==> nd.data == old(nd.data);
+
 decreases tmpNd.footprint;
 {
 tmpNd := tmpNd.next;
@@ -131,31 +129,20 @@ tmpNd.next := node;
 
 spine := spine + [node];
 
-assert spine == oldSpine + [node] && node.data == d;
-assert ndSeq2DataSeq(spine) == ndSeq2DataSeq(oldSpine) + [d];
 
 updateSeq(spine);
 
 assert ValidLemma();
-
-
-assert ndSeq2DataSeq(spine) == [data] + tailContents;
-//assert ndSeq2DataSeq(oldSpine) == [oldData] + oldTC;
-
-/*
-assert tailContents == oldTC + [d];
-//assert spine == oldSpine + [node]; //&& node.data == d;
-
-
-assert spine == oldSpine + [node] && node.data == d;
-assert ndSeq2DataSeq(oldSpine) == [oldData] + oldTC;
 assert ndSeq2DataSeq(spine) == [data] + tailContents;
 
+assert spine == old(spine) + [node];
 
-assert contentOK(oldData, oldTC, oldSpine,
+assert forall nd :: nd in old(spine) ==> nd.data == old(nd.data);
+assert (ndSeq2DataSeq(old(spine)) == old([data]) + old(tailContents));
+assert ndSeq2DataSeq(spine) == (ndSeq2DataSeq(old(spine)) + [d]);
+assert contentOK(old(data), old(tailContents), old(spine),
 		    data, tailContents, spine,
 			node, d);
-*/
 }
 */
 
@@ -332,15 +319,18 @@ if mySeq == [] then []
 else [mySeq[0].data] + ndSeq2DataSeq(mySeq[1..])
 }
 
-predicate contentOK(oldData:Data, oldTailC:seq<Data>, oldSeq:seq<Data>,
-		 newData:Data, newTailC:seq<Data>, newSpine:seq<INode>,	d:Data)
-requires listCond(newSpine);
+predicate contentOK(oldData:Data, oldTailC:seq<Data>, oldSpine:seq<INode>,
+		    newData:Data, newTailC:seq<Data>, newSpine:seq<INode>,
+			newNd:INode, d:Data)
+requires listCond(oldSpine) && listCond(newSpine);
 requires oldData == newData;
-requires oldSeq == [oldData] + oldTailC;
+requires ndSeq2DataSeq(oldSpine) == [oldData] + oldTailC;
 requires ndSeq2DataSeq(newSpine) == [newData] + newTailC;
-requires ndSeq2DataSeq(newSpine) == oldSeq + [d];
+requires newNd != null;
+requires newSpine == oldSpine + [newNd] && newNd.data == d;
 reads *;
 ensures newTailC == oldTailC + [d];
 {true}
+
 
 }
