@@ -179,7 +179,6 @@ mySeq == [] ||
 (seqV(mySeq[1..]))
 }
 
-/*
 predicate ValidLemma2(node:INode)
 requires node != null && node.Valid();
 reads node, getFtprint(node);
@@ -195,7 +194,6 @@ node.spine == [node] + node.next.spine
 && node.footprint == {node} + node.next.footprint
 && ValidLemma2(node.next))
 }
-*/
 
 predicate allDiff(mySeq:seq<INode>)
 reads mySeq;
@@ -267,7 +265,7 @@ requires mySeq[|mySeq|-1].spine == mySeq[|mySeq|-1..];
 modifies mySeq;
 
 ensures validSeqCond(mySeq);
-
+ensures fresh((set nd | nd in mySeq) - old(set nd | nd in mySeq));
 {
 ghost var index := |mySeq| - 2;
 
@@ -277,6 +275,7 @@ invariant listCond(mySeq);
 invariant mySeq[index+1].Valid(); 
 invariant mySeq[|mySeq|-1].Valid();
 invariant mySeq[index+1].spine == mySeq[index+1..];
+invariant fresh((set nd | nd in mySeq) - old(set nd | nd in mySeq));
 {
 updateCurIndex(mySeq, index);
 
@@ -297,6 +296,5 @@ ensures forall i :: 0 <= i < |mySeq| ==>
 if mySeq == [] then []
 else [mySeq[0].data] + ndSeq2DataSeq(mySeq[1..])
 }
-
 
 }
