@@ -40,7 +40,7 @@ reads this, footprint;
 good()  
 && (forall nd :: nd in spine ==> nd in footprint)
 && listCond(spine)
-&& |spine| == |footprint|
+&& |spine| == |footprint| == |contents|
 
 && (next != null ==> next.Valid())
 }
@@ -94,15 +94,14 @@ r.spine := [r] + spine;
 return r;
 }
 
-/*
+
 method append(d:Data)
 requires Valid();
-requires ndSeq2DataSeq(spine) == contents;
 
 modifies footprint;
-//ensures Valid();
+ensures Valid();
 //ensures (contents == old(contents) + [d]);
-//ensures fresh(footprint - old(footprint));
+ensures fresh(footprint - old(footprint));
 {
 var node := new INode.init(d);
 assert node.footprint !! footprint;
@@ -115,8 +114,6 @@ invariant tmpNd != null && tmpNd.Valid();
 invariant listCond(spine);
 invariant index == |this.footprint| - |tmpNd.footprint|;
 invariant tmpNd == spine[index];
-invariant forall nd :: nd in spine ==> nd.data == old(nd.data);
-
 decreases tmpNd.footprint;
 {
 tmpNd := tmpNd.next;
@@ -128,18 +125,11 @@ tmpNd.next := node;
 
 spine := spine + [node];
 
-
 updateSeq(spine);
 
-assert ValidLemma();
-
-assert spine == old(spine) + [node];
+//assert ValidLemma();
 
 }
-*/
-
-
-
 
 
 function getFtprint(nd:INode): set<INode>
@@ -235,7 +225,6 @@ listCond(mySeq) &&
 
 //===============================================
 
-
 ghost method updateCurIndex(mySeq:seq<INode>, index:int)
 requires 0 <= index <= |mySeq| - 2;
 requires listCond(mySeq);
@@ -250,9 +239,6 @@ ensures listCond(mySeq);
 ensures mySeq[index].Valid();
 
 ensures mySeq[index].spine == mySeq[index..];
-
-ensures mySeq == old(mySeq);
-ensures forall nd :: nd in mySeq ==> nd.data == old(nd.data);
 {
 mySeq[index].contents := [mySeq[index].data] + mySeq[index+1].contents;
 
@@ -274,9 +260,6 @@ requires mySeq[|mySeq|-1].spine == mySeq[|mySeq|-1..];
 modifies mySeq;
 
 ensures validSeqCond(mySeq);
-
-ensures mySeq == old(mySeq);
-ensures forall nd :: nd in mySeq ==> nd.data == old(nd.data);
 {
 ghost var index := |mySeq| - 2;
 
@@ -286,10 +269,6 @@ invariant listCond(mySeq);
 invariant mySeq[index+1].Valid(); 
 invariant mySeq[|mySeq|-1].Valid();
 invariant mySeq[index+1].spine == mySeq[index+1..];
-
-invariant mySeq == old(mySeq);
-invariant forall nd :: nd in mySeq ==> nd.data == old(nd.data);
-
 {
 updateCurIndex(mySeq, index);
 
