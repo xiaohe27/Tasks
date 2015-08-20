@@ -168,16 +168,16 @@ allV(myNode.next)
 
 predicate seqV(mySeq: seq<INode>)
 requires listCond(mySeq);
-requires mySeq != [] ==> mySeq[0].Valid()
-		&& (mySeq[|mySeq|-1].Valid());
+requires mySeq != [] ==> mySeq[0].Valid();
 
 reads mySeq, sumAllFtprint(mySeq);
 ensures seqV(mySeq);
 ensures forall nd :: nd in mySeq ==> nd.Valid(); 
 {
-mySeq == [] ||
-(seqV(mySeq[1..]))
+if mySeq == [] then true
+else mySeq[0].Valid() && seqV(mySeq[1..])
 }
+
 
 predicate ValidLemma2()
 requires Valid();
@@ -203,6 +203,18 @@ forall index :: 0 <= index < |mySeq| ==>
 	 (mySeq[other] != mySeq[index]))
 }
 
+
+function ndSeq2DataSeq(mySeq:seq<INode>) : seq<Data>
+requires listCond(mySeq);
+reads mySeq;
+ensures |mySeq| == |ndSeq2DataSeq(mySeq)|;
+ensures forall i :: 0 <= i < |mySeq| ==> 
+	ndSeq2DataSeq(mySeq)[i] == mySeq[i].data;
+{
+if mySeq == [] then []
+else [mySeq[0].data] + ndSeq2DataSeq(mySeq[1..])
+}
+
 predicate listCond(mySeq: seq<INode>)
 reads mySeq, (set nd | nd in mySeq);
 {
@@ -212,6 +224,7 @@ allDiff(mySeq) &&
 && (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint)
 }
 
+/*
 predicate goodSeqCond(mySeq: seq<INode>)
 reads mySeq, sumAllFtprint(mySeq);
 {
@@ -289,26 +302,27 @@ mySeq[index].spine := [mySeq[index]] + mySeq[index+1].spine;
 
 
 
-ghost method updateSeq(mySeq:seq<INode>)
+ghost method updateSeq(mySeq:seq<INode>, mid:int)
 
 requires mySeq != [];
 requires listCond(mySeq);
 
-requires mySeq[|mySeq|-1].Valid();
-requires mySeq[|mySeq|-1].spine == mySeq[|mySeq|-1..];
+requires 0 <= mid < |mySeq|;
+requires mySeq[mid].Valid();
+requires mySeq[mid].spine == mySeq[mid..];
 	
 modifies mySeq;
 
-ensures validSeqCond(mySeq);
+//ensures validSeqCond(mySeq);
 ensures fresh((set nd | nd in mySeq) - old(set nd | nd in mySeq));
 {
-ghost var index := |mySeq| - 2;
+ghost var index := mid - 1;
 
 while(index >= 0)
-invariant -1 <= index <= |mySeq| - 2;
+invariant -1 <= index <= mid - 1;
 invariant listCond(mySeq);
 invariant mySeq[index+1].Valid(); 
-invariant mySeq[|mySeq|-1].Valid();
+invariant mySeq[mid].Valid();
 invariant mySeq[index+1].spine == mySeq[index+1..];
 invariant fresh((set nd | nd in mySeq) - old(set nd | nd in mySeq));
 {
@@ -317,19 +331,12 @@ updateCurIndex(mySeq, index);
 index := index - 1;
 }
 
-assert seqV(mySeq);
+//assert seqV(mySeq);
 }
 
 
-function ndSeq2DataSeq(mySeq:seq<INode>) : seq<Data>
-requires listCond(mySeq);
-reads mySeq;
-ensures |mySeq| == |ndSeq2DataSeq(mySeq)|;
-ensures forall i :: 0 <= i < |mySeq| ==> 
-	ndSeq2DataSeq(mySeq)[i] == mySeq[i].data;
-{
-if mySeq == [] then []
-else [mySeq[0].data] + ndSeq2DataSeq(mySeq[1..])
-}
 
+
+
+*/
 }
