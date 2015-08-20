@@ -174,8 +174,7 @@ reads mySeq, sumAllFtprint(mySeq);
 ensures seqV(mySeq);
 ensures forall nd :: nd in mySeq ==> nd.Valid(); 
 {
-if mySeq == [] then true
-else mySeq[0].Valid() && seqV(mySeq[1..])
+mySeq == [] || seqV(mySeq[1..])
 }
 
 
@@ -333,8 +332,6 @@ index := index - 1;
 
 assert seqV(mySeq);
 }
-
-
 
 
 
