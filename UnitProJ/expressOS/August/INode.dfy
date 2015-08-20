@@ -226,11 +226,22 @@ listCond(mySeq) &&
 (forall nd :: nd in mySeq ==> nd.Valid())
 }
 
+//
 predicate validSeqLemma(mySeq:seq<INode>)
 requires validSeqCond(mySeq);
 requires mySeq != [] && mySeq[|mySeq|-1].next == null;
 reads mySeq, sumAllFtprint(mySeq);
-ensures validSeqLemma(mySeq);
+
+ensures mySeq[0].footprint == (set nd | nd in mySeq);
+{
+validSeqLemma2(mySeq) && mySeq[0].validSeqLemma3(mySeq)
+}
+
+predicate validSeqLemma2(mySeq:seq<INode>)
+requires validSeqCond(mySeq);
+requires mySeq != [] && mySeq[|mySeq|-1].next == null;
+reads mySeq, sumAllFtprint(mySeq);
+ensures validSeqLemma2(mySeq);
 
 ensures mySeq[0].spine == mySeq;
 {
@@ -239,21 +250,11 @@ if |mySeq| == 1 then mySeq[0].next == null
 && mySeq[0].spine == [mySeq[0]]
 else
 (mySeq[0].spine == [mySeq[0]] + mySeq[1].spine
-&& validSeqLemma(mySeq[1..]))
+&& validSeqLemma2(mySeq[1..]))
 )
 }
 
-predicate validSeqLemma2(mySeq:seq<INode>)
-requires validSeqCond(mySeq);
-requires mySeq != [] && mySeq[|mySeq|-1].next == null;
-reads mySeq, sumAllFtprint(mySeq);
-
-ensures mySeq[0].footprint == (set nd | nd in mySeq);
-{
-validSeqLemma(mySeq) && mySeq[0].spineLemma(mySeq)
-}
-
-predicate spineLemma(mySeq:seq<INode>)
+predicate validSeqLemma3(mySeq:seq<INode>)
 requires Valid();
 requires spine == mySeq;
 reads this, footprint, mySeq;
