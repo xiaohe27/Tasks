@@ -224,7 +224,7 @@ allDiff(mySeq) &&
 && (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint)
 }
 
-/*
+
 predicate goodSeqCond(mySeq: seq<INode>)
 reads mySeq, sumAllFtprint(mySeq);
 {
@@ -313,7 +313,7 @@ requires mySeq[mid].spine == mySeq[mid..];
 	
 modifies mySeq;
 
-//ensures validSeqCond(mySeq);
+ensures validSeqCond(mySeq);
 ensures fresh((set nd | nd in mySeq) - old(set nd | nd in mySeq));
 {
 ghost var index := mid - 1;
@@ -331,12 +331,12 @@ updateCurIndex(mySeq, index);
 index := index - 1;
 }
 
-//assert seqV(mySeq);
+assert seqV(mySeq);
 }
 
 
 
 
 
-*/
+
 }
