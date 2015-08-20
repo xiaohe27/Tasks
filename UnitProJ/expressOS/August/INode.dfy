@@ -179,6 +179,7 @@ mySeq == [] ||
 (seqV(mySeq[1..]))
 }
 
+/*
 predicate ValidLemma2(node:INode)
 requires node != null && node.Valid();
 reads node, getFtprint(node);
@@ -194,6 +195,7 @@ node.spine == [node] + node.next.spine
 && node.footprint == {node} + node.next.footprint
 && ValidLemma2(node.next))
 }
+*/
 
 predicate allDiff(mySeq:seq<INode>)
 reads mySeq;
@@ -296,17 +298,5 @@ if mySeq == [] then []
 else [mySeq[0].data] + ndSeq2DataSeq(mySeq[1..])
 }
 
-predicate contentOK(oldData:Data, oldTailC:seq<Data>, oldSpine:seq<INode>,
-		    newData:Data, newTailC:seq<Data>, newSpine:seq<INode>,
-			newNd:INode, d:Data)
-requires listCond(oldSpine) && listCond(newSpine);
-requires oldData == newData;
-requires [oldData] + oldTailC == ndSeq2DataSeq(oldSpine);
-requires [newData] + newTailC == ndSeq2DataSeq(newSpine);
-requires newNd != null;
-requires newSpine == oldSpine + [newNd] && newNd.data == d;
-reads *;
-ensures newTailC == oldTailC + [d];
-{true}
 
 }

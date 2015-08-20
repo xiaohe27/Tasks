@@ -1,5 +1,9 @@
-1.include prop of contents in updateSeq
+1.combine updateCurIndex and updateSeq
+2. make updateSeq generic:
+add one more parameter to that method: 'index',
 
-2. add more prop in the valid predicate
+so that 
+mySeq[index+1].Valid()
+mySeq[index+1].spine == mySeq[index+1..]
 
-3. use 'contents' instead of tailContents
+
