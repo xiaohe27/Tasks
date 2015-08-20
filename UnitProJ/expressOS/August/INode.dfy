@@ -132,15 +132,21 @@ tmpNd.next := node;
 spine := spine + [node];
 
 assert spine == oldSpine + [node] && node.data == d;
-
+assert ndSeq2DataSeq(spine) == ndSeq2DataSeq(oldSpine) + [d];
 
 updateSeq(spine);
 
-//assert spine == oldSpine + [node]; //&& node.data == d;
+assert ValidLemma();
 
-//assert ValidLemma();
+
+assert ndSeq2DataSeq(spine) == [data] + tailContents;
+//assert ndSeq2DataSeq(oldSpine) == [oldData] + oldTC;
 
 /*
+assert tailContents == oldTC + [d];
+//assert spine == oldSpine + [node]; //&& node.data == d;
+
+
 assert spine == oldSpine + [node] && node.data == d;
 assert ndSeq2DataSeq(oldSpine) == [oldData] + oldTC;
 assert ndSeq2DataSeq(spine) == [data] + tailContents;
@@ -267,6 +273,7 @@ ensures mySeq[index].Valid();
 ensures mySeq[index].spine == mySeq[index..];
 
 ensures mySeq == old(mySeq);
+ensures forall nd :: nd in mySeq ==> nd.data == old(nd.data);
 {
 mySeq[index].tailContents := [mySeq[index+1].data] + mySeq[index+1].tailContents;
 
@@ -290,6 +297,7 @@ modifies mySeq;
 ensures validSeqCond(mySeq);
 
 ensures mySeq == old(mySeq);
+ensures forall nd :: nd in mySeq ==> nd.data == old(nd.data);
 {
 ghost var index := |mySeq| - 2;
 
@@ -301,6 +309,8 @@ invariant mySeq[|mySeq|-1].Valid();
 invariant mySeq[index+1].spine == mySeq[index+1..];
 
 invariant mySeq == old(mySeq);
+invariant forall nd :: nd in mySeq ==> nd.data == old(nd.data);
+
 {
 updateCurIndex(mySeq, index);
 
@@ -322,15 +332,13 @@ if mySeq == [] then []
 else [mySeq[0].data] + ndSeq2DataSeq(mySeq[1..])
 }
 
-predicate contentOK(oldData:Data, oldTailC:seq<Data>, oldSpine:seq<INode>,
-		    newData:Data, newTailC:seq<Data>, newSpine:seq<INode>,
-			newNd:INode, d:Data)
-requires listCond(oldSpine) && listCond(newSpine);
+predicate contentOK(oldData:Data, oldTailC:seq<Data>, oldSeq:seq<Data>,
+		 newData:Data, newTailC:seq<Data>, newSpine:seq<INode>,	d:Data)
+requires listCond(newSpine);
 requires oldData == newData;
-requires ndSeq2DataSeq(oldSpine) == [oldData] + oldTailC;
+requires oldSeq == [oldData] + oldTailC;
 requires ndSeq2DataSeq(newSpine) == [newData] + newTailC;
-requires newNd != null;
-requires newSpine == oldSpine + [newNd] && newNd.data == d;
+requires ndSeq2DataSeq(newSpine) == oldSeq + [d];
 reads *;
 ensures newTailC == oldTailC + [d];
 {true}
