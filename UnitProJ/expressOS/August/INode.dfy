@@ -94,7 +94,7 @@ r.spine := [r] + spine;
 return r;
 }
 
-
+/*
 method append(d:Data)
 requires Valid();
 
@@ -131,7 +131,7 @@ assert ValidLemma();
 
 
 }
-
+*/
 
 
 
@@ -179,20 +179,20 @@ mySeq == [] ||
 (seqV(mySeq[1..]))
 }
 
-predicate ValidLemma2(node:INode)
-requires node != null && node.Valid();
-reads node, getFtprint(node);
+predicate ValidLemma2()
+requires Valid();
+reads this, footprint;
 
-ensures ValidLemma2(node);
-ensures (set nd | nd in node.spine) == node.footprint;
+ensures ValidLemma2();
+ensures (set nd | nd in spine) == footprint;
 
-ensures forall nd :: nd in node.footprint ==> nd.footprint <= node.footprint;
+ensures forall nd :: nd in footprint ==> nd.footprint <= footprint;
 {
-if node.next == null then (node.spine == [node] && node.footprint == {node})
+if next == null then (spine == [this] && footprint == {this})
 else (
-node.spine == [node] + node.next.spine 
-&& node.footprint == {node} + node.next.footprint
-&& ValidLemma2(node.next))
+spine == [this] + next.spine 
+&& footprint == {this} + next.footprint
+&& next.ValidLemma2())
 }
 
 predicate allDiff(mySeq:seq<INode>)
@@ -226,6 +226,40 @@ listCond(mySeq) &&
 (forall nd :: nd in mySeq ==> nd.Valid())
 }
 
+predicate validSeqLemma(mySeq:seq<INode>)
+requires validSeqCond(mySeq);
+requires mySeq != [] && mySeq[|mySeq|-1].next == null;
+reads mySeq, sumAllFtprint(mySeq);
+ensures validSeqLemma(mySeq);
+
+ensures mySeq[0].spine == mySeq;
+{
+mySeq[0].Valid() && (
+if |mySeq| == 1 then mySeq[0].next == null
+&& mySeq[0].spine == [mySeq[0]]
+else
+(mySeq[0].spine == [mySeq[0]] + mySeq[1].spine
+&& validSeqLemma(mySeq[1..]))
+)
+}
+
+predicate validSeqLemma2(mySeq:seq<INode>)
+requires validSeqCond(mySeq);
+requires mySeq != [] && mySeq[|mySeq|-1].next == null;
+reads mySeq, sumAllFtprint(mySeq);
+
+ensures mySeq[0].footprint == (set nd | nd in mySeq);
+{
+validSeqLemma(mySeq) && mySeq[0].spineLemma(mySeq)
+}
+
+predicate spineLemma(mySeq:seq<INode>)
+requires Valid();
+requires spine == mySeq;
+reads this, footprint, mySeq;
+ensures (set nd | nd in spine) == footprint;
+ensures footprint == (set nd | nd in mySeq);
+{ValidLemma2()}
 
 //===============================================
 
