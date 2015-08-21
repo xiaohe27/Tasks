@@ -301,7 +301,6 @@ requires 0 <= index <= |mySeq| - 2;
 requires listCond(mySeq);
 requires mySeq[index+1].Valid();
 requires mySeq[index+1].spine == mySeq[index+1..];
-requires mySeq[|mySeq|-1].next == null;	
 
 modifies mySeq[index];
 ensures (set nd | nd in mySeq) == old(set nd | nd in mySeq);
@@ -311,8 +310,6 @@ ensures listCond(mySeq);
 ensures mySeq[index].Valid();
 
 ensures mySeq[index].spine == mySeq[index..];
-ensures mySeq[|mySeq|-1].next == null;	
-
 {
 mySeq[index].tailContents := [mySeq[index+1].data] + mySeq[index+1].tailContents;
 
