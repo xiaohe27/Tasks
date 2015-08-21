@@ -94,12 +94,13 @@ r.spine := [r] + spine;
 return r;
 }
 
-/*
+
 method append(d:Data)
 requires Valid();
 
 modifies footprint;
-//ensures Valid();
+ensures Valid();
+
 //ensures (tailContents == old(tailContents) + [d]);
 //ensures this.data == old(this.data);
 //ensures fresh(footprint - old(footprint));
@@ -128,11 +129,11 @@ spine := spine + [node];
 
 updateSeq(spine, |spine|-1, this);
 
-assert this == spine[0] && Valid();
-//assert spine[0].footprint == (set nd | nd in spine);
+assert ValidLemma2();
+assert this.footprint == (set nd | nd in spine);
 //assert ValidLemma();
 }
-*/
+
 
 
 
