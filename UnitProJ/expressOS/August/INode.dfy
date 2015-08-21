@@ -50,6 +50,9 @@ requires Valid();
 reads this, footprint;
 ensures ValidLemma();
 ensures |tailContents| == |footprint|-1 == |spine|-1;
+
+ensures forall nd :: nd in spine ==> nd.Valid();
+
 ensures (forall i :: 1 <= i < |spine| ==> spine[i].data == tailContents[i-1]);
 ensures ndSeq2DataSeq(spine) == [data] + tailContents;
 {
@@ -95,12 +98,14 @@ return r;
 }
 
 
-method append(d:Data)
+method append(d:Data) returns (lastNd:INode)
 requires Valid();
 
 modifies footprint;
 ensures Valid();
-
+ensures fresh(lastNd);
+ensures lastNd != null && lastNd.Valid();
+//ensures spine == old(spine) + [lastNd];
 //ensures (tailContents == old(tailContents) + [d]);
 //ensures this.data == old(this.data);
 //ensures fresh(footprint - old(footprint));
@@ -130,8 +135,8 @@ spine := spine + [node];
 updateSeq(spine, |spine|-1);
 
 assert ValidLemma2();
-assert this.footprint == (set nd | nd in spine);
-//assert ValidLemma();
+assert ValidLemma();
+return node;
 }
 
 
@@ -168,7 +173,7 @@ else
 allV(myNode.next)
 }
 
-/*
+
 predicate seqV(mySeq: seq<INode>)
 requires listCond(mySeq);
 requires mySeq != [] ==> mySeq[0].Valid();
@@ -179,7 +184,7 @@ ensures forall nd :: nd in mySeq ==> nd.Valid();
 {
 mySeq == [] || seqV(mySeq[1..])
 }
-*/
+
 
 predicate ValidLemma2()
 requires Valid();
@@ -302,7 +307,9 @@ requires mySeq[|mySeq|-1].next == null;
 	
 modifies mySeq;
 
-ensures mySeq[0].Valid();
+//ensures mySeq[0].Valid();
+ensures listCond(mySeq);
+ensures forall nd :: nd in mySeq ==> nd.Valid();
 {
 ghost var index := mid - 1;
 
@@ -318,6 +325,8 @@ updateCurIndex(mySeq, index);
 
 index := index - 1;
 }
+
+assert seqV(mySeq);
 
 }
 
