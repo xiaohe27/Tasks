@@ -253,6 +253,7 @@ listCond(mySeq)
 && mySeq[|mySeq|-1].spine == [mySeq[|mySeq|-1]])
 }
 
+/*
 predicate validSeqLemma2(mySeq: seq<INode>)
 requires mySeq != [];
 
@@ -263,6 +264,7 @@ ensures validSeqCond(mySeq[1..]);
 {
 true
 }
+*/
 
 predicate validSeqLemma3(mySeq: seq<INode>)
 requires mySeq != [];
@@ -270,11 +272,16 @@ requires mySeq != [];
 requires validSeqCond(mySeq);
 reads mySeq, (set nd | nd in mySeq);
 ensures validSeqLemma3(mySeq);
+ensures |mySeq| == |mySeq[0].footprint|;
 ensures forall nd :: nd in mySeq ==> nd in mySeq[0].footprint;
 {
 if |mySeq| == 1 then true
 else mySeq[0] in mySeq[0].footprint &&
-	mySeq[1].footprint <= mySeq[0].footprint &&
+	{mySeq[0]} + mySeq[1].footprint == mySeq[0].footprint &&
+	mySeq[0] !in mySeq[1].footprint &&
+	|mySeq[0].footprint| == |mySeq[1].footprint| + 1 &&
+	mySeq[0].spine == [mySeq[0]] + mySeq[1].spine &&
+	|mySeq[0].spine| == |mySeq[1].spine| + 1 &&
 	validSeqLemma3(mySeq[1..])
 }
 
