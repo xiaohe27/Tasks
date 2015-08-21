@@ -96,7 +96,7 @@ r.spine := [r] + spine;
 return r;
 }
 
-
+/*
 method append(d:Data) returns (lastNd:INode)
 requires Valid();
 
@@ -120,6 +120,7 @@ assert V3();
 while(tmpNd.next != null)
 invariant tmpNd != null && tmpNd.Valid();
 invariant goodSeqCond(spine);
+invariant V4(spine);
 invariant index == |this.footprint| - |tmpNd.footprint|;
 invariant tmpNd == spine[index];
 decreases tmpNd.footprint;
@@ -129,42 +130,22 @@ tmpNd := tmpNd.next;
 index := index + 1;
 }
 
+assert V4(spine);
+
 tmpNd.next := node;
 
 ghost var mySeq := spine + [node];
 
-//assert goodSeqCond(mySeq[0..index]);
-///////////////////////////////////////////////
-/*
-while(index >= 0)
-invariant -1 <= index <= |mySeq| - 2;
-invariant listCond(mySeq);
-invariant mySeq[index+1].Valid(); 
-invariant mySeq[|mySeq|-1].Valid();
-invariant mySeq[index+1].spine == mySeq[index+1..];
-invariant mySeq[|mySeq|-1].next == null;
-
-invariant goodSeqCond(mySeq[0..index]);
-invariant index < |mySeq| - 2 ==>
-mySeq[index].footprint == {mySeq[index]} + old(mySeq[index+1].footprint);
-invariant index == |mySeq| - 2 ==> mySeq[index].footprint == {mySeq[index]};
-
-invariant mySeq[index+1].footprint == 
-	old(mySeq[index+1].footprint) + {node};
-{
-updateCurIndex(mySeq, index, mySeq[index].footprint - {mySeq[index]}, node);
-
-index := index - 1;
-}
+updateSeq(mySeq, |mySeq|-1);
 
 assert seqV(mySeq);
 
 assert ValidLemma2();
 assert ValidLemma();
 return node;
-*/
-}
 
+}
+*/
 
 
 
@@ -234,10 +215,18 @@ requires Valid();
 reads this, footprint;
 ensures V3();
 ensures goodSeqCond(spine);
-ensures forall i :: 0 <= i < |spine| ==> goodSeqCond(spine[0..i]);
 {
 if next == null then spine == [this]
 else good() && next.V3()
+}
+
+predicate V4(mySeq: seq<INode>)
+requires goodSeqCond(mySeq);
+reads mySeq, sumAllFtprint(mySeq);
+ensures V4(mySeq);
+ensures forall i :: 0 <= i < |mySeq| ==> goodSeqCond(mySeq[0..i]);
+{
+true
 }
 
 predicate allDiff(mySeq:seq<INode>)
@@ -308,16 +297,11 @@ else
 //===============================================
 
 
-ghost method updateCurIndex(mySeq:seq<INode>, index:int, 
-			oldNxtFp:set<INode>, newNd:INode)
-
+ghost method updateCurIndex(mySeq:seq<INode>, index:int)
 requires 0 <= index <= |mySeq| - 2;
 requires listCond(mySeq);
 requires mySeq[index+1].Valid();
 requires mySeq[index+1].spine == mySeq[index+1..];
-
-requires mySeq[index].footprint == {mySeq[index]} + oldNxtFp;
-requires mySeq[index+1].footprint == oldNxtFp + {newNd};
 
 modifies mySeq[index];
 
@@ -326,8 +310,6 @@ ensures listCond(mySeq);
 ensures mySeq[index].Valid();
 
 ensures mySeq[index].spine == mySeq[index..];
-
-ensures mySeq[index].footprint == old(mySeq[index].footprint) + {newNd};
 {
 mySeq[index].tailContents := [mySeq[index+1].data] + mySeq[index+1].tailContents;
 
@@ -337,7 +319,6 @@ mySeq[index].spine := [mySeq[index]] + mySeq[index+1].spine;
 }
 
 
-/*
 ghost method updateSeq(mySeq:seq<INode>, mid:int)
 
 requires mySeq != [];
@@ -371,6 +352,6 @@ index := index - 1;
 assert seqV(mySeq);
 
 }
-*/
+
 
 }
