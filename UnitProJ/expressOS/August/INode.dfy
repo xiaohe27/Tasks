@@ -94,7 +94,7 @@ r.spine := [r] + spine;
 return r;
 }
 
-/*
+
 method append(d:Data)
 requires Valid();
 
@@ -126,13 +126,13 @@ tmpNd.next := node;
 
 spine := spine + [node];
 
+//assert spine[|spine|-1] == node && node.next == null;
 updateSeq(spine, |spine|-1);
 
-//assert ValidLemma2();
 //assert validSeqLemma(spine);
 //assert ValidLemma();
 }
-*/
+
 
 
 
@@ -334,8 +334,6 @@ modifies mySeq;
 
 ensures validSeqCond(mySeq);
 ensures (set nd | nd in mySeq) == old(set nd | nd in mySeq);
-
-ensures mySeq[|mySeq|-1].next == null;	
 {
 ghost var index := mid - 1;
 
