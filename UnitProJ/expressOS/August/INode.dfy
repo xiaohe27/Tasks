@@ -94,7 +94,7 @@ r.spine := [r] + spine;
 return r;
 }
 
-
+/*
 method append(d:Data)
 requires Valid();
 
@@ -127,11 +127,12 @@ tmpNd.next := node;
 spine := spine + [node];
 
 updateSeq(spine, |spine|-1);
-assert ValidLemma();
 
-
+//assert ValidLemma2();
+//assert validSeqLemma(spine);
+//assert ValidLemma();
 }
-
+*/
 
 
 
@@ -184,6 +185,7 @@ reads this, footprint;
 
 ensures ValidLemma2();
 ensures (set nd | nd in spine) == footprint;
+ensures spine[|spine|-1].next == null;
 
 ensures forall nd :: nd in footprint ==> nd.footprint <= footprint;
 {
@@ -193,6 +195,21 @@ spine == [this] + next.spine
 && footprint == {this} + next.footprint
 && next.ValidLemma2())
 }
+
+/*
+predicate ValidLemma3()
+requires Valid();
+reads this, footprint;
+
+ensures ValidLemma3();
+ensures spine[|spine|-1].next == null;
+{
+if next == null then (spine == [this])
+else (
+spine == [this] + next.spine 
+&& next.ValidLemma3())
+}
+*/
 
 predicate allDiff(mySeq:seq<INode>)
 reads mySeq;
@@ -236,22 +253,24 @@ reads mySeq, sumAllFtprint(mySeq);
 {
 listCond(mySeq) &&
 (forall nd :: nd in mySeq ==> nd.Valid())
+&& (mySeq != [] ==> mySeq[|mySeq|-1].next == null)
 }
 
 //
 predicate validSeqLemma(mySeq:seq<INode>)
 requires validSeqCond(mySeq);
-requires mySeq != [] && mySeq[|mySeq|-1].next == null;
+requires mySeq != [];
 reads mySeq, sumAllFtprint(mySeq);
 
 ensures mySeq[0].footprint == (set nd | nd in mySeq);
 {
+
 validSeqLemma2(mySeq) && mySeq[0].validSeqLemma3(mySeq)
 }
 
 predicate validSeqLemma2(mySeq:seq<INode>)
 requires validSeqCond(mySeq);
-requires mySeq != [] && mySeq[|mySeq|-1].next == null;
+requires mySeq != [];
 reads mySeq, sumAllFtprint(mySeq);
 ensures validSeqLemma2(mySeq);
 
@@ -282,15 +301,18 @@ requires 0 <= index <= |mySeq| - 2;
 requires listCond(mySeq);
 requires mySeq[index+1].Valid();
 requires mySeq[index+1].spine == mySeq[index+1..];
-	
+requires mySeq[|mySeq|-1].next == null;	
+
 modifies mySeq[index];
-ensures fresh((set nd | nd in mySeq) - old(set nd | nd in mySeq));
+ensures (set nd | nd in mySeq) == old(set nd | nd in mySeq);
 
 ensures listCond(mySeq);
 
 ensures mySeq[index].Valid();
 
 ensures mySeq[index].spine == mySeq[index..];
+ensures mySeq[|mySeq|-1].next == null;	
+
 {
 mySeq[index].tailContents := [mySeq[index+1].data] + mySeq[index+1].tailContents;
 
@@ -309,11 +331,14 @@ requires listCond(mySeq);
 requires 0 <= mid < |mySeq|;
 requires mySeq[mid].Valid();
 requires mySeq[mid].spine == mySeq[mid..];
+requires mySeq[|mySeq|-1].next == null;	
 	
 modifies mySeq;
 
 ensures validSeqCond(mySeq);
-ensures fresh((set nd | nd in mySeq) - old(set nd | nd in mySeq));
+ensures (set nd | nd in mySeq) == old(set nd | nd in mySeq);
+
+ensures mySeq[|mySeq|-1].next == null;	
 {
 ghost var index := mid - 1;
 
@@ -323,7 +348,8 @@ invariant listCond(mySeq);
 invariant mySeq[index+1].Valid(); 
 invariant mySeq[mid].Valid();
 invariant mySeq[index+1].spine == mySeq[index+1..];
-invariant fresh((set nd | nd in mySeq) - old(set nd | nd in mySeq));
+invariant (set nd | nd in mySeq) == old(set nd | nd in mySeq);
+invariant mySeq[|mySeq|-1].next == null;
 {
 updateCurIndex(mySeq, index);
 
