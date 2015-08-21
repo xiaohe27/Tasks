@@ -351,30 +351,54 @@ else    validSeqLemma2(mySeq)
 
 
 //===============================================
-
-
-ghost method updateCurIndex(mySeq:seq<INode>, index:int)
-requires 0 <= index <= |mySeq| - 2;
-requires listCond(mySeq);
-requires mySeq[index+1].Valid();
-requires mySeq[index+1].spine == mySeq[index+1..];
-
-modifies mySeq[index];
-
-ensures listCond(mySeq);
-
-ensures mySeq[index].Valid();
-
-ensures mySeq[index].spine == mySeq[index..];
+predicate listInv(mySeq: seq<INode>)
+reads mySeq, (set nd | nd in mySeq);
 {
-mySeq[index].tailContents := [mySeq[index+1].data] + mySeq[index+1].tailContents;
-
-mySeq[index].footprint := {mySeq[index]} + mySeq[index+1].footprint;
-
-mySeq[index].spine := [mySeq[index]] + mySeq[index+1].spine;
+null !in mySeq &&
+(forall i :: 0 <= i < |mySeq|-1 ==> mySeq[i].next == mySeq[i+1])
+&& (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint)
 }
 
 
+ghost method updateCurIndex(mySeq:seq<INode>, index:int, 
+			d:Data, newNd:INode)
+requires 0 <= index <= |mySeq| - 2;
+requires listInv(mySeq);
+
+requires forall nd :: nd in mySeq[0..index+1] ==> newNd !in nd.footprint;
+
+requires listCond(mySeq[0..index+1]);
+requires mySeq[index+1].Valid();
+requires mySeq[index+1].spine == mySeq[index+1..];
+
+requires mySeq[index].next == mySeq[index+1] &&
+         mySeq[index].footprint == {mySeq[index]} + 
+			mySeq[index+1].footprint - {newNd}
+	&& mySeq[index].tailContents + [d] == 
+	([mySeq[index+1].data] +	
+	mySeq[index+1].tailContents)
+	&& mySeq[index].spine + [newNd] == 
+	([mySeq[index]] + mySeq[index+1].spine);
+					
+
+modifies mySeq[index];
+
+ensures listInv(mySeq);
+ensures listCond(mySeq[0..index]);
+
+//ensures mySeq[index].Valid();
+
+ensures mySeq[index].spine == mySeq[index..];
+{
+mySeq[index].tailContents := mySeq[index].tailContents + [d];
+
+mySeq[index].footprint := mySeq[index].footprint + {newNd};
+
+mySeq[index].spine := mySeq[index].spine + [newNd];
+}
+
+
+/*
 ghost method updateSeq(mySeq:seq<INode>, mid:int)
 
 requires mySeq != [];
@@ -408,6 +432,6 @@ index := index - 1;
 assert seqV(mySeq);
 
 }
-
+*/
 
 }
