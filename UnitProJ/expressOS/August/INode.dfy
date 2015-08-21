@@ -288,6 +288,26 @@ else mySeq[0] in mySeq[0].footprint &&
 	validSeqLemma3(mySeq[1..])
 }
 
+predicate validSeqLemma4(mySeq: seq<INode>)
+requires mySeq != [];
+
+requires validSeqCond(mySeq);
+reads mySeq, (set nd | nd in mySeq);
+ensures validSeqLemma4(mySeq);
+ensures mySeq[0].good();
+{
+if |mySeq| == 1 then true
+else 
+ mySeq[0].next == mySeq[1] &&
+ mySeq[0] in mySeq[0].footprint &&
+ mySeq[0] !in mySeq[1].footprint &&
+ mySeq[1] in mySeq[0].footprint &&
+ mySeq[0].spine == [mySeq[0]] + mySeq[1].spine &&
+ mySeq[0].tailContents == [mySeq[1].data] + mySeq[1].tailContents
+
+ && validSeqLemma4(mySeq[1..])
+}
+
 /*
 predicate validSeqLemma(mySeq: seq<INode>)
 requires mySeq != [];
