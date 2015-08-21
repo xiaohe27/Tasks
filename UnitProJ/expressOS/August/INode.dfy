@@ -166,6 +166,7 @@ else
 allV(myNode.next)
 }
 
+/*
 predicate seqV(mySeq: seq<INode>)
 requires listCond(mySeq);
 requires mySeq != [] ==> mySeq[0].Valid();
@@ -176,7 +177,7 @@ ensures forall nd :: nd in mySeq ==> nd.Valid();
 {
 mySeq == [] || seqV(mySeq[1..])
 }
-
+*/
 
 predicate ValidLemma2()
 requires Valid();
@@ -194,21 +195,6 @@ spine == [this] + next.spine
 && footprint == {this} + next.footprint
 && next.ValidLemma2())
 }
-
-/*
-predicate ValidLemma3()
-requires Valid();
-reads this, footprint;
-
-ensures ValidLemma3();
-ensures spine[|spine|-1].next == null;
-{
-if next == null then (spine == [this])
-else (
-spine == [this] + next.spine 
-&& next.ValidLemma3())
-}
-*/
 
 predicate allDiff(mySeq:seq<INode>)
 reads mySeq;
@@ -257,9 +243,7 @@ listCond(mySeq) &&
 
 //
 predicate validSeqLemma(mySeq:seq<INode>)
-//requires validSeqCond(mySeq);
 requires mySeq != [];
-
 requires listCond(mySeq);
 requires mySeq[0].Valid();
 requires (mySeq[|mySeq|-1].next == null);
@@ -273,16 +257,13 @@ validSeqLemma2(mySeq) && mySeq[0].validSeqLemma3(mySeq)
 }
 
 predicate validSeqLemma2(mySeq:seq<INode>)
-//requires validSeqCond(mySeq);
 requires mySeq != [];
-
 requires listCond(mySeq);
 requires mySeq[0].Valid();
 requires (mySeq[|mySeq|-1].next == null);
 
 reads mySeq, sumAllFtprint(mySeq);
 ensures validSeqLemma2(mySeq);
-
 ensures mySeq[0].spine == mySeq;
 {
 mySeq[0].Valid() && (
@@ -341,8 +322,6 @@ requires mySeq[|mySeq|-1].next == null;
 	
 modifies mySeq;
 
-//ensures validSeqCond(mySeq);
-//ensures validSeqLemma(mySeq);
 ensures mySeq[0].Valid();
 ensures mySeq[0].footprint == (set nd | nd in mySeq);
 ensures (set nd | nd in mySeq) == old(set nd | nd in mySeq);
@@ -363,7 +342,6 @@ updateCurIndex(mySeq, index);
 index := index - 1;
 }
 
-//assert seqV(mySeq);
 assert validSeqLemma(mySeq);
 }
 
