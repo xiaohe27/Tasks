@@ -96,7 +96,7 @@ r.spine := [r] + spine;
 return r;
 }
 
-
+/*
 method append(d:Data) returns (lastNd:INode)
 requires Valid();
 
@@ -132,6 +132,9 @@ tmpNd.next := node;
 
 ghost var mySeq := spine + [node];
 
+
+
+/*
 assert mySeq[|mySeq|-2].footprint == {mySeq[|mySeq|-2]};
 
 assert listCond(mySeq[0..|mySeq|-1]);
@@ -146,14 +149,13 @@ assert listCond(mySeq[0..|mySeq|-1]);
 assert mySeq[|mySeq|-2].footprint == 
 {mySeq[|mySeq|-2]} + mySeq[|mySeq|-1].footprint;
 
-/*
+
 forall (nd | nd in spine)
 {
 nd.tailContents := nd.tailContents + [d];
 }
 
-//assert listCond(mySeq[0..|mySeq|-2]);
-
+assert listCond(mySeq[0..|mySeq|-1]);
 
 updateSeq(mySeq, |mySeq|-1);
 
@@ -166,7 +168,7 @@ assert ValidLemma();
 return node;
 
 }
-
+*/
 
 
 
@@ -350,7 +352,7 @@ else    validSeqLemma2(mySeq)
 
 //===============================================
 
-/*
+
 ghost method updateCurIndex(mySeq:seq<INode>, index:int)
 requires 0 <= index <= |mySeq| - 2;
 requires listCond(mySeq);
@@ -406,6 +408,6 @@ index := index - 1;
 assert seqV(mySeq);
 
 }
-*/
+
 
 }
