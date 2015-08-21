@@ -238,7 +238,12 @@ null !in mySeq &&
 (forall i :: 0 <= i < |mySeq|-1 ==> mySeq[i].next == mySeq[i+1]
 	&& mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
 	&& mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
-	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine)
+	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine
+	/*
+	&& null !in mySeq[i].footprint 
+	&& mySeq[i] !in mySeq[i+1].footprint
+	&& mySeq[i+1] in mySeq[i].footprint */
+	)
 && (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint)
 }
 
@@ -288,6 +293,7 @@ else mySeq[0] in mySeq[0].footprint &&
 	validSeqLemma3(mySeq[1..])
 }
 
+
 predicate validSeqLemma4(mySeq: seq<INode>)
 requires mySeq != [];
 
@@ -307,6 +313,7 @@ else
 
  && validSeqLemma4(mySeq[1..])
 }
+
 
 /*
 predicate validSeqLemma(mySeq: seq<INode>)
