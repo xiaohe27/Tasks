@@ -127,7 +127,7 @@ tmpNd.next := node;
 
 spine := spine + [node];
 
-updateSeq(spine, |spine|-1, this);
+updateSeq(spine, |spine|-1);
 
 assert ValidLemma2();
 assert this.footprint == (set nd | nd in spine);
@@ -290,7 +290,7 @@ mySeq[index].spine := [mySeq[index]] + mySeq[index+1].spine;
 
 
 
-ghost method updateSeq(mySeq:seq<INode>, mid:int, head:INode)
+ghost method updateSeq(mySeq:seq<INode>, mid:int)
 
 requires mySeq != [];
 requires listCond(mySeq);
@@ -300,14 +300,9 @@ requires mySeq[mid].Valid();
 requires mySeq[mid].spine == mySeq[mid..];
 requires mySeq[|mySeq|-1].next == null;	
 	
-requires head == mySeq[0];
-
 modifies mySeq;
 
-ensures head == mySeq[0];
-
-ensures head.Valid();
-//ensures head.footprint == (set nd | nd in mySeq);
+ensures mySeq[0].Valid();
 {
 ghost var index := mid - 1;
 
@@ -317,7 +312,6 @@ invariant listCond(mySeq);
 invariant mySeq[index+1].Valid(); 
 invariant mySeq[mid].Valid();
 invariant mySeq[index+1].spine == mySeq[index+1..];
-invariant head == mySeq[0];
 invariant mySeq[|mySeq|-1].next == null;
 {
 updateCurIndex(mySeq, index);
