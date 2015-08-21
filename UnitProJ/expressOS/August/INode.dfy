@@ -132,6 +132,8 @@ tmpNd.next := node;
 
 ghost var mySeq := spine + [node];
 
+assert mySeq[|mySeq|-2].footprint == {mySeq[|mySeq|-2]};
+
 assert listCond(mySeq[0..|mySeq|-1]);
 
 forall (nd | nd in spine)
@@ -140,6 +142,9 @@ nd.footprint := nd.footprint + {node};
 }
 
 assert listCond(mySeq[0..|mySeq|-1]);
+
+assert mySeq[|mySeq|-2].footprint == 
+{mySeq[|mySeq|-2]} + mySeq[|mySeq|-1].footprint;
 
 /*
 forall (nd | nd in spine)
