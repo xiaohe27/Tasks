@@ -6,3 +6,7 @@ mySeq[index+1].Valid()
 mySeq[index+1].spine == mySeq[index+1..]
 
 
+***
+try to conclude validity from new validSeqCond
+
+
