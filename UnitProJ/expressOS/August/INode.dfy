@@ -94,7 +94,7 @@ r.spine := [r] + spine;
 return r;
 }
 
-
+/*
 method append(d:Data)
 requires Valid();
 
@@ -126,13 +126,12 @@ tmpNd.next := node;
 
 spine := spine + [node];
 
-//assert spine[|spine|-1] == node && node.next == null;
 updateSeq(spine, |spine|-1);
 
-//assert validSeqLemma(spine);
+//assert spine[0].footprint == (set nd | nd in spine);
 //assert ValidLemma();
 }
-
+*/
 
 
 
@@ -258,8 +257,13 @@ listCond(mySeq) &&
 
 //
 predicate validSeqLemma(mySeq:seq<INode>)
-requires validSeqCond(mySeq);
+//requires validSeqCond(mySeq);
 requires mySeq != [];
+
+requires listCond(mySeq);
+requires mySeq[0].Valid();
+requires (mySeq[|mySeq|-1].next == null);
+
 reads mySeq, sumAllFtprint(mySeq);
 
 ensures mySeq[0].footprint == (set nd | nd in mySeq);
@@ -269,8 +273,13 @@ validSeqLemma2(mySeq) && mySeq[0].validSeqLemma3(mySeq)
 }
 
 predicate validSeqLemma2(mySeq:seq<INode>)
-requires validSeqCond(mySeq);
+//requires validSeqCond(mySeq);
 requires mySeq != [];
+
+requires listCond(mySeq);
+requires mySeq[0].Valid();
+requires (mySeq[|mySeq|-1].next == null);
+
 reads mySeq, sumAllFtprint(mySeq);
 ensures validSeqLemma2(mySeq);
 
@@ -332,7 +341,10 @@ requires mySeq[|mySeq|-1].next == null;
 	
 modifies mySeq;
 
-ensures validSeqCond(mySeq);
+//ensures validSeqCond(mySeq);
+//ensures validSeqLemma(mySeq);
+ensures mySeq[0].Valid();
+ensures mySeq[0].footprint == (set nd | nd in mySeq);
 ensures (set nd | nd in mySeq) == old(set nd | nd in mySeq);
 {
 ghost var index := mid - 1;
@@ -351,7 +363,8 @@ updateCurIndex(mySeq, index);
 index := index - 1;
 }
 
-assert seqV(mySeq);
+//assert seqV(mySeq);
+assert validSeqLemma(mySeq);
 }
 
 
