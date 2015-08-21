@@ -243,21 +243,7 @@ listCond(mySeq) &&
 && (mySeq != [] ==> mySeq[|mySeq|-1].next == null)
 }
 
-//
-predicate validSeqLemma(mySeq:seq<INode>)
-requires mySeq != [];
-requires listCond(mySeq);
-requires mySeq[0].Valid();
-requires (mySeq[|mySeq|-1].next == null);
-
-reads mySeq, sumAllFtprint(mySeq);
-
-ensures mySeq[0].footprint == (set nd | nd in mySeq);
-{
-
-validSeqLemma2(mySeq) && mySeq[0].validSeqLemma3(mySeq)
-}
-
+/*
 predicate validSeqLemma2(mySeq:seq<INode>)
 requires mySeq != [];
 requires listCond(mySeq);
@@ -277,14 +263,7 @@ else
 )
 }
 
-predicate validSeqLemma3(mySeq:seq<INode>)
-requires Valid();
-requires spine == mySeq;
-reads this, footprint, mySeq;
-ensures (set nd | nd in spine) == footprint;
-ensures footprint == (set nd | nd in mySeq);
-{ValidLemma2()}
-
+*/
 //===============================================
 
 
@@ -328,7 +307,7 @@ modifies mySeq;
 ensures head == mySeq[0];
 
 ensures head.Valid();
-ensures head.footprint == (set nd | nd in mySeq);
+//ensures head.footprint == (set nd | nd in mySeq);
 {
 ghost var index := mid - 1;
 
@@ -346,7 +325,6 @@ updateCurIndex(mySeq, index);
 index := index - 1;
 }
 
-assert validSeqLemma(mySeq);
 }
 
 
