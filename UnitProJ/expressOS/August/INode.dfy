@@ -97,7 +97,7 @@ r.spine := [r] + spine;
 return r;
 }
 
-
+/*
 method append(d:Data) returns (lastNd:INode)
 requires Valid();
 
@@ -152,7 +152,7 @@ assert ValidLemma2();
 assert ValidLemma();
 return node;
 }
-
+*/
 
 
 
@@ -286,11 +286,16 @@ else
 //===============================================
 
 
-ghost method updateCurIndex(mySeq:seq<INode>, index:int)
+ghost method updateCurIndex(mySeq:seq<INode>, index:int, 
+			oldFp:set<INode>, newNd:INode)
+
 requires 0 <= index <= |mySeq| - 2;
 requires listCond(mySeq);
 requires mySeq[index+1].Valid();
 requires mySeq[index+1].spine == mySeq[index+1..];
+
+requires mySeq[index].footprint == {mySeq[index]} + oldFp;
+requires mySeq[index+1].footprint == oldFp + {newNd};
 
 modifies mySeq[index];
 
@@ -299,6 +304,8 @@ ensures listCond(mySeq);
 ensures mySeq[index].Valid();
 
 ensures mySeq[index].spine == mySeq[index..];
+
+ensures mySeq[index].footprint == {mySeq[index]} + oldFp + {newNd};
 {
 mySeq[index].tailContents := [mySeq[index+1].data] + mySeq[index+1].tailContents;
 
