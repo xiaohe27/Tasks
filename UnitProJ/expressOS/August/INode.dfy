@@ -96,7 +96,7 @@ r.spine := [r] + spine;
 return r;
 }
 
-/*
+
 method append(d:Data) returns (lastNd:INode)
 requires Valid();
 
@@ -132,8 +132,24 @@ tmpNd.next := node;
 
 ghost var mySeq := spine + [node];
 
-assert listCond(mySeq[0..|mySeq|-2]);
+assert listCond(mySeq[0..|mySeq|-1]);
+
+forall (nd | nd in spine)
+{
+nd.footprint := nd.footprint + {node};
+}
+
+assert listCond(mySeq[0..|mySeq|-1]);
+
 /*
+forall (nd | nd in spine)
+{
+nd.tailContents := nd.tailContents + [d];
+}
+
+//assert listCond(mySeq[0..|mySeq|-2]);
+
+
 updateSeq(mySeq, |mySeq|-1);
 
 assert seqV(mySeq);
@@ -145,7 +161,7 @@ assert ValidLemma();
 return node;
 
 }
-*/
+
 
 
 
@@ -238,12 +254,7 @@ null !in mySeq &&
 (forall i :: 0 <= i < |mySeq|-1 ==> mySeq[i].next == mySeq[i+1]
 	&& mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
 	&& mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
-	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine
-	/*
-	&& null !in mySeq[i].footprint 
-	&& mySeq[i] !in mySeq[i+1].footprint
-	&& mySeq[i+1] in mySeq[i].footprint */
-	)
+	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine)
 && (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint)
 }
 
@@ -332,33 +343,6 @@ else    validSeqLemma2(mySeq)
 }
 
 
-/*
-predicate goodSeqCond(mySeq: seq<INode>)
-reads mySeq, sumAllFtprint(mySeq);
-{
-listCond(mySeq) &&
-(forall nd :: nd in mySeq ==> nd.good())
-}
-
-predicate validSeqLemma2(mySeq:seq<INode>)
-requires mySeq != [];
-requires listCond(mySeq);
-requires mySeq[0].Valid();
-requires (mySeq[|mySeq|-1].next == null);
-
-reads mySeq, sumAllFtprint(mySeq);
-ensures validSeqLemma2(mySeq);
-ensures mySeq[0].spine == mySeq;
-{
-mySeq[0].Valid() && (
-if |mySeq| == 1 then mySeq[0].next == null
-&& mySeq[0].spine == [mySeq[0]]
-else
-(mySeq[0].spine == [mySeq[0]] + mySeq[1].spine
-&& validSeqLemma2(mySeq[1..]))
-)
-}
-*/
 //===============================================
 
 /*
