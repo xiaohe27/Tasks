@@ -274,12 +274,12 @@ else mySeq[0].spine == [mySeq[0]] + mySeq[1].spine
 }
 
 
-predicate validSeqLemma3(mySeq: seq<INode>)
+predicate validSeqLenLemma(mySeq: seq<INode>)
 requires mySeq != [];
 
 requires validSeqCond(mySeq);
 reads mySeq, (set nd | nd in mySeq);
-ensures validSeqLemma3(mySeq);
+ensures validSeqLenLemma(mySeq);
 ensures |mySeq| == |mySeq[0].footprint|;
 ensures forall nd :: nd in mySeq ==> nd in mySeq[0].footprint;
 {
@@ -290,16 +290,16 @@ else mySeq[0] in mySeq[0].footprint &&
 	|mySeq[0].footprint| == |mySeq[1].footprint| + 1 &&
 	mySeq[0].spine == [mySeq[0]] + mySeq[1].spine &&
 	|mySeq[0].spine| == |mySeq[1].spine| + 1 &&
-	validSeqLemma3(mySeq[1..])
+	validSeqLenLemma(mySeq[1..])
 }
 
 
-predicate validSeqLemma4(mySeq: seq<INode>)
+predicate validSeqGoodLemma(mySeq: seq<INode>)
 requires mySeq != [];
 
 requires validSeqCond(mySeq);
 reads mySeq, (set nd | nd in mySeq);
-ensures validSeqLemma4(mySeq);
+ensures validSeqGoodLemma(mySeq);
 ensures mySeq[0].good();
 {
 if |mySeq| == 1 then true
@@ -311,11 +311,11 @@ else
  mySeq[0].spine == [mySeq[0]] + mySeq[1].spine &&
  mySeq[0].tailContents == [mySeq[1].data] + mySeq[1].tailContents
 
- && validSeqLemma4(mySeq[1..])
+ && validSeqGoodLemma(mySeq[1..])
 }
 
 
-/*
+
 predicate validSeqLemma(mySeq: seq<INode>)
 requires mySeq != [];
 
@@ -325,11 +325,12 @@ ensures validSeqLemma(mySeq);
 ensures mySeq[0].Valid();
 {
 if(|mySeq| == 1) then true
-else mySeq[0].good()
-	&& validSeqLemma3(mySeq)
+else    validSeqLemma2(mySeq)
+	&& validSeqGoodLemma(mySeq)
+	&& validSeqLenLemma(mySeq)
 	&& validSeqLemma(mySeq[1..])
 }
-*/
+
 
 /*
 predicate goodSeqCond(mySeq: seq<INode>)
