@@ -368,10 +368,13 @@ ghost method updateSeq(mySeq:seq<INode>, mid:int, d:Data)
 requires mySeq != [];
 requires listCond(mySeq);
 
-requires 0 <= mid < |mySeq|;
+requires 0 < mid < |mySeq|;
 requires mySeq[mid].Valid();
 requires mySeq[mid].spine == mySeq[mid..];
 requires mySeq[|mySeq|-1].next == null;	
+
+requires mySeq[mid-1].tailContents + [d] == [mySeq[mid].data] +
+				mySeq[mid].tailContents;
 	
 modifies mySeq;
 
