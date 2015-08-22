@@ -39,8 +39,7 @@ reads this, footprint;
 {
 good()  
 && (forall nd :: nd in spine ==> nd in footprint)
-&& listCond(spine)
-&& |spine| == |footprint|
+//&& |spine| == |footprint|
 && (next != null ==> next.Valid())
 }
 
@@ -53,7 +52,7 @@ ensures |tailContents| == |footprint|-1 == |spine|-1;
 ensures forall nd :: nd in spine ==> nd.Valid();
 
 ensures (forall i :: 1 <= i < |spine| ==> spine[i].data == tailContents[i-1]);
-ensures ndSeq2DataSeq(spine) == [data] + tailContents;
+//ensures ndSeq2DataSeq(spine) == [data] + tailContents;
 {
 (next == null) ||
 (next.ValidLemma())
@@ -254,6 +253,15 @@ if mySeq == [] then []
 else [mySeq[0].data] + ndSeq2DataSeq(mySeq[1..])
 }
 
+
+predicate listInv(mySeq: seq<INode>)
+reads mySeq, (set nd | nd in mySeq);
+{
+null !in mySeq &&
+(forall i :: 0 <= i < |mySeq|-1 ==> mySeq[i].next == mySeq[i+1])
+&& (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint)
+}
+
 predicate listCond(mySeq: seq<INode>)
 reads mySeq, (set nd | nd in mySeq);
 {
@@ -352,13 +360,8 @@ else    validSeqLemma2(mySeq)
 
 */
 //===============================================
-predicate listInv(mySeq: seq<INode>)
-reads mySeq, (set nd | nd in mySeq);
-{
-null !in mySeq &&
-(forall i :: 0 <= i < |mySeq|-1 ==> mySeq[i].next == mySeq[i+1])
-&& (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint)
-}
+/*
+
 
 predicate goodSeqCond(mySeq: seq<INode>)
 reads mySeq, sumAllFtprint(mySeq);
@@ -405,7 +408,7 @@ mySeq[index].spine := mySeq[index].spine + [newNd];
 }
 
 
-/*
+
 ghost method updateSeq(mySeq:seq<INode>, mid:int)
 
 requires mySeq != [];
