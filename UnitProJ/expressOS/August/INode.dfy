@@ -22,7 +22,7 @@ if next == null then 1 else 1 + next.len()
 predicate good()
 reads this, footprint;
 {
-    this in footprint && null !in footprint
+    this in footprint 
 	&& (next != null ==> (next in footprint 
 	&& this !in next.footprint 
 	&& next.footprint + {this} == footprint
@@ -48,7 +48,7 @@ reads this, footprint;
 ensures ValidLemma();
 ensures |tailContents| == |footprint|-1 == |spine|-1;
 
-ensures forall nd :: nd in spine ==> nd.Valid();
+ensures forall nd :: nd in spine ==> nd != null && nd.Valid();
 
 ensures (forall i :: 1 <= i < |spine| ==> spine[i].data == tailContents[i-1]);
 //ensures ndSeq2DataSeq(spine) == [data] + tailContents;
@@ -236,14 +236,15 @@ reads this, footprint;
 
 ensures ndValid2ListValidLemma();
 
-ensures forall nd :: nd in footprint ==> nd.footprint <= footprint;
+ensures forall nd :: nd in footprint ==> nd != null &&
+							nd.footprint <= footprint;
 
 ensures validSeqCond(spine);
 {
 if next == null then (spine == [this] && footprint == {this}
 					&& tailContents == [])
 else (
-this !in next.footprint && null !in footprint &&
+this !in next.footprint &&
 spine == [this] + next.spine 
 && footprint == {this} + next.footprint
 && tailContents == [next.data] + next.tailContents
@@ -339,7 +340,6 @@ requires mySeq != [];
 
 requires validSeqCond(mySeq);
 reads mySeq, (set nd | nd in mySeq);
-ensures validSeqGoodLemma(mySeq);
 ensures mySeq[0].good();
 {
 if |mySeq| == 1 then true
@@ -350,8 +350,6 @@ else
  mySeq[1] in mySeq[0].footprint &&
  mySeq[0].spine == [mySeq[0]] + mySeq[1].spine &&
  mySeq[0].tailContents == [mySeq[1].data] + mySeq[1].tailContents
-
- && validSeqGoodLemma(mySeq[1..])
 }
 
 
@@ -365,8 +363,9 @@ ensures validSeqLemma(mySeq);
 ensures mySeq[0].Valid();
 {
 if(|mySeq| == 1) then true
-else    validSeqLemma2(mySeq)
-	&& validSeqGoodLemma(mySeq)
+else    
+	validSeqGoodLemma(mySeq)
+	&& validSeqLemma2(mySeq)
 	&& validSeqFtprintInclusionLemma(mySeq)
 	&& validSeqLemma(mySeq[1..])
 }
