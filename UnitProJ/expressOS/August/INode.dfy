@@ -373,15 +373,6 @@ else
 
 //===============================================
 
-
-predicate goodSeqCond(mySeq: seq<INode>)
-reads mySeq, sumAllFtprint(mySeq);
-{
-listInv(mySeq) &&
-(forall nd :: nd in mySeq ==> nd.good())
-}
-
-//8s
 ghost method updateCurIndex(mySeq:seq<INode>, index:int, 
 				d:Data, newNd:INode)
 requires 0 <= index <= |mySeq| - 2;
@@ -391,13 +382,10 @@ requires forall i :: 0 <= i < index ==>
 	   mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
 	&& mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
 	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine;
-//requires goodSeqCond(mySeq[0..index]);
-//requires mySeq[index+1].Valid();
 
 requires mySeq[index+1].spine == mySeq[index+1..];
 
 requires validSeqCond(mySeq[index+1..]);
-
 
 requires mySeq[index].footprint + {newNd} == 
 	{mySeq[index]} + mySeq[index+1].footprint;
@@ -417,9 +405,6 @@ requires forall i :: 0 <= i < index-1 ==>
 	&& mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
 	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine;
 
-
-//ensures index > 0 ==> goodSeqCond(mySeq[0..index-1]);
-//ensures mySeq[index].Valid();
 ensures mySeq[index].spine == mySeq[index..];
 
 ensures validSeqCond(mySeq[index..]);
@@ -434,9 +419,6 @@ mySeq[index].tailContents := [mySeq[index+1].data] + mySeq[index+1].tailContents
 mySeq[index].footprint := mySeq[index].footprint + {newNd};
 
 mySeq[index].spine := mySeq[index].spine + [newNd];
-
-assert validSeqLemma(mySeq[index..]);
-assert mySeq[index].Valid();
 }
 
 
