@@ -434,6 +434,9 @@ mySeq[index].tailContents := [mySeq[index+1].data] + mySeq[index+1].tailContents
 mySeq[index].footprint := mySeq[index].footprint + {newNd};
 
 mySeq[index].spine := mySeq[index].spine + [newNd];
+
+assert validSeqLemma(mySeq[index..]);
+assert mySeq[index].Valid();
 }
 
 
