@@ -388,10 +388,14 @@ requires mySeq[index].tailContents + [d] ==
 modifies mySeq[index];
 
 ensures listInv(mySeq);
+ensures index > 0 ==> goodSeqCond(mySeq[0..index-1]);
+ensures mySeq[index].Valid();
+ensures mySeq[index].spine == mySeq[index..];
 
-//ensures mySeq[index].Valid();
-
-//ensures mySeq[index].spine == mySeq[index..];
+ensures mySeq[index].footprint == old(mySeq[index].footprint) + {newNd};
+ensures mySeq[index].spine == old(mySeq[index].spine) + [newNd];
+ensures mySeq[index].tailContents == 
+	old(mySeq[index].tailContents) + [d];
 {
 mySeq[index].tailContents := [mySeq[index+1].data] + mySeq[index+1].tailContents;
 
@@ -402,6 +406,8 @@ mySeq[index].spine := mySeq[index].spine + [newNd];
 assert mySeq[index].good();
 assert mySeq[index].spine == mySeq[index..];
 assert listCond(mySeq[index].spine);
+assert (forall nd :: nd in mySeq[index].spine ==> nd in mySeq[index].footprint);
+assert mySeq[index+1].Valid();
 }
 
 
