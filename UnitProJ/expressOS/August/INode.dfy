@@ -402,12 +402,6 @@ mySeq[index].tailContents := [mySeq[index+1].data] + mySeq[index+1].tailContents
 mySeq[index].footprint := mySeq[index].footprint + {newNd};
 
 mySeq[index].spine := mySeq[index].spine + [newNd];
-
-assert mySeq[index].good();
-assert mySeq[index].spine == mySeq[index..];
-assert listCond(mySeq[index].spine);
-assert (forall nd :: nd in mySeq[index].spine ==> nd in mySeq[index].footprint);
-assert mySeq[index+1].Valid();
 }
 
 
