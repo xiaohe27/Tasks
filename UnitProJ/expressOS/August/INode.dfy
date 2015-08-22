@@ -318,23 +318,19 @@ else mySeq[0].spine == [mySeq[0]] + mySeq[1].spine
 }
 
 
-predicate validSeqLenLemma(mySeq: seq<INode>)
+predicate validSeqFtprintInclusionLemma(mySeq: seq<INode>)
 requires mySeq != [];
 
 requires validSeqCond(mySeq);
 reads mySeq, (set nd | nd in mySeq);
-ensures validSeqLenLemma(mySeq);
-ensures |mySeq| == |mySeq[0].footprint|;
+ensures validSeqFtprintInclusionLemma(mySeq);
 ensures forall nd :: nd in mySeq ==> nd in mySeq[0].footprint;
 {
 if |mySeq| == 1 then true
-else mySeq[0] in mySeq[0].footprint &&
+else 
 	{mySeq[0]} + mySeq[1].footprint == mySeq[0].footprint &&
-	mySeq[0] !in mySeq[1].footprint &&
-	|mySeq[0].footprint| == |mySeq[1].footprint| + 1 &&
-	mySeq[0].spine == [mySeq[0]] + mySeq[1].spine &&
-	|mySeq[0].spine| == |mySeq[1].spine| + 1 &&
-	validSeqLenLemma(mySeq[1..])
+	
+	validSeqFtprintInclusionLemma(mySeq[1..])
 }
 
 
@@ -371,7 +367,7 @@ ensures mySeq[0].Valid();
 if(|mySeq| == 1) then true
 else    validSeqLemma2(mySeq)
 	&& validSeqGoodLemma(mySeq)
-	&& validSeqLenLemma(mySeq)
+	&& validSeqFtprintInclusionLemma(mySeq)
 	&& validSeqLemma(mySeq[1..])
 }
 
