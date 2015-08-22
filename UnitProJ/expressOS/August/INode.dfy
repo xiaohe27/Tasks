@@ -39,7 +39,6 @@ reads this, footprint;
 {
 good()  
 && (forall nd :: nd in spine ==> nd in footprint)
-//&& |spine| == |footprint|
 && (next != null ==> next.Valid())
 }
 
@@ -236,7 +235,6 @@ requires Valid();
 reads this, footprint;
 
 ensures ndValid2ListValidLemma();
-//ensures (set nd | nd in spine) == footprint;
 
 ensures forall nd :: nd in footprint ==> nd.footprint <= footprint;
 
@@ -304,7 +302,7 @@ listCond(mySeq)
 && mySeq[|mySeq|-1].spine == [mySeq[|mySeq|-1]])
 }
 
-/*
+
 predicate validSeqLemma2(mySeq: seq<INode>)
 requires mySeq != [];
 
@@ -377,7 +375,7 @@ else    validSeqLemma2(mySeq)
 	&& validSeqLemma(mySeq[1..])
 }
 
-*/
+
 //===============================================
 /*
 
