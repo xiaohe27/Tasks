@@ -160,7 +160,7 @@ updateSeq(mySeq, |mySeq|-1);
 
 assert seqV(mySeq);
 
-assert ValidLemma2();
+assert spineFtprintLemma();
 assert ValidLemma();
 */
 
@@ -215,22 +215,43 @@ mySeq == [] || seqV(mySeq[1..])
 }
 
 
-predicate ValidLemma2()
+predicate spineFtprintLemma()
 requires Valid();
 reads this, footprint;
 
-ensures ValidLemma2();
+ensures spineFtprintLemma();
 ensures (set nd | nd in spine) == footprint;
-ensures spine[|spine|-1].next == null;
-
-ensures forall nd :: nd in footprint ==> nd.footprint <= footprint;
 {
 if next == null then (spine == [this] && footprint == {this})
 else (
 spine == [this] + next.spine 
 && footprint == {this} + next.footprint
-&& next.ValidLemma2())
+&& next.spineFtprintLemma())
 }
+
+
+/*************************************/
+predicate ndValid2ListValidLemma()
+requires Valid();
+reads this, footprint;
+
+ensures ndValid2ListValidLemma();
+//ensures (set nd | nd in spine) == footprint;
+
+ensures forall nd :: nd in footprint ==> nd.footprint <= footprint;
+
+ensures validSeqCond(spine);
+{
+if next == null then (spine == [this] && footprint == {this}
+					&& tailContents == [])
+else (
+this !in next.footprint && null !in footprint &&
+spine == [this] + next.spine 
+&& footprint == {this} + next.footprint
+&& tailContents == [next.data] + next.tailContents
+&& next.ndValid2ListValidLemma())
+}
+
 
 
 predicate allDiff(mySeq:seq<INode>)
@@ -273,8 +294,6 @@ null !in mySeq &&
 && (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint)
 }
 
-
-/*
 predicate validSeqCond(mySeq: seq<INode>)
 reads mySeq, (set nd | nd in mySeq);
 {
@@ -285,7 +304,7 @@ listCond(mySeq)
 && mySeq[|mySeq|-1].spine == [mySeq[|mySeq|-1]])
 }
 
-
+/*
 predicate validSeqLemma2(mySeq: seq<INode>)
 requires mySeq != [];
 
