@@ -360,46 +360,10 @@ null !in mySeq &&
 }
 
 
-ghost method updateCurIndex(mySeq:seq<INode>, index:int, 
-			d:Data, newNd:INode)
-requires 0 <= index <= |mySeq| - 2;
-requires listInv(mySeq);
-
-requires forall nd :: nd in mySeq[0..index+1] ==> newNd !in nd.footprint;
-
-requires listCond(mySeq[0..index+1]);
-requires mySeq[index+1].Valid();
-requires mySeq[index+1].spine == mySeq[index+1..];
-
-requires mySeq[index].next == mySeq[index+1] &&
-         mySeq[index].footprint == {mySeq[index]} + 
-			mySeq[index+1].footprint - {newNd}
-	&& mySeq[index].tailContents + [d] == 
-	([mySeq[index+1].data] +	
-	mySeq[index+1].tailContents)
-	&& mySeq[index].spine + [newNd] == 
-	([mySeq[index]] + mySeq[index+1].spine);
-					
-
-modifies mySeq[index];
-
-ensures listInv(mySeq);
-ensures listCond(mySeq[0..index]);
-
-//ensures mySeq[index].Valid();
-
-ensures mySeq[index].spine == mySeq[index..];
-{
-mySeq[index].tailContents := mySeq[index].tailContents + [d];
-
-mySeq[index].footprint := mySeq[index].footprint + {newNd};
-
-mySeq[index].spine := mySeq[index].spine + [newNd];
-}
 
 
-/*
-ghost method updateSeq(mySeq:seq<INode>, mid:int)
+
+ghost method updateSeq(mySeq:seq<INode>, mid:int, d:Data)
 
 requires mySeq != [];
 requires listCond(mySeq);
@@ -411,27 +375,36 @@ requires mySeq[|mySeq|-1].next == null;
 	
 modifies mySeq;
 
-ensures listCond(mySeq);
-ensures forall nd :: nd in mySeq ==> nd.Valid();
+//ensures listCond(mySeq);
+//ensures forall nd :: nd in mySeq ==> nd.Valid();
 {
 ghost var index := mid - 1;
 
 while(index >= 0)
 invariant -1 <= index <= mid - 1;
-invariant listCond(mySeq);
-invariant mySeq[index+1].Valid(); 
+invariant listInv(mySeq);
+invariant forall i :: 0 <= i < index ==>
+	mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents;
+
+//invariant mySeq[index+1].Valid(); 
 invariant mySeq[mid].Valid();
-invariant mySeq[index+1].spine == mySeq[index+1..];
+//invariant mySeq[index+1].spine == mySeq[index+1..];
 invariant mySeq[|mySeq|-1].next == null;
+invariant index >= 0 ==> mySeq[index].tailContents + [d] == 
+	  [mySeq[index+1].data] + mySeq[index+1].tailContents;
 {
-updateCurIndex(mySeq, index);
+mySeq[index].tailContents := mySeq[index].tailContents + [d];
+
+//mySeq[index].footprint := mySeq[index].footprint + {newNd};
+
+//mySeq[index].spine := mySeq[index].spine + [newNd];
 
 index := index - 1;
 }
 
-assert seqV(mySeq);
+//assert seqV(mySeq);
 
 }
-*/
+
 
 }
