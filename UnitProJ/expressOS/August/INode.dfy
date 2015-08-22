@@ -364,15 +364,14 @@ ensures mySeq[0].Valid();
 {
 if(|mySeq| == 1) then true
 else    
-	validSeqGoodLemma(mySeq)
-	&& validSeqLemma2(mySeq)
-	&& validSeqFtprintInclusionLemma(mySeq)
-	&& validSeqLemma(mySeq[1..])
+	validSeqGoodLemma(mySeq) &&
+    validSeqLemma2(mySeq) &&
+    validSeqFtprintInclusionLemma(mySeq) &&
+    validSeqLemma(mySeq[1..])
 }
 
 
 //===============================================
-/*
 
 
 predicate goodSeqCond(mySeq: seq<INode>)
@@ -420,7 +419,7 @@ mySeq[index].spine := mySeq[index].spine + [newNd];
 }
 
 
-
+/*
 ghost method updateSeq(mySeq:seq<INode>, mid:int)
 
 requires mySeq != [];
