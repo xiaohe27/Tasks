@@ -405,6 +405,8 @@ mySeq[index].tailContents := mySeq[index].tailContents + [d];
 index := index - 1;
 }
 
+assert forall i :: 0 <= i < |mySeq| ==>
+	mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents;
 //assert seqV(mySeq);
 
 }
