@@ -393,22 +393,29 @@ while(index >= 0)
 invariant -1 <= index <= mid - 1;
 invariant listInv(mySeq);
 invariant forall i :: 0 <= i < index ==>
-	mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents;
+	mySeq[i].good();
 
-//invariant mySeq[index+1].Valid(); 
+invariant mySeq[index+1].Valid(); 
 invariant mySeq[mid].Valid();
-//invariant mySeq[index+1].spine == mySeq[index+1..];
+invariant mySeq[index+1].spine == mySeq[index+1..];
 invariant mySeq[|mySeq|-1].next == null;
-invariant index >= 0 ==> mySeq[index].tailContents + [d] == 
-	  [mySeq[index+1].data] + mySeq[index+1].tailContents;
-invariant index < mid -1 ==> mySeq[index+1].tailContents ==
-	old(mySeq[index+1].tailContents) + [d];
+invariant index >= 0 ==> (mySeq[index].tailContents + [d] == 
+	  [mySeq[index+1].data] + mySeq[index+1].tailContents)
+	  && (mySeq[index].footprint + {newNd}== {mySeq[index]} +
+				mySeq[index+1].footprint)
+
+	  && (mySeq[index].spine + [newNd]== [mySeq[index]] +
+				mySeq[index+1].spine)
+
+
 {
 mySeq[index].tailContents := mySeq[index].tailContents + [d];
 
 mySeq[index].footprint := mySeq[index].footprint + {newNd};
 
 mySeq[index].spine := mySeq[index].spine + [newNd];
+
+assert mySeq[index].good();
 
 index := index - 1;
 }
