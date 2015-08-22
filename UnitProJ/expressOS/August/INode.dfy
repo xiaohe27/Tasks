@@ -411,9 +411,18 @@ requires mySeq[index].tailContents + [d] ==
 modifies mySeq[index];
 
 ensures listInv(mySeq);
+
+requires forall i :: 0 <= i < index-1 ==>
+	   mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
+	&& mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
+	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine;
+
+
 //ensures index > 0 ==> goodSeqCond(mySeq[0..index-1]);
 //ensures mySeq[index].Valid();
 ensures mySeq[index].spine == mySeq[index..];
+
+ensures validSeqCond(mySeq[index..]);
 
 ensures mySeq[index].footprint == old(mySeq[index].footprint) + {newNd};
 ensures mySeq[index].spine == old(mySeq[index].spine) + [newNd];
