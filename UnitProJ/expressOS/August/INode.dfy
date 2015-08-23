@@ -396,7 +396,8 @@ requires mySeq[index].spine + [newNd] ==
 requires mySeq[index].tailContents + [d] == 
 	[mySeq[index+1].data] + mySeq[index+1].tailContents;
 
-modifies mySeq[index];
+//modifies mySeq[index];
+modifies mySeq;
 
 ensures listInv(mySeq);
 
@@ -425,11 +426,10 @@ mySeq[index].spine := mySeq[index].spine + [newNd];
 
 ghost method updateSeq(mySeq:seq<INode>, mid:int, 
 			d:Data, newNd:INode)
-
 requires mySeq != [];
 requires listInv(mySeq);
 
-requires 0 <= mid < |mySeq|;
+requires 0 < mid < |mySeq|;
 requires forall i :: 0 <= i < mid-1 ==>
 	   mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
 	&& mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
@@ -439,13 +439,13 @@ requires forall i :: 0 <= i < mid-1 ==>
 requires mySeq[mid].spine == mySeq[mid..];
 requires validSeqCond(mySeq[mid..]);
 	
-requires mid > 0 ==> mySeq[mid-1].footprint + {newNd} == 
+requires mySeq[mid-1].footprint + {newNd} == 
 	{mySeq[mid-1]} + mySeq[mid].footprint;
 
-requires mid > 0 ==> mySeq[mid-1].spine + [newNd] == 
+requires mySeq[mid-1].spine + [newNd] == 
 	[mySeq[mid-1]] + mySeq[mid].spine;
 
-requires mid > 0 ==> mySeq[mid-1].tailContents + [d] == 
+requires mySeq[mid-1].tailContents + [d] == 
 	[mySeq[mid].data] + mySeq[mid].tailContents;
 
 
@@ -473,13 +473,13 @@ invariant mySeq[index+1].spine == mySeq[index+1..];
 
 invariant validSeqCond(mySeq[index+1..]);
 
-invariant mid > 0 ==>  mySeq[index].footprint + {newNd} == 
+invariant mySeq[index].footprint + {newNd} == 
 	{mySeq[index]} + mySeq[index+1].footprint;
 
-invariant mid > 0 ==> mySeq[index].spine + [newNd] == 
+invariant mySeq[index].spine + [newNd] == 
 	[mySeq[index]] + mySeq[index+1].spine;
 
-invariant mid > 0 ==> mySeq[index].tailContents + [d] == 
+invariant mySeq[index].tailContents + [d] == 
 	[mySeq[index+1].data] + mySeq[index+1].tailContents;
 
 
