@@ -21,7 +21,7 @@ if next == null then 1 else 1 + next.len()
 predicate good()
 reads this, footprint;
 {
-    this in footprint 
+    this in footprint && null !in footprint
 	&& (next != null ==> (next in footprint 
 	&& this !in next.footprint 
 	&& footprint == {this} + next.footprint
@@ -49,6 +49,28 @@ if (next == null)
 then footprint == {this}
 else 
 next.allVLemma()
+}
+
+
+predicate canGoto(node:INode)
+requires Valid();
+reads this, footprint;
+{
+this == node ||
+(next != null && next.canGoto(node))
+}
+
+predicate gotoLemma()
+requires Valid();
+reads this, footprint;
+ensures gotoLemma();
+ensures forall nd :: nd in footprint ==> canGoto(nd);
+{
+if (next == null)
+then footprint == {this}
+else 
+footprint == {this} + next.footprint &&
+next.gotoLemma()
 }
 
 
@@ -85,37 +107,44 @@ return r;
 }
 */
 
-/*
-method append(d:Data) returns (lastNd:INode)
+
+method append(d:Data)
 requires Valid();
 
 modifies footprint;
 //ensures Valid();
 //ensures fresh(footprint - old(footprint));
 {
-var node := new INode.init(d);
-assert node.footprint !! footprint;
+var newNd := new INode.init(d);
+assert newNd.footprint !! footprint;
 
 var tmpNd := this;
-ghost var index := 0;
 
 while(tmpNd.next != null)
 invariant tmpNd != null && tmpNd.Valid();
-invariant listCond(spine);
-invariant index == |this.footprint| - |tmpNd.footprint|;
-invariant tmpNd == spine[index];
 decreases tmpNd.footprint;
 {
 tmpNd := tmpNd.next;
-
-index := index + 1;
 }
 
+assert allVLemma();
 
-tmpNd.next := node;
+tmpNd.next := newNd;
 
+/*
+ghost var myNd := this;
+while(myNd != tmpNd)
+invariant forall nd :: nd in (footprint - {tmpNd}) ==> nd.good();
+invariant myNd in footprint;
+invariant myNd != tmpNd ==> myNd.good();
+{
+myNd := myNd.next;
 }
+
 */
+
+}
+
 
 
 
