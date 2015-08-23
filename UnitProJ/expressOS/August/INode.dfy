@@ -383,7 +383,7 @@ ghost method updateCurIndex(mySeq:seq<INode>, index:int,
 requires 0 <= index <= |mySeq| - 2;
 requires listInv(mySeq);
 
-requires forall nd :: nd in mySeq[0..index+1] ==> newNd !in nd.footprint;
+//requires forall nd :: nd in mySeq[0..index+1] ==> newNd !in nd.footprint;
 
 requires forall i :: 0 <= i < |mySeq|-1 && i != index ==>
 	   mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
@@ -392,7 +392,7 @@ requires forall i :: 0 <= i < |mySeq|-1 && i != index ==>
 
 requires mySeq[index+1].spine == mySeq[index+1..];
 
-requires validSeqCond(mySeq[index+1..]);
+//requires validSeqCond(mySeq[index+1..]);
 
 requires mySeq[index].footprint + {newNd} == 
 	{mySeq[index]} + mySeq[index+1].footprint;
@@ -411,7 +411,7 @@ ensures |mySeq| == old(|mySeq|) &&
 	forall i :: 0 <= i < |mySeq| ==> mySeq[i] == old(mySeq[i]);
 
 
-ensures forall nd :: nd in mySeq[0..index] ==> newNd !in nd.footprint;
+//ensures forall nd :: nd in mySeq[0..index] ==> newNd !in nd.footprint;
 
 ensures forall i :: 0 <= i < |mySeq|-1 && i != index-1 ==>
 	   mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
@@ -421,7 +421,7 @@ ensures forall i :: 0 <= i < |mySeq|-1 && i != index-1 ==>
 
 ensures mySeq[index].spine == mySeq[index..];
 
-ensures validSeqCond(mySeq[index..]);
+//ensures validSeqCond(mySeq[index..]);
 
 ensures index > 0 ==> (mySeq[index-1].footprint + {newNd} == 
 	{mySeq[index-1]} + mySeq[index].footprint &&
@@ -447,7 +447,7 @@ mySeq[index].spine := mySeq[index].spine + [newNd];
 }
 
 
-
+/*
 ghost method updateSeq(mySeq:seq<INode>, d:Data, newNd:INode)
 requires |mySeq| == 4;
 //requires |mySeq| > 1;
@@ -538,3 +538,4 @@ index := index - 1;
 //assert validSeqLemma(mySeq);
 
 }
+*/
