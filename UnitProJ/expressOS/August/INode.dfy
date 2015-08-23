@@ -453,7 +453,6 @@ requires mySeq[mid-1].tailContents + [d] ==
 
 modifies mySeq;
 
-/*
 ensures mySeq[0].footprint == old(mySeq[0].footprint) + {newNd};
 ensures mySeq[0].spine == old(mySeq[0].spine) + [newNd];
 ensures mySeq[0].tailContents == 
@@ -461,7 +460,6 @@ ensures mySeq[0].tailContents ==
 
 ensures validSeqCond(mySeq);
 ensures mySeq[0].Valid();
-*/
 {
 
 ghost var index := mid - 1;
@@ -500,7 +498,7 @@ updateCurIndex(mySeq, index, d, newNd);
 index := index - 1;
 }
 
-//assert validSeqLemma(mySeq);
+assert validSeqLemma(mySeq);
 
 }
 
