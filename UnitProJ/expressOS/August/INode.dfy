@@ -430,10 +430,9 @@ mySeq[index].spine := mySeq[index].spine + [newNd];
 }
 
 
-/*
+
 ghost method updateSeq(mySeq:seq<INode>, d:Data, newNd:INode)
-requires |mySeq| == 3;
-//requires |mySeq| > 1;
+requires |mySeq| > 1;
 requires listInv(mySeq);
 
 requires forall i :: 0 <= i < |mySeq|-2 ==>
@@ -506,6 +505,6 @@ index := index - 1;
 assert validSeqLemma(mySeq);
 
 }
-*/
+
 
 }
