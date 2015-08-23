@@ -424,31 +424,28 @@ mySeq[index].spine := mySeq[index].spine + [newNd];
 
 
 
-ghost method updateSeq(mySeq:seq<INode>, mid:int, 
-			d:Data, newNd:INode)
+ghost method updateSeq(mySeq:seq<INode>, d:Data, newNd:INode)
 requires |mySeq| == 3;
 //requires |mySeq| > 1;
 requires listInv(mySeq);
 
-requires mid == |mySeq| - 1;
-//requires 0 < mid < |mySeq|;
-requires forall i :: 0 <= i < mid-1 ==>
+requires forall i :: 0 <= i < |mySeq|-2 ==>
 	   mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
 	&& mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
 	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine;
 
 
-requires mySeq[mid].spine == mySeq[mid..];
-requires validSeqCond(mySeq[mid..]);
+requires mySeq[|mySeq|-1].spine == mySeq[|mySeq|-1..];
+requires validSeqCond(mySeq[|mySeq|-1..]);
 	
-requires mySeq[mid-1].footprint + {newNd} == 
-	{mySeq[mid-1]} + mySeq[mid].footprint;
+requires mySeq[|mySeq|-2].footprint + {newNd} == 
+	{mySeq[|mySeq|-2]} + mySeq[|mySeq|-1].footprint;
 
-requires mySeq[mid-1].spine + [newNd] == 
-	[mySeq[mid-1]] + mySeq[mid].spine;
+requires mySeq[|mySeq|-2].spine + [newNd] == 
+	[mySeq[|mySeq|-2]] + mySeq[|mySeq|-1].spine;
 
-requires mySeq[mid-1].tailContents + [d] == 
-	[mySeq[mid].data] + mySeq[mid].tailContents;
+requires mySeq[|mySeq|-2].tailContents + [d] == 
+	[mySeq[|mySeq|-1].data] + mySeq[|mySeq|-1].tailContents;
 
 
 modifies mySeq;
@@ -462,10 +459,11 @@ ensures validSeqCond(mySeq);
 ensures mySeq[0].Valid();
 {
 
-ghost var index := mid - 1;
+ghost var index := |mySeq|-2;
 
 while(index >= 0)
-invariant -1 <= index <= mid - 1;
+invariant -1 <= index <= |mySeq|-2;
+
 invariant listInv(mySeq);
 invariant forall i :: 0 <= i < index ==>
 	   mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
@@ -486,7 +484,7 @@ invariant index >= 0 ==> mySeq[index].tailContents + [d] ==
 	[mySeq[index+1].data] + mySeq[index+1].tailContents;
 
 
-invariant -1 <= index < mid-1 ==> (
+invariant -1 <= index < |mySeq|-2 ==> (
  mySeq[index+1].footprint == old(mySeq[index+1].footprint) + {newNd} &&
  mySeq[index+1].spine == old(mySeq[index+1].spine) + [newNd] &&
  mySeq[index+1].tailContents == 
@@ -501,7 +499,5 @@ index := index - 1;
 assert validSeqLemma(mySeq);
 
 }
-
-
 
 }
