@@ -129,30 +129,26 @@ tmpNd := tmpNd.next;
 
 assert allVLemma();
 
+
 tmpNd.next := newNd;
 
+assert forall nd :: nd in footprint - {tmpNd} ==> nd != null &&
+				nd.tailContents == [nd.next.data]
+				+ nd.next.tailContents;
 
-ghost var myNd := this;
-ghost var tmpSet: set<INode>;
-tmpSet := {};
-
-while(myNd != tmpNd)
-invariant forall nd :: nd in (footprint - {tmpNd}) ==> nd.good();
-invariant myNd in footprint;
-invariant tmpNd in myNd.footprint;
-invariant myNd != tmpNd ==> myNd.good();
-
-invariant tmpSet == old(footprint) - myNd.footprint;
-invariant newNd.Valid() && tmpNd.next == newNd;
-
-decreases myNd.footprint;
+forall (nd | nd in footprint)
 {
-tmpSet := tmpSet + {myNd};
-
-myNd := myNd.next;
-
+nd.tailContents := nd.tailContents + [d];
 }
 
+assert forall nd :: nd in footprint - {tmpNd} ==> nd != null &&
+				nd.tailContents == [nd.next.data]
+				+ nd.next.tailContents;
+
+forall (nd | nd in footprint)
+{
+nd.footprint:= nd.footprint + {newNd};
+}
 
 
 }
