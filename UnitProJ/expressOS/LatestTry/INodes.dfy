@@ -138,6 +138,8 @@ invariant forall nd :: nd in (footprint - {tmpNd}) ==> nd.good();
 invariant myNd in footprint;
 invariant tmpNd in myNd.footprint;
 invariant myNd != tmpNd ==> myNd.good();
+
+invariant newNd.Valid() && tmpNd.next == newNd;
 decreases myNd.footprint;
 {
 myNd := myNd.next;
