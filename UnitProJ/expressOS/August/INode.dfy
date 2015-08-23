@@ -429,7 +429,7 @@ ghost method updateSeq(mySeq:seq<INode>, mid:int,
 requires mySeq != [];
 requires listInv(mySeq);
 
-requires 0 < mid < |mySeq|;
+requires 0 <= mid < |mySeq|;
 requires forall i :: 0 <= i < mid-1 ==>
 	   mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
 	&& mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
@@ -439,13 +439,13 @@ requires forall i :: 0 <= i < mid-1 ==>
 requires mySeq[mid].spine == mySeq[mid..];
 requires validSeqCond(mySeq[mid..]);
 	
-requires mySeq[mid-1].footprint + {newNd} == 
+requires mid > 0 ==> mySeq[mid-1].footprint + {newNd} == 
 	{mySeq[mid-1]} + mySeq[mid].footprint;
 
-requires mySeq[mid-1].spine + [newNd] == 
+requires mid > 0 ==> mySeq[mid-1].spine + [newNd] == 
 	[mySeq[mid-1]] + mySeq[mid].spine;
 
-requires mySeq[mid-1].tailContents + [d] == 
+requires mid > 0 ==> mySeq[mid-1].tailContents + [d] == 
 	[mySeq[mid].data] + mySeq[mid].tailContents;
 
 
@@ -456,8 +456,8 @@ ensures mySeq[0].spine == old(mySeq[0].spine) + [newNd];
 ensures mySeq[0].tailContents == 
 	old(mySeq[0].tailContents) + [d];
 
-//ensures validSeqCond(mySeq);
-//ensures mySeq[0].Valid();
+ensures validSeqCond(mySeq);
+ensures mySeq[0].Valid();
 {
 ghost var index := mid - 1;
 
@@ -473,20 +473,29 @@ invariant mySeq[index+1].spine == mySeq[index+1..];
 
 invariant validSeqCond(mySeq[index+1..]);
 
-/*
+invariant mid > 0 ==>  mySeq[index].footprint + {newNd} == 
+	{mySeq[index]} + mySeq[index+1].footprint;
+
+invariant mid > 0 ==> mySeq[index].spine + [newNd] == 
+	[mySeq[index]] + mySeq[index+1].spine;
+
+invariant mid > 0 ==> mySeq[index].tailContents + [d] == 
+	[mySeq[index+1].data] + mySeq[index+1].tailContents;
+
+
 invariant -1 <= index < mid-1 ==> (
  mySeq[index+1].footprint == old(mySeq[index+1].footprint) + {newNd} &&
  mySeq[index+1].spine == old(mySeq[index+1].spine) + [newNd] &&
  mySeq[index+1].tailContents == 
 	old(mySeq[index+1].tailContents) + [d]);
-*/
+
 {
 updateCurIndex(mySeq, index, d, newNd);
 
 index := index - 1;
 }
 
-//assert seqV(mySeq);
+assert validSeqLemma(mySeq);
 
 }
 
