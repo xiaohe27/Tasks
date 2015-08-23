@@ -426,10 +426,12 @@ mySeq[index].spine := mySeq[index].spine + [newNd];
 
 ghost method updateSeq(mySeq:seq<INode>, mid:int, 
 			d:Data, newNd:INode)
-requires mySeq != [];
+requires |mySeq| == 2;
+//requires |mySeq| > 1;
 requires listInv(mySeq);
 
-requires 0 < mid < |mySeq|;
+requires mid == |mySeq| - 1;
+//requires 0 < mid < |mySeq|;
 requires forall i :: 0 <= i < mid-1 ==>
 	   mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
 	&& mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
@@ -461,6 +463,7 @@ ensures validSeqCond(mySeq);
 ensures mySeq[0].Valid();
 */
 {
+
 ghost var index := mid - 1;
 
 while(index >= 0)
@@ -475,13 +478,13 @@ invariant mySeq[index+1].spine == mySeq[index+1..];
 
 invariant validSeqCond(mySeq[index+1..]);
 
-invariant mySeq[index].footprint + {newNd} == 
+invariant index >= 0 ==> mySeq[index].footprint + {newNd} == 
 	{mySeq[index]} + mySeq[index+1].footprint;
 
-invariant mySeq[index].spine + [newNd] == 
+invariant index >= 0 ==> mySeq[index].spine + [newNd] == 
 	[mySeq[index]] + mySeq[index+1].spine;
 
-invariant mySeq[index].tailContents + [d] == 
+invariant index >= 0 ==> mySeq[index].tailContents + [d] == 
 	[mySeq[index+1].data] + mySeq[index+1].tailContents;
 
 
