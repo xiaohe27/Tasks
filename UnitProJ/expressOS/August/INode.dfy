@@ -42,6 +42,7 @@ good()
 && (next != null ==> next.Valid())
 }
 
+/*
 predicate ValidLemma()
 requires Valid();
 reads this, footprint;
@@ -94,7 +95,7 @@ r.spine := [r] + spine;
 return r;
 }
 
-/*
+
 method append(d:Data) returns (lastNd:INode)
 requires Valid();
 
@@ -186,7 +187,7 @@ if mySeq == [] then {} else getFtprint(mySeq[0]) + sumAllFtprint(mySeq[1..])
 }
 
 
-
+/*
 predicate allV(myNode:INode)
 reads myNode, getFtprint(myNode);
 requires myNode != null && myNode.Valid();
@@ -229,7 +230,6 @@ spine == [this] + next.spine
 }
 
 
-/*************************************/
 predicate ndValid2ListValidLemma()
 requires Valid();
 reads this, footprint;
@@ -274,13 +274,6 @@ else [mySeq[0].data] + ndSeq2DataSeq(mySeq[1..])
 }
 
 
-predicate listInv(mySeq: seq<INode>)
-reads mySeq, (set nd | nd in mySeq);
-{
-null !in mySeq && (forall nd :: nd in mySeq ==> nd in nd.footprint) &&
-(forall i :: 0 <= i < |mySeq|-1 ==> mySeq[i].next == mySeq[i+1])
-&& (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint)
-}
 
 predicate listCond(mySeq: seq<INode>)
 reads mySeq, (set nd | nd in mySeq);
@@ -370,8 +363,15 @@ else
     validSeqLemma(mySeq[1..])
 }
 
-
+*/
 //===============================================
+predicate listInv(mySeq: seq<INode>)
+reads mySeq, (set nd | nd in mySeq);
+{
+null !in mySeq && (forall nd :: nd in mySeq ==> nd in nd.footprint) &&
+(forall i :: 0 <= i < |mySeq|-1 ==> mySeq[i].next == mySeq[i+1])
+&& (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint)
+}
 
 ghost method updateCurIndex(mySeq:seq<INode>, index:int, 
 				d:Data, newNd:INode)
@@ -380,14 +380,14 @@ requires listInv(mySeq);
 
 requires forall nd :: nd in mySeq[0..index+1] ==> newNd !in nd.footprint;
 
-requires forall i :: 0 <= i < index ==>
+requires forall i :: 0 <= i < |mySeq|-1 && i != index ==>
 	   mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
 	&& mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
 	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine;
 
-requires mySeq[index+1].spine == mySeq[index+1..];
+//requires mySeq[index+1].spine == mySeq[index+1..];
 
-requires validSeqCond(mySeq[index+1..]);
+//requires validSeqCond(mySeq[index+1..]);
 
 requires mySeq[index].footprint + {newNd} == 
 	{mySeq[index]} + mySeq[index+1].footprint;
@@ -403,17 +403,19 @@ modifies mySeq[index];
 
 ensures listInv(mySeq);
 
+ensures |mySeq| == old(|mySeq|);
+
 ensures forall nd :: nd in mySeq[0..index] ==> newNd !in nd.footprint;
 
-ensures forall i :: 0 <= i < index-1 ==>
+ensures forall i :: 0 <= i < |mySeq|-1 && i != index-1 ==>
 	   mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
 	&& mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
 	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine;
 
 
-ensures mySeq[index].spine == mySeq[index..];
+//ensures mySeq[index].spine == mySeq[index..];
 
-ensures validSeqCond(mySeq[index..]);
+//ensures validSeqCond(mySeq[index..]);
 
 ensures mySeq[index].footprint == old(mySeq[index].footprint) + {newNd};
 ensures mySeq[index].spine == old(mySeq[index].spine) + [newNd];
@@ -435,9 +437,9 @@ mySeq[index].spine := mySeq[index].spine + [newNd];
 }
 
 
-
+/*
 ghost method updateSeq(mySeq:seq<INode>, d:Data, newNd:INode)
-requires |mySeq| == 4;
+requires |mySeq| == 5;
 //requires |mySeq| > 1;
 requires listInv(mySeq);
 
@@ -449,8 +451,8 @@ requires forall i :: 0 <= i < |mySeq|-2 ==>
 	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine;
 
 
-requires mySeq[|mySeq|-1].spine == mySeq[|mySeq|-1..];
-requires validSeqCond(mySeq[|mySeq|-1..]);
+//requires mySeq[|mySeq|-1].spine == mySeq[|mySeq|-1..];
+//requires validSeqCond(mySeq[|mySeq|-1..]);
 	
 requires mySeq[|mySeq|-2].footprint + {newNd} == 
 	{mySeq[|mySeq|-2]} + mySeq[|mySeq|-1].footprint;
@@ -463,7 +465,7 @@ requires mySeq[|mySeq|-2].tailContents + [d] ==
 
 
 modifies mySeq;
-
+/*
 ensures mySeq[0].footprint == old(mySeq[0].footprint) + {newNd};
 ensures mySeq[0].spine == old(mySeq[0].spine) + [newNd];
 ensures mySeq[0].tailContents == 
@@ -471,6 +473,7 @@ ensures mySeq[0].tailContents ==
 
 ensures validSeqCond(mySeq);
 ensures mySeq[0].Valid();
+*/
 {
 
 ghost var index := |mySeq|-2;
@@ -513,9 +516,9 @@ updateCurIndex(mySeq, index, d, newNd);
 index := index - 1;
 }
 
-assert validSeqLemma(mySeq);
+//assert validSeqLemma(mySeq);
 
 }
-
+*/
 
 }
