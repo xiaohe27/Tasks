@@ -405,6 +405,7 @@ ensures forall i :: 0 <= i < index-1 ==>
 	&& mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
 	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine;
 
+
 ensures mySeq[index].spine == mySeq[index..];
 
 ensures validSeqCond(mySeq[index..]);
@@ -422,7 +423,7 @@ mySeq[index].spine := mySeq[index].spine + [newNd];
 }
 
 
-/*
+
 ghost method updateSeq(mySeq:seq<INode>, mid:int, 
 			d:Data, newNd:INode)
 requires mySeq != [];
@@ -462,9 +463,6 @@ ensures mySeq[0].Valid();
 {
 ghost var index := mid - 1;
 
-updateCurIndex(mySeq, index, d, newNd);
-
-/*
 while(index >= 0)
 invariant -1 <= index <= mid - 1;
 invariant listInv(mySeq);
@@ -498,11 +496,11 @@ updateCurIndex(mySeq, index, d, newNd);
 
 index := index - 1;
 }
-*/
+
 //assert validSeqLemma(mySeq);
 
 }
-*/
+
 
 
 }
