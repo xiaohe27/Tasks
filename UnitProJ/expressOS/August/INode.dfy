@@ -426,7 +426,7 @@ mySeq[index].spine := mySeq[index].spine + [newNd];
 
 ghost method updateSeq(mySeq:seq<INode>, mid:int, 
 			d:Data, newNd:INode)
-requires |mySeq| == 2;
+requires |mySeq| == 3;
 //requires |mySeq| > 1;
 requires listInv(mySeq);
 
