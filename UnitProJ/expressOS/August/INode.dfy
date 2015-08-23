@@ -378,6 +378,8 @@ ghost method updateCurIndex(mySeq:seq<INode>, index:int,
 requires 0 <= index <= |mySeq| - 2;
 requires listInv(mySeq);
 
+requires forall nd :: nd in mySeq[0..index+1] ==> newNd !in nd.footprint;
+
 requires forall i :: 0 <= i < index ==>
 	   mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
 	&& mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
@@ -398,7 +400,10 @@ requires mySeq[index].tailContents + [d] ==
 
 modifies mySeq[index];
 
+
 ensures listInv(mySeq);
+
+ensures forall nd :: nd in mySeq[0..index] ==> newNd !in nd.footprint;
 
 ensures forall i :: 0 <= i < index-1 ==>
 	   mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
@@ -432,8 +437,11 @@ mySeq[index].spine := mySeq[index].spine + [newNd];
 
 
 ghost method updateSeq(mySeq:seq<INode>, d:Data, newNd:INode)
-requires |mySeq| > 1;
+requires |mySeq| == 4;
+//requires |mySeq| > 1;
 requires listInv(mySeq);
+
+requires forall nd :: nd in mySeq[0..|mySeq|-1] ==> newNd !in nd.footprint;
 
 requires forall i :: 0 <= i < |mySeq|-2 ==>
 	   mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
@@ -471,6 +479,9 @@ while(index >= 0)
 invariant -1 <= index <= |mySeq|-2;
 
 invariant listInv(mySeq);
+
+invariant forall nd :: nd in mySeq[0..index+1] ==> newNd !in nd.footprint;
+
 invariant forall i :: 0 <= i < index ==>
 	   mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
 	&& mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
