@@ -133,16 +133,24 @@ tmpNd.next := newNd;
 
 
 ghost var myNd := this;
+ghost var tmpSet: set<INode>;
+tmpSet := {};
+
 while(myNd != tmpNd)
 invariant forall nd :: nd in (footprint - {tmpNd}) ==> nd.good();
 invariant myNd in footprint;
 invariant tmpNd in myNd.footprint;
 invariant myNd != tmpNd ==> myNd.good();
 
+invariant tmpSet == old(footprint) - myNd.footprint;
 invariant newNd.Valid() && tmpNd.next == newNd;
+
 decreases myNd.footprint;
 {
+tmpSet := tmpSet + {myNd};
+
 myNd := myNd.next;
+
 }
 
 
