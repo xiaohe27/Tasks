@@ -51,7 +51,7 @@ else
 next.allVLemma()
 }
 
-
+/*
 predicate canGoto(node:INode)
 requires Valid();
 reads this, footprint;
@@ -72,7 +72,7 @@ else
 footprint == {this} + next.footprint &&
 next.gotoLemma()
 }
-
+*/
 
 constructor init(d:Data) 
 modifies this;
@@ -131,17 +131,19 @@ assert allVLemma();
 
 tmpNd.next := newNd;
 
-/*
+
 ghost var myNd := this;
 while(myNd != tmpNd)
 invariant forall nd :: nd in (footprint - {tmpNd}) ==> nd.good();
 invariant myNd in footprint;
+invariant tmpNd in myNd.footprint;
 invariant myNd != tmpNd ==> myNd.good();
+decreases myNd.footprint;
 {
 myNd := myNd.next;
 }
 
-*/
+
 
 }
 
