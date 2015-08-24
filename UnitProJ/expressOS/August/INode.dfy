@@ -130,7 +130,29 @@ tmpNd.next := node;
 
 ghost var tmpSeq := spine + [node];
 
-//updateSeq(spine, d, node);
+assert listInv(tmpSeq);
+
+assert forall i :: 0 <= i < |tmpSeq|-2 ==>
+	   tmpSeq[i].footprint == {tmpSeq[i]} + tmpSeq[i+1].footprint
+	&& tmpSeq[i].tailContents == [tmpSeq[i+1].data] + tmpSeq[i+1].tailContents
+	&& tmpSeq[i].spine == [tmpSeq[i]] + tmpSeq[i+1].spine;
+
+
+assert tmpSeq[|tmpSeq|-1].spine == tmpSeq[|tmpSeq|-1..];
+assert tmpSeq[|tmpSeq|-1].Valid();
+assert tmpSeq[|tmpSeq|-1].next == null;
+
+assert tmpSeq[|tmpSeq|-2].footprint + {node} == 
+	{tmpSeq[|tmpSeq|-2]} + tmpSeq[|tmpSeq|-1].footprint;
+
+assert tmpSeq[|tmpSeq|-2].spine + [node] == 
+	[tmpSeq[|tmpSeq|-2]] + tmpSeq[|tmpSeq|-1].spine;
+
+assert tmpSeq[|tmpSeq|-2].tailContents + [d] == 
+	[tmpSeq[|tmpSeq|-1].data] + tmpSeq[|tmpSeq|-1].tailContents;
+
+
+updateSeq(tmpSeq, d, node);
 
 }
 
@@ -245,7 +267,7 @@ listCond(mySeq)
 
 //===============================================
 
-/*
+
 ghost method updateCurIndex(mySeq:seq<INode>, index:int,
 			d:Data, newNd:INode)
 requires 0 <= index <= |mySeq| - 2;
@@ -386,7 +408,7 @@ index := index - 1;
 }
 
 }
-*/
+
 
 }
 
