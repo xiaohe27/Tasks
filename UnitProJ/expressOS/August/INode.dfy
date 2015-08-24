@@ -220,7 +220,6 @@ predicate listCond(mySeq: seq<INode>)
 reads mySeq, (set nd | nd in mySeq);
 {
 null !in mySeq && (forall nd :: nd in mySeq ==> nd in nd.footprint) &&
-allDiff(mySeq) &&
 (forall i :: 0 <= i < |mySeq|-1 ==> mySeq[i].next == mySeq[i+1])
 && (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint)
 }
