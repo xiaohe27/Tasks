@@ -116,7 +116,7 @@ assert ValidLemma();
 
 while(tmpNd.next != null)
 invariant tmpNd != null && tmpNd.Valid();
-invariant listInv(spine);
+invariant listCond(spine);
 invariant index == |this.footprint| - |tmpNd.footprint|;
 invariant tmpNd == spine[index];
 decreases tmpNd.footprint;
@@ -128,7 +128,7 @@ index := index + 1;
 
 tmpNd.next := node;
 
-spine := spine + [node];
+ghost var tmpSeq := spine + [node];
 
 //updateSeq(spine, d, node);
 
@@ -245,7 +245,7 @@ listCond(mySeq)
 
 //===============================================
 
-
+/*
 ghost method updateCurIndex(mySeq:seq<INode>, index:int,
 			d:Data, newNd:INode)
 requires 0 <= index <= |mySeq| - 2;
@@ -386,7 +386,7 @@ index := index - 1;
 }
 
 }
-
+*/
 
 }
 
