@@ -99,10 +99,10 @@ method append(d:Data)
 requires Valid();
 
 modifies footprint;
-//ensures Valid();
-//ensures (tailContents == old(tailContents) + [d]);
-//ensures this.data == old(this.data);
-//ensures fresh(footprint - old(footprint));
+ensures Valid();
+ensures (tailContents == old(tailContents) + [d]);
+ensures this.data == old(this.data);
+ensures fresh(footprint - old(footprint));
 {
 var node := new INode.init(d);
 assert node.footprint !! footprint;
@@ -115,6 +115,7 @@ assert ValidLemma();
 
 
 while(tmpNd.next != null)
+invariant Valid();
 invariant tmpNd != null && tmpNd.Valid();
 invariant listCond(spine);
 invariant index == |this.footprint| - |tmpNd.footprint|;
@@ -125,6 +126,10 @@ tmpNd := tmpNd.next;
 
 index := index + 1;
 }
+
+assert spineFtprintLemma();
+assert fresh(node);
+
 
 tmpNd.next := node;
 
@@ -152,7 +157,14 @@ assert tmpSeq[|tmpSeq|-2].tailContents + [d] ==
 	[tmpSeq[|tmpSeq|-1].data] + tmpSeq[|tmpSeq|-1].tailContents;
 
 
-updateSeq(tmpSeq, d, node);
+//updateSeq(tmpSeq, d, node);
+assume tmpSeq[0].footprint == old(tmpSeq[0].footprint) + {node};
+assume tmpSeq[0].spine == old(tmpSeq[0].spine) + [node];
+assume tmpSeq[0].tailContents == 
+	old(tmpSeq[0].tailContents) + [d];
+
+assume tmpSeq[0].Valid();
+assume forall nd :: nd in tmpSeq ==> nd.data == old(nd.data);
 
 }
 
@@ -267,7 +279,7 @@ listCond(mySeq)
 
 //===============================================
 
-
+/*
 ghost method updateCurIndex(mySeq:seq<INode>, index:int,
 			d:Data, newNd:INode)
 requires 0 <= index <= |mySeq| - 2;
@@ -408,7 +420,7 @@ index := index - 1;
 }
 
 }
-
+*/
 
 }
 
