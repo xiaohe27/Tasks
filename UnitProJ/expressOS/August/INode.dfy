@@ -42,7 +42,7 @@ good()
 && (next != null ==> next.Valid())
 }
 
-/*
+
 predicate ValidLemma()
 requires Valid();
 reads this, footprint;
@@ -75,7 +75,7 @@ ensures fresh(footprint - {this});
     spine := [this];
 }
 
-
+/*
 method preAppend(d:Data) returns (node:INode)
 requires Valid();
 ensures node != null && node.Valid();
@@ -94,12 +94,12 @@ return r;
 }
 */
 
-/*
+
 method append(d:Data)
 requires Valid();
 
 modifies footprint;
-ensures Valid();
+//ensures Valid();
 //ensures (tailContents == old(tailContents) + [d]);
 //ensures this.data == old(this.data);
 //ensures fresh(footprint - old(footprint));
@@ -111,10 +111,12 @@ var tmpNd := this;
 ghost var index := 0;
 
 assert ndValid2ListValidLemma();
+assert ValidLemma();
+
 
 while(tmpNd.next != null)
 invariant tmpNd != null && tmpNd.Valid();
-invariant validSeqCond(spine);
+invariant listInv(spine);
 invariant index == |this.footprint| - |tmpNd.footprint|;
 invariant tmpNd == spine[index];
 decreases tmpNd.footprint;
@@ -131,7 +133,7 @@ spine := spine + [node];
 //updateSeq(spine, d, node);
 
 }
-*/
+
 
 
 
@@ -193,6 +195,7 @@ ensures forall nd :: nd in mySeq ==>
 if mySeq == [] then {} else getFtprint(mySeq[0]) + sumAllFtprint(mySeq[1..])
 }
 
+/*
 predicate allV(myNode:INode)
 reads myNode, getFtprint(myNode);
 requires myNode != null && myNode.Valid();
@@ -207,7 +210,7 @@ else
 	myNode.footprint == {myNode} + myNode.next.footprint &&
 allV(myNode.next)
 }
-
+*/
 
 ///////////////////////////////////////////
 
@@ -283,7 +286,7 @@ ensures mySeq[index].tailContents ==
 ensures mySeq[index].spine == mySeq[index..];
 
 ensures mySeq[index].Valid();
-ensures validSeqCond(mySeq[index..]);
+//ensures validSeqCond(mySeq[index..]);
 
 ensures index > 0 ==> (mySeq[index-1].footprint + {newNd} == 
 	{mySeq[index-1]} + mySeq[index].footprint &&
@@ -301,12 +304,12 @@ mySeq[index].footprint := {mySeq[index]} + mySeq[index+1].footprint;
 
 mySeq[index].spine := [mySeq[index]] + mySeq[index+1].spine;
 
-assert mySeq[index].ndValid2ListValidLemma();
+//assert mySeq[index].ndValid2ListValidLemma();
 }
 
 
 
-
+/*
 ghost method updateSeq(mySeq:seq<INode>, d:Data, newNd:INode)
 requires |mySeq| > 1;
 requires listInv(mySeq);
@@ -383,7 +386,7 @@ index := index - 1;
 }
 
 }
-
+*/
 
 }
 
