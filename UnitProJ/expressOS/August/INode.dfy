@@ -42,6 +42,7 @@ good()
 && (next != null ==> next.Valid())
 }
 
+/*
 predicate ValidLemma()
 requires Valid();
 reads this, footprint;
@@ -91,6 +92,7 @@ r.spine := [r] + spine;
 
 return r;
 }
+*/
 
 /*
 method append(d:Data)
@@ -108,9 +110,11 @@ assert node.footprint !! footprint;
 var tmpNd := this;
 ghost var index := 0;
 
+assert ndValid2ListValidLemma();
+
 while(tmpNd.next != null)
 invariant tmpNd != null && tmpNd.Valid();
-invariant listCond(spine);
+invariant validSeqCond(spine);
 invariant index == |this.footprint| - |tmpNd.footprint|;
 invariant tmpNd == spine[index];
 decreases tmpNd.footprint;
@@ -124,18 +128,16 @@ tmpNd.next := node;
 
 spine := spine + [node];
 
-updateSeq(spine, |spine|-1);
-assert ValidLemma();
-
+//updateSeq(spine, d, node);
 
 }
-
 */
 
 
 
 
-/*
+
+
 predicate spineFtprintLemma()
 requires Valid();
 reads this, footprint;
@@ -149,6 +151,8 @@ spine == [this] + next.spine
 && footprint == {this} + next.footprint
 && next.spineFtprintLemma())
 }
+
+
 
 predicate ndValid2ListValidLemma()
 requires Valid();
@@ -171,11 +175,8 @@ spine == [this] + next.spine
 && next.ndValid2ListValidLemma())
 }
 
-*/
 
 
-
-}
 
 
 function getFtprint(nd:INode): set<INode>
@@ -261,8 +262,9 @@ requires mySeq[index].spine + [newNd] ==
 requires mySeq[index].tailContents + [d] == 
 	[mySeq[index+1].data] + mySeq[index+1].tailContents;
 
-requires mySeq[index+1].Valid();
 requires mySeq[index+1].spine == mySeq[index+1..];
+
+requires mySeq[index+1].Valid();
 
 modifies mySeq[index];
 
@@ -278,6 +280,11 @@ ensures mySeq[index].spine == old(mySeq[index].spine) + [newNd];
 ensures mySeq[index].tailContents == 
 	old(mySeq[index].tailContents) + [d];
 
+ensures mySeq[index].spine == mySeq[index..];
+
+ensures mySeq[index].Valid();
+ensures validSeqCond(mySeq[index..]);
+
 ensures index > 0 ==> (mySeq[index-1].footprint + {newNd} == 
 	{mySeq[index-1]} + mySeq[index].footprint &&
 	mySeq[index-1].spine + [newNd] == 
@@ -285,15 +292,16 @@ ensures index > 0 ==> (mySeq[index-1].footprint + {newNd} ==
 	mySeq[index-1].tailContents + [d] == 
 	[mySeq[index].data] + mySeq[index].tailContents);
 
-ensures mySeq[index].Valid();
 
-ensures mySeq[index].spine == mySeq[index..];
+
 {
 mySeq[index].tailContents := [mySeq[index+1].data] + mySeq[index+1].tailContents;
 
 mySeq[index].footprint := {mySeq[index]} + mySeq[index+1].footprint;
 
 mySeq[index].spine := [mySeq[index]] + mySeq[index+1].spine;
+
+assert mySeq[index].ndValid2ListValidLemma();
 }
 
 
@@ -335,8 +343,12 @@ ensures mySeq[0].Valid();
 
 ghost var index := |mySeq|-2;
 
+
 while(index >= 0)
 invariant -1 <= index <= |mySeq|-2;
+
+invariant mySeq[|mySeq|-1].Valid();
+invariant mySeq[|mySeq|-1].next == null;	
 
 invariant listInv(mySeq);
 invariant forall i :: 0 <= i < index ==>
@@ -371,4 +383,8 @@ index := index - 1;
 }
 
 }
+
+
+}
+
 
