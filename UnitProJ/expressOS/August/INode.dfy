@@ -42,7 +42,7 @@ good()
 && (next != null ==> next.Valid())
 }
 
-
+/*
 predicate ValidLemma()
 requires Valid();
 reads this, footprint;
@@ -75,7 +75,7 @@ ensures fresh(footprint - {this});
     spine := [this];
 }
 
-/*
+
 method preAppend(d:Data) returns (node:INode)
 requires Valid();
 ensures node != null && node.Valid();
@@ -95,6 +95,7 @@ return r;
 */
 
 
+/*
 method append(d:Data)
 requires Valid();
 
@@ -167,12 +168,12 @@ assume tmpSeq[0].Valid();
 assume forall nd :: nd in tmpSeq ==> nd.data == old(nd.data);
 
 }
+*/
 
 
 
 
-
-
+/*
 
 predicate spineFtprintLemma()
 requires Valid();
@@ -211,7 +212,7 @@ spine == [this] + next.spine
 && next.ndValid2ListValidLemma())
 }
 
-
+*/
 
 
 
@@ -279,7 +280,7 @@ listCond(mySeq)
 
 //===============================================
 
-/*
+
 ghost method updateCurIndex(mySeq:seq<INode>, index:int,
 			d:Data, newNd:INode)
 requires 0 <= index <= |mySeq| - 2;
@@ -305,6 +306,8 @@ requires mySeq[index+1].Valid();
 
 modifies mySeq[index];
 
+ensures forall nd :: nd in mySeq ==> nd.data == old(nd.data);
+
 ensures listInv(mySeq);
 
 ensures forall i :: 0 <= i < index-1 ==>
@@ -328,8 +331,6 @@ ensures index > 0 ==> (mySeq[index-1].footprint + {newNd} ==
 	[mySeq[index-1]] + mySeq[index].spine &&
 	mySeq[index-1].tailContents + [d] == 
 	[mySeq[index].data] + mySeq[index].tailContents);
-
-
 
 {
 mySeq[index].tailContents := [mySeq[index+1].data] + mySeq[index+1].tailContents;
@@ -369,6 +370,7 @@ requires mySeq[|mySeq|-2].tailContents + [d] ==
 
 
 modifies mySeq;
+ensures forall nd :: nd in mySeq ==> nd.data == old(nd.data);
 
 ensures mySeq[0].footprint == old(mySeq[0].footprint) + {newNd};
 ensures mySeq[0].spine == old(mySeq[0].spine) + [newNd];
@@ -376,6 +378,7 @@ ensures mySeq[0].tailContents ==
 	old(mySeq[0].tailContents) + [d];
 
 ensures mySeq[0].Valid();
+
 {
 
 ghost var index := |mySeq|-2;
@@ -420,7 +423,7 @@ index := index - 1;
 }
 
 }
-*/
+
 
 }
 
