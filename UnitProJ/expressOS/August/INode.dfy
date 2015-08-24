@@ -47,14 +47,15 @@ requires Valid();
 reads this, footprint;
 ensures ValidLemma();
 ensures |tailContents| == |footprint|-1 == |spine|-1;
-
 ensures forall nd :: nd in spine ==> nd != null && nd.Valid();
 {
-(next == null) ||
-(next.ValidLemma())
+if next == null then (spine == [this])
+else (
+spine == [this] + next.spine 
+&& next.ValidLemma())
 }
 
-/*
+
 constructor init(d:Data) 
 modifies this;
 ensures Valid();
@@ -91,7 +92,7 @@ r.spine := [r] + spine;
 return r;
 }
 
-
+/*
 method append(d:Data)
 requires Valid();
 
@@ -191,8 +192,6 @@ ensures forall nd :: nd in mySeq ==>
 if mySeq == [] then {} else getFtprint(mySeq[0]) + sumAllFtprint(mySeq[1..])
 }
 
-
-
 predicate allV(myNode:INode)
 reads myNode, getFtprint(myNode);
 requires myNode != null && myNode.Valid();
@@ -204,18 +203,8 @@ ensures forall nd :: nd in myNode.footprint ==> nd != null && nd.Valid();
 if (myNode.next == null)
 then myNode.footprint == {myNode}
 else 
+	myNode.footprint == {myNode} + myNode.next.footprint &&
 allV(myNode.next)
-}
-
-predicate seqV(mySeq: seq<INode>)
-requires listCond(mySeq);
-requires mySeq != [] ==> mySeq[0].Valid();
-
-reads mySeq, sumAllFtprint(mySeq);
-ensures seqV(mySeq);
-ensures forall nd :: nd in mySeq ==> nd.Valid(); 
-{
-mySeq == [] || seqV(mySeq[1..])
 }
 
 
@@ -276,7 +265,6 @@ requires mySeq[index+1].Valid();
 requires mySeq[index+1].spine == mySeq[index+1..];
 
 modifies mySeq[index];
-//ensures fresh((set nd | nd in mySeq) - old(set nd | nd in mySeq));
 
 ensures listInv(mySeq);
 
@@ -336,14 +324,12 @@ requires mySeq[|mySeq|-2].tailContents + [d] ==
 
 
 modifies mySeq;
-//modifies mySeq[0..|mySeq|-1];
 
 ensures mySeq[0].footprint == old(mySeq[0].footprint) + {newNd};
 ensures mySeq[0].spine == old(mySeq[0].spine) + [newNd];
 ensures mySeq[0].tailContents == 
 	old(mySeq[0].tailContents) + [d];
 
-//ensures validSeqCond(mySeq);
 ensures mySeq[0].Valid();
 {
 
@@ -379,14 +365,10 @@ invariant -1 <= index < |mySeq|-2 ==> (
 	old(mySeq[index+1].tailContents) + [d]);
 
 {
-//assert mySeq[index] in mySeq[0..|mySeq|-1];
-
 updateCurIndex(mySeq, index, d, newNd);
 
 index := index - 1;
 }
-
-//assert seqV(mySeq);
 
 }
 
