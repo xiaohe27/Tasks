@@ -42,7 +42,7 @@ good()
 && (next != null ==> next.Valid())
 }
 
-/*
+
 predicate ValidLemma()
 requires Valid();
 reads this, footprint;
@@ -75,7 +75,7 @@ ensures fresh(footprint - {this});
     spine := [this];
 }
 
-
+/*
 method preAppend(d:Data) returns (node:INode)
 requires Valid();
 ensures node != null && node.Valid();
@@ -95,14 +95,14 @@ return r;
 */
 
 
-/*
+
 method append(d:Data)
 requires Valid();
 
 modifies footprint;
 ensures Valid();
-ensures (tailContents == old(tailContents) + [d]);
 ensures this.data == old(this.data);
+ensures (tailContents == old(tailContents) + [d]);
 ensures fresh(footprint - old(footprint));
 {
 var node := new INode.init(d);
@@ -116,7 +116,7 @@ assert ValidLemma();
 
 
 while(tmpNd.next != null)
-invariant Valid();
+//invariant Valid();
 invariant tmpNd != null && tmpNd.Valid();
 invariant listCond(spine);
 invariant index == |this.footprint| - |tmpNd.footprint|;
@@ -129,13 +129,14 @@ index := index + 1;
 }
 
 assert spineFtprintLemma();
-assert fresh(node);
+//assert fresh(node);
 
 
 tmpNd.next := node;
 
 ghost var tmpSeq := spine + [node];
 
+/*
 assert listInv(tmpSeq);
 
 assert forall i :: 0 <= i < |tmpSeq|-2 ==>
@@ -157,8 +158,10 @@ assert tmpSeq[|tmpSeq|-2].spine + [node] ==
 assert tmpSeq[|tmpSeq|-2].tailContents + [d] == 
 	[tmpSeq[|tmpSeq|-1].data] + tmpSeq[|tmpSeq|-1].tailContents;
 
+*/
+updateSeq(tmpSeq, d, node);
 
-//updateSeq(tmpSeq, d, node);
+/*
 assume tmpSeq[0].footprint == old(tmpSeq[0].footprint) + {node};
 assume tmpSeq[0].spine == old(tmpSeq[0].spine) + [node];
 assume tmpSeq[0].tailContents == 
@@ -166,14 +169,14 @@ assume tmpSeq[0].tailContents ==
 
 assume tmpSeq[0].Valid();
 assume forall nd :: nd in tmpSeq ==> nd.data == old(nd.data);
-
-}
 */
+}
 
 
 
 
-/*
+
+
 
 predicate spineFtprintLemma()
 requires Valid();
@@ -212,7 +215,7 @@ spine == [this] + next.spine
 && next.ndValid2ListValidLemma())
 }
 
-*/
+
 
 
 
