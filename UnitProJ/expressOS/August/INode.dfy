@@ -174,7 +174,7 @@ ensures forall nd :: nd in mySeq ==> nd.Valid();
 mySeq == [] || seqV(mySeq[1..])
 }
 
-
+/*
 predicate spineFtprintLemma()
 requires Valid();
 reads this, footprint;
@@ -210,6 +210,7 @@ spine == [this] + next.spine
 && next.ndValid2ListValidLemma())
 }
 
+*/
 ///////////////////////////////////////////
 
 predicate listInv(mySeq: seq<INode>)
