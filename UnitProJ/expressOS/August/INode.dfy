@@ -309,7 +309,7 @@ mySeq[index].spine := [mySeq[index]] + mySeq[index+1].spine;
 
 
 
-/*
+
 ghost method updateSeq(mySeq:seq<INode>, d:Data, newNd:INode)
 requires |mySeq| > 1;
 requires listInv(mySeq);
@@ -386,7 +386,7 @@ index := index - 1;
 }
 
 }
-*/
+
 
 }
 
