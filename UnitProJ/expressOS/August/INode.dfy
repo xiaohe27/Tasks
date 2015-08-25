@@ -95,17 +95,17 @@ return r;
 */
 
 
-/*
+
 method append(d:Data)
 requires Valid();
 
 modifies footprint;
-/*
+
 ensures Valid();
 ensures this.data == old(this.data);
 ensures (tailContents == old(tailContents) + [d]);
 ensures fresh(footprint - old(footprint));
-*/
+
 {
 var node := new INode.init(d);
 assert node.footprint !! footprint;
@@ -118,7 +118,6 @@ assert ValidLemma();
 
 
 while(tmpNd.next != null)
-//invariant Valid();
 invariant tmpNd != null && tmpNd.Valid();
 invariant listCond(spine);
 invariant index == |this.footprint| - |tmpNd.footprint|;
@@ -130,28 +129,12 @@ tmpNd := tmpNd.next;
 index := index + 1;
 }
 
-assert spineFtprintLemma();
-//assert fresh(node);
-
-
 tmpNd.next := node;
 
-ghost var mySeq := spine + [node];
-
-assert mySeq[|mySeq|-2].footprint + {newNd} == 
-	{mySeq[|mySeq|-2]} + mySeq[|mySeq|-1].footprint;
-
-assert mySeq[|mySeq|-2].spine + [newNd] == 
-	[mySeq[|mySeq|-2]] + mySeq[|mySeq|-1].spine;
-
-assert mySeq[|mySeq|-2].tailContents + [d] == 
-	[mySeq[|mySeq|-1].data] + mySeq[|mySeq|-1].tailContents;
-
-
-//updateSeq(tmpSeq, d, node);
+updateSeq(spine, d, node);
 
 }
-*/
+
 
 
 
