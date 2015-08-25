@@ -181,15 +181,11 @@ final class EnforceTestEnforcementMonitor_Set extends com.runtimeverification.rv
 }
 
 class EnforceTestEnforcementMonitor extends com.runtimeverification.rvmonitor.java.rt.tablebase.AbstractAtomicMonitor implements Cloneable, com.runtimeverification.rvmonitor.java.rt.RVMObject {
-		protected Object clone() {
-		try {
-			EnforceTestEnforcementMonitor ret = (EnforceTestEnforcementMonitor) super.clone();
- 			ret.pairValue = new AtomicInteger(pairValue.get());
-			return ret;
-		}
-		catch (CloneNotSupportedException e) {
-			throw new InternalError(e.toString());
-		}
+	protected Object clone() {
+		
+		EnforceTestEnforcementMonitor ret = this.clone(this);
+		return ret;
+		
 	}
 
         private EnforceTestEnforcementMonitor clone(EnforceTestEnforcementMonitor old) {
@@ -207,6 +203,7 @@ class EnforceTestEnforcementMonitor extends com.runtimeverification.rvmonitor.ja
 
 	EnforceTestEnforcementMonitor(EnforceTestEnforcementMonitor old) {
 		this.pairValue = new AtomicInteger(old.pairValue.get()) ;
+		this.Prop_1_Category_nonfail = old.Prop_1_Category_nonfail;
 	}
 
 	EnforceTestEnforcementMonitor() {
