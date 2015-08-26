@@ -1,0 +1,12 @@
+Difficulties:
+
+1. Accuracy of performance measure
+When I try to measure the performance (w.r.t. execution time) of a program which reads a large amount of data from hard disk, 
+I intended to have multiple tests with the same parameters to obtain more convincing statistics. 
+
+However, due to some optimization of hardware etc. (like disk caches), the first execution will cost significantly more time, which affects the reliability of the experiments.
+
+My temporary solution is using some Unix commands after each run to clean all the caches, but I wonder whether there exists some tools, preferably cross-platforms ones, that can do this job conveniently.
+
+2. Test case generation
+In the past, when I developed a piece of code, I only performed a limited number of tests. Therefore, many corner-cases may be missed. The insufficient tests increases the risk of failures when feeding with certain inputs. The reason that I am often not able to provide good coverage of tests is my limited skills in generating test cases. What I did is picking up some tests in mind and wrote some ad-hoc 
