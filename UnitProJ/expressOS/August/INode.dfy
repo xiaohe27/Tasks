@@ -312,7 +312,6 @@ ensures mySeq[index].tailContents ==
 ensures mySeq[index].spine == mySeq[index..] + [newNd];
 
 ensures mySeq[index].Valid();
-//ensures validSeqCond(mySeq[index..]);
 
 ensures index > 0 ==> (mySeq[index-1].footprint + {newNd} == 
 	{mySeq[index-1]} + mySeq[index].footprint &&
@@ -340,8 +339,6 @@ mySeq[index].footprint := {mySeq[index]} + newNd.footprint;
 mySeq[index].spine := [mySeq[index]] + newNd.spine;
 }
 
-
-//assert mySeq[index].ndValid2ListValidLemma();
 }
 
 
