@@ -56,7 +56,6 @@ spine == [this] + next.spine
 && next.ValidLemma())
 }
 
-
 constructor init(d:Data) 
 modifies this;
 ensures Valid();
@@ -76,6 +75,59 @@ ensures fresh(footprint - {this});
 }
 
 
+method insertAt(d:Data, i:int) returns (newNd: INode) 
+requires 0 < i <= |tailContents|;
+requires Valid();
+modifies footprint;
+/*
+ensures Valid();
+ensures this.data == old(this.data);
+ensures tailContents == old(tailContents[0..i-1]) + [d] + old(tailContents[i-1..]);
+ensures footprint == old(footprint) + {newNd};
+ensures fresh(newNd);
+*/
+{
+var curNd := this;
+var curIndex := 0;
+
+assert ValidLemma();
+assert ndValid2ListValidLemma();
+
+while (curIndex < i-1)
+invariant 0 <= curIndex < i;
+invariant curNd != null && curNd.Valid();
+
+invariant |curNd.tailContents| + curIndex == |tailContents|;
+
+invariant curNd.next != null;
+invariant curNd == spine[curIndex];
+{
+curNd := curNd.next;
+curIndex := curIndex + 1;
+}
+
+}
+
+
+predicate ndValid2ListValidLemma()
+requires Valid();
+reads this, footprint;
+
+ensures ndValid2ListValidLemma();
+
+ensures forall nd :: nd in footprint ==> nd != null && nd.footprint <= footprint;
+
+ensures validSeqCond(spine);
+{
+if next == null then (spine == [this] && footprint == {this}
+					&& tailContents == [])
+else (
+this !in next.footprint &&
+spine == [this] + next.spine 
+&& footprint == {this} + next.footprint
+&& tailContents == [next.data] + next.tailContents
+&& next.ndValid2ListValidLemma())
+}
 
 
 
@@ -92,6 +144,9 @@ spine == [this] + next.spine
 && footprint == {this} + next.footprint
 && next.spineFtprintLemma())
 }
+
+
+
 
 function getFtprint(nd:INode): set<INode>
 reads nd;
@@ -129,6 +184,15 @@ null !in mySeq && (forall nd :: nd in mySeq ==> nd in nd.footprint) &&
 && (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint)
 }
 
+predicate validSeqCond(mySeq: seq<INode>)
+reads mySeq, (set nd | nd in mySeq);
+{
+listCond(mySeq) 
+&& (mySeq != [] ==> mySeq[|mySeq|-1].next == null
+&& mySeq[|mySeq|-1].footprint == {mySeq[|mySeq|-1]}
+&& mySeq[|mySeq|-1].tailContents == []
+&& mySeq[|mySeq|-1].spine == [mySeq[|mySeq|-1]])
+}
 //===============================================
 
 
