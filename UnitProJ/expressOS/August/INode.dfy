@@ -75,68 +75,6 @@ ensures fresh(footprint - {this});
     spine := [this];
 }
 
-/*
-method preAppend(d:Data) returns (node:INode)
-requires Valid();
-ensures node != null && node.Valid();
-ensures node.data == d && node.next == this;
-ensures node.tailContents == [this.data] + this.tailContents;
-{
-var r := new INode.init(d);
-
-r.next := this;
-
-r.footprint := {r} + footprint;
-r.tailContents := [this.data] + this.tailContents;
-r.spine := [r] + spine;
-
-return r;
-}
-*/
-
-
-
-method append(d:Data)
-requires Valid();
-
-modifies footprint;
-
-ensures Valid();
-ensures this.data == old(this.data);
-ensures (tailContents == old(tailContents) + [d]);
-ensures fresh(footprint - old(footprint));
-
-{
-var node := new INode.init(d);
-assert node.footprint !! footprint;
-
-var tmpNd := this;
-ghost var index := 0;
-
-assert ndValid2ListValidLemma();
-assert ValidLemma();
-
-
-while(tmpNd.next != null)
-invariant tmpNd != null && tmpNd.Valid();
-invariant listCond(spine);
-invariant index == |this.footprint| - |tmpNd.footprint|;
-invariant tmpNd == spine[index];
-decreases tmpNd.footprint;
-{
-tmpNd := tmpNd.next;
-
-index := index + 1;
-}
-
-tmpNd.next := node;
-
-updateSeq(spine, d, node);
-
-}
-
-
-
 
 
 
@@ -155,33 +93,6 @@ spine == [this] + next.spine
 && next.spineFtprintLemma())
 }
 
-
-
-predicate ndValid2ListValidLemma()
-requires Valid();
-reads this, footprint;
-
-ensures ndValid2ListValidLemma();
-
-ensures forall nd :: nd in footprint ==> nd != null &&
-							nd.footprint <= footprint;
-
-ensures validSeqCond(spine);
-{
-if next == null then (spine == [this] && footprint == {this}
-					&& tailContents == [])
-else (
-this !in next.footprint &&
-spine == [this] + next.spine 
-&& footprint == {this} + next.footprint
-&& tailContents == [next.data] + next.tailContents
-&& next.ndValid2ListValidLemma())
-}
-
-
-
-
-
 function getFtprint(nd:INode): set<INode>
 reads nd;
 {
@@ -196,22 +107,6 @@ ensures forall nd :: nd in mySeq ==>
 if mySeq == [] then {} else getFtprint(mySeq[0]) + sumAllFtprint(mySeq[1..])
 }
 
-/*
-predicate allV(myNode:INode)
-reads myNode, getFtprint(myNode);
-requires myNode != null && myNode.Valid();
-decreases myNode.footprint;
-ensures allV(myNode);
-ensures forall nd :: nd in myNode.footprint ==> nd != null && nd.Valid();
-{
-
-if (myNode.next == null)
-then myNode.footprint == {myNode}
-else 
-	myNode.footprint == {myNode} + myNode.next.footprint &&
-allV(myNode.next)
-}
-*/
 
 ///////////////////////////////////////////
 
@@ -232,16 +127,6 @@ null !in mySeq && (forall nd :: nd in mySeq ==> nd in nd.footprint) &&
 	&& mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
 	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine)
 && (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint)
-}
-
-predicate validSeqCond(mySeq: seq<INode>)
-reads mySeq, (set nd | nd in mySeq);
-{
-listCond(mySeq) 
-&& (mySeq != [] ==> mySeq[|mySeq|-1].next == null
-&& mySeq[|mySeq|-1].footprint == {mySeq[|mySeq|-1]}
-&& mySeq[|mySeq|-1].tailContents == []
-&& mySeq[|mySeq|-1].spine == [mySeq[|mySeq|-1]])
 }
 
 //===============================================
@@ -341,9 +226,7 @@ mySeq[index].spine := [mySeq[index]] + newNd.spine;
 
 }
 
-
-
-
+/*
 ghost method updateSeq(mySeq:seq<INode>, d:Data, newNd:INode)
 requires mySeq != [];
 requires listInv(mySeq);
@@ -439,7 +322,7 @@ index := index - 1;
 }
 
 }
-
+*/
 
 }
 
