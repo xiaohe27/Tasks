@@ -1,0 +1,13 @@
+If an additional arg newPos:int is added, then verified.
+Otherwise, it'll report one error.
+
+However, if we only analyze the path that caused the error, 
+no error is found!
+
+Dafny sucks!!!
+For a precond that requires some var 'v' to be 
+0 <= v <= N, it reports one error
+
+However, the same method with condition 0 <= v < N, and with v == N,
+both can be verified independently!
+
