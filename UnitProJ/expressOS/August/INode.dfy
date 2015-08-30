@@ -200,7 +200,7 @@ listCond(mySeq)
 
 
 ghost method updateCurIndex(mySeq:seq<INode>, index:int,
-			d:Data, newNd:INode, newPos:int)
+			d:Data, newNd:INode)
 requires mySeq != [];
 
 requires 0 <= index <= |mySeq| - 1;
@@ -252,7 +252,7 @@ requires index < |mySeq| - 1 ==> mySeq[index+1].Valid();
 modifies mySeq[index];
 
 ensures newNd !in mySeq;
-ensures newNd != null && newNd.Valid();
+ensures newNd != null && newNd.Valid() && newNd.data == d;
 ensures newNd.footprint !! (set nd | nd in mySeq);
 
 ensures mySeq[|mySeq|-1].next == newNd;
@@ -277,20 +277,17 @@ ensures mySeq[index].tailContents ==
 
 ensures mySeq[index].spine == mySeq[index..] + newNd.spine;
 
-
 ensures mySeq[index].Valid();
 
-ensures index > 0 ==> (mySeq[index-1].footprint + {newNd} == 
-	{mySeq[index-1]} + mySeq[index].footprint &&
+ensures index > 0 ==> mySeq[index-1].footprint + {newNd} == 
+	{mySeq[index-1]} + mySeq[index].footprint;
 
-	mySeq[index-1].spine[0..|mySeq|-index+1] + [newNd]
- + mySeq[index-1].spine[|mySeq|-index+1..] == [mySeq[index-1]] + mySeq[index].spine 
+ensures index > 0 ==> mySeq[index-1].spine[0..|mySeq|-index+1] + [newNd]
+ + mySeq[index-1].spine[|mySeq|-index+1..] == [mySeq[index-1]] + mySeq[index].spine;
 	
-     &&	mySeq[index-1].tailContents[0..|mySeq|-index] + [d]
+ensures index > 0 ==> mySeq[index-1].tailContents[0..|mySeq|-index] + [d]
  + mySeq[index-1].tailContents[|mySeq|-index..] == 
- [mySeq[index].data] + mySeq[index].tailContents 
-
- );
+ [mySeq[index].data] + mySeq[index].tailContents;
 
 {
 if (index < |mySeq|-1)
