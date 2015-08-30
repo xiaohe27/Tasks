@@ -203,9 +203,7 @@ ghost method updateCurIndex(mySeq:seq<INode>, index:int,
 			d:Data, newNd:INode)
 requires mySeq != [];
 
-//requires 0 <= index <= |mySeq| - 1;
-//requires index == |mySeq| - 1;
-requires 0 <= index < |mySeq| - 1;
+requires 0 <= index <= |mySeq| - 1;
 
 requires listInv(mySeq);
 
@@ -292,7 +290,7 @@ ensures index > 0 ==> mySeq[index-1].tailContents[0..|mySeq|-index] + [d]
  [mySeq[index].data] + mySeq[index].tailContents;
 
 {
-if (index < |mySeq|-1)
+if (0 <= index < |mySeq|-1)
 {
 mySeq[index].tailContents := [mySeq[index+1].data] + mySeq[index+1].tailContents;
 
@@ -301,7 +299,7 @@ mySeq[index].footprint := {mySeq[index]} + mySeq[index+1].footprint;
 mySeq[index].spine := [mySeq[index]] + mySeq[index+1].spine;
 }
 
-else 
+else if (index == |mySeq|-1) 
 {
 mySeq[index].tailContents := [newNd.data] + newNd.tailContents;
 
