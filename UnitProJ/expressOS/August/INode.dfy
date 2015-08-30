@@ -205,6 +205,9 @@ requires mySeq != [];
 requires 0 <= index <= |mySeq| - 1;
 requires listInv(mySeq);
 
+requires |mySeq|-index <= |mySeq[index].spine|;
+requires |mySeq|-index-1 <= |mySeq[index].tailContents|;
+
 requires newNd !in mySeq;
 requires newNd != null && newNd.Valid();
 
@@ -217,7 +220,7 @@ requires index == |mySeq|-1 ==> (mySeq[|mySeq|-1].footprint + {newNd} ==
 	[mySeq[|mySeq|-1]] + newNd.spine
 
 && [d] + mySeq[|mySeq|-1].tailContents == 
-	[newNd.data] + newNd.tailContents);
+	[d] + newNd.tailContents);
 
 
 requires forall i :: 0 <= i < index ==>
