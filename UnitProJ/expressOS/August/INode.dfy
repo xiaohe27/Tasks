@@ -308,6 +308,8 @@ mySeq[index].footprint := {mySeq[index]} + newNd.footprint;
 mySeq[index].spine := [mySeq[index]] + newNd.spine;
 }
 
+//else {assert false;}
+
 }
 
 /*

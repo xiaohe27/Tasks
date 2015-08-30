@@ -198,13 +198,18 @@ listCond(mySeq)
 }
 //===============================================
 
-
+//add additional param 'newPos:int' can make it verified.
+//owise 1 err.
+//both the two branches 'index == |mySeq| - 1'
+//and '0 <= index < |mySeq| - 1' can be verified,
+//but when they combined, it does not work...
 ghost method updateCurIndex(mySeq:seq<INode>, index:int,
 			d:Data, newNd:INode)
 requires mySeq != [];
 
-//requires 0 <= index <= |mySeq| - 1;
-requires index == |mySeq| - 1;
+requires 0 <= index <= |mySeq| - 1;
+//requires index == |mySeq| - 1;
+//requires 0 <= index < |mySeq| - 1;
 
 requires listInv(mySeq);
 
