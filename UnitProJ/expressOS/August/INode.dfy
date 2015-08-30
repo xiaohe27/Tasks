@@ -202,7 +202,13 @@ listCond(mySeq)
 ghost method updateCurIndex(mySeq:seq<INode>, index:int,
 			d:Data, newNd:INode, newPos:int)
 requires mySeq != [];
-requires 0 <= index <= |mySeq| - 1;
+
+//requires 0 <= index <= |mySeq| - 1;
+
+//
+requires 0 <= index < |mySeq| - 1;
+//
+
 requires listInv(mySeq);
 
 requires |mySeq|-index <= |mySeq[index].spine|;
@@ -210,6 +216,7 @@ requires |mySeq|-index-1 <= |mySeq[index].tailContents|;
 
 requires newNd !in mySeq;
 requires newNd != null && newNd.Valid();
+requires newNd.footprint !! (set nd | nd in mySeq);
 
 requires mySeq[|mySeq|-1].next == newNd;
 
@@ -250,6 +257,7 @@ modifies mySeq[index];
 
 ensures newNd !in mySeq;
 ensures newNd != null && newNd.Valid();
+ensures newNd.footprint !! (set nd | nd in mySeq);
 
 ensures mySeq[|mySeq|-1].next == newNd;
 
@@ -262,27 +270,37 @@ ensures forall i :: 0 <= i < index-1 ==>
 	&& mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
 	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine;
 
+
 ensures mySeq[index].footprint == old(mySeq[index].footprint) + {newNd};
 ensures mySeq[index].spine == old(mySeq[index].spine[0..|mySeq|-index]) + [newNd]
  + old(mySeq[index].spine[|mySeq|-index..]);
+
+//
 ensures mySeq[index].tailContents == 
 	old(mySeq[index].tailContents[0..|mySeq|-index-1]) + [d]
  + old(mySeq[index].tailContents[|mySeq|-index-1..]);
 
+//
+
 ensures mySeq[index].spine == mySeq[index..] + newNd.spine;
+
 
 ensures mySeq[index].Valid();
 
+//
 ensures index > 0 ==> (mySeq[index-1].footprint + {newNd} == 
 	{mySeq[index-1]} + mySeq[index].footprint &&
 
 	mySeq[index-1].spine[0..|mySeq|-index+1] + [newNd]
- + mySeq[index-1].spine[|mySeq|-index+1..] == [mySeq[index-1]] + mySeq[index].spine &&
+ + mySeq[index-1].spine[|mySeq|-index+1..] == [mySeq[index-1]] + mySeq[index].spine 
 	
-	mySeq[index-1].tailContents[0..|mySeq|-index] + [d]
+     &&	mySeq[index-1].tailContents[0..|mySeq|-index] + [d]
  + mySeq[index-1].tailContents[|mySeq|-index..] == 
- [mySeq[index].data] + mySeq[index].tailContents);
+ [mySeq[index].data] + mySeq[index].tailContents 
 
+ );
+
+//
 {
 if (index < |mySeq|-1)
 {
