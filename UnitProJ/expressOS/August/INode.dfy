@@ -232,22 +232,22 @@ requires forall i :: 0 <= i < index ==>
 	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine;
 
 
-requires index < |mySeq| - 1 ==> mySeq[index].footprint + {newNd} == 
+requires 0 <= index < |mySeq| - 1 ==> mySeq[index].footprint + {newNd} == 
 	{mySeq[index]} + mySeq[index+1].footprint;
 
-requires index < |mySeq| - 1 ==> mySeq[index].spine[0..|mySeq|-index] + [newNd]
+requires 0 <= index < |mySeq| - 1 ==> mySeq[index].spine[0..|mySeq|-index] + [newNd]
  + mySeq[index].spine[|mySeq|-index..] == [mySeq[index]] + mySeq[index+1].spine;
 
 
-requires index < |mySeq| - 1 ==> mySeq[index].tailContents[0..|mySeq|-index-1] + [d]
- + mySeq[index].tailContents[|mySeq|-index-1..] == 
- [mySeq[index+1].data] + mySeq[index+1].tailContents;
+requires 0 <= index < |mySeq| - 1 ==> mySeq[index].tailContents[0..|mySeq|-index-1] 
+  + [d] + mySeq[index].tailContents[|mySeq|-index-1..] == 
+  [mySeq[index+1].data] + mySeq[index+1].tailContents;
 
 
-requires index < |mySeq| - 1 ==> mySeq[index+1].spine == mySeq[index+1..] +
+requires 0 <= index < |mySeq| - 1 ==> mySeq[index+1].spine == mySeq[index+1..] +
 						newNd.spine;
 
-requires index < |mySeq| - 1 ==> mySeq[index+1].Valid();
+requires 0 <= index < |mySeq| - 1 ==> mySeq[index+1].Valid();
 
 modifies mySeq[index];
 
@@ -279,13 +279,13 @@ ensures mySeq[index].spine == mySeq[index..] + newNd.spine;
 
 ensures mySeq[index].Valid();
 
-ensures index > 0 ==> mySeq[index-1].footprint + {newNd} == 
+ensures 0 < index <= |mySeq| - 1 ==> mySeq[index-1].footprint + {newNd} == 
 	{mySeq[index-1]} + mySeq[index].footprint;
 
-ensures index > 0 ==> mySeq[index-1].spine[0..|mySeq|-index+1] + [newNd]
+ensures 0 < index <= |mySeq| - 1 ==> mySeq[index-1].spine[0..|mySeq|-index+1] + [newNd]
  + mySeq[index-1].spine[|mySeq|-index+1..] == [mySeq[index-1]] + mySeq[index].spine;
 	
-ensures index > 0 ==> mySeq[index-1].tailContents[0..|mySeq|-index] + [d]
+ensures 0 < index <= |mySeq| - 1 ==> mySeq[index-1].tailContents[0..|mySeq|-index] + [d]
  + mySeq[index-1].tailContents[|mySeq|-index..] == 
  [mySeq[index].data] + mySeq[index].tailContents;
 
@@ -346,7 +346,7 @@ ensures forall nd :: nd in mySeq ==> nd.data == old(nd.data);
 
 ensures mySeq[0].footprint == old(mySeq[0].footprint) + {newNd};
 ensures mySeq[0].spine == old(mySeq[0].spine[0..|mySeq|]) + [newNd]
- + old(mySeq[index].spine[|mySeq|..]);
+ + old(mySeq[0].spine[|mySeq|..]);
 
 ensures mySeq[0].tailContents == 
 	old(mySeq[0].tailContents[0..|mySeq|-1]) + [d]
