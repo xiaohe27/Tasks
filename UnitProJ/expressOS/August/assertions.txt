@@ -1,0 +1,58 @@
+UpdateSeq assertions:
+
+//
+assert -1 <= index <= |mySeq|-1;
+
+assert newNd !in mySeq;
+assert newNd != null && newNd.Valid() && newNd.data == d;
+assert newNd.footprint !! (set nd | nd in mySeq);
+
+assert mySeq[|mySeq|-1].next == newNd;
+
+assert index == |mySeq|-1 ==> (mySeq[index].footprint + {newNd} == 
+	{mySeq[index]} + newNd.footprint
+
+&& mySeq[index].spine[0..1] + [newNd] + mySeq[index].spine[1..]  == 
+	[mySeq[index]] + newNd.spine
+
+&& [d] + mySeq[index].tailContents == 
+	[d] + newNd.tailContents);
+
+
+assert listInv(mySeq);
+
+assert forall nd :: nd in mySeq ==> nd.data == old(nd.data);
+
+assert forall i :: 0 <= i < index ==>
+	   mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
+	&& mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
+	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine;
+
+assert index < |mySeq|-1 ==> mySeq[index+1].spine == 
+					mySeq[index+1..] + newNd.spine;
+
+assert index < |mySeq|-1 ==> mySeq[index+1].Valid();
+
+assert 0 <= index < |mySeq| - 1 ==> mySeq[index].footprint + {newNd} == 
+	{mySeq[index]} + mySeq[index+1].footprint;
+
+assert 0 <= index < |mySeq| - 1 ==> mySeq[index].spine[0..|mySeq|-index] + [newNd]
+ + mySeq[index].spine[|mySeq|-index..] == [mySeq[index]] + mySeq[index+1].spine;
+
+
+assert 0 <= index < |mySeq| - 1 ==> mySeq[index].tailContents[0..|mySeq|-index-1] + [d]
+ + mySeq[index].tailContents[|mySeq|-index-1..] == 
+ [mySeq[index+1].data] + mySeq[index+1].tailContents;
+
+
+assert index < |mySeq|-1 ==> (
+mySeq[index+1].footprint == old(mySeq[index+1].footprint) + {newNd} &&
+mySeq[index+1].spine == old(mySeq[index+1].spine[0..|mySeq|-index-1]) + [newNd]
+ + old(mySeq[index+1].spine[|mySeq|-index-1..]) &&
+
+mySeq[index+1].tailContents == 
+	old(mySeq[index+1].tailContents[0..|mySeq|-index-2]) + [d]
+ + old(mySeq[index+1].tailContents[|mySeq|-index-2..])
+);
+
+//
