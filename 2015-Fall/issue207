@@ -1,0 +1,10 @@
+EventManager.
+Line 58 
+
+should have diff advices, but sharing the same pointcut!
+
+Problem is caused by duplicate pointcuts.
+
+Multiple events in mop file may be defined in the same program location;
+
+and the fault is: for each event, a point cut will be extracted and placed in the .aj file.
