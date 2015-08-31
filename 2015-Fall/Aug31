@@ -1,0 +1,7 @@
+From Owolabi:
+
+I suggest to fully document this (and any other) restriction(s) on .mop file names in at least three places?:
+
+In the code comments right before the areValidNames in JavaMOPMain.java
+In the error message, of the areValidNames method, so that non-members of our team know why their .mop file names are not being accepted
+In the README inside the property-db repository where we store our properties
