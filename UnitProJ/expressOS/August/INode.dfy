@@ -203,8 +203,8 @@ ghost method updateCurIndex(mySeq:seq<INode>, index:int,
 			d:Data, newNd:INode)
 requires mySeq != [];
 
-//requires 0 <= index <= |mySeq| - 1;
-requires 0 <= index < |mySeq| - 1;
+requires 0 <= index <= |mySeq| - 1;
+//requires 0 <= index < |mySeq| - 1;
 
 requires listInv(mySeq);
 
