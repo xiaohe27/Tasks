@@ -216,7 +216,7 @@ requires newNd.footprint !! (set nd | nd in mySeq);
 
 requires mySeq[|mySeq|-1].next == newNd;
 
-requires (mySeq[|mySeq|-1].footprint + {newNd} == 
+requires index == |mySeq|-1 ==> (mySeq[|mySeq|-1].footprint + {newNd} == 
 	{mySeq[|mySeq|-1]} + newNd.footprint
 
 && mySeq[|mySeq|-1].spine[0..1] + [newNd] + mySeq[|mySeq|-1].spine[1..]  == 
@@ -251,34 +251,36 @@ requires index < |mySeq| - 1 ==> mySeq[index+1].Valid();
 
 modifies mySeq[index];
 
-ensures newNd !in mySeq;
-ensures newNd != null && newNd.Valid() && newNd.data == d;
-ensures newNd.footprint !! (set nd | nd in mySeq);
-
-ensures mySeq[|mySeq|-1].next == newNd;
-
-ensures forall nd :: nd in mySeq ==> nd == old(nd) && nd.data == old(nd.data);
-
-ensures newNd == old(newNd);
-
 ensures listInv(mySeq);
+
+ensures forall i :: 0 <= i < |mySeq| && i != index ==>
+ (mySeq[i].data == old(mySeq[i].data)
+ && mySeq[i].next == old(mySeq[i].next)
+ && mySeq[i].footprint == old(mySeq[i].footprint)
+ && mySeq[i].tailContents == old(mySeq[i].tailContents)
+ && mySeq[i].spine == old(mySeq[i].spine));
+
+ensures newNd !in mySeq;
+ensures newNd != null && newNd.Valid() && 
+  newNd.data == old(newNd.data) 
+  && newNd.next == old(newNd.next)
+  && newNd.footprint == old(newNd.footprint)
+  && newNd.tailContents == old(newNd.tailContents)
+  && newNd.spine == old(newNd.spine);
+
+ensures newNd.footprint !! (set nd | nd in mySeq);
 
 ensures forall i :: 0 <= i < |mySeq| ==> |mySeq|-i <= |mySeq[i].spine|;
 ensures forall i :: 0 <= i < |mySeq| ==> |mySeq|-i-1 <= |mySeq[i].tailContents|;
 
-ensures forall i :: 0 <= i < index-1 ==>
-	   mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
-	&& mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
-	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine;
-
+ensures mySeq[index].tailContents == 
+	old(mySeq[index].tailContents[0..|mySeq|-index-1]) + [d]
+ + old(mySeq[index].tailContents[|mySeq|-index-1..]);
 
 ensures mySeq[index].footprint == old(mySeq[index].footprint) + {newNd};
 ensures mySeq[index].spine == old(mySeq[index].spine[0..|mySeq|-index]) + [newNd]
  + old(mySeq[index].spine[|mySeq|-index..]);
 
-ensures mySeq[index].tailContents == 
-	old(mySeq[index].tailContents[0..|mySeq|-index-1]) + [d]
- + old(mySeq[index].tailContents[|mySeq|-index-1..]);
 
 ensures mySeq[index].spine == mySeq[index..] + newNd.spine;
 
