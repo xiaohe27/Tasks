@@ -217,14 +217,14 @@ requires newNd.footprint !! (set nd | nd in mySeq);
 
 requires mySeq[|mySeq|-1].next == newNd;
 
-requires index == |mySeq|-1 ==> (mySeq[|mySeq|-1].footprint + {newNd} == 
-	{mySeq[|mySeq|-1]} + newNd.footprint
+requires index == |mySeq|-1 ==> (mySeq[index].footprint + {newNd} == 
+	{mySeq[index]} + newNd.footprint
 
-&& mySeq[|mySeq|-1].spine[0..1] + [newNd] + mySeq[|mySeq|-1].spine[1..]  == 
-	[mySeq[|mySeq|-1]] + newNd.spine
+&& mySeq[index].spine[0..1] + [newNd] + mySeq[index].spine[1..]  == 
+	[mySeq[index]] + newNd.spine
 
-&& [d] + mySeq[|mySeq|-1].tailContents == 
-	[d] + newNd.tailContents);
+&& [d] + mySeq[index].tailContents == 
+	[newNd.data] + newNd.tailContents);
 
 
 requires forall i :: 0 <= i < index ==>
@@ -252,6 +252,9 @@ requires index < |mySeq| - 1 ==> mySeq[index+1].Valid();
 
 modifies mySeq[index];
 
+ensures index > 0 ==> |mySeq|-index + 1 <= |mySeq[index-1].spine|;
+ensures index > 0 ==> |mySeq|-index <= |mySeq[index-1].tailContents|;
+
 ensures newNd !in mySeq;
 ensures newNd != null && newNd.Valid() && newNd.data == d;
 ensures newNd.footprint !! (set nd | nd in mySeq);
@@ -263,6 +266,16 @@ ensures forall nd :: nd in mySeq ==> nd == old(nd) && nd.data == old(nd.data);
 ensures newNd == old(newNd);
 
 ensures listInv(mySeq);
+
+ensures index == |mySeq|-1 ==> (mySeq[index].footprint + {newNd} == 
+	{mySeq[index]} + newNd.footprint
+
+&& mySeq[index].spine[0..1] + [newNd] + mySeq[index].spine[1..]  == 
+	[mySeq[index]] + newNd.spine
+
+&& [d] + mySeq[index].tailContents == 
+	[newNd.data] + newNd.tailContents);
+
 
 ensures forall i :: 0 <= i < index-1 ==>
 	   mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
@@ -319,7 +332,7 @@ mySeq[index].spine := [mySeq[index]] + newNd.spine;
 }
 
 
-
+/*
 ghost method updateSeq(mySeq:seq<INode>, d:Data, newNd:INode)
 requires mySeq != [];
 
@@ -348,7 +361,7 @@ requires (mySeq[|mySeq|-1].footprint + {newNd} ==
 	[mySeq[|mySeq|-1]] + newNd.spine
 
 && [d] + mySeq[|mySeq|-1].tailContents == 
-	[d] + newNd.tailContents);
+	[newNd.data] + newNd.tailContents);
 
 
 modifies mySeq;
@@ -386,19 +399,21 @@ invariant index >= 0 ==> |mySeq|-index <= |mySeq[index].spine|;
 invariant index >= 0 ==> |mySeq|-index-1 <= |mySeq[index].tailContents|;
 //
 
-invariant index == |mySeq|-1 ==> (mySeq[index].footprint + {newNd} == 
-	{mySeq[index]} + newNd.footprint
+invariant (mySeq[|mySeq|-1].footprint + {newNd} == 
+	{mySeq[|mySeq|-1]} + newNd.footprint
 
-&& mySeq[index].spine[0..1] + [newNd] + mySeq[index].spine[1..]  == 
-	[mySeq[index]] + newNd.spine
+&& mySeq[|mySeq|-1].spine[0..1] + [newNd] + mySeq[|mySeq|-1].spine[1..]  == 
+	[mySeq[|mySeq|-1]] + newNd.spine
 
-&& [d] + mySeq[index].tailContents == 
-	[d] + newNd.tailContents);
+&& [d] + mySeq[|mySeq|-1].tailContents == 
+	[newNd.data] + newNd.tailContents);
 
+
+ensures forall nd :: nd in mySeq ==> nd == old(nd) && nd.data == old(nd.data);
+
+ensures newNd == old(newNd);
 
 invariant listInv(mySeq);
-
-invariant forall nd :: nd in mySeq ==> nd.data == old(nd.data);
 
 invariant forall i :: 0 <= i < index ==>
 	   mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
@@ -441,7 +456,7 @@ index := index - 1;
 
 
 }
-
+*/
 
 }
 
