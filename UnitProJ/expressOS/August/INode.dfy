@@ -285,6 +285,12 @@ ensures mySeq[index].Valid();
 ensures index > 0 ==> mySeq[index-1].footprint + {newNd} == 
 	{mySeq[index-1]} + mySeq[index].footprint;
 
+//
+ensures index > 0 ==> mySeq[index-1].spine == [mySeq[index-1]] + 
+				old(mySeq[index].spine);
+
+//
+
 ensures index > 0 ==> mySeq[index-1].spine[0..|mySeq|-index+1] + [newNd]
  + mySeq[index-1].spine[|mySeq|-index+1..] == [mySeq[index-1]] + mySeq[index].spine;
 	
@@ -314,7 +320,7 @@ mySeq[index].spine := [mySeq[index]] + newNd.spine;
 }
 
 
-
+/*
 ghost method updateSeq(mySeq:seq<INode>, d:Data, newNd:INode)
 requires mySeq != [];
 
@@ -442,7 +448,7 @@ index := index - 1;
 */
 
 }
-
+*/
 
 }
 
