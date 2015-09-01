@@ -224,7 +224,7 @@ requires index == |mySeq|-1 ==> (mySeq[index].footprint + {newNd} ==
 	[mySeq[index]] + newNd.spine
 
 && [d] + mySeq[index].tailContents == 
-	[newNd.data] + newNd.tailContents);
+	[d] + newNd.tailContents);
 
 
 requires forall i :: 0 <= i < index ==>
@@ -252,9 +252,6 @@ requires index < |mySeq| - 1 ==> mySeq[index+1].Valid();
 
 modifies mySeq[index];
 
-ensures index > 0 ==> |mySeq|-index + 1 <= |mySeq[index-1].spine|;
-ensures index > 0 ==> |mySeq|-index <= |mySeq[index-1].tailContents|;
-
 ensures newNd !in mySeq;
 ensures newNd != null && newNd.Valid() && newNd.data == d;
 ensures newNd.footprint !! (set nd | nd in mySeq);
@@ -274,7 +271,7 @@ ensures index == |mySeq|-1 ==> (mySeq[index].footprint + {newNd} ==
 	[mySeq[index]] + newNd.spine
 
 && [d] + mySeq[index].tailContents == 
-	[newNd.data] + newNd.tailContents);
+	[d] + newNd.tailContents);
 
 
 ensures forall i :: 0 <= i < index-1 ==>
@@ -302,6 +299,8 @@ ensures index > 0 ==> mySeq[index-1].footprint + {newNd} ==
 ensures index > 0 ==> mySeq[index-1].spine == [mySeq[index-1]] + 
 				old(mySeq[index].spine);
 
+//ensures index > 0 ==> |mySeq|-index + 1 <= |mySeq[index-1].spine|;
+//ensures index > 0 ==> |mySeq|-index <= |mySeq[index-1].tailContents|;
 
 ensures index > 0 ==> mySeq[index-1].spine[0..|mySeq|-index+1] + [newNd]
  + mySeq[index-1].spine[|mySeq|-index+1..] == [mySeq[index-1]] + mySeq[index].spine;
