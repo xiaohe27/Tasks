@@ -351,6 +351,7 @@ ghost var index := |mySeq|-1;
 
 
 while(index >= 0)
+decreases index;
 invariant -1 <= index <= |mySeq|-1;
 
 invariant listInv(mySeq);
@@ -403,85 +404,10 @@ invariant index < |mySeq| - 1 ==> mySeq[index+1].spine == mySeq[index+1..] +
 
 invariant index < |mySeq| - 1 ==> mySeq[index+1].Valid();
 
-/*
-invariant index < |mySeq|-1 ==> (
-mySeq[index+1].footprint == old(mySeq[index+1].footprint) + {newNd} &&
-mySeq[index+1].spine == old(mySeq[index+1].spine[0..|mySeq|-index-1]) + [newNd]
- + old(mySeq[index+1].spine[|mySeq|-index-1..]) &&
-
-mySeq[index+1].tailContents == 
-	old(mySeq[index+1].tailContents[0..|mySeq|-index-2]) + [d]
- + old(mySeq[index+1].tailContents[|mySeq|-index-2..])
-);
-*/
-
 {
 updateCurIndex(mySeq, index, d, newNd);
 
-//assert mySeq[index].ValidLemma();
-//assert mySeq[index].ndValid2ListValidLemma();
-
 index := index - 1;
-
-
-//////////////////////////////////////////////
-//asserted the loop inv can be maintained, ok
-
-//assert the pre of updateCurIndex can be satisfied
-
-assert mySeq != [];
-
-assert 0 <= index <= |mySeq| - 1;
-
-assert listInv(mySeq);
-
-assert forall i :: 0 <= i < |mySeq| ==> |mySeq|-i <= |mySeq[i].spine|;
-assert forall i :: 0 <= i < |mySeq| ==> |mySeq|-i-1 <= |mySeq[i].tailContents|;
-
-assert newNd !in mySeq;
-assert newNd != null && newNd.Valid() && newNd.data == d;
-assert newNd.footprint !! (set nd | nd in mySeq);
-
-assert mySeq[|mySeq|-1].next == newNd;
-
-assert index == |mySeq|-1 ==> (mySeq[|mySeq|-1].footprint + {newNd} == 
-	{mySeq[|mySeq|-1]} + newNd.footprint
-
-&& mySeq[|mySeq|-1].spine[0..1] + [newNd] + mySeq[|mySeq|-1].spine[1..]  == 
-	[mySeq[|mySeq|-1]] + newNd.spine
-
-&& [d] + mySeq[|mySeq|-1].tailContents == 
-	[newNd.data] + newNd.tailContents);
-
-assert forall i :: 0 <= i < index ==>
-	   mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
-
-	&& mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
-	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine;
-
-
-assert 0 <= index < |mySeq| - 1 ==> mySeq[index].footprint + {newNd} == 
-	{mySeq[index]} + mySeq[index+1].footprint;
-
-assert 0 <= index < |mySeq| - 1 ==> mySeq[index].spine[0..|mySeq|-index] + [newNd]
- + mySeq[index].spine[|mySeq|-index..] == [mySeq[index]] + mySeq[index+1].spine;
-
-
-assert 0 <= index < |mySeq| - 1 ==> mySeq[index].tailContents[0..|mySeq|-index-1] + [d]
- + mySeq[index].tailContents[|mySeq|-index-1..] == 
- [mySeq[index+1].data] + mySeq[index+1].tailContents;
-
-
-assert index < |mySeq| - 1 ==> mySeq[index+1].spine == mySeq[index+1..] +
-						newNd.spine;
-
-assert index < |mySeq| - 1 ==> mySeq[index+1].Valid();
-
-
-
-break;
-
-
 }
 
 
