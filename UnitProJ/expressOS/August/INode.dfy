@@ -204,12 +204,11 @@ ghost method updateCurIndex(mySeq:seq<INode>, index:int,
 requires mySeq != [];
 
 requires 0 <= index <= |mySeq| - 1;
-//requires 0 <= index < |mySeq| - 1;
 
 requires listInv(mySeq);
 
-requires |mySeq|-index <= |mySeq[index].spine|;
-requires |mySeq|-index-1 <= |mySeq[index].tailContents|;
+requires forall i :: 0 <= i < |mySeq| ==> |mySeq|-i <= |mySeq[i].spine|;
+requires forall i :: 0 <= i < |mySeq| ==> |mySeq|-i-1 <= |mySeq[i].tailContents|;
 
 requires newNd !in mySeq;
 requires newNd != null && newNd.Valid() && newNd.data == d;
@@ -217,14 +216,14 @@ requires newNd.footprint !! (set nd | nd in mySeq);
 
 requires mySeq[|mySeq|-1].next == newNd;
 
-requires index == |mySeq|-1 ==> (mySeq[|mySeq|-1].footprint + {newNd} == 
+requires (mySeq[|mySeq|-1].footprint + {newNd} == 
 	{mySeq[|mySeq|-1]} + newNd.footprint
 
 && mySeq[|mySeq|-1].spine[0..1] + [newNd] + mySeq[|mySeq|-1].spine[1..]  == 
 	[mySeq[|mySeq|-1]] + newNd.spine
 
 && [d] + mySeq[|mySeq|-1].tailContents == 
-	[d] + newNd.tailContents);
+	[newNd.data] + newNd.tailContents);
 
 
 requires forall i :: 0 <= i < index ==>
@@ -263,6 +262,9 @@ ensures forall nd :: nd in mySeq ==> nd == old(nd) && nd.data == old(nd.data);
 ensures newNd == old(newNd);
 
 ensures listInv(mySeq);
+
+ensures forall i :: 0 <= i < |mySeq| ==> |mySeq|-i <= |mySeq[i].spine|;
+ensures forall i :: 0 <= i < |mySeq| ==> |mySeq|-i-1 <= |mySeq[i].tailContents|;
 
 ensures forall i :: 0 <= i < index-1 ==>
 	   mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
