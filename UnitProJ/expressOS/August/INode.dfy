@@ -399,13 +399,13 @@ invariant index >= 0 ==> |mySeq|-index <= |mySeq[index].spine|;
 invariant index >= 0 ==> |mySeq|-index-1 <= |mySeq[index].tailContents|;
 //
 
-invariant (mySeq[|mySeq|-1].footprint + {newNd} == 
-	{mySeq[|mySeq|-1]} + newNd.footprint
+invariant index == |mySeq|-1 ==> (mySeq[index].footprint + {newNd} == 
+	{mySeq[index]} + newNd.footprint
 
-&& mySeq[|mySeq|-1].spine[0..1] + [newNd] + mySeq[|mySeq|-1].spine[1..]  == 
-	[mySeq[|mySeq|-1]] + newNd.spine
+&& mySeq[index].spine[0..1] + [newNd] + mySeq[index].spine[1..]  == 
+	[mySeq[index]] + newNd.spine
 
-&& [d] + mySeq[|mySeq|-1].tailContents == 
+&& [d] + mySeq[index].tailContents == 
 	[newNd.data] + newNd.tailContents);
 
 
