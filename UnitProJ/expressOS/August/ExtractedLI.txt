@@ -1,67 +1,59 @@
-/*
-predicate LI(mySeq:seq<INode>, d:Data, newNd:INode)
+
+predicate LI(mySeq:seq<INode>, d:Data, newNd:INode,
+			oldD:Data, oldNext:INode, oldFp:set<INode>, 
+			oldTC:seq<Data>, oldSpine:seq<INode>)
 reads mySeq, newNd;
 {
- -1 <= index <= |mySeq|-1
+ (-1 <= index <= |mySeq|-1)
 
 && listInv(mySeq)
 
-&& forall i :: 0 <= i < |mySeq| ==> |mySeq|-i <= |mySeq[i].spine|
-&& forall i :: 0 <= i < |mySeq| ==> |mySeq|-i-1 <= |mySeq[i].tailContents|
+&& (forall i :: 0 <= i < |mySeq| ==> |mySeq|-i <= |mySeq[i].spine|)
+&& (forall i :: 0 <= i < |mySeq| ==> |mySeq|-i-1 <= |mySeq[i].tailContents|)
 
-&& newNd !in mySeq
+&& (newNd !in mySeq
 && newNd != null && newNd.Valid() && newNd.data == d
 && newNd.footprint !! (set nd | nd in mySeq)
 
-/*
-&& newNd.data == old(newNd.data) 
-  && newNd.next == old(newNd.next)
-  && newNd.footprint == old(newNd.footprint)
-  && newNd.tailContents == old(newNd.tailContents)
-  && newNd.spine == old(newNd.spine)
-*/
+&& newNd.data == oldD 
+  && newNd.next == oldNext
+  && newNd.footprint == oldFp
+  && newNd.tailContents == oldTC
+  && newNd.spine == oldSpine)
 
-&& mySeq[|mySeq|-1].next == newNd;
+&& mySeq[|mySeq|-1].next == newNd
 
-&& index == |mySeq|-1 ==> (mySeq[|mySeq|-1].footprint + {newNd} == 
+&& (index == |mySeq|-1 ==> (mySeq[|mySeq|-1].footprint + {newNd} == 
 	{mySeq[|mySeq|-1]} + newNd.footprint
 
 && mySeq[|mySeq|-1].spine[0..1] + [newNd] + mySeq[|mySeq|-1].spine[1..]  == 
 	[mySeq[|mySeq|-1]] + newNd.spine
 
 && [d] + mySeq[|mySeq|-1].tailContents == 
-	[newNd.data] + newNd.tailContents);
+	[newNd.data] + newNd.tailContents))
 
 
-&& forall i :: 0 <= i < index ==>
+&& (forall i :: 0 <= i < index ==>
 	mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
 
 	&& mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
-	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine;
+	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine)
 
 
-&& 0 <= index < |mySeq| - 1 ==> mySeq[index].tailContents[0..|mySeq|-index-1] + [d]
+&& (0 <= index < |mySeq| - 1 ==> mySeq[index].tailContents[0..|mySeq|-index-1] + [d]
  + mySeq[index].tailContents[|mySeq|-index-1..] == 
- [mySeq[index+1].data] + mySeq[index+1].tailContents;
+ [mySeq[index+1].data] + mySeq[index+1].tailContents)
 
-&& 0 <= index < |mySeq| - 1 ==> mySeq[index].footprint + {newNd} == 
-	{mySeq[index]} + mySeq[index+1].footprint;
+&& (0 <= index < |mySeq| - 1 ==> mySeq[index].footprint + {newNd} == 
+	{mySeq[index]} + mySeq[index+1].footprint)
 
-&& 0 <= index < |mySeq| - 1 ==> mySeq[index].spine[0..|mySeq|-index] + [newNd]
- + mySeq[index].spine[|mySeq|-index..] == [mySeq[index]] + mySeq[index+1].spine;
+&& (0 <= index < |mySeq| - 1 ==> mySeq[index].spine[0..|mySeq|-index] + [newNd]
+ + mySeq[index].spine[|mySeq|-index..] == [mySeq[index]] + mySeq[index+1].spine)
 
 
-&& index < |mySeq|-1 ==> mySeq[index+1].tailContents == 
-	old(mySeq[index+1].tailContents[0..|mySeq|-index-2]) + [d]
-	+ old(mySeq[index+1].tailContents[|mySeq|-index-2..]);
+&& (index < |mySeq| - 1 ==> mySeq[index+1].spine == mySeq[index+1..] +
+						newNd.spine)
 
-&& index < |mySeq|-1 ==> mySeq[index+1].footprint ==
-			old(mySeq[index+1].footprint) + {newNd};
-
-&& index < |mySeq| - 1 ==> mySeq[index+1].spine == mySeq[index+1..] +
-						newNd.spine;
-
-&& index < |mySeq| - 1 ==> mySeq[index+1].Valid();
+&& (index < |mySeq| - 1 ==> mySeq[index+1].Valid())
 
 }
-*/
