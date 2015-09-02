@@ -1,12 +1,6 @@
-2. make updateSeq generic:
-add one more parameter to that method: 'index',
+split the problem to several smaller sub-problem and conquer them separately.
 
-so that 
-mySeq[index+1].Valid()
-mySeq[index+1].spine == mySeq[index+1..]
-
-
-***
-try to conclude validity from new validSeqCond
-
+1. updateSeq's preCond ==> LI
+2. {LI && loop guard} <updateCurIndex> {LI}
+3. {LI && !loop guard} ==> updateSeq's postCond
 
