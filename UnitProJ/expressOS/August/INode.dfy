@@ -293,6 +293,7 @@ mySeq[index].spine := [mySeq[index]] + mySeq[index].next.spine;
 }
 
 
+/*
 ghost method updateSeq(mySeq:seq<INode>, d:Data, newNd:INode)
 requires mySeq != [];
 
@@ -384,7 +385,6 @@ invariant forall i :: 0 <= i < index ==>
 	&& mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
 	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine;
 
-
 invariant 0 <= index < |mySeq| - 1 ==> mySeq[index].tailContents[0..|mySeq|-index-1] + [d]
  + mySeq[index].tailContents[|mySeq|-index-1..] == 
  [mySeq[index+1].data] + mySeq[index+1].tailContents;
@@ -394,7 +394,6 @@ invariant 0 <= index < |mySeq| - 1 ==> mySeq[index].footprint + {newNd} ==
 
 invariant 0 <= index < |mySeq| - 1 ==> mySeq[index].spine[0..|mySeq|-index] + [newNd]
  + mySeq[index].spine[|mySeq|-index..] == [mySeq[index]] + mySeq[index+1].spine;
-
 
 
 invariant index < |mySeq| - 1 ==> mySeq[index+1].spine == mySeq[index+1..] +
@@ -410,7 +409,7 @@ index := index - 1;
 
 
 }
-
+*/
 
 
 
