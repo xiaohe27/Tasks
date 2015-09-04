@@ -492,7 +492,7 @@ ensures mySeq[0].Valid();
 {}
 
 
-/*
+
 ghost method updateSeq(mySeq:seq<INode>, d:Data, newNd:INode)
 requires mySeq != [];
 
@@ -553,15 +553,25 @@ newNd.data, newNd.next, newNd.footprint, newNd.tailContents, newNd.spine);
 while(index >= 0)
 invariant LI(mySeq, index, d, newNd,
 	newNd.data, newNd.next, newNd.footprint, 
-			newNd.tailContents, newNd.spine, 
+	newNd.tailContents, newNd.spine, 
 	oldD, oldNext, oldFp, oldTC, oldSpine);
 {
-break;
+index, oldD, oldNext, oldFp, oldTC, oldSpine := 
+LIGuardExecBody2LI(mySeq, index, d, newNd,
+		newNd.data, newNd.next, newNd.footprint, 
+		newNd.tailContents, newNd.spine, 
+			oldD, oldNext, oldFp, 
+			oldTC, oldSpine);
 }
 
 
+LIAndNegGuard2Post(mySeq, index, d, newNd,
+		newNd.data, newNd.next, newNd.footprint, 
+		newNd.tailContents, newNd.spine, 
+		oldD, oldNext, oldFp, oldTC, oldSpine);
+
 }
-*/
+
 
 
 
