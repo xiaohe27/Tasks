@@ -401,6 +401,28 @@ ensures LI(mySeq, index, d, newNd, oldD, oldNext, oldFp, oldTC, oldSpine);
 index := |mySeq| - 1;
 }
 
+ghost method LIGuardExecBody2LI(mySeq:seq<INode>, index:int, d:Data, newNd:INode,
+			oldD:Data, oldNext:INode, oldFp:set<INode>, 
+			oldTC:seq<Data>, oldSpine:seq<INode>) 
+			returns (newIndex:int)
+			
+requires LI(mySeq, index, d, newNd, oldD, oldNext, oldFp, oldTC, oldSpine);
+requires index >= 0;
+
+modifies mySeq;
+
+ensures newIndex == index - 1;
+ensures LI(mySeq, newIndex, d, newNd, oldD, oldNext, oldFp, oldTC, oldSpine);
+{
+mySeq[index].tailContents := [mySeq[index].next.data] + mySeq[index].next.tailContents;
+
+mySeq[index].footprint := {mySeq[index]} + mySeq[index].next.footprint;
+
+mySeq[index].spine := [mySeq[index]] + mySeq[index].next.spine;
+
+newIndex := index - 1;
+}
+
 
 /*
 ghost method updateSeq(mySeq:seq<INode>, d:Data, newNd:INode)
