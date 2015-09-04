@@ -350,11 +350,11 @@ reads mySeq, newNd, oldNext, oldFp, oldTC, oldSpine,
  + mySeq[index].spine[|mySeq|-index..] == [mySeq[index]] + mySeq[index+1].spine)
 
 //
+&& (|oldTC| >= |mySeq|-index-2 && 
+	|oldSpine| >= |mySeq|-index-1) 
 
 && (- 1 <= index < |mySeq| - 1 ==> (
-(|oldTC| >= |mySeq|-index-2 && 
-	|oldSpine| >= |mySeq|-index-1) &&
-	
+
 mySeq[index+1].tailContents == 
 	oldTC[0..|mySeq|-index-2] + [d]
  + oldTC[|mySeq|-index-2..]
