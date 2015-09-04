@@ -293,6 +293,115 @@ mySeq[index].spine := [mySeq[index]] + mySeq[index].next.spine;
 }
 
 
+//LI
+predicate LI(mySeq:seq<INode>, index:int, d:Data, newNd:INode,
+			oldD:Data, oldNext:INode, oldFp:set<INode>, 
+			oldTC:seq<Data>, oldSpine:seq<INode>)
+reads mySeq, newNd, oldNext, oldFp, oldTC, oldSpine,
+	getFtprint(newNd);
+{
+ mySeq != []
+&& (-1 <= index <= |mySeq|-1)
+
+&& listInv(mySeq)
+
+&& (forall i :: 0 <= i < |mySeq| ==> |mySeq|-i <= |mySeq[i].spine|)
+&& (forall i :: 0 <= i < |mySeq| ==> |mySeq|-i-1 <= |mySeq[i].tailContents|)
+
+&& (newNd !in mySeq
+&& newNd != null && newNd.Valid() && newNd.data == d
+&& newNd.footprint !! (set nd | nd in mySeq)
+&& newNd.data == oldD 
+  && newNd.next == oldNext
+  && newNd.footprint == oldFp
+  && newNd.tailContents == oldTC
+  && newNd.spine == oldSpine)
+
+&& mySeq[|mySeq|-1].next == newNd
+
+/*
+&& (index == |mySeq|-1 ==> (mySeq[|mySeq|-1].footprint + {newNd} == 
+	{mySeq[|mySeq|-1]} + newNd.footprint
+
+&& mySeq[|mySeq|-1].spine[0..1] + [newNd] + mySeq[|mySeq|-1].spine[1..]  == 
+	[mySeq[|mySeq|-1]] + newNd.spine
+
+&& [d] + mySeq[|mySeq|-1].tailContents == 
+	[newNd.data] + newNd.tailContents))
+
+
+&& (forall i :: 0 <= i < index ==>
+	mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
+
+	&& mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
+	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine)
+
+
+&& (0 <= index < |mySeq| - 1 ==> mySeq[index].tailContents[0..|mySeq|-index-1] + [d]
+ + mySeq[index].tailContents[|mySeq|-index-1..] == 
+ [mySeq[index+1].data] + mySeq[index+1].tailContents)
+
+&& (0 <= index < |mySeq| - 1 ==> mySeq[index].footprint + {newNd} == 
+	{mySeq[index]} + mySeq[index+1].footprint)
+
+&& (0 <= index < |mySeq| - 1 ==> mySeq[index].spine[0..|mySeq|-index] + [newNd]
+ + mySeq[index].spine[|mySeq|-index..] == [mySeq[index]] + mySeq[index+1].spine)
+
+
+&& (index < |mySeq| - 1 ==> mySeq[index+1].spine == mySeq[index+1..] +
+						newNd.spine)
+
+&& (index < |mySeq| - 1 ==> mySeq[index+1].Valid())
+*/
+}
+
+
+//precond ==> LI
+ghost method pre2LI(mySeq:seq<INode>, d:Data, newNd:INode,
+			oldD:Data, oldNext:INode, oldFp:set<INode>, 
+			oldTC:seq<Data>, oldSpine:seq<INode>)
+			returns (index:int)
+requires mySeq != [];
+
+requires listInv(mySeq);
+
+requires newNd !in mySeq;
+requires newNd != null && newNd.Valid() && newNd.data == d;
+requires newNd.footprint !! (set nd | nd in mySeq);
+
+requires forall i :: 0 <= i < |mySeq| ==> |mySeq|-i <= |mySeq[i].spine|;
+requires forall i :: 0 <= i < |mySeq| ==> |mySeq|-i-1 <= |mySeq[i].tailContents|;
+
+requires forall i :: 0 <= i < |mySeq|-1 ==>
+	   mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
+
+	&& mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
+	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine;
+
+
+requires mySeq[|mySeq|-1].next == newNd;
+
+requires [d] + mySeq[|mySeq|-1].tailContents == 
+	[newNd.data] + newNd.tailContents
+
+&& mySeq[|mySeq|-1].footprint + {newNd} == 
+	{mySeq[|mySeq|-1]} + newNd.footprint
+
+&& mySeq[|mySeq|-1].spine[0..1] + [newNd] + mySeq[|mySeq|-1].spine[1..]  == 
+	[mySeq[|mySeq|-1]] + newNd.spine;
+
+//////////////////////////////
+requires oldD == d && oldNext == newNd.next && oldFp == newNd.footprint 
+	&& oldTC == newNd.tailContents && oldSpine == newNd.spine;
+
+ensures index == |mySeq| - 1;
+
+ensures LI(mySeq, index, d, newNd, oldD, oldNext, oldFp, oldTC, oldSpine);
+{
+index := |mySeq| - 1;
+}
+
+
 /*
 ghost method updateSeq(mySeq:seq<INode>, d:Data, newNd:INode)
 requires mySeq != [];
