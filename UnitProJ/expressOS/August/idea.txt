@@ -4,3 +4,6 @@ split the problem to several smaller sub-problem and conquer them separately.
 2. {LI && loop guard} <updateCurIndex> {LI}
 3. {LI && !loop guard} ==> updateSeq's postCond
 
+***
+should always assure that the len of the seq is >= any index it refers to,
+identify the bounds!!! similar that lower bound.
