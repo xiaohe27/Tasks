@@ -298,7 +298,7 @@ predicate LI(mySeq:seq<INode>, index:int, d:Data, newNd:INode,
 			oldD:Data, oldNext:INode, oldFp:set<INode>, 
 			oldTC:seq<Data>, oldSpine:seq<INode>)
 reads mySeq, newNd, oldNext, oldFp, oldTC, oldSpine,
-	getFtprint(newNd);
+	getFtprint(newNd), sumAllFtprint(mySeq);
 {
  mySeq != []
 && (-1 <= index <= |mySeq|-1)
@@ -319,7 +319,6 @@ reads mySeq, newNd, oldNext, oldFp, oldTC, oldSpine,
 
 && mySeq[|mySeq|-1].next == newNd
 
-//
 && (index == |mySeq|-1 ==> 
 	([d] + mySeq[|mySeq|-1].tailContents == 
 	[newNd.data] + newNd.tailContents
@@ -331,14 +330,13 @@ reads mySeq, newNd, oldNext, oldFp, oldTC, oldSpine,
 	[mySeq[|mySeq|-1]] + newNd.spine
 ))
 
-/*
 && (forall i :: 0 <= i < index ==>
 	mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
 
 	&& mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
 	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine)
 
-
+//
 && (0 <= index < |mySeq| - 1 ==> mySeq[index].tailContents[0..|mySeq|-index-1] + [d]
  + mySeq[index].tailContents[|mySeq|-index-1..] == 
  [mySeq[index+1].data] + mySeq[index+1].tailContents)
@@ -354,7 +352,7 @@ reads mySeq, newNd, oldNext, oldFp, oldTC, oldSpine,
 						newNd.spine)
 
 && (index < |mySeq| - 1 ==> mySeq[index+1].Valid())
-*/
+
 }
 
 
