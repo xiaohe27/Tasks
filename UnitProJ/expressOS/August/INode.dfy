@@ -376,9 +376,10 @@ mySeq[index+1].tailContents ==
 ghost method pre2LI(mySeq:seq<INode>, d:Data, newNd:INode,
 	oldNewD:Data, oldNewNext:INode, oldNewFp:set<INode>, 
 			oldNewTC:seq<Data>, oldNewSpine:seq<INode>, 
-			oldD:Data, oldNext:INode, oldFp:set<INode>, 
+			oldD0:Data, oldNext0:INode, oldFp0:set<INode>, 
+			oldTC0:seq<Data>, oldSpine0:seq<INode>)
+			returns (index:int,oldD:Data, oldNext:INode, oldFp:set<INode>, 
 			oldTC:seq<Data>, oldSpine:seq<INode>)
-			returns (index:int)
 requires mySeq != [];
 
 requires listInv(mySeq);
@@ -418,7 +419,9 @@ ensures LI(mySeq, index, d, newNd,
 oldNewD, oldNewNext, oldNewFp, oldNewTC, oldNewSpine,	
 oldNewD, oldNewNext, oldNewFp, oldNewTC, oldNewSpine);
 {
-index := |mySeq| - 1;
+index, oldD, oldNext, oldFp, oldTC, oldSpine := 
+	|mySeq| - 1, newNd.data, newNd.next, newNd.footprint, 
+		newNd.tailContents, newNd.spine;
 }
 
 
@@ -426,14 +429,15 @@ index := |mySeq| - 1;
 ghost method LIGuardExecBody2LI(mySeq:seq<INode>, index:int, d:Data, newNd:INode,
 		oldNewD:Data, oldNewNext:INode, oldNewFp:set<INode>, 
 			oldNewTC:seq<Data>, oldNewSpine:seq<INode>, 
-			oldD:Data, oldNext:INode, oldFp:set<INode>, 
-			oldTC:seq<Data>, oldSpine:seq<INode>) 
-			returns (newIndex:int)
+			oldD0:Data, oldNext0:INode, oldFp0:set<INode>, 
+			oldTC0:seq<Data>, oldSpine0:seq<INode>) 
+			returns (newIndex:int,oldD:Data, oldNext:INode, 
+			oldFp:set<INode>, oldTC:seq<Data>, oldSpine:seq<INode>)
 			
 requires LI(mySeq, index, d, newNd,
 	oldNewD, oldNewNext, oldNewFp, 
 			oldNewTC, oldNewSpine, 
-	oldD, oldNext, oldFp, oldTC, oldSpine);
+	oldD0, oldNext0, oldFp0, oldTC0, oldSpine0);
 
 requires index >= 0;
 
@@ -444,9 +448,7 @@ ensures newIndex == index - 1;
 ensures LI(mySeq, newIndex, d, newNd,
 	oldNewD, oldNewNext, oldNewFp, 
 			oldNewTC, oldNewSpine, 
-	old(mySeq[index].data), old(mySeq[index].next), 
-	old(mySeq[index].footprint), old(mySeq[index].tailContents), 
-	old(mySeq[index].spine));
+	oldD, oldNext, oldFp, oldTC, oldSpine);
 {
 mySeq[index].tailContents := [mySeq[index].next.data] + mySeq[index].next.tailContents;
 
@@ -454,7 +456,10 @@ mySeq[index].footprint := {mySeq[index]} + mySeq[index].next.footprint;
 
 mySeq[index].spine := [mySeq[index]] + mySeq[index].next.spine;
 
-newIndex := index - 1;
+newIndex, oldD, oldNext, oldFp, oldTC, oldSpine := index - 1,
+old(mySeq[index].data), old(mySeq[index].next), 
+	old(mySeq[index].footprint), old(mySeq[index].tailContents), 
+	old(mySeq[index].spine);
 }
 
 
@@ -534,71 +539,24 @@ ensures mySeq[0].footprint == old(mySeq[0].footprint) + {newNd};
 //ensures mySeq[0].spine == old(mySeq[0].spine[0..|mySeq|]) + [newNd]
 // + old(mySeq[0].spine[|mySeq|..]);
 
-ensures mySeq[0].spine == mySeq + newNd.spine;
+//ensures mySeq[0].spine == mySeq + newNd.spine;
 
-ensures mySeq[0].Valid();
+//ensures mySeq[0].Valid();
 
 {
 
-ghost var index := |mySeq|-1;
-
+ghost var index, oldD, oldNext, oldFp, oldTC, oldSpine := 
+pre2LI(mySeq, d, newNd,	
+newNd.data, newNd.next, newNd.footprint, newNd.tailContents, newNd.spine, 
+newNd.data, newNd.next, newNd.footprint, newNd.tailContents, newNd.spine);
 
 while(index >= 0)
-decreases index;
-invariant -1 <= index <= |mySeq|-1;
-
-invariant listInv(mySeq);
-
-invariant forall i :: 0 <= i < |mySeq| ==> |mySeq|-i <= |mySeq[i].spine|;
-invariant forall i :: 0 <= i < |mySeq| ==> |mySeq|-i-1 <= |mySeq[i].tailContents|;
-
-invariant newNd !in mySeq;
-invariant newNd != null && newNd.Valid() && newNd.data == d;
-invariant newNd.footprint !! (set nd | nd in mySeq);
-invariant newNd.data == old(newNd.data) 
-  && newNd.next == old(newNd.next)
-  && newNd.footprint == old(newNd.footprint)
-  && newNd.tailContents == old(newNd.tailContents)
-  && newNd.spine == old(newNd.spine);
-
-invariant mySeq[|mySeq|-1].next == newNd;
-
-invariant index == |mySeq|-1 ==> (mySeq[|mySeq|-1].footprint + {newNd} == 
-	{mySeq[|mySeq|-1]} + newNd.footprint
-
-&& mySeq[|mySeq|-1].spine[0..1] + [newNd] + mySeq[|mySeq|-1].spine[1..]  == 
-	[mySeq[|mySeq|-1]] + newNd.spine
-
-&& [d] + mySeq[|mySeq|-1].tailContents == 
-	[newNd.data] + newNd.tailContents);
-
-
-invariant forall i :: 0 <= i < index ==>
-	mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
-
-	&& mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
-	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine;
-
-invariant 0 <= index < |mySeq| - 1 ==> mySeq[index].tailContents[0..|mySeq|-index-1] + [d]
- + mySeq[index].tailContents[|mySeq|-index-1..] == 
- [mySeq[index+1].data] + mySeq[index+1].tailContents;
-
-invariant 0 <= index < |mySeq| - 1 ==> mySeq[index].footprint + {newNd} == 
-	{mySeq[index]} + mySeq[index+1].footprint;
-
-invariant 0 <= index < |mySeq| - 1 ==> mySeq[index].spine[0..|mySeq|-index] + [newNd]
- + mySeq[index].spine[|mySeq|-index..] == [mySeq[index]] + mySeq[index+1].spine;
-
-
-invariant index < |mySeq| - 1 ==> mySeq[index+1].spine == mySeq[index+1..] +
-						newNd.spine;
-
-invariant index < |mySeq| - 1 ==> mySeq[index+1].Valid();
-
+invariant LI(mySeq, index, d, newNd,
+	newNd.data, newNd.next, newNd.footprint, 
+			newNd.tailContents, newNd.spine, 
+	oldD, oldNext, oldFp, oldTC, oldSpine);
 {
-updateCurIndex(mySeq, index, d, newNd);
-
-index := index - 1;
+break;
 }
 
 
