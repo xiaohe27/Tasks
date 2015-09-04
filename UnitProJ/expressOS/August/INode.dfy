@@ -415,9 +415,15 @@ requires oldNewD == d && oldNewNext == newNd.next && oldNewFp == newNd.footprint
 
 ensures index == |mySeq| - 1;
 
+ensures old(mySeq[index].data) == oldD &&
+	old(mySeq[index].next) == oldNext && 
+	old(mySeq[index].footprint) == oldFp &&
+	old(mySeq[index].tailContents) == oldTC &&
+	old(mySeq[index].spine == oldSpine;
+
 ensures LI(mySeq, index, d, newNd,
 oldNewD, oldNewNext, oldNewFp, oldNewTC, oldNewSpine,	
-oldNewD, oldNewNext, oldNewFp, oldNewTC, oldNewSpine);
+oldD, oldNext, oldFp, oldTC, oldSpine);
 {
 index, oldD, oldNext, oldFp, oldTC, oldSpine := 
 	|mySeq| - 1, newNd.data, newNd.next, newNd.footprint, 
@@ -445,9 +451,14 @@ modifies mySeq;
 
 ensures newIndex == index - 1;
 
+ensures old(mySeq[index].data) == oldD &&
+	old(mySeq[index].next) == oldNext && 
+	old(mySeq[index].footprint) == oldFp &&
+	old(mySeq[index].tailContents) == oldTC &&
+	old(mySeq[index].spine == oldSpine;
+
 ensures LI(mySeq, newIndex, d, newNd,
-	oldNewD, oldNewNext, oldNewFp, 
-			oldNewTC, oldNewSpine, 
+	oldNewD, oldNewNext, oldNewFp, oldNewTC, oldNewSpine, 
 	oldD, oldNext, oldFp, oldTC, oldSpine);
 {
 mySeq[index].tailContents := [mySeq[index].next.data] + mySeq[index].next.tailContents;
@@ -527,21 +538,20 @@ requires (mySeq[|mySeq|-1].footprint + {newNd} ==
 
 modifies mySeq;
 
-
 //ensures forall nd :: nd in mySeq ==> nd.data == old(nd.data);
-/*
+
 ensures mySeq[0].tailContents == 
 	old(mySeq[0].tailContents[0..|mySeq|-1]) + [d]
  + old(mySeq[0].tailContents[|mySeq|-1..]);
 
 ensures mySeq[0].footprint == old(mySeq[0].footprint) + {newNd};
-*/
-//ensures mySeq[0].spine == old(mySeq[0].spine[0..|mySeq|]) + [newNd]
-// + old(mySeq[0].spine[|mySeq|..]);
 
-//ensures mySeq[0].spine == mySeq + newNd.spine;
+ensures mySeq[0].spine == old(mySeq[0].spine[0..|mySeq|]) + [newNd]
+ + old(mySeq[0].spine[|mySeq|..]);
 
-//ensures mySeq[0].Valid();
+ensures mySeq[0].spine == mySeq + newNd.spine;
+
+ensures mySeq[0].Valid();
 
 {
 
@@ -551,6 +561,13 @@ newNd.data, newNd.next, newNd.footprint, newNd.tailContents, newNd.spine,
 newNd.data, newNd.next, newNd.footprint, newNd.tailContents, newNd.spine);
 
 while(index >= 0)
+invariant 
+	old(mySeq[index].data) == oldD &&
+	old(mySeq[index].next) == oldNext && 
+	old(mySeq[index].footprint) == oldFp &&
+	old(mySeq[index].tailContents) == oldTC &&
+	old(mySeq[index].spine == oldSpine;
+
 invariant LI(mySeq, index, d, newNd,
 	newNd.data, newNd.next, newNd.footprint, 
 	newNd.tailContents, newNd.spine, 
@@ -560,8 +577,7 @@ index, oldD, oldNext, oldFp, oldTC, oldSpine :=
 LIGuardExecBody2LI(mySeq, index, d, newNd,
 		newNd.data, newNd.next, newNd.footprint, 
 		newNd.tailContents, newNd.spine, 
-			oldD, oldNext, oldFp, 
-			oldTC, oldSpine);
+		oldD, oldNext, oldFp, oldTC, oldSpine);
 }
 
 
@@ -571,8 +587,6 @@ LIAndNegGuard2Post(mySeq, index, d, newNd,
 		oldD, oldNext, oldFp, oldTC, oldSpine);
 
 }
-
-
 
 
 }
