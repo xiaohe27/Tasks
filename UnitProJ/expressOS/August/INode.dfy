@@ -319,17 +319,19 @@ reads mySeq, newNd, oldNext, oldFp, oldTC, oldSpine,
 
 && mySeq[|mySeq|-1].next == newNd
 
-/*
-&& (index == |mySeq|-1 ==> (mySeq[|mySeq|-1].footprint + {newNd} == 
+//
+&& (index == |mySeq|-1 ==> 
+	([d] + mySeq[|mySeq|-1].tailContents == 
+	[newNd.data] + newNd.tailContents
+
+&& mySeq[|mySeq|-1].footprint + {newNd} == 
 	{mySeq[|mySeq|-1]} + newNd.footprint
 
 && mySeq[|mySeq|-1].spine[0..1] + [newNd] + mySeq[|mySeq|-1].spine[1..]  == 
 	[mySeq[|mySeq|-1]] + newNd.spine
+))
 
-&& [d] + mySeq[|mySeq|-1].tailContents == 
-	[newNd.data] + newNd.tailContents))
-
-
+/*
 && (forall i :: 0 <= i < index ==>
 	mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
 
