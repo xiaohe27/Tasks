@@ -350,9 +350,12 @@ reads mySeq, newNd, oldNext, oldFp, oldTC, oldSpine,
  + mySeq[index].spine[|mySeq|-index..] == [mySeq[index]] + mySeq[index+1].spine)
 
 //
-&& (|oldTC| >= |mySeq|-index-2 && 
-	|oldSpine| >= |mySeq|-index-1)
-&& (- 1 <= index < |mySeq| - 1 ==> (mySeq[index+1].tailContents == 
+
+&& (- 1 <= index < |mySeq| - 1 ==> (
+(|oldTC| >= |mySeq|-index-2 && 
+	|oldSpine| >= |mySeq|-index-1) &&
+	
+mySeq[index+1].tailContents == 
 	oldTC[0..|mySeq|-index-2] + [d]
  + oldTC[|mySeq|-index-2..]
 
@@ -368,9 +371,11 @@ reads mySeq, newNd, oldNext, oldFp, oldTC, oldSpine,
 
 }
 
-/*
+
 //precond ==> LI
 ghost method pre2LI(mySeq:seq<INode>, d:Data, newNd:INode,
+	oldNewD:Data, oldNewNext:INode, oldNewFp:set<INode>, 
+			oldNewTC:seq<Data>, oldNewSpine:seq<INode>, 
 			oldD:Data, oldNext:INode, oldFp:set<INode>, 
 			oldTC:seq<Data>, oldSpine:seq<INode>)
 			returns (index:int)
@@ -404,28 +409,44 @@ requires [d] + mySeq[|mySeq|-1].tailContents ==
 	[mySeq[|mySeq|-1]] + newNd.spine;
 
 //////////////////////////////
-requires oldD == d && oldNext == newNd.next && oldFp == newNd.footprint 
-	&& oldTC == newNd.tailContents && oldSpine == newNd.spine;
+requires oldNewD == d && oldNewNext == newNd.next && oldNewFp == newNd.footprint 
+	&& oldNewTC == newNd.tailContents && oldNewSpine == newNd.spine;
 
 ensures index == |mySeq| - 1;
 
-ensures LI(mySeq, index, d, newNd, oldD, oldNext, oldFp, oldTC, oldSpine);
+ensures LI(mySeq, index, d, newNd,
+oldNewD, oldNewNext, oldNewFp, oldNewTC, oldNewSpine,	
+oldNewD, oldNewNext, oldNewFp, oldNewTC, oldNewSpine);
 {
 index := |mySeq| - 1;
 }
 
+
+
 ghost method LIGuardExecBody2LI(mySeq:seq<INode>, index:int, d:Data, newNd:INode,
+		oldNewD:Data, oldNewNext:INode, oldNewFp:set<INode>, 
+			oldNewTC:seq<Data>, oldNewSpine:seq<INode>, 
 			oldD:Data, oldNext:INode, oldFp:set<INode>, 
 			oldTC:seq<Data>, oldSpine:seq<INode>) 
 			returns (newIndex:int)
 			
-requires LI(mySeq, index, d, newNd, oldD, oldNext, oldFp, oldTC, oldSpine);
+requires LI(mySeq, index, d, newNd,
+	oldNewD, oldNewNext, oldNewFp, 
+			oldNewTC, oldNewSpine, 
+	oldD, oldNext, oldFp, oldTC, oldSpine);
+
 requires index >= 0;
 
 modifies mySeq;
 
 ensures newIndex == index - 1;
-ensures LI(mySeq, newIndex, d, newNd, oldD, oldNext, oldFp, oldTC, oldSpine);
+
+ensures LI(mySeq, newIndex, d, newNd,
+	oldNewD, oldNewNext, oldNewFp, 
+			oldNewTC, oldNewSpine, 
+	old(mySeq[index].data), old(mySeq[index].next), 
+	old(mySeq[index].footprint), old(mySeq[index].tailContents), 
+	old(mySeq[index].spine));
 {
 mySeq[index].tailContents := [mySeq[index].next.data] + mySeq[index].next.tailContents;
 
@@ -435,7 +456,7 @@ mySeq[index].spine := [mySeq[index]] + mySeq[index].next.spine;
 
 newIndex := index - 1;
 }
-*/
+
 
 lemma LIAndNegGuard2Post(mySeq:seq<INode>, index:int, d:Data, newNd:INode,
 	oldNewD:Data, oldNewNext:INode, oldNewFp:set<INode>, 
@@ -464,6 +485,7 @@ ensures mySeq[0].spine == mySeq + newNd.spine;
 
 ensures mySeq[0].Valid();
 {}
+
 
 /*
 ghost method updateSeq(mySeq:seq<INode>, d:Data, newNd:INode)
