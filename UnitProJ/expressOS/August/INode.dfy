@@ -198,6 +198,7 @@ listCond(mySeq)
 }
 //===============================================
 
+/*
 ghost method updateCurIndex(mySeq:seq<INode>, index:int,
 			d:Data, newNd:INode)
 requires mySeq != [];
@@ -291,11 +292,13 @@ mySeq[index].footprint := {mySeq[index]} + mySeq[index].next.footprint;
 
 mySeq[index].spine := [mySeq[index]] + mySeq[index].next.spine;
 }
-
+*/
 
 //LI
 predicate LI(mySeq:seq<INode>, index:int, d:Data, newNd:INode,
-			oldD:Data, oldNext:INode, oldFp:set<INode>, 
+			oldNewD:Data, oldNewNext:INode, oldNewFp:set<INode>, 
+			oldNewTC:seq<Data>, oldNewSpine:seq<INode>, 
+	oldD:Data, oldNext:INode, oldFp:set<INode>, 
 			oldTC:seq<Data>, oldSpine:seq<INode>)
 reads mySeq, newNd, oldNext, oldFp, oldTC, oldSpine,
 	getFtprint(newNd), sumAllFtprint(mySeq);
@@ -311,11 +314,11 @@ reads mySeq, newNd, oldNext, oldFp, oldTC, oldSpine,
 && (newNd !in mySeq
 && newNd != null && newNd.Valid() && newNd.data == d
 && newNd.footprint !! (set nd | nd in mySeq)
-&& newNd.data == oldD 
-  && newNd.next == oldNext
-  && newNd.footprint == oldFp
-  && newNd.tailContents == oldTC
-  && newNd.spine == oldSpine)
+&& newNd.data == oldNewD 
+  && newNd.next == oldNewNext
+  && newNd.footprint == oldNewFp
+  && newNd.tailContents == oldNewTC
+  && newNd.spine == oldNewSpine)
 
 && mySeq[|mySeq|-1].next == newNd
 
@@ -336,7 +339,6 @@ reads mySeq, newNd, oldNext, oldFp, oldTC, oldSpine,
 	&& mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
 	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine)
 
-//
 && (0 <= index < |mySeq| - 1 ==> mySeq[index].tailContents[0..|mySeq|-index-1] + [d]
  + mySeq[index].tailContents[|mySeq|-index-1..] == 
  [mySeq[index+1].data] + mySeq[index+1].tailContents)
@@ -347,7 +349,18 @@ reads mySeq, newNd, oldNext, oldFp, oldTC, oldSpine,
 && (0 <= index < |mySeq| - 1 ==> mySeq[index].spine[0..|mySeq|-index] + [newNd]
  + mySeq[index].spine[|mySeq|-index..] == [mySeq[index]] + mySeq[index+1].spine)
 
+//
+&& (|oldTC| >= |mySeq|-index-2 && 
+	|oldSpine| >= |mySeq|-index-1)
+&& (- 1 <= index < |mySeq| - 1 ==> (mySeq[index+1].tailContents == 
+	oldTC[0..|mySeq|-index-2] + [d]
+ + oldTC[|mySeq|-index-2..]
 
+&& mySeq[index+1].footprint == oldFp + {newNd}
+&& mySeq[index+1].spine == oldSpine[0..|mySeq|-index-1] + [newNd]
+ + oldSpine[|mySeq|-index-1..]))
+
+//
 && (index < |mySeq| - 1 ==> mySeq[index+1].spine == mySeq[index+1..] +
 						newNd.spine)
 
@@ -355,7 +368,7 @@ reads mySeq, newNd, oldNext, oldFp, oldTC, oldSpine,
 
 }
 
-
+/*
 //precond ==> LI
 ghost method pre2LI(mySeq:seq<INode>, d:Data, newNd:INode,
 			oldD:Data, oldNext:INode, oldFp:set<INode>, 
@@ -422,7 +435,35 @@ mySeq[index].spine := [mySeq[index]] + mySeq[index].next.spine;
 
 newIndex := index - 1;
 }
+*/
 
+lemma LIAndNegGuard2Post(mySeq:seq<INode>, index:int, d:Data, newNd:INode,
+	oldNewD:Data, oldNewNext:INode, oldNewFp:set<INode>, 
+			oldNewTC:seq<Data>, oldNewSpine:seq<INode>, 
+			oldD:Data, oldNext:INode, oldFp:set<INode>, 
+			oldTC:seq<Data>, oldSpine:seq<INode>) 
+					
+requires LI(mySeq, index, d, newNd,
+	oldNewD, oldNewNext, oldNewFp, 
+			oldNewTC, oldNewSpine, 
+	oldD, oldNext, oldFp, oldTC, oldSpine);
+
+requires index < 0;
+
+ensures mySeq[0].tailContents == 
+	oldTC[0..|mySeq|-1] + [d]
+ + oldTC[|mySeq|-1..];
+
+ensures mySeq[0].footprint == oldFp + {newNd};
+
+ensures mySeq[0].spine == oldSpine[0..|mySeq|] + [newNd]
+ + oldSpine[|mySeq|..];
+
+
+ensures mySeq[0].spine == mySeq + newNd.spine;
+
+ensures mySeq[0].Valid();
+{}
 
 /*
 ghost method updateSeq(mySeq:seq<INode>, d:Data, newNd:INode)
