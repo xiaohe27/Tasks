@@ -579,4 +579,3 @@ LIAndNegGuard2Post(mySeq, index, d, newNd,
 
 
 }
-
