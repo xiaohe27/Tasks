@@ -38,7 +38,6 @@ predicate Valid()
 reads this, footprint;
 {
 good()  
-&& (forall nd :: nd in spine ==> nd in footprint)
 && (next != null ==> next.Valid())
 }
 
@@ -47,6 +46,7 @@ predicate ValidLemma()
 requires Valid();
 reads this, footprint;
 ensures ValidLemma();
+ensures (forall nd :: nd in spine ==> nd in footprint);
 ensures |tailContents| == |footprint|-1 == |spine|-1;
 ensures forall nd :: nd in spine ==> nd != null && nd.Valid();
 {
@@ -112,12 +112,14 @@ curIndex := curIndex + 1;
 }
 */
 
+
+
 predicate ndValid2ListValidLemma()
 requires Valid();
 reads this, footprint;
 
 ensures ndValid2ListValidLemma();
-
+ensures forall nd :: nd in spine ==> nd in footprint;
 ensures forall nd :: nd in footprint ==> nd != null && nd.footprint <= footprint;
 
 ensures validSeqCond(spine);
@@ -139,6 +141,8 @@ requires Valid();
 reads this, footprint;
 
 ensures spineFtprintLemma();
+ensures forall nd :: nd in spine ==> nd in footprint;
+
 ensures (set nd | nd in spine) == footprint;
 {
 if next == null then (spine == [this] && footprint == {this})
@@ -196,104 +200,11 @@ listCond(mySeq)
 && mySeq[|mySeq|-1].tailContents == []
 && mySeq[|mySeq|-1].spine == [mySeq[|mySeq|-1]])
 }
+
+
+
 //===============================================
-
 /*
-ghost method updateCurIndex(mySeq:seq<INode>, index:int,
-			d:Data, newNd:INode)
-requires mySeq != [];
-
-requires 0 <= index <= |mySeq| - 1;
-
-requires listInv(mySeq);
-
-requires forall i :: 0 <= i < |mySeq| ==> |mySeq|-i <= |mySeq[i].spine|;
-requires forall i :: 0 <= i < |mySeq| ==> |mySeq|-i-1 <= |mySeq[i].tailContents|;
-
-requires newNd !in mySeq;
-requires newNd != null && newNd.Valid() && newNd.data == d;
-requires newNd.footprint !! (set nd | nd in mySeq);
-
-requires mySeq[|mySeq|-1].next == newNd;
-
-requires index == |mySeq|-1 ==> (mySeq[|mySeq|-1].footprint + {newNd} == 
-	{mySeq[|mySeq|-1]} + newNd.footprint
-
-&& mySeq[|mySeq|-1].spine[0..1] + [newNd] + mySeq[|mySeq|-1].spine[1..]  == 
-	[mySeq[|mySeq|-1]] + newNd.spine
-
-&& [d] + mySeq[|mySeq|-1].tailContents == 
-	[newNd.data] + newNd.tailContents);
-
-requires forall i :: 0 <= i < index ==>
-	   mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
-
-	&& mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
-	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine;
-
-
-requires 0 <= index < |mySeq| - 1 ==> mySeq[index].tailContents[0..|mySeq|-index-1] + [d]
- + mySeq[index].tailContents[|mySeq|-index-1..] == 
- [mySeq[index+1].data] + mySeq[index+1].tailContents;
-
-requires 0 <= index < |mySeq| - 1 ==> mySeq[index].footprint + {newNd} == 
-	{mySeq[index]} + mySeq[index+1].footprint;
-
-requires 0 <= index < |mySeq| - 1 ==> mySeq[index].spine[0..|mySeq|-index] + [newNd]
- + mySeq[index].spine[|mySeq|-index..] == [mySeq[index]] + mySeq[index+1].spine;
-
-
-requires index < |mySeq| - 1 ==> mySeq[index+1].spine == mySeq[index+1..] +
-						newNd.spine;
-
-requires index < |mySeq| - 1 ==> mySeq[index+1].Valid();
-
-modifies mySeq[index];
-
-ensures listInv(mySeq);
-
-ensures forall i :: 0 <= i < |mySeq| && i != index ==>
- (mySeq[i].data == old(mySeq[i].data)
- && mySeq[i].next == old(mySeq[i].next)
- && mySeq[i].footprint == old(mySeq[i].footprint)
- && mySeq[i].tailContents == old(mySeq[i].tailContents)
- && mySeq[i].spine == old(mySeq[i].spine));
-
-ensures newNd !in mySeq;
-ensures newNd != null && newNd.Valid() && 
-  newNd.data == old(newNd.data) 
-  && newNd.next == old(newNd.next)
-  && newNd.footprint == old(newNd.footprint)
-  && newNd.tailContents == old(newNd.tailContents)
-  && newNd.spine == old(newNd.spine);
-
-ensures newNd.footprint !! (set nd | nd in mySeq);
-
-ensures forall i :: 0 <= i < |mySeq| ==> |mySeq|-i <= |mySeq[i].spine|;
-ensures forall i :: 0 <= i < |mySeq| ==> |mySeq|-i-1 <= |mySeq[i].tailContents|;
-
-ensures mySeq[index].tailContents == 
-	old(mySeq[index].tailContents[0..|mySeq|-index-1]) + [d]
- + old(mySeq[index].tailContents[|mySeq|-index-1..]);
-
-ensures mySeq[index].footprint == old(mySeq[index].footprint) + {newNd};
-ensures mySeq[index].spine == old(mySeq[index].spine[0..|mySeq|-index]) + [newNd]
- + old(mySeq[index].spine[|mySeq|-index..]);
-
-
-ensures mySeq[index].spine == mySeq[index..] + newNd.spine;
-
-ensures mySeq[index].Valid();
-
-{
-mySeq[index].tailContents := [mySeq[index].next.data] + mySeq[index].next.tailContents;
-
-mySeq[index].footprint := {mySeq[index]} + mySeq[index].next.footprint;
-
-mySeq[index].spine := [mySeq[index]] + mySeq[index].next.spine;
-}
-*/
-
 //LI
 predicate LI(mySeq:seq<INode>, index:int, d:Data, newNd:INode,
 			oldNewD:Data, oldNewNext:INode, oldNewFp:set<INode>, 
@@ -593,7 +504,7 @@ LIAndNegGuard2Post(mySeq, index, d, newNd,
 
 }
 
-
+*/
 
 
 }
