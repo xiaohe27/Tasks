@@ -359,16 +359,16 @@ modifies mySeq[index];
 
 ensures newIndex == index - 1;
 
-ensures LI(mySeq, newIndex, d, newNd,
-	oldNewD, oldNewNext, oldNewFp, 
-			oldNewTC, oldNewSpine, 
-	oldD, oldNext, oldFp, oldTC, oldSpine);
-
 ensures oldFp == old(mySeq[index].footprint)
 	&& oldTC == old(mySeq[index].tailContents);
 
 ensures oldFp == old(mySeq[newIndex+1].footprint)
 	&& oldTC == old(mySeq[newIndex+1].tailContents);
+
+ensures LI(mySeq, newIndex, d, newNd,
+	oldNewD, oldNewNext, oldNewFp, 
+			oldNewTC, oldNewSpine, 
+	oldD, oldNext, oldFp, oldTC, oldSpine);
 {
 mySeq[index].tailContents := [mySeq[index].next.data] + mySeq[index].next.tailContents;
 
@@ -382,7 +382,7 @@ old(mySeq[index].data), old(mySeq[index].next),
 	old(mySeq[index].spine);
 }
 
-/*
+
 lemma LIAndNegGuard2Post(mySeq:seq<INode>, index:int, d:Data, newNd:INode,
 	oldNewD:Data, oldNewNext:INode, oldNewFp:set<INode>, 
 			oldNewTC:seq<Data>, oldNewSpine:seq<INode>, 
@@ -412,7 +412,7 @@ ensures mySeq[0].Valid();
 {}
 
 
-
+/*
 ghost method updateSeq(mySeq:seq<INode>, d:Data, newNd:INode)
 requires mySeq != [];
 
