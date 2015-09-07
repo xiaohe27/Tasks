@@ -402,17 +402,13 @@ ensures mySeq[0].tailContents ==
 
 ensures mySeq[0].footprint == oldFp + {newNd};
 
-//ensures mySeq[0].spine == oldSpine[0..|mySeq|] + [newNd]
-// + oldSpine[|mySeq|..];
-
-
 ensures mySeq[0].spine == mySeq + newNd.spine;
 
 ensures mySeq[0].Valid();
 {}
 
 
-/*
+
 ghost method updateSeq(mySeq:seq<INode>, d:Data, newNd:INode)
 requires mySeq != [];
 
@@ -507,7 +503,7 @@ LIAndNegGuard2Post(mySeq, index, d, newNd,
 
 }
 
-*/
+
 
 
 }
