@@ -332,7 +332,6 @@ ensures LI(mySeq, index, d, newNd,
 oldNewD, oldNewNext, oldNewFp, oldNewTC, oldNewSpine,	
 oldNewD, oldNewNext, oldNewFp, oldNewTC, oldNewSpine);
 {
-assert newNd.ValidLemma();
 
 index, oldD, oldNext, oldFp, oldTC, oldSpine := 
 	|mySeq| - 1, newNd.data, newNd.next, newNd.footprint, 
@@ -340,7 +339,7 @@ index, oldD, oldNext, oldFp, oldTC, oldSpine :=
 }
 
 
-/*
+
 ghost method LIGuardExecBody2LI(mySeq:seq<INode>, index:int, d:Data, newNd:INode,
 		oldNewD:Data, oldNewNext:INode, oldNewFp:set<INode>, 
 			oldNewTC:seq<Data>, oldNewSpine:seq<INode>, 
@@ -356,7 +355,7 @@ requires LI(mySeq, index, d, newNd,
 
 requires index >= 0;
 
-modifies mySeq;
+modifies mySeq[index];
 
 ensures newIndex == index - 1;
 
@@ -365,6 +364,11 @@ ensures LI(mySeq, newIndex, d, newNd,
 			oldNewTC, oldNewSpine, 
 	oldD, oldNext, oldFp, oldTC, oldSpine);
 
+ensures oldFp == old(mySeq[index].footprint)
+	&& oldTC == old(mySeq[index].tailContents);
+
+ensures oldFp == old(mySeq[newIndex+1].footprint)
+	&& oldTC == old(mySeq[newIndex+1].tailContents);
 {
 mySeq[index].tailContents := [mySeq[index].next.data] + mySeq[index].next.tailContents;
 
@@ -378,7 +382,7 @@ old(mySeq[index].data), old(mySeq[index].next),
 	old(mySeq[index].spine);
 }
 
-
+/*
 lemma LIAndNegGuard2Post(mySeq:seq<INode>, index:int, d:Data, newNd:INode,
 	oldNewD:Data, oldNewNext:INode, oldNewFp:set<INode>, 
 			oldNewTC:seq<Data>, oldNewSpine:seq<INode>, 
