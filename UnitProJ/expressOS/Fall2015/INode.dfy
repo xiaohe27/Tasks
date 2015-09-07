@@ -204,7 +204,7 @@ listCond(mySeq)
 
 
 //===============================================
-/*
+
 //LI
 predicate LI(mySeq:seq<INode>, index:int, d:Data, newNd:INode,
 			oldNewD:Data, oldNewNext:INode, oldNewFp:set<INode>, 
@@ -257,8 +257,8 @@ reads mySeq, newNd, oldNext, oldFp, oldTC, oldSpine,
 && (0 <= index < |mySeq| - 1 ==> mySeq[index].footprint + {newNd} == 
 	{mySeq[index]} + mySeq[index+1].footprint)
 
-//&& (0 <= index < |mySeq| - 1 ==> mySeq[index].spine[0..|mySeq|-index] + [newNd]
-// + mySeq[index].spine[|mySeq|-index..] == [mySeq[index]] + mySeq[index+1].spine)
+&& (0 <= index < |mySeq| - 1 ==> mySeq[index].spine[0..|mySeq|-index] + [newNd]
+ + mySeq[index].spine[|mySeq|-index..] == [mySeq[index]] + mySeq[index+1].spine)
 
 //
 && (|oldTC| >= |mySeq|-index-2 && 
@@ -332,13 +332,15 @@ ensures LI(mySeq, index, d, newNd,
 oldNewD, oldNewNext, oldNewFp, oldNewTC, oldNewSpine,	
 oldNewD, oldNewNext, oldNewFp, oldNewTC, oldNewSpine);
 {
+assert newNd.ValidLemma();
+
 index, oldD, oldNext, oldFp, oldTC, oldSpine := 
 	|mySeq| - 1, newNd.data, newNd.next, newNd.footprint, 
 		newNd.tailContents, newNd.spine;
 }
 
 
-
+/*
 ghost method LIGuardExecBody2LI(mySeq:seq<INode>, index:int, d:Data, newNd:INode,
 		oldNewD:Data, oldNewNext:INode, oldNewFp:set<INode>, 
 			oldNewTC:seq<Data>, oldNewSpine:seq<INode>, 
@@ -363,8 +365,6 @@ ensures LI(mySeq, newIndex, d, newNd,
 			oldNewTC, oldNewSpine, 
 	oldD, oldNext, oldFp, oldTC, oldSpine);
 
-ensures oldFp == old(mySeq[newIndex+1].footprint);
-ensures oldTC == old(mySeq[newIndex+1].tailContents);
 {
 mySeq[index].tailContents := [mySeq[index].next.data] + mySeq[index].next.tailContents;
 
@@ -473,6 +473,7 @@ invariant LI(mySeq, index, d, newNd,
 	newNd.tailContents, newNd.spine, 
 	oldD, oldNext, oldFp, oldTC, oldSpine);
 
+/*
 invariant index < |mySeq|-1 ==>
 	(oldTC == old(mySeq[index+1].tailContents))
 	&& (mySeq[index+1].tailContents == 
@@ -483,6 +484,7 @@ invariant index < |mySeq|-1 ==> (
 		oldFp == old(mySeq[index+1].footprint) &&
 		mySeq[index+1].footprint ==
 		oldFp + {newNd});
+*/
 {
 index, oldD, oldNext, oldFp, oldTC, oldSpine := 
 LIGuardExecBody2LI(mySeq, index, d, newNd,
@@ -490,9 +492,6 @@ LIGuardExecBody2LI(mySeq, index, d, newNd,
 		newNd.tailContents, newNd.spine, 
 			oldD, oldNext, oldFp, 
 			oldTC, oldSpine);
-
-assert oldTC == old(mySeq[index+1].tailContents)
-	&& oldFp == old(mySeq[index+1].footprint);
 
 }
 
