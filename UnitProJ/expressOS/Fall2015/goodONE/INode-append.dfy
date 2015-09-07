@@ -38,7 +38,6 @@ predicate Valid()
 reads this, footprint;
 {
 good()  
-&& (forall nd :: nd in spine ==> nd in footprint)
 && (next != null ==> next.Valid())
 }
 
@@ -47,6 +46,7 @@ predicate ValidLemma()
 requires Valid();
 reads this, footprint;
 ensures ValidLemma();
+ensures (forall nd :: nd in spine ==> nd in footprint);
 ensures |tailContents| == |footprint|-1 == |spine|-1;
 ensures forall nd :: nd in spine ==> nd != null && nd.Valid();
 {
@@ -138,33 +138,13 @@ updateSeq(spine, d, node);
 
 
 
-
-
-
-predicate spineFtprintLemma()
-requires Valid();
-reads this, footprint;
-
-ensures spineFtprintLemma();
-ensures (set nd | nd in spine) == footprint;
-{
-if next == null then (spine == [this] && footprint == {this})
-else (
-spine == [this] + next.spine 
-&& footprint == {this} + next.footprint
-&& next.spineFtprintLemma())
-}
-
-
-
 predicate ndValid2ListValidLemma()
 requires Valid();
 reads this, footprint;
 
 ensures ndValid2ListValidLemma();
-
-ensures forall nd :: nd in footprint ==> nd != null &&
-							nd.footprint <= footprint;
+ensures forall nd :: nd in spine ==> nd in footprint;
+ensures forall nd :: nd in footprint ==> nd != null && nd.footprint <= footprint;
 
 ensures validSeqCond(spine);
 {
@@ -177,6 +157,25 @@ spine == [this] + next.spine
 && tailContents == [next.data] + next.tailContents
 && next.ndValid2ListValidLemma())
 }
+
+
+
+predicate spineFtprintLemma()
+requires Valid();
+reads this, footprint;
+
+ensures spineFtprintLemma();
+ensures forall nd :: nd in spine ==> nd in footprint;
+
+ensures (set nd | nd in spine) == footprint;
+{
+if next == null then (spine == [this] && footprint == {this})
+else (
+spine == [this] + next.spine 
+&& footprint == {this} + next.footprint
+&& next.spineFtprintLemma())
+}
+
 
 
 
