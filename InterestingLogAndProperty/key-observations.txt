@@ -1,0 +1,26 @@
+1. Huge logs should be stored in data warehouse.
+Unlike database which we can dynamically update, data warehouse is static and fixed.
+
+2. RV-Monitor is an event-driven tool and 
+
+its existing logic plugin can only express the properties about control flow.
+
+i.e. whether the events related by common fields (whose values are used as
+indices of monitors) of certain objects occur in such an order that it conforms
+to the property.
+
+The particular values of non-indexing fields of an object are not important when 
+we analyze the control flow property. As long as different objects can be distinguished.
+
+E.G property p:
+Before next() is called on an iterator 'iter', hasNext() should always be called.
+
+This property is implictly universally quantified: forall iter:Iterator, 
+the property p(iter) should hold.
+
+Therefore, we do not care about the iterator's name/field values. All we care is whether
+the 'hasNext' and 'next' events related to the same iterator satisfy the property.
+
+=============================
+However, if the log is data-driven and needs sql-like query, we existing logic plugin
+is not power enough.

@@ -4,6 +4,17 @@ What direction should we make main efforts?
 
 2. Logs in general. Clients may perform SQL like query.
 
+
+***
+My opinion: our RV-Monitor is more event-driven. In the area of log analysis,
+it is good at analyzing the logs that reflect the program's execution, and ensuring 
+the recorded method invocations conform to good programming practice.
+
+When analyzing whether a program conforms to good programming practices, we do not
+care too much about the object ID (name) that invoke the methods, as long as the 
+set of methods that related by the same object happen in certain order so that 
+the given good programming practice can be satisfied.
+
 trade-off between expressive power and efficiency.
 
 shortcomings of rv-monitor:
