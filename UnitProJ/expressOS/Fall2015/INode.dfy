@@ -445,19 +445,19 @@ modifies mySeq;
 
 
 //ensures forall nd :: nd in mySeq ==> nd.data == old(nd.data);
-/*
+
 ensures mySeq[0].tailContents == 
 	old(mySeq[0].tailContents) [0..|mySeq|-1] + [d]
  + old(mySeq[0].tailContents) [|mySeq|-1..];
 
 ensures mySeq[0].footprint == old(mySeq[0].footprint) + {newNd};
-*/
+
 //ensures mySeq[0].spine == old(mySeq[0].spine[0..|mySeq|]) + [newNd]
 // + old(mySeq[0].spine[|mySeq|..]);
 
 //ensures mySeq[0].spine == mySeq + newNd.spine;
 
-//ensures mySeq[0].Valid();
+ensures mySeq[0].Valid();
 
 {
 
