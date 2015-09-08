@@ -1,0 +1,194 @@
+BODY { 
+   font-family: arial, helvetica, sans-serif;
+   background-color: #ffffff; 
+   color: #000000; 
+   font-size: 10pt; 
+   font-weight: normal; 
+   margin-left: 12px; 
+   margin-right: 12px;
+}
+
+HR {
+   color: #dedee7;
+}
+
+A {
+   font-family: arial, helvetica, sans-serif;
+   color: #525782;
+   text-decoration: none;
+   cursor: pointer;
+}
+
+A:link {
+   color: #525782; 
+   text-decoration: none;
+}
+
+A:visited {
+   color: #525782; 
+   text-decoration: none;
+}
+
+A:active {
+   color : #ffffff;
+   background-color: #525782;
+}
+
+A:hover {
+   color : #ffffff;
+   background-color: #525782;
+   cursor : pointer; 
+}
+
+A:focus {
+   color : #ffffff;
+   background-color: #525782; 
+   cursor : pointer; 
+}
+
+
+H1 {
+   font-family: arial, helvetica, sans-serif;
+   font-size: 18pt; 
+   font-weight: bold;
+}
+
+H2 {
+   font-family: arial, helvetica, sans-serif;
+   font-size: 12pt; 
+   font-weight: bold;
+}
+
+H3 {
+   font-family: arial, helvetica, sans-serif;
+   font-size: 12pt; 
+   font-weight: bold;
+}
+
+H4 {
+   font-family: arial, helvetica, sans-serif;
+   font-size: 12pt; 
+   font-style: italic; 
+   font-weight: normal;
+}
+
+B {
+   font-weight: bold;
+}
+
+STRONG {
+   font-family: arial, helvetica, sans-serif; 
+   font-weight: 700;
+}
+
+TT {
+   font-family: monospace;
+}
+
+PRE {
+   font-family: monospace;
+}
+
+SAMP {
+   font-family: monospace;
+}
+
+KBD {
+   font-family: monospace;
+}
+
+
+TABLE {margin-top: 0em; margin-bottom: 1em;
+   font-family: arial, helvetica, sans-serif;
+   font-size: 10pt;
+}
+
+DL {
+   font-family: arial, helvetica, sans-serif; 
+   font-size: 10pt;
+}
+
+P {
+   font-family: arial, helvetica, sans-serif;
+   font-size: 10pt;
+}
+
+CITE {
+   font-family: arial, helvetica, sans-serif;
+   font-size: 10pt;
+   font-style: italic;
+}
+
+UL {
+   font-family: arial, helvetica, sans-serif;
+   font-size: 10pt
+}
+
+OL {
+   font-family: arial, helvetica, sans-serif;
+   font-size: 10pt;
+}
+
+TH {
+   font-family: arial, helvetica, sans-serif;
+   font-size: 10pt;
+}
+
+TD {
+   font-family: arial, helvetica, sans-serif;
+   font-size: 10pt;
+}
+
+DT {
+   font-weight: bold;
+}
+
+
+.rvw {
+   background-color: yellow;
+}
+
+.ind {
+   margin-left: 20px;
+}
+
+.tm {
+   font-size: smaller;
+}
+
+.com {
+   font-weight: bold;
+}
+
+.ctl {
+   font-weight: bold;
+}
+
+.def {
+   font-style: italic;
+}
+
+.emph {
+   font-style: italic;
+}
+
+.fn {
+   font-family: monospace;
+}
+
+.key {
+   font-weight: bold;
+}
+
+.menu {
+   font-weight: bold;
+}
+
+.msg {
+   font-family: monospace;
+}
+
+.type {
+   font-family: monospace;
+}
+

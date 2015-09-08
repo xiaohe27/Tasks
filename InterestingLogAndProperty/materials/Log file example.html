@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0083)https://publib.boulder.ibm.com/tividd/td/tec/SC32-1242-00/en_US/HTML/ecoamst284.htm -->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Log file example</title>
+<!-- All rights reserved. Licensed Materials Property of IBM -->
+<!-- US Government Users Restricted Rights                   -->
+<!-- Use, duplication or disclosure restricted by            -->
+<!-- GSA ADP Schedule Contract with IBM Corp.                -->
+
+<meta name="dc.date" scheme="iso8601" content="2003-07-22">
+<meta name="copyright" content="(C) Copyright IBM Corporation 2003">
+<meta name="security" content="">
+<meta name="dc.language" scheme="rfc1766" content="en-us">
+<meta name="Robots" content="index,follow">
+<meta http-equiv="PICS-Label" content="(PICS-1.1 &quot;http://www.icra.org/ratingsv02.html&quot; l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) &quot;http://www.rsac.org/ratingsv01.html&quot; l gen true r (n 0 s 0 v 0 l 0) &quot;http://www.classify.org/safesurf/&quot; l gen true r (SS~~000 1))">
+<meta name="keywords" content="format file, UNIX logfile adapter,
+adapter-specific, format files">
+<link rel="stylesheet" type="text/css" href="./Log file example_files/ibmidwb.css">
+<link rel="stylesheet" type="text/css" href="./Log file example_files/twoframeinterfacebody.css">
+<link rel="stylesheet" id="coToolbarStyle" href="chrome-extension://nppllibpnmahfaklnpggkibhkapjkeob/toolbar/styles/placeholder.css" type="text/css"><script type="text/javascript" id="cosymantecbfw_removeToolbar">(function () {				var toolbarElement = {},					parent = {},					interval = 0,					retryCount = 0,					isRemoved = false;				if (window.location.protocol === 'file:') {					interval = window.setInterval(function () {						toolbarElement = document.getElementById('coFrameDiv');						if (toolbarElement) {							parent = toolbarElement.parentNode;							if (parent) {								parent.removeChild(toolbarElement);								isRemoved = true;								if (document.body && document.body.style) {									document.body.style.setProperty('margin-top', '0px', 'important');								}							}						}						retryCount += 1;						if (retryCount > 10 || isRemoved) {							window.clearInterval(interval);						}					}, 10);				}			})();</script></head>
+<body>
+<a id="Top_Of_Page" name="Top_Of_Page"></a>
+
+
+<table border="0" width="708" cellspacing="0" cellpadding="0">
+  <tbody><tr>
+    <td width="100%" background="./Log file example_files/ltbanner_tivibm2.gif"><img src="./Log file example_files/ltbanner_tivibm1.gif" width="421" height="54" alt="IBM Tivoli Software"></td>
+    <td width="287"><img src="./Log file example_files/ltbanner_tivibm3.gif" width="287" height="54" alt="IBM Tivoli Software"></td>
+  </tr>
+</tbody></table>
+
+<p><b>[ <a href="https://publib.boulder.ibm.com/tividd/td/tec/SC32-1242-00/en_US/HTML/ecoamst284.htm#Bot_Of_Page">Bottom of Page</a> | <a href="https://publib.boulder.ibm.com/tividd/td/tec/SC32-1242-00/en_US/HTML/ecoamst283.htm">Previous Page</a> | <a href="https://publib.boulder.ibm.com/tividd/td/tec/SC32-1242-00/en_US/HTML/ecoamst285.htm">Next Page</a> | <a href="https://publib.boulder.ibm.com/tividd/td/tec/SC32-1242-00/en_US/HTML/ecoamst02.htm#wq1">Contents</a> | <a href="https://publib.boulder.ibm.com/tividd/td/tec/SC32-1242-00/en_US/HTML/ecoamst306.htm#wq848">Index</a> ]</b></p>
+<hr>
+
+
+
+<a name="wq800"></a>
+<h2 id="wq800"><a href="https://publib.boulder.ibm.com/tividd/td/tec/SC32-1242-00/en_US/HTML/ecoamst02.htm#ToC_324">Log file example</a></h2>
+<p><a id="idx1327" name="idx1327"></a><a id="idx1328" name="idx1328"></a>The following
+successful <span class="bold">su</span> message from a system log is an example
+of matching a system log message to the generic format specification mentioned
+in the preceding section: </p>
+<pre class="xmp">Sep 13 12:17:11 elcap su: 'su root' succeeded for tjones on /dev/ttyp0</pre>
+<p>The component specifiers and matches are as follows: </p>
+<dl>
+<dt class="bold"><span class="bold">%t</span></dt>
+<dd><span>Sep 13 12:17:11</span>
+</dd>
+<dt class="bold"><span class="bold">%s</span></dt>
+<dd><span>elcap</span>
+</dd>
+<dt class="bold"><span class="bold">%s*</span></dt>
+<dd><span>su: 'su root' succeeded for tjones on /dev/ttyp0</span>
+</dd>
+</dl>
+<p>The system log message contains some constant parts and some
+variable parts. The constant parts of the system log message are the same
+for <span><span class="italic">any</span></span> successful <span class="bold">su</span> message.
+The constant parts are as follows: </p>
+<ul>
+<li><span>su: 'su</span></li>
+<li><span>' succeeded for</span></li>
+<li><span>on</span></li></ul>
+<p>The variable parts of the example system log message are as follows: </p>
+<ul>
+<li><span>Sep 13 12:17:11</span></li>
+<li><span>elcap</span></li>
+<li><span>root</span></li>
+<li><span>tjones</span></li>
+<li><span>/dev/ttyp0</span></li></ul>
+<p>The following example shows how the variable data differs in another successful <tt class="xph">su</tt> message: </p>
+<pre class="xmp">Sep 29 14:57:28 aspen su: 'su root' succeeded for jsmith on /dev/ttypd</pre>
+<p>The general format specification %t %s %s* can be specialized for the Su_Success
+event class as follows: </p>
+<pre class="xmp">%t %s su: 'su %s' succeeded for %s on %s</pre>
+<p>Using the system log message from the preceding September 29 example, the
+component specifiers and matches are as follows: </p>
+<dl>
+<dt class="bold"><tt class="xph">%t</tt></dt>
+<dd><span>Sep 29 14:57:28</span>
+</dd>
+<dt class="bold"><tt class="xph">%s</tt></dt>
+<dd><span>aspen</span>
+</dd>
+<dt class="bold"><tt class="xph">su: 'su</tt></dt>
+<dd><span>su: 'su</span>
+</dd>
+<dt class="bold"><tt class="xph">%s</tt></dt>
+<dd><span>root</span><span class="bold"></span>
+</dd>
+<dt class="bold"><tt class="xph">succeeded for</tt></dt>
+<dd><span>succeeded for</span>
+</dd>
+<dt class="bold"><tt class="xph">%s</tt></dt>
+<dd><span>jsmith</span>
+</dd>
+<dt class="bold"><tt class="xph">on</tt></dt>
+<dd><span>on</span>
+</dd>
+<dt class="bold"><tt class="xph">%s</tt></dt>
+<dd><span>/dev/ttypd</span>
+</dd>
+</dl>
+<p>The white space characters that separate the words of a system
+log message must also be present in the format string. A single space character
+(that is, one blank) in the format string matches any number of white space
+characters in the message. For example, if the space between the colon (:)
+and the quotation mark (') is deleted in the preceding specialized format
+string, as shown in the following example, the system log message would no
+longer match it. </p>
+<pre class="xmp">%t %s su:'su %s' succeeded for %s on %s</pre>
+<p>Care should be taken when using the arbitrary length repeater component
+specifiers (%s* and *s+). The following format string does not make much sense: </p>
+<pre class="xmp">This is not a good format %s* %s*</pre>
+<p>The first %s* matches everything through the end of the message,
+and the second %s* never matches anything. Although it might seem that this
+does not matter, the importance is described in <a href="https://publib.boulder.ibm.com/tividd/td/tec/SC32-1242-00/en_US/HTML/ecoamst286.htm#caa34574">Mappings</a>.</p>
+<p>The following format string, however, is meaningful: </p>
+<pre class="xmp">This is a good format %s* : %s*</pre>
+<p>The first %s* matches everything up to the first colon (:), and the second
+%s* now matches everything through the end of the message.</p>
+<p>The format string must also reflect whether white space precedes a constant
+or component specifier. In the following example, both messages match a format
+string of <tt class="xph">%s*company_xyz</tt> because they are preceded by zero (<tt class="xph">0</tt>) or more constants and no white space. </p>
+<pre class="xmp">company_xyz is logging messages</pre><p class="indatacontent"> </p>
+<pre class="xmp">Acompany_xyz is logging messages</pre>
+<p>However, the following example requires a format string with a space after
+the %s* component specifier, as in <tt class="xph">%s* company_xyz</tt>, because it
+is preceded by white space and does not match the previous format string. </p>
+<pre class="xmp">the company_xyz is logging messages</pre>
+<p>From the preceding examples, you can see that you can specialize a generic
+format string to match a more specific event by either replacing component
+specifiers with constants or by restricting the arbitrary length repeater
+specifiers to a fixed length, using constants to complete the specifier.</p>
+<hr><p><b>[ <a href="https://publib.boulder.ibm.com/tividd/td/tec/SC32-1242-00/en_US/HTML/ecoamst284.htm#Top_Of_Page">Top of Page</a> | <a href="https://publib.boulder.ibm.com/tividd/td/tec/SC32-1242-00/en_US/HTML/ecoamst283.htm">Previous Page</a> | <a href="https://publib.boulder.ibm.com/tividd/td/tec/SC32-1242-00/en_US/HTML/ecoamst285.htm">Next Page</a> | <a href="https://publib.boulder.ibm.com/tividd/td/tec/SC32-1242-00/en_US/HTML/ecoamst02.htm#wq1">Contents</a> | <a href="https://publib.boulder.ibm.com/tividd/td/tec/SC32-1242-00/en_US/HTML/ecoamst306.htm#wq848">Index</a> ]</b></p>
+<a id="Bot_Of_Page" name="Bot_Of_Page"></a>
+
+
+</body><div id="coFrameDiv" style="height:0px;display:none;"><iframe id="coToolbarFrame" src="./Log file example_files/placeholder.html" style="height: 0px; width: 100%; display: none;"></iframe></div></html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0168)https://www.microsoft.com/technet/mnp_utility.mspx/quicksearch?url=/technet/prodtechnol/WindowsServer2003/Library/IIS/ffdd7079-47be-4277-921f-7a3a6e610dcb.mspx&nosearch -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+		<title>Microsoft search frame</title>
+		
+		<meta name="robots" content="noindex">
+		<!--<base target="_top">--><base href="." target="_top">
+		<link type="text/css" rel="Stylesheet" href="css.aspx">
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"><link rel="stylesheet" type="text/css" href="css(1).aspx"><script language="JavaScript">var doImage=doImage;var TType=TType;var defaultSearchLable;
+function mhHover(tbl,idx,cls){var t,d;if(document.getElementById)t=document.getElementById(tbl);else t=document.all(tbl);if(t==null)return;if(t.getElementsByTagName)d=t.getElementsByTagName("TD");else d=t.all.tags("TD");if(d==null)return;if(d.length<=idx)return;d[idx].className=cls;}
+function footerjs(doc){};
+var varSegmentation = 0;
+var varClickTracking = 1;
+var varCustomerTracking=1;
+document.write("<script type='text/javascript' src='" + (window.location.protocol) + "//c.microsoft.com/ms.js'"+"'><\/script>");
+
+
+var rsltextbox = 'msviLSBtbox'; var wtflag = false;
+function stripSymbols () { var objrslttextbox = getObjectById(rsltextbox); if (objrslttextbox) { var form = objrslttextbox.form; var s = objrslttextbox.value; filteredValues = "<>!@^*"; var i; var returnString = ""; for (i = 0; i < s.length; i++) { var c = s.charAt(i); if (filteredValues.indexOf(c) == -1) { returnString += c; } else { returnString += " "; } } objrslttextbox.value = returnString; } if(!wtflag) { trackLSB("Site"); } } 
+function addSubmitEvent() {
+ msviLSBtbox=document.getElementById("msviLSBtbox")
+ if(msviLSBtbox)
+ {
+    defaultSearchLable = msviLSBtbox.value;
+ }
+ var objrslttextbox = getObjectById(rsltextbox); 
+ if (objrslttextbox) 
+ { 
+    var form = objrslttextbox.form;
+     if (window.attachEvent) 
+     { 
+         form.attachEvent("onsubmit",stripSymbols); 
+     }
+     else 
+     { 
+        form.addEventListener("submit",stripSymbols,false);
+     }
+  } 
+} 
+function getObjectById(elid) 
+{ 
+    if (document.getElementById) 
+    { 
+        return document.getElementById(elid); 
+    } 
+    else if (document.all) 
+    { 
+        return document.all[elid]; 
+    } 
+    else if (document.layers) 
+    { 
+        return document.layers[elid];
+    } 
+} 
+if (window.attachEvent) { window.attachEvent("onload",addSubmitEvent); } else { window.addEventListener("load",addSubmitEvent,false); } 
+var FromWeb = false;
+function trackLSB(type)
+{
+
+  clearDefaultSearchLable();
+ 
+  if(type=="Web")
+    FromWeb = true;
+  var tmp = document.getElementById("msviLSBtbox");
+  var errorInfo = document.getElementById("errorInfo");
+  if(type=="Site" && tmp.value.length==0 && !FromWeb)
+  {
+       tmp.value=errorInfo.value;
+       tmp.style.color='#bc2b2b';
+       ajustWidth();
+  }
+  if (typeof dcsMultiTrack == "function")
+  { 
+      var qu = document.getElementById("msviLSBtbox").value;
+      var dcsuri = "results.aspx";
+      var dcssip, ti;
+      if (type == "Site")
+      {
+        dcssip = "search.microsoft.com";
+        ti = "SearchButton: OnSite"; 
+      }
+      else if (type == "Web")
+      {
+         dcssip = "bing.com";
+         ti = "SearchButton: Web";
+      }
+      dcsMultiTrack("DCS.dcsuri", dcsuri, "DCS.dcssip", dcssip, "WT.ti", ti, "WT.dl", "2", "WT.z_srch_t", qu, "DCS.dcsqry", "", "WT.ad", "", "WT.mc_id", ""); 
+      wtflag = true; DCS.dcsuri=DCS.dcssip=DCS.dcsqry=WT.ti=WT.z_srch_t="";
+  }
+}
+
+var isInputqu = false;
+var searchBoxWidthWithKievLogo = 0;
+var searchBoxWidthWithoutKievLogo = 0;
+function clearDefaultSearchLable()
+{var searchBox = document.getElementById("msviLSBtbox");
+if(!isInputqu){searchBox.value = "";}}
+var kievImageWidth = 47;
+var isAdTboxWidth = false;
+var isInitailed = false;
+function ajustWidth()
+{
+    var searchBoxInput = document.getElementById("msviLSBtbox");
+    var kievImage = document.getElementById("msviLSBlogo");
+    if(!isInitailed)
+    {
+         searchBoxWidthWithKievLogo = searchBoxInput.style.width;
+         searchBoxWidthWithoutKievLogo = searchBoxInput.clientWidth + (kievImageWidth - 1);
+         isInitailed = true;
+    }
+    var width = kievImage.clientWidth-1;
+    kievImage.style.width = '1px';
+    var tBoxAloneWidth = searchBoxInput.clientWidth + width;
+    searchBoxInput.style.width = tBoxAloneWidth;
+    isAdTboxWidth = true;
+    
+      
+    
+}
+
+function searchBoxFocused(defaultSearchLabel)
+{
+    var searchBoxInput = document.getElementById("msviLSBtbox");
+    var kievImage = document.getElementById("msviLSBlogo");
+    if(searchBoxInput.value == defaultSearchLabel || searchBoxInput.value==document.getElementById("errorInfo").value)
+    {
+        searchBoxInput.value = '';
+        searchBoxInput.style.fontStyle = '';
+        searchBoxInput.style.color='#000000';
+        kievImage.style.width = '1px';
+        if(searchBoxWidthWithKievLogo == 0 && !isAdTboxWidth &&!isInitailed)
+        {
+            searchBoxWidthWithKievLogo = searchBoxInput.style.width;
+            searchBoxWidthWithoutKievLogo = searchBoxInput.clientWidth + (kievImageWidth - 1);
+            isInitailed = true;
+        }
+        searchBoxInput.style.width = searchBoxWidthWithoutKievLogo;
+    }
+}
+
+function searchBoxBlur(defaultSearchLabel)
+{
+    var searchBoxInput = document.getElementById("msviLSBtbox");
+    var kievImage = document.getElementById("msviLSBlogo");
+    if(searchBoxInput.value.replace(/(^\s*)|(\s*$)/g, '')=='') 
+    {
+        searchBoxInput.value=defaultSearchLabel;searchBoxInput.style.fontStyle ='Italic';
+        searchBoxInput.style.color = "#a1a1a1";
+        kievImage.style.width = kievImageWidth;
+        
+        searchBoxInput.style.width = searchBoxWidthWithKievLogo;
+        isInputqu = false;
+     }
+     else
+     {
+        isInputqu = true;
+     }
+}
+
+function Test()
+{
+    var searchBox = document.getElementById(rsltextbox);
+    var go = document.getElementById("errorInfo");
+    if(searchBox.value==go.value)
+        return false;
+    return true; 
+}</script><script type="text/javascript" src="ms.js" '=""></script><script language="JavaScript" src="broker.js"></script>
+		
+	</head>
+	<body topmargin="0" leftmargin="0" marginheight="0" marginwidth="0">
+		
+	
+
+<script src="broker-config_s2.js"></script></body></html>
