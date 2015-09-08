@@ -470,13 +470,11 @@ ghost var nxtOldTC:seq<Data>;
 nxtOldTC := newNd.tailContents;
 
 while(index >= 0)
+invariant forall i :: 0 <= i <= index ==> 
+(mySeq[i].tailContents == old(mySeq[i].tailContents)
+&& mySeq[i].footprint == old(mySeq[i].footprint));
 
-/*
-invariant index < |mySeq|-1 ==> (
-		oldFp == old(mySeq[index+1].footprint) &&
-		mySeq[index+1].footprint ==
-		oldFp + {newNd});
-*/
+
 
 invariant LI(mySeq, index, d, newNd,
 	newNd.data, newNd.next, newNd.footprint, 
@@ -484,24 +482,24 @@ invariant LI(mySeq, index, d, newNd,
 	oldD, oldNext, oldFp, oldTC, oldSpine);
 
 
-invariant index < |mySeq|-1 ==> 
-	(nxtOldTC == old(mySeq[index+1].tailContents));
+invariant index < |mySeq|-1 ==> (
+		oldFp == old(mySeq[index+1].footprint) &&
+		mySeq[index+1].footprint ==
+		oldFp + {newNd});
 
-/*
-	&& (mySeq[index].next.tailContents == 
+invariant index < |mySeq|-1 ==> 
+	oldTC == old(mySeq[index+1].tailContents)
+	&& (mySeq[index+1].tailContents == 
 	oldTC[0..|mySeq|-index-2] + [d]
 	+ oldTC[|mySeq|-index-2..]);
-*/
-{
-nxtOldTC := mySeq[index].tailContents;
 
+{
 index, oldD, oldNext, oldFp, oldTC, oldSpine := 
 LIGuardExecBody2LI(mySeq, index, d, newNd,
 		newNd.data, newNd.next, newNd.footprint, 
 		newNd.tailContents, newNd.spine, 
 			oldD, oldNext, oldFp, 
 			oldTC, oldSpine);
-
 }
 
 
