@@ -260,7 +260,6 @@ reads mySeq, newNd, oldNext, oldFp, oldTC, oldSpine,
 && (0 <= index < |mySeq| - 1 ==> mySeq[index].spine[0..|mySeq|-index] + [newNd]
  + mySeq[index].spine[|mySeq|-index..] == [mySeq[index]] + mySeq[index+1].spine)
 
-//
 && (|oldTC| >= |mySeq|-index-2 && 
 	|oldSpine| >= |mySeq|-index-1) 
 
@@ -272,11 +271,8 @@ mySeq[index+1].tailContents ==
 
 && mySeq[index+1].footprint == oldFp + {newNd}
 
-//&& mySeq[index+1].spine == oldSpine[0..|mySeq|-index-1] + [newNd]
-// + oldSpine[|mySeq|-index-1..]
 ))
 
-//
 && (index < |mySeq| - 1 ==> mySeq[index+1].spine == mySeq[index+1..] +
 						newNd.spine)
 
@@ -443,19 +439,11 @@ requires (mySeq[|mySeq|-1].footprint + {newNd} ==
 
 modifies mySeq;
 
-
-//ensures forall nd :: nd in mySeq ==> nd.data == old(nd.data);
-
 ensures mySeq[0].tailContents == 
 	old(mySeq[0].tailContents) [0..|mySeq|-1] + [d]
  + old(mySeq[0].tailContents) [|mySeq|-1..];
 
 ensures mySeq[0].footprint == old(mySeq[0].footprint) + {newNd};
-
-//ensures mySeq[0].spine == old(mySeq[0].spine[0..|mySeq|]) + [newNd]
-// + old(mySeq[0].spine[|mySeq|..]);
-
-//ensures mySeq[0].spine == mySeq + newNd.spine;
 
 ensures mySeq[0].Valid();
 

@@ -1,0 +1,11 @@
+What direction should we make main efforts?
+
+1. Logs that record the program execution traces.
+
+2. Logs in general. Clients may perform SQL like query.
+
+trade-off between expressive power and efficiency.
+
+shortcomings of rv-monitor:
+
+equality reasoning.
