@@ -1,5 +1,5 @@
 // Dafny program verifier version 1.9.5.20511, Copyright (c) 2003-2015, Microsoft.
-// Command Line Options: /noVerify /print:INode.dfy.bpl INode.dfy
+// Command Line Options: /compile:0 /nologo /nologo /noVerify /print:/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy.bpl /home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy
 
 const $$Language$Dafny: bool;
 
@@ -5078,7 +5078,7 @@ implementation CheckWellformed$$_module.INode.len(this: ref)
     b$reqreads#4 := true;
 
     // AddWellformednessCheck for function len
-    assume {:captureState "INode.dfy(12,16): initial state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(12,16): initial state"} true;
     $_Frame := (lambda<alpha> $o: ref, $f: Field alpha :: 
   $o != null && read($Heap, $o, alloc)
      ==> $o == this || read($Heap, this, _module.INode.footprint)[$Box($o)]);
@@ -5592,7 +5592,7 @@ implementation CheckWellformed$$_module.INode.good(this: ref)
     b$reqreads#21 := true;
 
     // AddWellformednessCheck for function good
-    assume {:captureState "INode.dfy(22,10): initial state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(22,10): initial state"} true;
     $_Frame := (lambda<alpha> $o: ref, $f: Field alpha :: 
   $o != null && read($Heap, $o, alloc)
      ==> $o == this || read($Heap, this, _module.INode.footprint)[$Box($o)]);
@@ -5928,7 +5928,7 @@ implementation CheckWellformed$$_module.INode.Valid(this: ref)
     b$reqreads#4 := true;
 
     // AddWellformednessCheck for function Valid
-    assume {:captureState "INode.dfy(37,10): initial state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(37,10): initial state"} true;
     $_Frame := (lambda<alpha> $o: ref, $f: Field alpha :: 
   $o != null && read($Heap, $o, alloc)
      ==> $o == this || read($Heap, this, _module.INode.footprint)[$Box($o)]);
@@ -6193,7 +6193,7 @@ implementation CheckWellformed$$_module.INode.ValidLemma(this: ref)
     b$reqreads#8 := true;
 
     // AddWellformednessCheck for function ValidLemma
-    assume {:captureState "INode.dfy(45,10): initial state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(45,10): initial state"} true;
     $_Frame := (lambda<alpha> $o: ref, $f: Field alpha :: 
   $o != null && read($Heap, $o, alloc)
      ==> $o == this || read($Heap, this, _module.INode.footprint)[$Box($o)]);
@@ -6509,14 +6509,14 @@ implementation CheckWellformed$$_module.INode.init(this: ref, d#0: ref)
     // AddMethodImpl: init, CheckWellformed$$_module.INode.init
     $_Frame := (lambda<alpha> $o: ref, $f: Field alpha :: 
   $o != null && read($Heap, $o, alloc) ==> $o == this);
-    assume {:captureState "INode.dfy(59,12): initial state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(59,12): initial state"} true;
     havoc $Heap;
     assume (forall<alpha> $o: ref, $f: Field alpha :: 
   { read($Heap, $o, $f) } 
   $o != null && read(old($Heap), $o, alloc)
      ==> read($Heap, $o, $f) == read(old($Heap), $o, $f) || $o == this);
     assume $HeapSucc(old($Heap), $Heap);
-    assume {:captureState "INode.dfy(61,13): post-state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(61,13): post-state"} true;
     assume _module.INode.Valid#canCall($Heap, this);
     assume _module.INode.Valid($LS($LZ), $Heap, this);
     assume read($Heap, this, _module.INode.data) == d#0;
@@ -6743,9 +6743,9 @@ implementation Impl$$_module.INode.init(this: ref, d#0: ref) returns ($_reverify
     // AddMethodImpl: init, Impl$$_module.INode.init
     $_Frame := (lambda<alpha> $o: ref, $f: Field alpha :: 
   $o != null && read($Heap, $o, alloc) ==> $o == this);
-    assume {:captureState "INode.dfy(69,0): initial state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(69,0): initial state"} true;
     $_reverifyPost := false;
-    // ----- assignment statement ----- INode.dfy(70,10)
+    // ----- assignment statement ----- /home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(70,10)
     assume true;
     assert $_Frame[this, _module.INode.data];
     assume true;
@@ -6753,8 +6753,8 @@ implementation Impl$$_module.INode.init(this: ref, d#0: ref) returns ($_reverify
     $rhs#0 := d#0;
     $Heap := update($Heap, this, _module.INode.data, $rhs#0);
     assume $IsGoodHeap($Heap);
-    assume {:captureState "INode.dfy(70,13)"} true;
-    // ----- assignment statement ----- INode.dfy(71,7)
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(70,13)"} true;
+    // ----- assignment statement ----- /home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(71,7)
     assume true;
     assert $_Frame[this, _module.INode.next];
     assume true;
@@ -6762,8 +6762,8 @@ implementation Impl$$_module.INode.init(this: ref, d#0: ref) returns ($_reverify
     $rhs#1 := null;
     $Heap := update($Heap, this, _module.INode.next, $rhs#1);
     assume $IsGoodHeap($Heap);
-    assume {:captureState "INode.dfy(71,13)"} true;
-    // ----- assignment statement ----- INode.dfy(72,18)
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(71,13)"} true;
+    // ----- assignment statement ----- /home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(72,18)
     assume true;
     assert $_Frame[this, _module.INode.tailContents];
     assume true;
@@ -6771,8 +6771,8 @@ implementation Impl$$_module.INode.init(this: ref, d#0: ref) returns ($_reverify
     $rhs#2 := Lit(Seq#Empty(): Seq Box);
     $Heap := update($Heap, this, _module.INode.tailContents, $rhs#2);
     assume $IsGoodHeap($Heap);
-    assume {:captureState "INode.dfy(72,22)"} true;
-    // ----- assignment statement ----- INode.dfy(73,12)
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(72,22)"} true;
+    // ----- assignment statement ----- /home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(73,12)
     assume true;
     assert $_Frame[this, _module.INode.footprint];
     assume true;
@@ -6780,8 +6780,8 @@ implementation Impl$$_module.INode.init(this: ref, d#0: ref) returns ($_reverify
     $rhs#3 := Set#UnionOne(Set#Empty(): Set Box, $Box(this));
     $Heap := update($Heap, this, _module.INode.footprint, $rhs#3);
     assume $IsGoodHeap($Heap);
-    assume {:captureState "INode.dfy(73,20)"} true;
-    // ----- assignment statement ----- INode.dfy(74,11)
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(73,20)"} true;
+    // ----- assignment statement ----- /home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(74,11)
     assume true;
     assert $_Frame[this, _module.INode.spine];
     assume true;
@@ -6789,7 +6789,7 @@ implementation Impl$$_module.INode.init(this: ref, d#0: ref) returns ($_reverify
     $rhs#4 := Seq#Build(Seq#Empty(): Seq Box, $Box(this));
     $Heap := update($Heap, this, _module.INode.spine, $rhs#4);
     assume $IsGoodHeap($Heap);
-    assume {:captureState "INode.dfy(74,19)"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(74,19)"} true;
 }
 
 
@@ -7196,7 +7196,7 @@ implementation CheckWellformed$$_module.INode.ndValid2ListValidLemma(this: ref)
     b$reqreads#20 := true;
 
     // AddWellformednessCheck for function ndValid2ListValidLemma
-    assume {:captureState "INode.dfy(117,10): initial state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(117,10): initial state"} true;
     $_Frame := (lambda<alpha> $o: ref, $f: Field alpha :: 
   $o != null && read($Heap, $o, alloc)
      ==> $o == this || read($Heap, this, _module.INode.footprint)[$Box($o)]);
@@ -7839,7 +7839,7 @@ implementation CheckWellformed$$_module.INode.spineFtprintLemma(this: ref)
     b$reqreads#12 := true;
 
     // AddWellformednessCheck for function spineFtprintLemma
-    assume {:captureState "INode.dfy(139,10): initial state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(139,10): initial state"} true;
     $_Frame := (lambda<alpha> $o: ref, $f: Field alpha :: 
   $o != null && read($Heap, $o, alloc)
      ==> $o == this || read($Heap, this, _module.INode.footprint)[$Box($o)]);
@@ -8299,7 +8299,7 @@ implementation CheckWellformed$$_module.INode.getFtprint(this: ref, nd#0: ref)
     b$reqreads#0 := true;
 
     // AddWellformednessCheck for function getFtprint
-    assume {:captureState "INode.dfy(158,9): initial state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(158,9): initial state"} true;
     $_Frame := (lambda<alpha> $o: ref, $f: Field alpha :: 
   $o != null && read($Heap, $o, alloc) ==> $o == nd#0);
     if (*)
@@ -8522,7 +8522,7 @@ implementation CheckWellformed$$_module.INode.sumAllFtprint(this: ref, mySeq#0: 
     b$reqreads#1 := true;
 
     // AddWellformednessCheck for function sumAllFtprint
-    assume {:captureState "INode.dfy(164,9): initial state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(164,9): initial state"} true;
     $_Frame := (lambda<alpha> $o: ref, $f: Field alpha :: 
   $o != null && read($Heap, $o, alloc)
      ==> (exists $i: int :: 
@@ -8984,7 +8984,7 @@ implementation CheckWellformed$$_module.INode.listInv(this: ref, mySeq#0: Seq Bo
     b$reqreads#2 := true;
 
     // AddWellformednessCheck for function listInv
-    assume {:captureState "INode.dfy(175,10): initial state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(175,10): initial state"} true;
     $_Frame := (lambda<alpha> $o: ref, $f: Field alpha :: 
   $o != null && read($Heap, $o, alloc)
      ==> (exists $i: int :: 
@@ -9531,7 +9531,7 @@ implementation CheckWellformed$$_module.INode.listCond(this: ref, mySeq#0: Seq B
     b$reqreads#9 := true;
 
     // AddWellformednessCheck for function listCond
-    assume {:captureState "INode.dfy(183,10): initial state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(183,10): initial state"} true;
     $_Frame := (lambda<alpha> $o: ref, $f: Field alpha :: 
   $o != null && read($Heap, $o, alloc)
      ==> (exists $i: int :: 
@@ -10086,7 +10086,7 @@ implementation CheckWellformed$$_module.INode.validSeqCond(this: ref, mySeq#0: S
     b$reqreads#4 := true;
 
     // AddWellformednessCheck for function validSeqCond
-    assume {:captureState "INode.dfy(194,10): initial state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(194,10): initial state"} true;
     $_Frame := (lambda<alpha> $o: ref, $f: Field alpha :: 
   $o != null && read($Heap, $o, alloc)
      ==> (exists $i: int :: 
@@ -13438,7 +13438,7 @@ implementation CheckWellformed$$_module.INode.LI(this: ref,
     b$reqreads#42 := true;
 
     // AddWellformednessCheck for function LI
-    assume {:captureState "INode.dfy(209,10): initial state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(209,10): initial state"} true;
     $_Frame := (lambda<alpha> $o: ref, $f: Field alpha :: 
   $o != null && read($Heap, $o, alloc)
      ==> (exists $i: int :: 
@@ -16219,7 +16219,7 @@ implementation CheckWellformed$$_module.INode.pre2LI(this: ref,
     // AddMethodImpl: pre2LI, CheckWellformed$$_module.INode.pre2LI
     $_Frame := (lambda<alpha> $o: ref, $f: Field alpha :: 
   $o != null && read($Heap, $o, alloc) ==> false);
-    assume {:captureState "INode.dfy(285,13): initial state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(285,13): initial state"} true;
     assume !Seq#Equal(mySeq#0, Seq#Empty(): Seq Box);
     assert true;
     ##mySeq#0 := mySeq#0;
@@ -16431,7 +16431,7 @@ implementation CheckWellformed$$_module.INode.pre2LI(this: ref,
     havoc $Heap;
     assume old($Heap) == $Heap;
     havoc index#0, oldD#0, oldNext#0, oldFp#0, oldTC#0, oldSpine#0;
-    assume {:captureState "INode.dfy(325,14): post-state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(325,14): post-state"} true;
     assume index#0 == Seq#Length(mySeq#0) - 1;
     assert true;
     ##mySeq#1 := mySeq#0;
@@ -19278,9 +19278,9 @@ implementation Impl$$_module.INode.pre2LI(this: ref,
     // AddMethodImpl: pre2LI, Impl$$_module.INode.pre2LI
     $_Frame := (lambda<alpha> $o: ref, $f: Field alpha :: 
   $o != null && read($Heap, $o, alloc) ==> false);
-    assume {:captureState "INode.dfy(330,0): initial state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(330,0): initial state"} true;
     $_reverifyPost := false;
-    // ----- update statement ----- INode.dfy(332,46)
+    // ----- update statement ----- /home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(332,46)
     assume true;
     assume true;
     assume true;
@@ -19316,7 +19316,7 @@ implementation Impl$$_module.INode.pre2LI(this: ref,
     oldFp#0 := $rhs#3;
     oldTC#0 := $rhs#4;
     oldSpine#0 := $rhs#5;
-    assume {:captureState "INode.dfy(334,33)"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(334,33)"} true;
 }
 
 
@@ -19442,7 +19442,7 @@ implementation CheckWellformed$$_module.INode.LIGuardExecBody2LI(this: ref,
     $_Frame := (lambda<alpha> $o: ref, $f: Field alpha :: 
   $o != null && read($Heap, $o, alloc)
      ==> $o == $Unbox(Seq#Index(mySeq#0, index#0)): ref);
-    assume {:captureState "INode.dfy(339,13): initial state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(339,13): initial state"} true;
     assert true;
     ##mySeq#0 := mySeq#0;
     // assume allocatedness for argument to function
@@ -19541,7 +19541,7 @@ implementation CheckWellformed$$_module.INode.LIGuardExecBody2LI(this: ref,
        || $o == $Unbox(Seq#Index(mySeq#0, index#0)): ref);
     assume $HeapSuccGhost(old($Heap), $Heap);
     havoc newIndex#0, oldD#0, oldNext#0, oldFp#0, oldTC#0, oldSpine#0;
-    assume {:captureState "INode.dfy(356,17): post-state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(356,17): post-state"} true;
     assume newIndex#0 == index#0 - 1;
     assert 0 <= index#0 && index#0 < Seq#Length(mySeq#0);
     assert $Unbox(Seq#Index(mySeq#0, index#0)): ref != null;
@@ -24290,9 +24290,9 @@ implementation Impl$$_module.INode.LIGuardExecBody2LI(this: ref,
     $_Frame := (lambda<alpha> $o: ref, $f: Field alpha :: 
   $o != null && read($Heap, $o, alloc)
      ==> $o == $Unbox(Seq#Index(mySeq#0, index#0)): ref);
-    assume {:captureState "INode.dfy(368,0): initial state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(368,0): initial state"} true;
     $_reverifyPost := false;
-    // ----- assignment statement ----- INode.dfy(369,27)
+    // ----- assignment statement ----- /home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(369,27)
     assert 0 <= index#0 && index#0 < Seq#Length(mySeq#0);
     assert $Unbox(Seq#Index(mySeq#0, index#0)): ref != null;
     assume true;
@@ -24319,8 +24319,8 @@ implementation Impl$$_module.INode.LIGuardExecBody2LI(this: ref,
   _module.INode.tailContents, 
   $rhs#0);
     assume $IsGoodHeap($Heap);
-    assume {:captureState "INode.dfy(369,86)"} true;
-    // ----- assignment statement ----- INode.dfy(371,24)
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(369,86)"} true;
+    // ----- assignment statement ----- /home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(371,24)
     assert 0 <= index#0 && index#0 < Seq#Length(mySeq#0);
     assert $Unbox(Seq#Index(mySeq#0, index#0)): ref != null;
     assume true;
@@ -24338,8 +24338,8 @@ implementation Impl$$_module.INode.LIGuardExecBody2LI(this: ref,
     _module.INode.footprint));
     $Heap := update($Heap, $Unbox(Seq#Index(mySeq#0, index#0)): ref, _module.INode.footprint, $rhs#1);
     assume $IsGoodHeap($Heap);
-    assume {:captureState "INode.dfy(371,70)"} true;
-    // ----- assignment statement ----- INode.dfy(373,20)
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(371,70)"} true;
+    // ----- assignment statement ----- /home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(373,20)
     assert 0 <= index#0 && index#0 < Seq#Length(mySeq#0);
     assert $Unbox(Seq#Index(mySeq#0, index#0)): ref != null;
     assume true;
@@ -24357,8 +24357,8 @@ implementation Impl$$_module.INode.LIGuardExecBody2LI(this: ref,
     _module.INode.spine));
     $Heap := update($Heap, $Unbox(Seq#Index(mySeq#0, index#0)): ref, _module.INode.spine, $rhs#2);
     assume $IsGoodHeap($Heap);
-    assume {:captureState "INode.dfy(373,62)"} true;
-    // ----- update statement ----- INode.dfy(375,49)
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(373,62)"} true;
+    // ----- update statement ----- /home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(375,49)
     assume true;
     assume true;
     assume true;
@@ -24399,7 +24399,7 @@ implementation Impl$$_module.INode.LIGuardExecBody2LI(this: ref,
     oldFp#0 := $rhs#6;
     oldTC#0 := $rhs#7;
     oldSpine#0 := $rhs#8;
-    assume {:captureState "INode.dfy(378,24)"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(378,24)"} true;
 }
 
 
@@ -24488,7 +24488,7 @@ implementation CheckWellformed$$_module.INode.LIAndNegGuard2Post(this: ref,
     // AddMethodImpl: LIAndNegGuard2Post, CheckWellformed$$_module.INode.LIAndNegGuard2Post
     $_Frame := (lambda<alpha> $o: ref, $f: Field alpha :: 
   $o != null && read($Heap, $o, alloc) ==> false);
-    assume {:captureState "INode.dfy(382,6): initial state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(382,6): initial state"} true;
     assert true;
     ##mySeq#0 := mySeq#0;
     // assume allocatedness for argument to function
@@ -24580,7 +24580,7 @@ implementation CheckWellformed$$_module.INode.LIAndNegGuard2Post(this: ref,
     assume index#0 < 0;
     havoc $Heap;
     assume old($Heap) == $Heap;
-    assume {:captureState "INode.dfy(395,30): post-state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(395,30): post-state"} true;
     assert 0 <= LitInt(0) && LitInt(0) < Seq#Length(mySeq#0);
     assert $Unbox(Seq#Index(mySeq#0, LitInt(0))): ref != null;
     assert 0 <= LitInt(0) && LitInt(0) <= Seq#Length(oldTC#0);
@@ -27040,7 +27040,7 @@ implementation Impl$$_module.INode.LIAndNegGuard2Post(this: ref,
     // AddMethodImpl: LIAndNegGuard2Post, Impl$$_module.INode.LIAndNegGuard2Post
     $_Frame := (lambda<alpha> $o: ref, $f: Field alpha :: 
   $o != null && read($Heap, $o, alloc) ==> false);
-    assume {:captureState "INode.dfy(404,0): initial state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(404,0): initial state"} true;
     $_reverifyPost := false;
 }
 
@@ -27078,7 +27078,7 @@ implementation CheckWellformed$$_module.INode.updateSeq(this: ref, mySeq#0: Seq 
   $o != null && read($Heap, $o, alloc)
      ==> (exists $i: int :: 
       0 <= $i && $i < Seq#Length(mySeq#0) && Seq#Index(mySeq#0, $i) == $Box($o)));
-    assume {:captureState "INode.dfy(408,13): initial state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(408,13): initial state"} true;
     assume !Seq#Equal(mySeq#0, Seq#Empty(): Seq Box);
     assert true;
     ##mySeq#0 := mySeq#0;
@@ -27319,7 +27319,7 @@ implementation CheckWellformed$$_module.INode.updateSeq(this: ref, mySeq#0: Seq 
        || (exists $i: int :: 
         0 <= $i && $i < Seq#Length(mySeq#0) && Seq#Index(mySeq#0, $i) == $Box($o)));
     assume $HeapSuccGhost(old($Heap), $Heap);
-    assume {:captureState "INode.dfy(442,30): post-state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(442,30): post-state"} true;
     assert 0 <= LitInt(0) && LitInt(0) < Seq#Length(mySeq#0);
     assert $Unbox(Seq#Index(mySeq#0, LitInt(0))): ref != null;
     assert 0 <= LitInt(0) && LitInt(0) < Seq#Length(mySeq#0);
@@ -28048,9 +28048,9 @@ implementation Impl$$_module.INode.updateSeq(this: ref, mySeq#0: Seq Box, d#0: r
   $o != null && read($Heap, $o, alloc)
      ==> (exists $i: int :: 
       0 <= $i && $i < Seq#Length(mySeq#0) && Seq#Index(mySeq#0, $i) == $Box($o)));
-    assume {:captureState "INode.dfy(450,0): initial state"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(450,0): initial state"} true;
     $_reverifyPost := false;
-    // ----- call statement ----- INode.dfy(453,7)
+    // ----- call statement ----- /home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(453,7)
     assume true;
     assume true;
     assume true;
@@ -28148,15 +28148,15 @@ implementation Impl$$_module.INode.updateSeq(this: ref, mySeq#0: Seq Box, d#0: r
     // TrCallStmt: Checking bRhs $rhs##5 to have type seq<INode>
     assert true;
     oldSpine#0 := $rhs##5;
-    assume {:captureState "INode.dfy(455,73)"} true;
-    // ----- assignment statement ----- INode.dfy(458,10)
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(455,73)"} true;
+    // ----- assignment statement ----- /home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(458,10)
     assume true;
     assert newNd#0 != null;
     assume true;
     assert true;
     nxtOldTC#0 := read($Heap, newNd#0, _module.INode.tailContents);
-    assume {:captureState "INode.dfy(458,30)"} true;
-    // ----- while statement ----- INode.dfy(460,1)
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(458,30)"} true;
+    // ----- while statement ----- /home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(460,1)
     $PreLoopHeap$loop#0 := $Heap;
     $decr_init$loop#00 := index#0 - 0;
     havoc $w$loop#0;
@@ -30465,7 +30465,7 @@ implementation Impl$$_module.INode.updateSeq(this: ref, mySeq#0: Seq Box, d#0: r
       free invariant index#0 - 0 <= $decr_init$loop#00
    && (index#0 - 0 == $decr_init$loop#00 ==> true);
     {
-        assume {:captureState "INode.dfy(460,0): after some loop iterations"} true;
+        assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(460,0): after some loop iterations"} true;
         if (!$w$loop#0)
         {
             havoc i#10;
@@ -30690,7 +30690,7 @@ implementation Impl$$_module.INode.updateSeq(this: ref, mySeq#0: Seq Box, d#0: r
         }
 
         $decr$loop#00 := index#0 - 0;
-        // ----- call statement ----- INode.dfy(486,19)
+        // ----- call statement ----- /home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(486,19)
         assume true;
         assume true;
         assume true;
@@ -30791,8 +30791,8 @@ implementation Impl$$_module.INode.updateSeq(this: ref, mySeq#0: Seq Box, d#0: r
         // TrCallStmt: Checking bRhs $rhs##0_5 to have type seq<INode>
         assert true;
         oldSpine#0 := $rhs##0_5;
-        assume {:captureState "INode.dfy(490,19)"} true;
-        // ----- loop termination check ----- INode.dfy(460,1)
+        assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(490,19)"} true;
+        // ----- loop termination check ----- /home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(460,1)
         assert 0 <= $decr$loop#00 || index#0 - 0 == $decr$loop#00;
         assert index#0 - 0 < $decr$loop#00;
         assume (forall i#11: int :: 
@@ -30835,7 +30835,7 @@ implementation Impl$$_module.INode.updateSeq(this: ref, mySeq#0: Seq Box, d#0: r
    ==> true;
     }
 
-    // ----- call statement ----- INode.dfy(494,19)
+    // ----- call statement ----- /home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(494,19)
     // TrCallStmt: Before ProcessCallStmt
     assume true;
     // ProcessCallStmt: CheckSubrange
@@ -30902,7 +30902,7 @@ implementation Impl$$_module.INode.updateSeq(this: ref, mySeq#0: Seq Box, d#0: r
     // ProcessCallStmt: Make the call
     call IntraModuleCall$$_module.INode.LIAndNegGuard2Post(this, mySeq##1, index##0, d##1, newNd##1, oldNewD##1, oldNewNext##1, oldNewFp##1, oldNewTC##1, oldNewSpine##1, oldD##0, oldNext##0, oldFp##0, oldTC##0, oldSpine##0);
     // TrCallStmt: After ProcessCallStmt
-    assume {:captureState "INode.dfy(497,40)"} true;
+    assume {:captureState "/home/xiaohe/workspace/Tasks/UnitProJ/expressOS/Fall2015/INode.dfy(497,40)"} true;
 }
 
 

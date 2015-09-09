@@ -1,0 +1,8 @@
+updateSeq:
+
+
+Verifying Impl$$_module.INode.append ...
+  [4.577 s, 124 proof obligations]  verified
+
+Verifying Impl$$_module.INode.updateSeq ...
+  [32.493 s, 208 proof obligations]  verified

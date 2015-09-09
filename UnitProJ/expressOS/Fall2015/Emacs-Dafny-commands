@@ -1,0 +1,6 @@
+#show trace and time
+dafny /compile\:0 /nologo /trace /timeLimit\:60 $1
+
+#just verify
+dafny /compile\:0 /nologo $1
+

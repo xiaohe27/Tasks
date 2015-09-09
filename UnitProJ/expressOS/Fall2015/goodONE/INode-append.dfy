@@ -388,7 +388,6 @@ ghost var index := |mySeq|-1;
 while(index >= 0)
 invariant -1 <= index <= |mySeq|-1;
 
-
 invariant newNd != null && newNd.Valid();
 invariant newNd.next == null;	
 
@@ -406,6 +405,11 @@ invariant index == |mySeq|-1 ==> (mySeq[|mySeq|-1].footprint + {newNd} ==
 
 
 invariant listInv(mySeq);
+
+invariant forall i :: 0 <= i <= index ==> mySeq[i].tailContents == old(mySeq[i].tailContents)
+								 	 				 			 		 && mySeq[i].footprint == old(mySeq[i].footprint)
+																		 && mySeq[i].spine == old(mySeq[i].spine);
+
 invariant forall i :: 0 <= i < index ==>
 	   mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
 	&& mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
