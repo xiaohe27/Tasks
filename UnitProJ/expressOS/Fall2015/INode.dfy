@@ -75,7 +75,7 @@ ensures fresh(footprint - {this});
 }
 
 
-/*
+
 method insertAt(d:Data, i:int) returns (newNd: INode) 
 requires 0 < i <= |tailContents|;
 requires Valid();
@@ -99,7 +99,7 @@ assert ndValid2ListValidLemma();
 while (curIndex < i-1)
 invariant 0 <= curIndex < i;
 invariant curNd != null && curNd.Valid();
-
+invariant listCond(spine);
 invariant |curNd.tailContents| + curIndex == |tailContents|;
 
 invariant curNd.next != null;
@@ -109,8 +109,43 @@ curNd := curNd.next;
 curIndex := curIndex + 1;
 }
 
-}
+assert listCondLemma(spine);
+
+newNd.next := curNd.next;
+newNd.tailContents := [newNd.next.data] + newNd.next.tailContents;
+newNd.footprint := {newNd} + newNd.next.footprint;
+newNd.spine := [newNd] + newNd.next.spine;
+
+curNd.next := newNd;
+
+
+
+assert forall k :: 0 <= k < |spine[0..i]| ==> |spine[0..i]|-k <= |spine[0..i][k].spine|;
+assert forall k :: 0 <= k < |spine[0..i]| ==> |spine[0..i]|-k-1 <= |spine[0..i][k].tailContents|;
+
+/*
+assert forall i :: 0 <= i < |spine[0..i]|-1 ==>
+	   spine[0..i][i].tailContents == [spine[0..i][i+1].data] + spine[0..i][i+1].tailContents
+
+	&& spine[0..i][i].footprint == {spine[0..i][i]} + spine[0..i][i+1].footprint
+	&& spine[0..i][i].spine[0..i] == [spine[0..i][i]] + spine[0..i][i+1].spine[0..i];
+
+
+assert spine[0..i][|spine[0..i]|-1].next == newNd;
+
+assert (spine[0..i][|spine[0..i]|-1].footprint + {newNd} == 
+	{spine[0..i][|spine[0..i]|-1]} + newNd.footprint
+
+&& spine[0..i][|spine[0..i]|-1].spine[0..i][0..1] + [newNd] + spine[0..i][|spine[0..i]|-1].spine[0..i][1..]  == 
+	[spine[0..i][|spine[0..i]|-1]] + newNd.spine[0..i]
+
+&& [d] + spine[0..i][|spine[0..i]|-1].tailContents == 
+	[newNd.data] + newNd.tailContents);
 */
+
+//updateSeq(spine[0..i], d, newNd);
+}
+
 
 
 
@@ -190,6 +225,16 @@ null !in mySeq && (forall nd :: nd in mySeq ==> nd in nd.footprint) &&
 	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine)
 && (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint)
 }
+
+predicate listCondLemma(mySeq: seq<INode>)
+requires listCond(mySeq);
+reads mySeq, (set nd | nd in mySeq);
+ensures listCondLemma(mySeq);
+ensures forall i :: 0 <= i <= |mySeq| ==> listCond(mySeq[0..i]);
+{
+if mySeq == [] then true
+else listCondLemma(mySeq[0..|mySeq|-1])
+}			
 
 predicate validSeqCond(mySeq: seq<INode>)
 reads mySeq, (set nd | nd in mySeq);
@@ -497,7 +542,6 @@ LIAndNegGuard2Post(mySeq, index, d, newNd,
 		oldD, oldNext, oldFp, oldTC, oldSpine);
 
 }
-
 
 
 
