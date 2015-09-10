@@ -79,13 +79,13 @@ method insertAt(d:Data, i:int) returns (newNd: INode)
 requires 0 < i <= |tailContents|;
 requires Valid();
 modifies footprint;
-/*
+
 ensures Valid();
 ensures this.data == old(this.data);
 ensures tailContents == old(tailContents[0..i-1]) + [d] + old(tailContents[i-1..]);
 ensures footprint == old(footprint) + {newNd};
 ensures fresh(newNd);
-*/
+
 {
 newNd := new INode.init(d);
 
@@ -117,28 +117,7 @@ newNd.spine := [newNd] + newNd.next.spine;
 curNd.next := newNd;
 
 
-
-/*
-assert forall i :: 0 <= i < |spine[0..i]|-1 ==>
-	   spine[0..i][i].tailContents == [spine[0..i][i+1].data] + spine[0..i][i+1].tailContents
-
-	&& spine[0..i][i].footprint == {spine[0..i][i]} + spine[0..i][i+1].footprint
-	&& spine[0..i][i].spine[0..i] == [spine[0..i][i]] + spine[0..i][i+1].spine[0..i];
-
-
-assert spine[0..i][|spine[0..i]|-1].next == newNd;
-
-assert (spine[0..i][|spine[0..i]|-1].footprint + {newNd} == 
-	{spine[0..i][|spine[0..i]|-1]} + newNd.footprint
-
-&& spine[0..i][|spine[0..i]|-1].spine[0..i][0..1] + [newNd] + spine[0..i][|spine[0..i]|-1].spine[0..i][1..]  == 
-	[spine[0..i][|spine[0..i]|-1]] + newNd.spine[0..i]
-
-&& [d] + spine[0..i][|spine[0..i]|-1].tailContents == 
-	[newNd.data] + newNd.tailContents);
-*/
-
-//updateSeq(spine[0..i], d, newNd);
+updateSeq(spine[0..i], d, newNd);
 }
 
 
