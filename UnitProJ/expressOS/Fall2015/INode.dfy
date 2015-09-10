@@ -181,11 +181,9 @@ spine == [this] + next.spine
 && next.spineFtprintLemma())
 }
 
-}
 
 
-
-
+////////////////////////////////////////////////////////
 
 function getFtprint(nd:INode): set<INode>
 reads nd;
@@ -531,5 +529,7 @@ LIAndNegGuard2Post(mySeq, index, d, newNd,
 		newNd.data, newNd.next, newNd.footprint, 
 		newNd.tailContents, newNd.spine, 
 		oldD, oldNext, oldFp, oldTC, oldSpine);
+
+}
 
 }
