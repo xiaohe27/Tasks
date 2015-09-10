@@ -75,6 +75,7 @@ ensures fresh(footprint - {this});
 }
 
 
+
 method insertAt(d:Data, i:int) returns (newNd: INode) 
 requires 0 < i <= |tailContents|;
 requires Valid();
@@ -100,6 +101,7 @@ invariant 0 <= curIndex < i;
 invariant curNd != null && curNd.Valid();
 invariant listCond(spine);
 invariant |curNd.tailContents| + curIndex == |tailContents|;
+
 invariant curNd.next != null;
 invariant curNd == spine[curIndex];
 {
@@ -117,6 +119,9 @@ newNd.spine := [newNd] + newNd.next.spine;
 curNd.next := newNd;
 
 
+
+//assert forall k :: 0 <= k < |spine[0..i]| ==> |spine[0..i]|-k <= |spine[0..i][k].spine|;
+//assert forall k :: 0 <= k < |spine[0..i]| ==> |spine[0..i]|-k-1 <= |spine[0..i][k].tailContents|;
 
 /*
 assert forall i :: 0 <= i < |spine[0..i]|-1 ==>
@@ -140,6 +145,7 @@ assert (spine[0..i][|spine[0..i]|-1].footprint + {newNd} ==
 
 //updateSeq(spine[0..i], d, newNd);
 }
+
 
 
 
@@ -181,9 +187,6 @@ spine == [this] + next.spine
 && next.spineFtprintLemma())
 }
 
-}
-
-
 
 
 
@@ -220,13 +223,15 @@ null !in mySeq && (forall nd :: nd in mySeq ==> nd in nd.footprint) &&
 	&& mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
 	&& mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
 	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine)
-&& (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint)
+	&& (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint)
+	&& (forall i :: 0 <= i < |mySeq| ==> |mySeq[i].tailContents| >= |mySeq| - i - 1)
+	&& (forall i :: 0 <= i < |mySeq| ==> |mySeq[i].spine| >= |mySeq| - i)
 }
 
 lemma listCondLemma(mySeq: seq<INode>)
 requires listCond(mySeq);
 ensures forall i :: 0 <= i <= |mySeq| ==> listCond(mySeq[0..i]);
-{}
+{}			
 
 predicate validSeqCond(mySeq: seq<INode>)
 reads mySeq, (set nd | nd in mySeq);
@@ -248,7 +253,8 @@ predicate LI(mySeq:seq<INode>, index:int, d:Data, newNd:INode,
 			oldNewTC:seq<Data>, oldNewSpine:seq<INode>, 
 	oldD:Data, oldNext:INode, oldFp:set<INode>, 
 			oldTC:seq<Data>, oldSpine:seq<INode>)
-reads *;
+reads mySeq, newNd, oldNext, oldFp, oldTC, oldSpine,
+	getFtprint(newNd), sumAllFtprint(mySeq);
 {
  mySeq != []
 && (-1 <= index <= |mySeq|-1)
@@ -371,7 +377,7 @@ index, oldD, oldNext, oldFp, oldTC, oldSpine :=
 }
 
 
-
+/*
 ghost method LIGuardExecBody2LI(mySeq:seq<INode>, index:int, d:Data, newNd:INode,
 		oldNewD:Data, oldNewNext:INode, oldNewFp:set<INode>, 
 			oldNewTC:seq<Data>, oldNewSpine:seq<INode>, 
@@ -444,7 +450,7 @@ ensures mySeq[0].Valid();
 ghost method updateSeq(mySeq:seq<INode>, d:Data, newNd:INode)
 requires mySeq != [];
 
-requires listInv(mySeq);
+requires listCond(mySeq);
 
 requires newNd !in mySeq;
 requires newNd != null && newNd.Valid() && newNd.data == d;
@@ -452,13 +458,6 @@ requires newNd.footprint !! (set nd | nd in mySeq);
 
 requires forall i :: 0 <= i < |mySeq| ==> |mySeq|-i <= |mySeq[i].spine|;
 requires forall i :: 0 <= i < |mySeq| ==> |mySeq|-i-1 <= |mySeq[i].tailContents|;
-
-
-requires forall i :: 0 <= i < |mySeq|-1 ==>
-	   mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
-
-	&& mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
-	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine;
 
 
 requires mySeq[|mySeq|-1].next == newNd;
@@ -531,5 +530,9 @@ LIAndNegGuard2Post(mySeq, index, d, newNd,
 		newNd.data, newNd.next, newNd.footprint, 
 		newNd.tailContents, newNd.spine, 
 		oldD, oldNext, oldFp, oldTC, oldSpine);
+
+}
+
+*/
 
 }
