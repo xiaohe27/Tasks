@@ -1,0 +1,2 @@
+forall user. forall data. insert(user, db2, daba) && data != null ==>
+(<*>[0,1s) <>[0,60s) exists user' . insert(user', db3, data) )
