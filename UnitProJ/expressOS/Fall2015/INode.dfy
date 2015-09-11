@@ -110,7 +110,8 @@ curNd := curNd.next;
 curIndex := curIndex + 1;
 }
 
-//newNd.setNext(curNd.next, curNd, spine[0..i], d);
+//newNd.setNext(curNd, d, this);
+
 /*
 newNd.next := curNd.next;
 newNd.tailContents := [newNd.next.data] + newNd.next.tailContents;
@@ -140,22 +141,35 @@ assert (spine[0..i][|spine[0..i]|-1].footprint + {newNd} ==
 }
 
 
-method setNext(curNd:INode, d:Data)
+method setNext(curNd:INode, d:Data, fstNd:INode, i:int)
 	requires Valid();
 
   requires curNd != null && curNd.Valid();
 	requires curNd.next != null;
 	requires this !in curNd.footprint;
-
 	requires data == d;
+
+	requires fstNd != null && fstNd.Valid() && 0 < i <= |fstNd.spine| &&
+		listCond(fstNd.spine[0..i]);
+	requires this !in fstNd.spine[0..i] && footprint !! (set nd | nd in fstNd.spine[0..i]); 
+  requires curNd == fstNd.spine[i-1];
+
+	requires fstNd !in curNd.footprint;
 	
-	modifies footprint, curNd;
+	modifies this, curNd;
 	ensures Valid();
-	ensures curNd.next == this;
+
+		ensures fstNd != null && 0 < i <= |fstNd.spine| &&
+		listCond(fstNd.spine[0..i]);
+	ensures this !in fstNd.spine[0..i] && footprint !! (set nd | nd in fstNd.spine[0..i]); 
+  ensures curNd == fstNd.spine[i-1];
+
+		ensures curNd.next == this;
 	ensures data == d; 
 
 	ensures curNd.footprint + {this} == {curNd} + this.footprint;
 	ensures [d] + curNd.tailContents == [data] + tailContents;
+
 {
 next := curNd.next;
 tailContents := [next.data] + next.tailContents;
