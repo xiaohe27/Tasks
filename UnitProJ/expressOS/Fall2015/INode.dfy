@@ -372,8 +372,8 @@ modifies mySeq[index];
 
 ensures newIndex == index - 1;
 
-ensures oldFp == old(mySeq[index].footprint)
-	&& oldTC == old(mySeq[index].tailContents);
+//ensures oldFp == old(mySeq[index].footprint)
+//	&& oldTC == old(mySeq[index].tailContents);
 
 ensures oldFp == old(mySeq[newIndex+1].footprint)
 	&& oldTC == old(mySeq[newIndex+1].tailContents);
