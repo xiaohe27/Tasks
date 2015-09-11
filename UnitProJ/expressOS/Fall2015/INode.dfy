@@ -154,15 +154,21 @@ method setNext(curNd:INode, d:Data, fstNd:INode, i:int)
 	requires this !in fstNd.spine[0..i] && footprint !! (set nd | nd in fstNd.spine[0..i]); 
   requires curNd == fstNd.spine[i-1];
 
-	requires fstNd !in curNd.footprint;
+	requires fstNd !in curNd.footprint && fstNd !in footprint;
 	
 	modifies this, curNd;
 	ensures Valid();
-
-		ensures fstNd != null && 0 < i <= |fstNd.spine| &&
+	
+	ensures fstNd != null &&
+      fstNd.spine == old(fstNd.spine)
+		&& 0 < i <= |fstNd.spine| &&
+		(forall nd :: nd in fstNd.spine[0..i] ==> (nd != null && nd.footprint == old(nd.footprint)
+		&& nd.tailContents == old(nd.tailContents)
+		&& nd.spine == old(nd.spine))) &&
 		listCond(fstNd.spine[0..i]);
 	ensures this !in fstNd.spine[0..i] && footprint !! (set nd | nd in fstNd.spine[0..i]); 
-  ensures curNd == fstNd.spine[i-1];
+	
+	  ensures curNd == fstNd.spine[i-1];
 
 		ensures curNd.next == this;
 	ensures data == d; 
