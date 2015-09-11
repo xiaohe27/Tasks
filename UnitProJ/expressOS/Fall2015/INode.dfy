@@ -110,7 +110,8 @@ curNd := curNd.next;
 curIndex := curIndex + 1;
 }
 
-
+//newNd.setNext(curNd.next, curNd, spine[0..i], d);
+/*
 newNd.next := curNd.next;
 newNd.tailContents := [newNd.next.data] + newNd.next.tailContents;
 newNd.footprint := {newNd} + newNd.next.footprint;
@@ -118,34 +119,51 @@ newNd.spine := [newNd] + newNd.next.spine;
 
 curNd.next := newNd;
 
-/*
-requires newNd !in mySeq;
-requires newNd != null && newNd.Valid() && newNd.data == d;
-requires newNd.footprint !! (set nd | nd in mySeq);
+//assert listCond(spine[0..i]);
+
+////
+assert newNd !in spine[0..i];
+assert newNd != null && newNd.Valid() && newNd.data == d;
+assert newNd.footprint !! (set nd | nd in spine[0..i]);
 
 
-requires forall k :: 0 <= k < |mySeq|-1 ==>
-	   mySeq[k].tailContents == [mySeq[k+1].data] + mySeq[k+1].tailContents
+assert spine[0..i][|spine[0..i]|-1].next == newNd;
 
-	&& mySeq[k].footprint == {mySeq[k]} + mySeq[k+1].footprint
-	&& mySeq[k].spine == [mySeq[k]] + mySeq[k+1].spine;
-
-
-requires mySeq[|mySeq|-1].next == newNd;
-
-requires (mySeq[|mySeq|-1].footprint + {newNd} == 
-	{mySeq[|mySeq|-1]} + newNd.footprint
-
-&& mySeq[|mySeq|-1].spine[0..1] + [newNd] + mySeq[|mySeq|-1].spine[1..]  == 
-	[mySeq[|mySeq|-1]] + newNd.spine
-
-&& [d] + mySeq[|mySeq|-1].tailContents == 
+assert (spine[0..i][|spine[0..i]|-1].footprint + {newNd} == 
+	{spine[0..i][|spine[0..i]|-1]} + newNd.footprint
+	
+&& [d] + spine[0..i][|spine[0..i]|-1].tailContents == 
 	[newNd.data] + newNd.tailContents);
- */
+*/
 
 //updateSeq(spine[0..i], d, newNd);
 }
 
+
+method setNext(curNd:INode, d:Data)
+	requires Valid();
+
+  requires curNd != null && curNd.Valid();
+	requires curNd.next != null;
+	requires this !in curNd.footprint;
+
+	requires data == d;
+	
+	modifies footprint, curNd;
+	ensures Valid();
+	ensures curNd.next == this;
+	ensures data == d; 
+
+	ensures curNd.footprint + {this} == {curNd} + this.footprint;
+	ensures [d] + curNd.tailContents == [data] + tailContents;
+{
+next := curNd.next;
+tailContents := [next.data] + next.tailContents;
+footprint := {this} + next.footprint;
+spine := [this] + next.spine;
+
+curNd.next := this;
+}
 
 
 predicate ndValid2ListValidLemma()
@@ -434,13 +452,6 @@ requires listCond(mySeq);
 requires newNd !in mySeq;
 requires newNd != null && newNd.Valid() && newNd.data == d;
 requires newNd.footprint !! (set nd | nd in mySeq);
-
-
-requires forall i :: 0 <= i < |mySeq|-1 ==>
-	   mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
-
-	&& mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint;
-
 
 requires mySeq[|mySeq|-1].next == newNd;
 
