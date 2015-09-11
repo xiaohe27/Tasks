@@ -4,7 +4,7 @@ rm *.mdb
 Start=$(date +"%s")
 echo "Start time : $Start" 
 
-Dafny.exe INode.dfy
+Dafny.exe $1
 
 End=$(date +"%s")
 echo "Finish time : $End"

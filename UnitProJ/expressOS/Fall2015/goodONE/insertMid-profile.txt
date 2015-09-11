@@ -1,0 +1,2 @@
+16s: siebel-ubuntu
+20s: hp-windows
