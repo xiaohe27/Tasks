@@ -96,10 +96,12 @@ var curIndex := 0;
 assert ValidLemma();
 assert ndValid2ListValidLemma();
 
+listCondLemma(spine);
+
 while (curIndex < i-1)
 invariant 0 <= curIndex < i;
 invariant curNd != null && curNd.Valid();
-invariant listCond(spine);
+invariant listCond(spine[0..i]);
 invariant |curNd.tailContents| + curIndex == |tailContents|;
 invariant curNd.next != null;
 invariant curNd == spine[curIndex];
@@ -108,7 +110,6 @@ curNd := curNd.next;
 curIndex := curIndex + 1;
 }
 
-listCondLemma(spine);
 
 newNd.next := curNd.next;
 newNd.tailContents := [newNd.next.data] + newNd.next.tailContents;
@@ -117,6 +118,30 @@ newNd.spine := [newNd] + newNd.next.spine;
 
 curNd.next := newNd;
 
+/*
+requires newNd !in mySeq;
+requires newNd != null && newNd.Valid() && newNd.data == d;
+requires newNd.footprint !! (set nd | nd in mySeq);
+
+
+requires forall k :: 0 <= k < |mySeq|-1 ==>
+	   mySeq[k].tailContents == [mySeq[k+1].data] + mySeq[k+1].tailContents
+
+	&& mySeq[k].footprint == {mySeq[k]} + mySeq[k+1].footprint
+	&& mySeq[k].spine == [mySeq[k]] + mySeq[k+1].spine;
+
+
+requires mySeq[|mySeq|-1].next == newNd;
+
+requires (mySeq[|mySeq|-1].footprint + {newNd} == 
+	{mySeq[|mySeq|-1]} + newNd.footprint
+
+&& mySeq[|mySeq|-1].spine[0..1] + [newNd] + mySeq[|mySeq|-1].spine[1..]  == 
+	[mySeq[|mySeq|-1]] + newNd.spine
+
+&& [d] + mySeq[|mySeq|-1].tailContents == 
+	[newNd.data] + newNd.tailContents);
+ */
 
 //updateSeq(spine[0..i], d, newNd);
 }
@@ -414,21 +439,16 @@ requires newNd.footprint !! (set nd | nd in mySeq);
 requires forall i :: 0 <= i < |mySeq|-1 ==>
 	   mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
 
-	&& mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
-	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine;
+	&& mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint;
 
 
 requires mySeq[|mySeq|-1].next == newNd;
 
 requires (mySeq[|mySeq|-1].footprint + {newNd} == 
 	{mySeq[|mySeq|-1]} + newNd.footprint
-
-&& mySeq[|mySeq|-1].spine[0..1] + [newNd] + mySeq[|mySeq|-1].spine[1..]  == 
-	[mySeq[|mySeq|-1]] + newNd.spine
-
+	
 && [d] + mySeq[|mySeq|-1].tailContents == 
 	[newNd.data] + newNd.tailContents);
-
 
 modifies mySeq;
 
