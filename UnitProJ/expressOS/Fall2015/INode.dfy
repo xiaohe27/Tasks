@@ -110,7 +110,7 @@ curNd := curNd.next;
 curIndex := curIndex + 1;
 }
 
-//newNd.setNext(curNd, d, this);
+newNd.setNext(curNd, d, this, i);
 
 /*
 newNd.next := curNd.next;
@@ -154,7 +154,7 @@ method setNext(curNd:INode, d:Data, fstNd:INode, i:int)
 	requires this !in fstNd.spine[0..i] && footprint !! (set nd | nd in fstNd.spine[0..i]); 
   requires curNd == fstNd.spine[i-1];
 
-	requires fstNd !in curNd.footprint && fstNd !in footprint;
+	requires fstNd !in footprint;
 	
 	modifies this, curNd;
 	ensures Valid();
