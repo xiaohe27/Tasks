@@ -138,7 +138,8 @@ method setNext(curNd:INode, d:Data, fstNd:INode, i:int)
 		&& 0 < i <= |fstNd.spine| &&
 		(forall nd :: nd in fstNd.spine[0..i] ==> (nd != null && nd.footprint == old(nd.footprint)
 		&& nd.tailContents == old(nd.tailContents)
-		&& nd.spine == old(nd.spine))) &&
+		//&& nd.spine == old(nd.spine)
+		)) &&
 		listCond(fstNd.spine[0..i]);
 	ensures this !in fstNd.spine[0..i] && footprint !! (set nd | nd in fstNd.spine[0..i]); 
 	
@@ -284,7 +285,8 @@ reads *;
   && newNd.next == oldNewNext
   && newNd.footprint == oldNewFp
   && newNd.tailContents == oldNewTC
-  && newNd.spine == oldNewSpine)
+  //&& newNd.spine == oldNewSpine
+	)
 
 && mySeq[|mySeq|-1].next == newNd
 
@@ -300,8 +302,8 @@ reads *;
 && (forall i :: 0 <= i < index ==>
 	mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
 
-	&& mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
-	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine)
+	&& mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint)
+//	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine)
 
 && (0 <= index < |mySeq| - 1 ==> mySeq[index].tailContents[0..|mySeq|-index-1] + [d]
  + mySeq[index].tailContents[|mySeq|-index-1..] == 
@@ -323,8 +325,8 @@ mySeq[index+1].tailContents ==
 
 ))
 
-&& (index < |mySeq| - 1 ==> mySeq[index+1].spine == mySeq[index+1..] +
-						newNd.spine)
+//&& (index < |mySeq| - 1 ==> mySeq[index+1].spine == mySeq[index+1..] +
+//						newNd.spine)
 
 && (index < |mySeq| - 1 ==> mySeq[index+1].Valid())
 
@@ -426,15 +428,14 @@ requires LI(mySeq, index, d, newNd,
 
 requires index < 0;
 
+//ensures mySeq[0].spine == mySeq + newNd.spine;
+
+ensures mySeq[0].Valid();
 ensures mySeq[0].tailContents == 
 	oldTC[0..|mySeq|-1] + [d]
  + oldTC[|mySeq|-1..];
 
 ensures mySeq[0].footprint == oldFp + {newNd};
-
-ensures mySeq[0].spine == mySeq + newNd.spine;
-
-ensures mySeq[0].Valid();
 {}
 
 
