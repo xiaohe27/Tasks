@@ -18,7 +18,6 @@ import com.runtimeverification.rvmonitor.java.rt.tablebase.IMonitor;
 import com.runtimeverification.rvmonitor.java.rt.tablebase.DisableHolder;
 import com.runtimeverification.rvmonitor.java.rt.tablebase.TerminatedMonitorCleaner;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.aspectj.lang.*;
 
 final class Iterator_HasNextMonitor_Set extends com.runtimeverification.rvmonitor.java.rt.tablebase.AbstractMonitorSet<Iterator_HasNextMonitor> {
 
@@ -534,9 +533,9 @@ class Iterator_HasNextMonitor extends com.runtimeverification.rvmonitor.java.rt.
 		}
 	}
 
-	static final int Prop_1_transition_hasnexttrue[] = {2, 3, 2, 3};;
-	static final int Prop_1_transition_hasnextfalse[] = {0, 3, 0, 3};;
-	static final int Prop_1_transition_next[] = {1, 3, 0, 3};;
+	static final int Prop_1_transition_hasnexttrue[] = {1, 1, 3, 3};;
+	static final int Prop_1_transition_hasnextfalse[] = {0, 0, 3, 3};;
+	static final int Prop_1_transition_next[] = {2, 0, 3, 3};;
 
 	volatile boolean Iterator_HasNextMonitor_Prop_1_Category_violation = false;
 
@@ -587,7 +586,7 @@ class Iterator_HasNextMonitor extends com.runtimeverification.rvmonitor.java.rt.
 		}
 
 		int nextstate = this.handleEvent(0, Prop_1_transition_hasnexttrue) ;
-		this.Iterator_HasNextMonitor_Prop_1_Category_violation = nextstate == 1;
+		this.Iterator_HasNextMonitor_Prop_1_Category_violation = nextstate == 2;
 
 		return true;
 	}
@@ -602,7 +601,7 @@ class Iterator_HasNextMonitor extends com.runtimeverification.rvmonitor.java.rt.
 		}
 
 		int nextstate = this.handleEvent(1, Prop_1_transition_hasnextfalse) ;
-		this.Iterator_HasNextMonitor_Prop_1_Category_violation = nextstate == 1;
+		this.Iterator_HasNextMonitor_Prop_1_Category_violation = nextstate == 2;
 
 		return true;
 	}
@@ -612,7 +611,7 @@ class Iterator_HasNextMonitor extends com.runtimeverification.rvmonitor.java.rt.
 		}
 
 		int nextstate = this.handleEvent(2, Prop_1_transition_next) ;
-		this.Iterator_HasNextMonitor_Prop_1_Category_violation = nextstate == 1;
+		this.Iterator_HasNextMonitor_Prop_1_Category_violation = nextstate == 2;
 
 		return true;
 	}
@@ -989,12 +988,12 @@ class ListIterator_SetMonitor extends com.runtimeverification.rvmonitor.java.rt.
 		}
 	}
 
-	static final int Prop_1_transition_create[] = {2, 4, 4, 4, 4};;
-	static final int Prop_1_transition_remove[] = {4, 3, 4, 4, 4};;
-	static final int Prop_1_transition_add[] = {4, 2, 2, 4, 4};;
-	static final int Prop_1_transition_next[] = {4, 1, 1, 1, 4};;
-	static final int Prop_1_transition_previous[] = {4, 1, 1, 1, 4};;
-	static final int Prop_1_transition_set[] = {4, 1, 4, 4, 4};;
+	static final int Prop_1_transition_create[] = {1, 4, 4, 4, 4};;
+	static final int Prop_1_transition_remove[] = {4, 4, 3, 4, 4};;
+	static final int Prop_1_transition_add[] = {4, 1, 1, 4, 4};;
+	static final int Prop_1_transition_next[] = {4, 2, 2, 2, 4};;
+	static final int Prop_1_transition_previous[] = {4, 2, 2, 2, 4};;
+	static final int Prop_1_transition_set[] = {4, 4, 2, 4, 4};;
 
 	volatile boolean ListIterator_SetMonitor_Prop_1_Category_fail = false;
 
@@ -1204,12 +1203,12 @@ class ListIterator_hasNextPreviousMonitor extends com.runtimeverification.rvmoni
 		}
 	}
 
-	static final int Prop_1_transition_hasnexttrue[] = {1, 1, 3, 3, 4};;
-	static final int Prop_1_transition_hasnextfalse[] = {0, 0, 2, 2, 4};;
-	static final int Prop_1_transition_next[] = {4, 2, 4, 2, 4};;
-	static final int Prop_1_transition_hasprevioustrue[] = {2, 3, 2, 3, 4};;
-	static final int Prop_1_transition_haspreviousfalse[] = {0, 1, 0, 1, 4};;
-	static final int Prop_1_transition_previous[] = {4, 4, 1, 1, 4};;
+	static final int Prop_1_transition_hasnexttrue[] = {3, 2, 2, 3, 4};;
+	static final int Prop_1_transition_hasnextfalse[] = {0, 1, 1, 0, 4};;
+	static final int Prop_1_transition_next[] = {4, 4, 1, 1, 4};;
+	static final int Prop_1_transition_hasprevioustrue[] = {1, 1, 2, 2, 4};;
+	static final int Prop_1_transition_haspreviousfalse[] = {0, 0, 3, 3, 4};;
+	static final int Prop_1_transition_previous[] = {4, 3, 3, 4, 4};;
 
 	volatile boolean ListIterator_hasNextPreviousMonitor_Prop_1_Category_fail = false;
 
@@ -1442,9 +1441,9 @@ class List_UnsafeListIteratorMonitor extends com.runtimeverification.rvmonitor.j
 	WeakReference Ref_i = null;
 	WeakReference Ref_l = null;
 
-	static final int Prop_1_transition_create[] = {1, 4, 4, 4, 4};;
-	static final int Prop_1_transition_modify[] = {4, 3, 4, 3, 4};;
-	static final int Prop_1_transition_useiter[] = {4, 1, 4, 2, 4};;
+	static final int Prop_1_transition_create[] = {2, 4, 4, 4, 4};;
+	static final int Prop_1_transition_modify[] = {4, 4, 3, 3, 4};;
+	static final int Prop_1_transition_useiter[] = {4, 4, 2, 1, 4};;
 
 	volatile boolean List_UnsafeListIteratorMonitor_Prop_1_Category_match = false;
 
@@ -1496,7 +1495,7 @@ class List_UnsafeListIteratorMonitor extends com.runtimeverification.rvmonitor.j
 		}
 
 		int nextstate = this.handleEvent(0, Prop_1_transition_create) ;
-		this.List_UnsafeListIteratorMonitor_Prop_1_Category_match = nextstate == 2;
+		this.List_UnsafeListIteratorMonitor_Prop_1_Category_match = nextstate == 1;
 
 		return true;
 	}
@@ -1513,7 +1512,7 @@ class List_UnsafeListIteratorMonitor extends com.runtimeverification.rvmonitor.j
 		}
 
 		int nextstate = this.handleEvent(1, Prop_1_transition_modify) ;
-		this.List_UnsafeListIteratorMonitor_Prop_1_Category_match = nextstate == 2;
+		this.List_UnsafeListIteratorMonitor_Prop_1_Category_match = nextstate == 1;
 
 		return true;
 	}
@@ -1530,7 +1529,7 @@ class List_UnsafeListIteratorMonitor extends com.runtimeverification.rvmonitor.j
 		}
 
 		int nextstate = this.handleEvent(2, Prop_1_transition_useiter) ;
-		this.List_UnsafeListIteratorMonitor_Prop_1_Category_match = nextstate == 2;
+		this.List_UnsafeListIteratorMonitor_Prop_1_Category_match = nextstate == 1;
 
 		return true;
 	}
@@ -1614,7 +1613,7 @@ class List_UnsafeListIteratorMonitor extends com.runtimeverification.rvmonitor.j
 
 }
 
-class MultiSpec_1RuntimeMonitor implements com.runtimeverification.rvmonitor.java.rt.RVMObject {
+public final class MultiSpec_1RuntimeMonitor implements com.runtimeverification.rvmonitor.java.rt.RVMObject {
 	private static com.runtimeverification.rvmonitor.java.rt.map.RVMMapManager MultiSpec_1MapManager;
 	static {
 		MultiSpec_1MapManager = new com.runtimeverification.rvmonitor.java.rt.map.RVMMapManager();
@@ -1832,27 +1831,27 @@ class MultiSpec_1RuntimeMonitor implements com.runtimeverification.rvmonitor.jav
 		MultiSpec_1_RVMLock.unlock();
 	}
 
-	public static final void Iterator_RemoveOnce_removeEvent(Iterator i) {
-		Iterator_RemoveOnce_activated = true;
+	public static final void ListIterator_Set_createEvent(ListIterator i) {
+		ListIterator_Set_activated = true;
 		while (!MultiSpec_1_RVMLock.tryLock()) {
 			Thread.yield();
 		}
 
 		CachedWeakReference wr_i = null;
-		MapOfMonitor<Iterator_RemoveOnceMonitor> matchedLastMap = null;
-		Iterator_RemoveOnceMonitor matchedEntry = null;
+		MapOfMonitor<ListIterator_SetMonitor> matchedLastMap = null;
+		ListIterator_SetMonitor matchedEntry = null;
 		boolean cachehit = false;
-		if ((i == Iterator_RemoveOnce_i_Map_cachekey_i) ) {
-			matchedEntry = Iterator_RemoveOnce_i_Map_cachevalue;
+		if ((i == ListIterator_Set_i_Map_cachekey_i) ) {
+			matchedEntry = ListIterator_Set_i_Map_cachevalue;
 			cachehit = true;
 		}
 		else {
 			wr_i = new CachedWeakReference(i) ;
 			{
 				// FindOrCreateEntry
-				MapOfMonitor<Iterator_RemoveOnceMonitor> itmdMap = Iterator_RemoveOnce_i_Map;
+				MapOfMonitor<ListIterator_SetMonitor> itmdMap = ListIterator_Set_i_Map;
 				matchedLastMap = itmdMap;
-				Iterator_RemoveOnceMonitor node_i = Iterator_RemoveOnce_i_Map.getNodeEquivalent(wr_i) ;
+				ListIterator_SetMonitor node_i = ListIterator_Set_i_Map.getNodeEquivalent(wr_i) ;
 				matchedEntry = node_i;
 			}
 		}
@@ -1862,69 +1861,200 @@ class MultiSpec_1RuntimeMonitor implements com.runtimeverification.rvmonitor.jav
 				wr_i = new CachedWeakReference(i) ;
 			}
 			// D(X) main:4
-			Iterator_RemoveOnceMonitor created = new Iterator_RemoveOnceMonitor() ;
+			ListIterator_SetMonitor created = new ListIterator_SetMonitor() ;
 			matchedEntry = created;
 			matchedLastMap.putNode(wr_i, created) ;
 		}
 		// D(X) main:8--9
-		final Iterator_RemoveOnceMonitor matchedEntryfinalMonitor = matchedEntry;
-		matchedEntry.Prop_1_event_remove(i);
-		if(matchedEntryfinalMonitor.Iterator_RemoveOnceMonitor_Prop_1_Category_fail) {
+		final ListIterator_SetMonitor matchedEntryfinalMonitor = matchedEntry;
+		matchedEntry.Prop_1_event_create(i);
+		if(matchedEntryfinalMonitor.ListIterator_SetMonitor_Prop_1_Category_fail) {
 			matchedEntryfinalMonitor.Prop_1_handler_fail();
 		}
 
 		if ((cachehit == false) ) {
-			Iterator_RemoveOnce_i_Map_cachekey_i = i;
-			Iterator_RemoveOnce_i_Map_cachevalue = matchedEntry;
+			ListIterator_Set_i_Map_cachekey_i = i;
+			ListIterator_Set_i_Map_cachevalue = matchedEntry;
 		}
 
 		MultiSpec_1_RVMLock.unlock();
 	}
 
-	public static final void Iterator_RemoveOnce_nextEvent(Iterator i) {
-		Iterator_RemoveOnce_activated = true;
+	public static final void ListIterator_Set_removeEvent(ListIterator i) {
 		while (!MultiSpec_1_RVMLock.tryLock()) {
 			Thread.yield();
 		}
 
-		CachedWeakReference wr_i = null;
-		MapOfMonitor<Iterator_RemoveOnceMonitor> matchedLastMap = null;
-		Iterator_RemoveOnceMonitor matchedEntry = null;
-		boolean cachehit = false;
-		if ((i == Iterator_RemoveOnce_i_Map_cachekey_i) ) {
-			matchedEntry = Iterator_RemoveOnce_i_Map_cachevalue;
-			cachehit = true;
-		}
-		else {
-			wr_i = new CachedWeakReference(i) ;
-			{
-				// FindOrCreateEntry
-				MapOfMonitor<Iterator_RemoveOnceMonitor> itmdMap = Iterator_RemoveOnce_i_Map;
-				matchedLastMap = itmdMap;
-				Iterator_RemoveOnceMonitor node_i = Iterator_RemoveOnce_i_Map.getNodeEquivalent(wr_i) ;
+		if (ListIterator_Set_activated) {
+			ListIterator_SetMonitor matchedEntry = null;
+			boolean cachehit = false;
+			if ((i == ListIterator_Set_i_Map_cachekey_i) ) {
+				matchedEntry = ListIterator_Set_i_Map_cachevalue;
+				cachehit = true;
+			}
+			else {
+				// FindEntry
+				ListIterator_SetMonitor node_i = ListIterator_Set_i_Map.getNodeWithStrongRef(i) ;
 				matchedEntry = node_i;
 			}
-		}
-		// D(X) main:1
-		if ((matchedEntry == null) ) {
-			if ((wr_i == null) ) {
-				wr_i = new CachedWeakReference(i) ;
+			// D(X) main:8--9
+			if ((matchedEntry != null) ) {
+				final ListIterator_SetMonitor matchedEntryfinalMonitor = matchedEntry;
+				matchedEntry.Prop_1_event_remove(i);
+				if(matchedEntryfinalMonitor.ListIterator_SetMonitor_Prop_1_Category_fail) {
+					matchedEntryfinalMonitor.Prop_1_handler_fail();
+				}
+
+				if ((cachehit == false) ) {
+					ListIterator_Set_i_Map_cachekey_i = i;
+					ListIterator_Set_i_Map_cachevalue = matchedEntry;
+				}
 			}
-			// D(X) main:4
-			Iterator_RemoveOnceMonitor created = new Iterator_RemoveOnceMonitor() ;
-			matchedEntry = created;
-			matchedLastMap.putNode(wr_i, created) ;
-		}
-		// D(X) main:8--9
-		final Iterator_RemoveOnceMonitor matchedEntryfinalMonitor = matchedEntry;
-		matchedEntry.Prop_1_event_next(i);
-		if(matchedEntryfinalMonitor.Iterator_RemoveOnceMonitor_Prop_1_Category_fail) {
-			matchedEntryfinalMonitor.Prop_1_handler_fail();
+
 		}
 
-		if ((cachehit == false) ) {
-			Iterator_RemoveOnce_i_Map_cachekey_i = i;
-			Iterator_RemoveOnce_i_Map_cachevalue = matchedEntry;
+		MultiSpec_1_RVMLock.unlock();
+	}
+
+	public static final void ListIterator_Set_addEvent(ListIterator i) {
+		while (!MultiSpec_1_RVMLock.tryLock()) {
+			Thread.yield();
+		}
+
+		if (ListIterator_Set_activated) {
+			ListIterator_SetMonitor matchedEntry = null;
+			boolean cachehit = false;
+			if ((i == ListIterator_Set_i_Map_cachekey_i) ) {
+				matchedEntry = ListIterator_Set_i_Map_cachevalue;
+				cachehit = true;
+			}
+			else {
+				// FindEntry
+				ListIterator_SetMonitor node_i = ListIterator_Set_i_Map.getNodeWithStrongRef(i) ;
+				matchedEntry = node_i;
+			}
+			// D(X) main:8--9
+			if ((matchedEntry != null) ) {
+				final ListIterator_SetMonitor matchedEntryfinalMonitor = matchedEntry;
+				matchedEntry.Prop_1_event_add(i);
+				if(matchedEntryfinalMonitor.ListIterator_SetMonitor_Prop_1_Category_fail) {
+					matchedEntryfinalMonitor.Prop_1_handler_fail();
+				}
+
+				if ((cachehit == false) ) {
+					ListIterator_Set_i_Map_cachekey_i = i;
+					ListIterator_Set_i_Map_cachevalue = matchedEntry;
+				}
+			}
+
+		}
+
+		MultiSpec_1_RVMLock.unlock();
+	}
+
+	public static final void ListIterator_Set_nextEvent(ListIterator i) {
+		while (!MultiSpec_1_RVMLock.tryLock()) {
+			Thread.yield();
+		}
+
+		if (ListIterator_Set_activated) {
+			ListIterator_SetMonitor matchedEntry = null;
+			boolean cachehit = false;
+			if ((i == ListIterator_Set_i_Map_cachekey_i) ) {
+				matchedEntry = ListIterator_Set_i_Map_cachevalue;
+				cachehit = true;
+			}
+			else {
+				// FindEntry
+				ListIterator_SetMonitor node_i = ListIterator_Set_i_Map.getNodeWithStrongRef(i) ;
+				matchedEntry = node_i;
+			}
+			// D(X) main:8--9
+			if ((matchedEntry != null) ) {
+				final ListIterator_SetMonitor matchedEntryfinalMonitor = matchedEntry;
+				matchedEntry.Prop_1_event_next(i);
+				if(matchedEntryfinalMonitor.ListIterator_SetMonitor_Prop_1_Category_fail) {
+					matchedEntryfinalMonitor.Prop_1_handler_fail();
+				}
+
+				if ((cachehit == false) ) {
+					ListIterator_Set_i_Map_cachekey_i = i;
+					ListIterator_Set_i_Map_cachevalue = matchedEntry;
+				}
+			}
+
+		}
+
+		MultiSpec_1_RVMLock.unlock();
+	}
+
+	public static final void ListIterator_Set_previousEvent(ListIterator i) {
+		while (!MultiSpec_1_RVMLock.tryLock()) {
+			Thread.yield();
+		}
+
+		if (ListIterator_Set_activated) {
+			ListIterator_SetMonitor matchedEntry = null;
+			boolean cachehit = false;
+			if ((i == ListIterator_Set_i_Map_cachekey_i) ) {
+				matchedEntry = ListIterator_Set_i_Map_cachevalue;
+				cachehit = true;
+			}
+			else {
+				// FindEntry
+				ListIterator_SetMonitor node_i = ListIterator_Set_i_Map.getNodeWithStrongRef(i) ;
+				matchedEntry = node_i;
+			}
+			// D(X) main:8--9
+			if ((matchedEntry != null) ) {
+				final ListIterator_SetMonitor matchedEntryfinalMonitor = matchedEntry;
+				matchedEntry.Prop_1_event_previous(i);
+				if(matchedEntryfinalMonitor.ListIterator_SetMonitor_Prop_1_Category_fail) {
+					matchedEntryfinalMonitor.Prop_1_handler_fail();
+				}
+
+				if ((cachehit == false) ) {
+					ListIterator_Set_i_Map_cachekey_i = i;
+					ListIterator_Set_i_Map_cachevalue = matchedEntry;
+				}
+			}
+
+		}
+
+		MultiSpec_1_RVMLock.unlock();
+	}
+
+	public static final void ListIterator_Set_setEvent(ListIterator i) {
+		while (!MultiSpec_1_RVMLock.tryLock()) {
+			Thread.yield();
+		}
+
+		if (ListIterator_Set_activated) {
+			ListIterator_SetMonitor matchedEntry = null;
+			boolean cachehit = false;
+			if ((i == ListIterator_Set_i_Map_cachekey_i) ) {
+				matchedEntry = ListIterator_Set_i_Map_cachevalue;
+				cachehit = true;
+			}
+			else {
+				// FindEntry
+				ListIterator_SetMonitor node_i = ListIterator_Set_i_Map.getNodeWithStrongRef(i) ;
+				matchedEntry = node_i;
+			}
+			// D(X) main:8--9
+			if ((matchedEntry != null) ) {
+				final ListIterator_SetMonitor matchedEntryfinalMonitor = matchedEntry;
+				matchedEntry.Prop_1_event_set(i);
+				if(matchedEntryfinalMonitor.ListIterator_SetMonitor_Prop_1_Category_fail) {
+					matchedEntryfinalMonitor.Prop_1_handler_fail();
+				}
+
+				if ((cachehit == false) ) {
+					ListIterator_Set_i_Map_cachekey_i = i;
+					ListIterator_Set_i_Map_cachevalue = matchedEntry;
+				}
+			}
+
 		}
 
 		MultiSpec_1_RVMLock.unlock();
@@ -2371,27 +2501,27 @@ class MultiSpec_1RuntimeMonitor implements com.runtimeverification.rvmonitor.jav
 		MultiSpec_1_RVMLock.unlock();
 	}
 
-	public static final void ListIterator_Set_createEvent(ListIterator i) {
-		ListIterator_Set_activated = true;
+	public static final void Iterator_RemoveOnce_removeEvent(Iterator i) {
+		Iterator_RemoveOnce_activated = true;
 		while (!MultiSpec_1_RVMLock.tryLock()) {
 			Thread.yield();
 		}
 
 		CachedWeakReference wr_i = null;
-		MapOfMonitor<ListIterator_SetMonitor> matchedLastMap = null;
-		ListIterator_SetMonitor matchedEntry = null;
+		MapOfMonitor<Iterator_RemoveOnceMonitor> matchedLastMap = null;
+		Iterator_RemoveOnceMonitor matchedEntry = null;
 		boolean cachehit = false;
-		if ((i == ListIterator_Set_i_Map_cachekey_i) ) {
-			matchedEntry = ListIterator_Set_i_Map_cachevalue;
+		if ((i == Iterator_RemoveOnce_i_Map_cachekey_i) ) {
+			matchedEntry = Iterator_RemoveOnce_i_Map_cachevalue;
 			cachehit = true;
 		}
 		else {
 			wr_i = new CachedWeakReference(i) ;
 			{
 				// FindOrCreateEntry
-				MapOfMonitor<ListIterator_SetMonitor> itmdMap = ListIterator_Set_i_Map;
+				MapOfMonitor<Iterator_RemoveOnceMonitor> itmdMap = Iterator_RemoveOnce_i_Map;
 				matchedLastMap = itmdMap;
-				ListIterator_SetMonitor node_i = ListIterator_Set_i_Map.getNodeEquivalent(wr_i) ;
+				Iterator_RemoveOnceMonitor node_i = Iterator_RemoveOnce_i_Map.getNodeEquivalent(wr_i) ;
 				matchedEntry = node_i;
 			}
 		}
@@ -2401,200 +2531,69 @@ class MultiSpec_1RuntimeMonitor implements com.runtimeverification.rvmonitor.jav
 				wr_i = new CachedWeakReference(i) ;
 			}
 			// D(X) main:4
-			ListIterator_SetMonitor created = new ListIterator_SetMonitor() ;
+			Iterator_RemoveOnceMonitor created = new Iterator_RemoveOnceMonitor() ;
 			matchedEntry = created;
 			matchedLastMap.putNode(wr_i, created) ;
 		}
 		// D(X) main:8--9
-		final ListIterator_SetMonitor matchedEntryfinalMonitor = matchedEntry;
-		matchedEntry.Prop_1_event_create(i);
-		if(matchedEntryfinalMonitor.ListIterator_SetMonitor_Prop_1_Category_fail) {
+		final Iterator_RemoveOnceMonitor matchedEntryfinalMonitor = matchedEntry;
+		matchedEntry.Prop_1_event_remove(i);
+		if(matchedEntryfinalMonitor.Iterator_RemoveOnceMonitor_Prop_1_Category_fail) {
 			matchedEntryfinalMonitor.Prop_1_handler_fail();
 		}
 
 		if ((cachehit == false) ) {
-			ListIterator_Set_i_Map_cachekey_i = i;
-			ListIterator_Set_i_Map_cachevalue = matchedEntry;
+			Iterator_RemoveOnce_i_Map_cachekey_i = i;
+			Iterator_RemoveOnce_i_Map_cachevalue = matchedEntry;
 		}
 
 		MultiSpec_1_RVMLock.unlock();
 	}
 
-	public static final void ListIterator_Set_removeEvent(ListIterator i) {
+	public static final void Iterator_RemoveOnce_nextEvent(Iterator i) {
+		Iterator_RemoveOnce_activated = true;
 		while (!MultiSpec_1_RVMLock.tryLock()) {
 			Thread.yield();
 		}
 
-		if (ListIterator_Set_activated) {
-			ListIterator_SetMonitor matchedEntry = null;
-			boolean cachehit = false;
-			if ((i == ListIterator_Set_i_Map_cachekey_i) ) {
-				matchedEntry = ListIterator_Set_i_Map_cachevalue;
-				cachehit = true;
-			}
-			else {
-				// FindEntry
-				ListIterator_SetMonitor node_i = ListIterator_Set_i_Map.getNodeWithStrongRef(i) ;
+		CachedWeakReference wr_i = null;
+		MapOfMonitor<Iterator_RemoveOnceMonitor> matchedLastMap = null;
+		Iterator_RemoveOnceMonitor matchedEntry = null;
+		boolean cachehit = false;
+		if ((i == Iterator_RemoveOnce_i_Map_cachekey_i) ) {
+			matchedEntry = Iterator_RemoveOnce_i_Map_cachevalue;
+			cachehit = true;
+		}
+		else {
+			wr_i = new CachedWeakReference(i) ;
+			{
+				// FindOrCreateEntry
+				MapOfMonitor<Iterator_RemoveOnceMonitor> itmdMap = Iterator_RemoveOnce_i_Map;
+				matchedLastMap = itmdMap;
+				Iterator_RemoveOnceMonitor node_i = Iterator_RemoveOnce_i_Map.getNodeEquivalent(wr_i) ;
 				matchedEntry = node_i;
 			}
-			// D(X) main:8--9
-			if ((matchedEntry != null) ) {
-				final ListIterator_SetMonitor matchedEntryfinalMonitor = matchedEntry;
-				matchedEntry.Prop_1_event_remove(i);
-				if(matchedEntryfinalMonitor.ListIterator_SetMonitor_Prop_1_Category_fail) {
-					matchedEntryfinalMonitor.Prop_1_handler_fail();
-				}
-
-				if ((cachehit == false) ) {
-					ListIterator_Set_i_Map_cachekey_i = i;
-					ListIterator_Set_i_Map_cachevalue = matchedEntry;
-				}
+		}
+		// D(X) main:1
+		if ((matchedEntry == null) ) {
+			if ((wr_i == null) ) {
+				wr_i = new CachedWeakReference(i) ;
 			}
-
+			// D(X) main:4
+			Iterator_RemoveOnceMonitor created = new Iterator_RemoveOnceMonitor() ;
+			matchedEntry = created;
+			matchedLastMap.putNode(wr_i, created) ;
+		}
+		// D(X) main:8--9
+		final Iterator_RemoveOnceMonitor matchedEntryfinalMonitor = matchedEntry;
+		matchedEntry.Prop_1_event_next(i);
+		if(matchedEntryfinalMonitor.Iterator_RemoveOnceMonitor_Prop_1_Category_fail) {
+			matchedEntryfinalMonitor.Prop_1_handler_fail();
 		}
 
-		MultiSpec_1_RVMLock.unlock();
-	}
-
-	public static final void ListIterator_Set_addEvent(ListIterator i) {
-		while (!MultiSpec_1_RVMLock.tryLock()) {
-			Thread.yield();
-		}
-
-		if (ListIterator_Set_activated) {
-			ListIterator_SetMonitor matchedEntry = null;
-			boolean cachehit = false;
-			if ((i == ListIterator_Set_i_Map_cachekey_i) ) {
-				matchedEntry = ListIterator_Set_i_Map_cachevalue;
-				cachehit = true;
-			}
-			else {
-				// FindEntry
-				ListIterator_SetMonitor node_i = ListIterator_Set_i_Map.getNodeWithStrongRef(i) ;
-				matchedEntry = node_i;
-			}
-			// D(X) main:8--9
-			if ((matchedEntry != null) ) {
-				final ListIterator_SetMonitor matchedEntryfinalMonitor = matchedEntry;
-				matchedEntry.Prop_1_event_add(i);
-				if(matchedEntryfinalMonitor.ListIterator_SetMonitor_Prop_1_Category_fail) {
-					matchedEntryfinalMonitor.Prop_1_handler_fail();
-				}
-
-				if ((cachehit == false) ) {
-					ListIterator_Set_i_Map_cachekey_i = i;
-					ListIterator_Set_i_Map_cachevalue = matchedEntry;
-				}
-			}
-
-		}
-
-		MultiSpec_1_RVMLock.unlock();
-	}
-
-	public static final void ListIterator_Set_nextEvent(ListIterator i) {
-		while (!MultiSpec_1_RVMLock.tryLock()) {
-			Thread.yield();
-		}
-
-		if (ListIterator_Set_activated) {
-			ListIterator_SetMonitor matchedEntry = null;
-			boolean cachehit = false;
-			if ((i == ListIterator_Set_i_Map_cachekey_i) ) {
-				matchedEntry = ListIterator_Set_i_Map_cachevalue;
-				cachehit = true;
-			}
-			else {
-				// FindEntry
-				ListIterator_SetMonitor node_i = ListIterator_Set_i_Map.getNodeWithStrongRef(i) ;
-				matchedEntry = node_i;
-			}
-			// D(X) main:8--9
-			if ((matchedEntry != null) ) {
-				final ListIterator_SetMonitor matchedEntryfinalMonitor = matchedEntry;
-				matchedEntry.Prop_1_event_next(i);
-				if(matchedEntryfinalMonitor.ListIterator_SetMonitor_Prop_1_Category_fail) {
-					matchedEntryfinalMonitor.Prop_1_handler_fail();
-				}
-
-				if ((cachehit == false) ) {
-					ListIterator_Set_i_Map_cachekey_i = i;
-					ListIterator_Set_i_Map_cachevalue = matchedEntry;
-				}
-			}
-
-		}
-
-		MultiSpec_1_RVMLock.unlock();
-	}
-
-	public static final void ListIterator_Set_previousEvent(ListIterator i) {
-		while (!MultiSpec_1_RVMLock.tryLock()) {
-			Thread.yield();
-		}
-
-		if (ListIterator_Set_activated) {
-			ListIterator_SetMonitor matchedEntry = null;
-			boolean cachehit = false;
-			if ((i == ListIterator_Set_i_Map_cachekey_i) ) {
-				matchedEntry = ListIterator_Set_i_Map_cachevalue;
-				cachehit = true;
-			}
-			else {
-				// FindEntry
-				ListIterator_SetMonitor node_i = ListIterator_Set_i_Map.getNodeWithStrongRef(i) ;
-				matchedEntry = node_i;
-			}
-			// D(X) main:8--9
-			if ((matchedEntry != null) ) {
-				final ListIterator_SetMonitor matchedEntryfinalMonitor = matchedEntry;
-				matchedEntry.Prop_1_event_previous(i);
-				if(matchedEntryfinalMonitor.ListIterator_SetMonitor_Prop_1_Category_fail) {
-					matchedEntryfinalMonitor.Prop_1_handler_fail();
-				}
-
-				if ((cachehit == false) ) {
-					ListIterator_Set_i_Map_cachekey_i = i;
-					ListIterator_Set_i_Map_cachevalue = matchedEntry;
-				}
-			}
-
-		}
-
-		MultiSpec_1_RVMLock.unlock();
-	}
-
-	public static final void ListIterator_Set_setEvent(ListIterator i) {
-		while (!MultiSpec_1_RVMLock.tryLock()) {
-			Thread.yield();
-		}
-
-		if (ListIterator_Set_activated) {
-			ListIterator_SetMonitor matchedEntry = null;
-			boolean cachehit = false;
-			if ((i == ListIterator_Set_i_Map_cachekey_i) ) {
-				matchedEntry = ListIterator_Set_i_Map_cachevalue;
-				cachehit = true;
-			}
-			else {
-				// FindEntry
-				ListIterator_SetMonitor node_i = ListIterator_Set_i_Map.getNodeWithStrongRef(i) ;
-				matchedEntry = node_i;
-			}
-			// D(X) main:8--9
-			if ((matchedEntry != null) ) {
-				final ListIterator_SetMonitor matchedEntryfinalMonitor = matchedEntry;
-				matchedEntry.Prop_1_event_set(i);
-				if(matchedEntryfinalMonitor.ListIterator_SetMonitor_Prop_1_Category_fail) {
-					matchedEntryfinalMonitor.Prop_1_handler_fail();
-				}
-
-				if ((cachehit == false) ) {
-					ListIterator_Set_i_Map_cachekey_i = i;
-					ListIterator_Set_i_Map_cachevalue = matchedEntry;
-				}
-			}
-
+		if ((cachehit == false) ) {
+			Iterator_RemoveOnce_i_Map_cachekey_i = i;
+			Iterator_RemoveOnce_i_Map_cachevalue = matchedEntry;
 		}
 
 		MultiSpec_1_RVMLock.unlock();
@@ -2754,133 +2753,6 @@ class MultiSpec_1RuntimeMonitor implements com.runtimeverification.rvmonitor.jav
 		}
 
 		MultiSpec_1_RVMLock.unlock();
-	}
-
-}
-
-
-aspect BaseAspect {
-	pointcut notwithin() :
-	!within(sun..*) &&
-	!within(java..*) &&
-	!within(javax..*) &&
-	!within(com.sun..*) &&
-	!within(org.dacapo.harness..*) &&
-	!within(org.apache.commons..*) &&
-	!within(org.apache.geronimo..*) &&
-	!within(net.sf.cglib..*) &&
-	!within(mop..*) &&
-	!within(javamoprt..*) &&
-	!within(rvmonitorrt..*) &&
-	!within(com.runtimeverification..*);
-}
-
-public aspect MultiSpec_1MonitorAspect implements com.runtimeverification.rvmonitor.java.rt.RVMObject {
-	public MultiSpec_1MonitorAspect(){
-	}
-
-	// Declarations for the Lock
-	static ReentrantLock MultiSpec_1_MOPLock = new ReentrantLock();
-	static Condition MultiSpec_1_MOPLock_cond = MultiSpec_1_MOPLock.newCondition();
-
-	pointcut MOP_CommonPointCut() : !within(com.runtimeverification.rvmonitor.java.rt.RVMObject+) && !adviceexecution() && BaseAspect.notwithin();
-	pointcut List_UnsafeListIterator_useiter(ListIterator i) : ((call(* Iterator+.hasNext(..)) || call(* ListIterator+.hasPrevious(..)) || call(* Iterator+.next(..)) || call(* ListIterator+.previous(..)) || call(* ListIterator+.nextIndex(..)) || call(* ListIterator+.previousIndex(..))) && target(i)) && MOP_CommonPointCut();
-	before (ListIterator i) : List_UnsafeListIterator_useiter(i) {
-		MultiSpec_1RuntimeMonitor.List_UnsafeListIterator_useiterEvent(i);
-	}
-
-	pointcut List_UnsafeListIterator_modify(List l) : ((call(* Collection+.add*(..)) || call(* Collection+.clear(..)) || call(* Collection+.remove*(..)) || call(* Collection+.retain*(..))) && target(l)) && MOP_CommonPointCut();
-	before (List l) : List_UnsafeListIterator_modify(l) {
-		MultiSpec_1RuntimeMonitor.List_UnsafeListIterator_modifyEvent(l);
-	}
-
-	pointcut ListIterator_Set_set(ListIterator i) : (call(* ListIterator+.set(..)) && target(i)) && MOP_CommonPointCut();
-	before (ListIterator i) : ListIterator_Set_set(i) {
-		MultiSpec_1RuntimeMonitor.ListIterator_Set_setEvent(i);
-	}
-
-	pointcut ListIterator_Set_add(ListIterator i) : (call(void ListIterator+.add(..)) && target(i)) && MOP_CommonPointCut();
-	before (ListIterator i) : ListIterator_Set_add(i) {
-		MultiSpec_1RuntimeMonitor.ListIterator_Set_addEvent(i);
-	}
-
-	pointcut ListIterator_RemoveOnce_previous(ListIterator i) : (call(* ListIterator+.previous()) && target(i)) && MOP_CommonPointCut();
-	before (ListIterator i) : ListIterator_RemoveOnce_previous(i) {
-		//ListIterator_Set_previous
-		MultiSpec_1RuntimeMonitor.ListIterator_Set_previousEvent(i);
-		//ListIterator_RemoveOnce_previous
-		MultiSpec_1RuntimeMonitor.ListIterator_RemoveOnce_previousEvent(i);
-	}
-
-	pointcut Iterator_HasNext_next(ListIterator i) : (call(* Iterator+.next()) && target(i)) && MOP_CommonPointCut();
-	before (ListIterator i) : Iterator_HasNext_next(i) {
-		//ListIterator_Set_next
-		MultiSpec_1RuntimeMonitor.ListIterator_Set_nextEvent(i);
-		//ListIterator_RemoveOnce_next
-		MultiSpec_1RuntimeMonitor.ListIterator_RemoveOnce_nextEvent(i);
-	}
-
-	pointcut Iterator_RemoveOnce_remove(ListIterator i) : (call(void Iterator+.remove()) && target(i)) && MOP_CommonPointCut();
-	before (ListIterator i) : Iterator_RemoveOnce_remove(i) {
-		//ListIterator_Set_remove
-		MultiSpec_1RuntimeMonitor.ListIterator_Set_removeEvent(i);
-		//ListIterator_RemoveOnce_remove
-		MultiSpec_1RuntimeMonitor.ListIterator_RemoveOnce_removeEvent(i);
-	}
-
-	pointcut ListIterator_hasNextPrevious_previous(ListIterator i) : (call(* ListIterator.previous()) && target(i)) && MOP_CommonPointCut();
-	before (ListIterator i) : ListIterator_hasNextPrevious_previous(i) {
-		MultiSpec_1RuntimeMonitor.ListIterator_hasNextPrevious_previousEvent(i);
-	}
-
-	pointcut ListIterator_hasNextPrevious_next(ListIterator i) : (call(* ListIterator.next()) && target(i)) && MOP_CommonPointCut();
-	before (ListIterator i) : ListIterator_hasNextPrevious_next(i) {
-		MultiSpec_1RuntimeMonitor.ListIterator_hasNextPrevious_nextEvent(i);
-	}
-
-	before (Iterator i) : Iterator_RemoveOnce_remove(i) {
-		MultiSpec_1RuntimeMonitor.Iterator_RemoveOnce_removeEvent(i);
-	}
-
-	before (Iterator i) : Iterator_HasNext_next(i) {
-		//Iterator_RemoveOnce_next
-		MultiSpec_1RuntimeMonitor.Iterator_RemoveOnce_nextEvent(i);
-		//Iterator_HasNext_next
-		MultiSpec_1RuntimeMonitor.Iterator_HasNext_nextEvent(i);
-	}
-
-	pointcut Iterator_HasNext_hasnexttrue(Iterator i) : (call(* Iterator+.hasNext()) && target(i)) && MOP_CommonPointCut();
-	after (Iterator i) returning (boolean b) : Iterator_HasNext_hasnexttrue(i) {
-		//Iterator_HasNext_hasnexttrue
-		MultiSpec_1RuntimeMonitor.Iterator_HasNext_hasnexttrueEvent(i, b);
-		//Iterator_HasNext_hasnextfalse
-		MultiSpec_1RuntimeMonitor.Iterator_HasNext_hasnextfalseEvent(i, b);
-	}
-
-	pointcut ListIterator_hasNextPrevious_hasnexttrue(ListIterator i) : (call(* ListIterator.hasNext()) && target(i)) && MOP_CommonPointCut();
-	after (ListIterator i) returning (boolean b) : ListIterator_hasNextPrevious_hasnexttrue(i) {
-		//ListIterator_hasNextPrevious_hasnexttrue
-		MultiSpec_1RuntimeMonitor.ListIterator_hasNextPrevious_hasnexttrueEvent(i, b);
-		//ListIterator_hasNextPrevious_hasnextfalse
-		MultiSpec_1RuntimeMonitor.ListIterator_hasNextPrevious_hasnextfalseEvent(i, b);
-	}
-
-	pointcut ListIterator_hasNextPrevious_hasprevioustrue(ListIterator i) : (call(* ListIterator.hasPrevious()) && target(i)) && MOP_CommonPointCut();
-	after (ListIterator i) returning (boolean b) : ListIterator_hasNextPrevious_hasprevioustrue(i) {
-		//ListIterator_hasNextPrevious_hasprevioustrue
-		MultiSpec_1RuntimeMonitor.ListIterator_hasNextPrevious_hasprevioustrueEvent(i, b);
-		//ListIterator_hasNextPrevious_haspreviousfalse
-		MultiSpec_1RuntimeMonitor.ListIterator_hasNextPrevious_haspreviousfalseEvent(i, b);
-	}
-
-	pointcut ListIterator_Set_create() : (call(ListIterator Iterable+.listIterator())) && MOP_CommonPointCut();
-	after () returning (ListIterator i) : ListIterator_Set_create() {
-		MultiSpec_1RuntimeMonitor.ListIterator_Set_createEvent(i);
-	}
-
-	pointcut List_UnsafeListIterator_create(List l) : (call(ListIterator List+.listIterator()) && target(l)) && MOP_CommonPointCut();
-	after (List l) returning (ListIterator i) : List_UnsafeListIterator_create(l) {
-		MultiSpec_1RuntimeMonitor.List_UnsafeListIterator_createEvent(l, i);
 	}
 
 }
