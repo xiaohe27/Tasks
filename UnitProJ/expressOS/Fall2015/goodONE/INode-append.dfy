@@ -122,6 +122,7 @@ invariant tmpNd != null && tmpNd.Valid();
 invariant listCond(spine);
 invariant index == |this.footprint| - |tmpNd.footprint|;
 invariant tmpNd == spine[index];
+invariant this.data == old(this.data);
 decreases tmpNd.footprint;
 {
 tmpNd := tmpNd.next;
@@ -296,6 +297,7 @@ ensures newNd.next == null;
 ensures mySeq[|mySeq|-1].next == newNd;
 
 ensures forall nd :: nd in mySeq ==> nd.data == old(nd.data);
+//ensures mySeq[0].data == old(mySeq[0].data);
 
 ensures listInv(mySeq);
 
@@ -372,7 +374,8 @@ requires mySeq[|mySeq|-1].tailContents + [d] ==
 
 
 modifies mySeq;
-ensures forall nd :: nd in mySeq ==> nd.data == old(nd.data);
+//ensures forall nd :: nd in mySeq ==> nd.data == old(nd.data);
+ensures mySeq[0].data == old(mySeq[0].data);
 
 ensures mySeq[0].footprint == old(mySeq[0].footprint) + {newNd};
 //ensures mySeq[0].spine == old(mySeq[0].spine) + [newNd];
@@ -404,7 +407,8 @@ invariant index == |mySeq|-1 ==> (mySeq[|mySeq|-1].footprint + {newNd} ==
 	[newNd.data] + newNd.tailContents);
 
 
-
+invariant mySeq != [] && mySeq[0].data == old(mySeq[0].data);
+	
 invariant listInv(mySeq);
 
 invariant forall i :: 0 <= i <= index ==> mySeq[i].tailContents == old(mySeq[i].tailContents)
