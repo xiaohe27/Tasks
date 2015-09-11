@@ -80,12 +80,13 @@ requires 0 < i <= |tailContents|;
 requires Valid();
 modifies footprint;
 
+/*
 ensures Valid();
 ensures this.data == old(this.data);
 ensures tailContents == old(tailContents[0..i-1]) + [d] + old(tailContents[i-1..]);
 ensures footprint == old(footprint) + {newNd};
 ensures fresh(newNd);
-
+*/
 {
 newNd := new INode.init(d);
 
@@ -117,7 +118,7 @@ newNd.spine := [newNd] + newNd.next.spine;
 curNd.next := newNd;
 
 
-updateSeq(spine[0..i], d, newNd);
+//updateSeq(spine[0..i], d, newNd);
 }
 
 
@@ -467,8 +468,6 @@ pre2LI(mySeq, d, newNd,
 newNd.data, newNd.next, newNd.footprint, newNd.tailContents, newNd.spine, 
 newNd.data, newNd.next, newNd.footprint, newNd.tailContents, newNd.spine);
 
-ghost var nxtOldTC:seq<Data>;
-nxtOldTC := newNd.tailContents;
 
 while(index >= 0)
 invariant forall i :: 0 <= i <= index ==> 
@@ -481,7 +480,6 @@ invariant LI(mySeq, index, d, newNd,
 	newNd.data, newNd.next, newNd.footprint, 
 	newNd.tailContents, newNd.spine, 
 	oldD, oldNext, oldFp, oldTC, oldSpine);
-
 
 invariant index < |mySeq|-1 ==> (
 		oldFp == old(mySeq[index+1].footprint) &&
