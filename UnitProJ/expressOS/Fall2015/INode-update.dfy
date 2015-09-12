@@ -60,8 +60,8 @@ spine == [this] + next.spine
 method update(pos:int, d:Data)
 requires 0 <= pos < |spine|;
 requires Valid();
-modifies this, spine[pos];
-ensures Valid();
+modifies footprint;
+//ensures Valid();
 /*
 ensures pos == 0 ==> (data == d && tailContents == old(tailContents));
 ensures pos > 0 ==> (this.data == old(this.data)
@@ -72,16 +72,47 @@ ensures footprint == old(footprint);
 {
 	var index := 0;
 	var curNd := this;
-	
-while(index <= pos)
-invariant 0 <= index <= pos+1;
+
+assert ndValid2ListValidLemma();
+assert ValidLemma();
+
+while(index < pos)
+invariant 0 <= index <= pos;
+invariant listInv(spine);
 invariant 0 <= index < |spine| ==> curNd != null && curNd.Valid();
 invariant curNd != null ==> |curNd.spine| + index == |spine|;
-{
 
+invariant spine == old(this.spine);
+invariant 0 <= index <= pos ==> curNd == spine[index];
+
+invariant forall nd :: nd in spine ==> nd.footprint == old(nd.footprint) &&
+	nd.spine == old(nd.spine);
+
+invariant forall nd :: (nd in spine[0..pos] || nd in spine[pos+1..] ) ==> nd.data == old(nd.data);
+
+//invariant listCond(spine[0..index]);
+
+invariant forall i :: 0 <= i < index ==> spine[i].tailContents == old(spine[i].tailContents)[0..pos-i-1] + [d] +  old(spine[i].tailContents)[pos-i..];
+
+/*
+invariant index > 0 ==> (spine[index-1].next == curNd &&
+spine[index-1].tailContents ==
+(if index == pos then [d] + spine[index].tailContents
+else [spine[index].data] + curNd.tailContents[0..pos-index-1] + [d] + curNd.tailContents[pos-index..])
+);
+*/
+{
+	assert curNd.ndValid2ListValidLemma();
+	assert curNd.ValidLemma();
+	curNd.tailContents := curNd.tailContents[0..pos-index-1] + [d] + curNd.tailContents[pos-index..];
 	
 index := index + 1;	
 curNd := curNd.next;
+
+/*
+assume (forall i :: 0 <= i < |spine[0..index]|-1 ==>
+	 spine[0..index][i].tailContents == [spine[0..index][i+1].data] + spine[0..index][i+1].tailContents);
+*/
 }
 
 
