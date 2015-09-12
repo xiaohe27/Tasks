@@ -1,2 +1,3 @@
-49 verified.
-windows: 54s
+windows: 54s, 49 verified. (binary)
+
+ubuntu at Siebel: 24s, 36 verified (build from src).
