@@ -75,7 +75,6 @@ ensures fresh(footprint - {this});
     spine := [this];
 }
 
-
 method preAppend(d:Data) returns (node:INode)
 requires Valid();
 ensures node != null && node.Valid();
@@ -104,9 +103,9 @@ ensures this.data == old(this.data);
 ensures (tailContents == old(tailContents) + [d]);
 ensures footprint == old(footprint) + {newNd};
 ensures fresh(footprint - old(footprint));
+ensures fresh(newNd);
 {
 newNd := new INode.init(d);
-assert newNd.footprint !! footprint;
 
 var tmpNd := this;
 ghost var index := 0;
@@ -133,7 +132,6 @@ tmpNd.next := newNd;
 updateSeqAppend(spine, d, newNd);
 
 }
-
 
 method insertAt(d:Data, i:int) returns (newNd: INode) 
 requires 0 < i <= |tailContents|;
@@ -320,7 +318,6 @@ listCond(mySeq)
 
 
 //===============================================
-
 //LI
 predicate LI(mySeq:seq<INode>, index:int, d:Data, newNd:INode,
 			oldNewD:Data, oldNewNext:INode, oldNewFp:set<INode>, 
@@ -853,13 +850,15 @@ spine := spine + {head};
 
 contents := head.tailContents;
 
-assert head.ValidLemma();
+assert head.ValidLemma() && head.ndValid2ListValidLemma();
 }
+
 
 method append(d:Data)
 requires valid();
 
 modifies footprint;
+
 ensures valid();
 ensures (contents == old(contents) + [d]);
 ensures fresh(footprint - old(footprint));
@@ -870,10 +869,8 @@ footprint := footprint + {newNd};
 spine := spine + {newNd};
 contents := head.tailContents;
 
-assert head.ValidLemma();
-
+assert head.ValidLemma() && head.ndValid2ListValidLemma();
 }
-
 
 method insertAt(i:int, d:Data)
 requires 0 < i < |contents|;
@@ -889,7 +886,7 @@ footprint := footprint + {newNd};
 spine := spine + {newNd};
 contents := head.tailContents;
 
-assert head.ValidLemma();
+assert head.ValidLemma() && head.ndValid2ListValidLemma();
 }
 
 
@@ -923,8 +920,6 @@ else {
 insertAt(pos, d);
 }
 }
-
-
 
 
 
