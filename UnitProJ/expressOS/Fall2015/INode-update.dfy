@@ -58,21 +58,31 @@ spine == [this] + next.spine
 }
 
 method update(pos:int, d:Data)
-requires 0 <= pos <= |tailContents|;
+requires 0 <= pos < |spine|;
 requires Valid();
-modifies spine[pos];
+modifies this, spine[pos];
 ensures Valid();
-ensures index == 0 ==> (data == d && tailContents == old(tailContents));
-ensures index > 0 ==> (this.data == old(this.data)
-&& tailContents == old(tailContents[0..index-1]) + [d] +
-						old(tailContents[index..]));
+/*
+ensures pos == 0 ==> (data == d && tailContents == old(tailContents));
+ensures pos > 0 ==> (this.data == old(this.data)
+&& tailContents == old(tailContents[0..pos-1]) + [d] +
+						old(tailContents[pos..]));
 ensures footprint == old(footprint);
+*/
 {
-var index := 0;
+	var index := 0;
+	var curNd := this;
+	
 while(index <= pos)
 invariant 0 <= index <= pos+1;
+invariant 0 <= index < |spine| ==> curNd != null && curNd.Valid();
+invariant curNd != null ==> |curNd.spine| + index == |spine|;
+{
 
-{}
+	
+index := index + 1;	
+curNd := curNd.next;
+}
 
 
 }
