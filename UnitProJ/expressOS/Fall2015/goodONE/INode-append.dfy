@@ -108,7 +108,6 @@ ensures fresh(footprint - old(footprint));
 
 {
 var node := new INode.init(d);
-assert node.footprint !! footprint;
 
 var tmpNd := this;
 ghost var index := 0;
