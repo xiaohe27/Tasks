@@ -59,16 +59,18 @@ public aspect MultiSpec_1MonitorAspect implements com.runtimeverification.rvmoni
 	}
 
 
-
+/*
 	before (ListIterator i) : ListIterator_Set_next(i) {
 		//ListIterator_RemoveOnce_next
 		MultiSpec_1RuntimeMonitor.ListIterator_RemoveOnce_nextEvent(i);
 		//ListIterator_Set_next
 		MultiSpec_1RuntimeMonitor.ListIterator_Set_nextEvent(i);
 	}
+*/
 
+	pointcut ListIterator_Set_remove2(ListIterator i) : (call(void Iterator+.remove()) && target(i)) && MOP_CommonPointCut();
 
-	before (ListIterator i) : ListIterator_Set_remove(i) {
+	before (ListIterator i) : ListIterator_Set_remove2(i) {
 		//ListIterator_RemoveOnce_remove
 		MultiSpec_1RuntimeMonitor.ListIterator_RemoveOnce_removeEvent(i);
 		//ListIterator_Set_remove

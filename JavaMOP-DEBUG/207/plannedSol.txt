@@ -1,0 +1,2 @@
+1. when both pointcut str and parameter type are the same, share the pointcut.
+2. Otherwise, simply do the previous operation.
