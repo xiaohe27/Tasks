@@ -110,6 +110,9 @@ curNd := curNd.next;
 
 
 //method that performs curNd.data := d;
+//curNd.data := d;
+
+
 updateData(d, pos, curNd);
 
 ghost var updatedSpineDataList := ndSeq2DataSeq(spine);
@@ -117,6 +120,18 @@ dataSeqCmp(updatedSpineDataList, oldContents, pos, d);
 
 assert updatedSpineDataList == oldContents[0..pos] + [d] + oldContents[pos+1..];
 	
+//
+assert 0 <= index <= pos
+	&& spine == old(spine)
+	&& listInv(spine)
+	&& (forall nd :: nd in spine ==> nd.footprint == old(nd.footprint) &&
+		nd.spine == old(nd.spine))
+	&& (forall i :: 0 <= i < |spine| ==> spine[i].next == old(spine[i].next))
+	&& (forall i :: 0 <= i < |spine| && i != pos ==> spine[i].data == old(spine[i].data))
+  && spine[pos].data == d;
+
+assert spine[index].Valid();
+
 /*
 while index >= 1
   invariant 0 <= index <= pos;
@@ -129,13 +144,8 @@ while index >= 1
   invariant spine[pos].data == d;
 
 //	invariant ndSeq2DataSeq(spine[index..]) == oldContents[index..pos] + [d] + oldContents[pos+1..];
-	
-//	invariant forall i :: pos <= i < |spine|  ==> spine[i].tailContents == old(spine[i].tailContents);
-
-//	invariant forall i :: 0 <= i < index ==> spine[i].tailContents == old(spine[i].tailContents);
 
 	invariant spine[index].Valid();
-
 
 {
 spine[index-1].tailContents := [spine[index].data] + spine[index].tailContents;
@@ -144,9 +154,9 @@ index := index - 1;
 
 //assert spine[index].ValidLemma();
 }
-
-//assert spine[0].spineTCLemma();
 */
+//assert spine[0].spineTCLemma();
+
 }
 
 
