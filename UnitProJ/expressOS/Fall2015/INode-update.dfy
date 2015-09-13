@@ -113,8 +113,7 @@ while index >= 1
 
 	invariant forall i :: 0 <= i < index ==> spine[i].tailContents == old(spine[i].tailContents);
 
-		invariant spine[index].Valid();
-
+/*
 		invariant 0 <= index-1 ==> |spine[index-1].tailContents| >= pos - index + 1 &&
 			(spine[index-1].tailContents[0..pos-index] + [d] +
 			spine[index-1].tailContents[pos-index+1..] == [spine[index].data] + spine[index].tailContents);
@@ -123,7 +122,10 @@ while index >= 1
   (|spine[index].tailContents| >= pos - index &&
 		spine[index].tailContents == old(spine[index].tailContents[0..pos-index-1]) +
 		                                                     [d] + old(spine[index].tailContents[pos-index..]));
-		
+
+ */
+
+		invariant spine[index].Valid();
 
 
 {
