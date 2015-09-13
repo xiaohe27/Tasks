@@ -80,7 +80,8 @@ ensures footprint == old(footprint);
 
 assert ndValid2ListValidLemma();
 assert ValidLemma();
-assert spineTCLemma();
+
+//assert spineTCLemma();
 
 
 while(index < pos)
@@ -109,22 +110,21 @@ while index >= 1
 	invariant forall i :: 0 <= i < |spine| && i != pos ==> spine[i].data == old(spine[i].data);
   invariant spine[pos].data == d;
 
-	/*
-	invariant |spine[index].tailContents| == old(|spine[index].tailContents|);
-	invariant forall i :: 0 <= i < |spine[index].tailContents| ==> old(spine[index].tailContents[i])
-		== old(spine[index].spine[i+1].data);
-*/	
 
-invariant spine[index].Valid();
+	invariant forall i :: pos <= i < |spine|  ==> spine[i].tailContents == old(spine[i].tailContents);
+
+	
+	invariant spine[index].Valid();
+
 {
 spine[index-1].tailContents := [spine[index].data] + spine[index].tailContents;
 	
 index := index - 1;
 
-assert spine[index].spineTCLemma();
+//assert spine[index].spineTCLemma();
 }
 
-assert spine[0].spineTCLemma();
+//assert spine[0].spineTCLemma();
 
 }
 
