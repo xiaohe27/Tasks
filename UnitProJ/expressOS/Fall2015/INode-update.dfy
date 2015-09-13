@@ -69,7 +69,7 @@ else [mySeq[0].data] + ndSeq2DataSeq(mySeq[1..])
 }
 
 ///////////////////////////////////
-
+/*
 method update(pos:int, d:Data)
 requires 0 <= pos <= |tailContents|;
 requires Valid();
@@ -112,10 +112,10 @@ curNd := curNd.next;
 
 listCondLemma(spine);
 
-//curNd.data := d;
-updateData(d, index, this, curNd);
+//method that performs curNd.data := d;
+ghost var updatedSpineData := updateData(d, index, this, curNd, oldContents);
 
-ghost var updatedSpineData := ndSeq2DataSeq(spine);
+//ghost var updatedSpineData := ndSeq2DataSeq(spine);
 //assert updatedSpineData == oldContents[0..pos] + [d] + oldContents[pos+1..];
 	
 /*
@@ -149,28 +149,37 @@ index := index - 1;
 //assert spine[0].spineTCLemma();
 */
 }
-
+*/
 
 ////////////////////////////////////////////////////////////////////
-method updateData(d:Data, index:int, fstNd:INode, tarNd:INode)
-	requires fstNd != null && fstNd.Valid();
-	requires validSeqCond(fstNd.spine);
-	requires 0 <= index < |fstNd.spine|;
-	requires fstNd.spine[index] == tarNd;
+method updateData(d:Data, index:int, tarNd:INode, oldSpineDataList:seq<Data>)
+	                    
+	requires Valid();
+	requires validSeqCond(spine);
+	requires 0 <= index < |spine|;
+	requires spine[index] == tarNd;
 	requires tarNd.Valid();
-	modifies fstNd.spine[index];
+
+	requires ndSeq2DataSeq(spine) == oldSpineDataList;
+  requires [data] + tailContents == oldSpineDataList;
+	
+	modifies spine[index];
 	ensures tarNd.Valid();
-	ensures listInv(fstNd.spine);
+	ensures listInv(spine);
+
+	ensures spine == old(spine);
+	ensures forall i :: 0 <= i < |spine| && i != index ==> spine[i].data == old(spine[i].data);
 	
 	ensures tarNd.data == d;
 	ensures tarNd.next == old(tarNd.next);
 	ensures tarNd.tailContents == old(tarNd.tailContents);
 	ensures tarNd.footprint == old(tarNd.footprint);
 	ensures tarNd.spine == old(tarNd.spine);
-	ensures fstNd.spine[index] == tarNd;
+	ensures spine[index] == tarNd;
 
+	ensures ndSeq2DataSeq(spine) == oldSpineDataList[0..index] + [d] + oldSpineDataList[index+1..];
 {
-tarNd.data := d;
+	tarNd.data := d;
 }
 	
 
