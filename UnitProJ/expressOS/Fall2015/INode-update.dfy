@@ -69,7 +69,7 @@ else [mySeq[0].data] + ndSeq2DataSeq(mySeq[1..])
 }
 
 ///////////////////////////////////
-/*
+
 method update(pos:int, d:Data)
 requires 0 <= pos <= |tailContents|;
 requires Valid();
@@ -118,22 +118,13 @@ updateData(d, pos, curNd);
 ghost var updatedSpineDataList := ndSeq2DataSeq(spine);
 dataSeqCmp(updatedSpineDataList, oldContents, pos, d);
 
-assert updatedSpineDataList == oldContents[0..pos] + [d] + oldContents[pos+1..];
-	
-//
-assert 0 <= index <= pos
-	&& spine == old(spine)
-	&& listInv(spine)
-	&& (forall nd :: nd in spine ==> nd.footprint == old(nd.footprint) &&
-		nd.spine == old(nd.spine))
-	&& (forall i :: 0 <= i < |spine| ==> spine[i].next == old(spine[i].next))
-	&& (forall i :: 0 <= i < |spine| && i != pos ==> spine[i].data == old(spine[i].data))
-  && spine[pos].data == d;
+updateSeq4UpdateOp(spine, d, pos, updatedSpineDataList);
 
-assert spine[index].Valid();
+assert this.ndValid2ListValidLemma();
+////ensures oldContents == [mySeq[0].data] + mySeq[0].tailContents;
 
 }
-*/
+
 
 ////////////////////////////////////////////////////////////////////
 method updateData(d:Data, index:int, tarNd:INode)
@@ -196,12 +187,6 @@ while index >= 1
 	invariant listInv(mySeq);
 
 	invariant forall nd :: nd in mySeq ==> nd.data == old(nd.data);
-	
-//	invariant forall nd :: nd in mySeq ==> nd.footprint == old(nd.footprint) &&
-//		nd.spine == old(nd.spine);
-//	invariant forall i :: 0 <= i < |mySeq| ==> mySeq[i].next == old(mySeq[i].next);
-//	invariant forall i :: 0 <= i < |mySeq| && i != pos ==> mySeq[i].data == old(mySeq[i].data);
-//  invariant mySeq[pos].data == d;
 
 	invariant oldContents == ndSeq2DataSeq(mySeq);
 
@@ -216,7 +201,6 @@ index := index - 1;
 
 }
 
-//assert mySeq[0].spineTCLemma();
 }
 	
 
@@ -325,6 +309,15 @@ listCond(mySeq)
 }
 
 //===============================================
+predicate validSeqLemma(mySeq: seq<INode>)
+	requires validSeqCond(mySeq);
+	reads mySeq;
+	ensures validSeqLemma(mySeq);
+	ensures mySeq != [] ==> (mySeq[0].spine == mySeq);
+{
+	if |mySeq| <= 1 then true
+		else validSeqLemma(mySeq[1..])
+}
 
 }
 
