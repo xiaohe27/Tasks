@@ -57,17 +57,21 @@ spine == [this] + next.spine
 && next.ValidLemma())
 }
 
+
 method update(pos:int, d:Data)
 requires 0 <= pos <= |tailContents|;
 requires Valid();
 modifies footprint;
-//ensures Valid();
-/*
+ensures Valid();
+
 ensures pos == 0 ==> (data == d && tailContents == old(tailContents));
+
+/*
 ensures pos > 0 ==> (this.data == old(this.data)
 && tailContents == old(tailContents[0..pos-1]) + [d] +
 old(tailContents[pos..]));
-*/
+ */
+
 ensures footprint == old(footprint);
 
 {
@@ -76,6 +80,8 @@ ensures footprint == old(footprint);
 
 assert ndValid2ListValidLemma();
 assert ValidLemma();
+assert spineTCLemma();
+
 
 while(index < pos)
 invariant 0 <= index <= pos;
@@ -102,14 +108,27 @@ while index >= 1
 	invariant forall i :: 0 <= i < |spine| ==> spine[i].next == old(spine[i].next);
 	invariant forall i :: 0 <= i < |spine| && i != pos ==> spine[i].data == old(spine[i].data);
   invariant spine[pos].data == d;
-	invariant spine[index].Valid();
+
+	/*
+	invariant |spine[index].tailContents| == old(|spine[index].tailContents|);
+	invariant forall i :: 0 <= i < |spine[index].tailContents| ==> old(spine[index].tailContents[i])
+		== old(spine[index].spine[i+1].data);
+*/	
+
+invariant spine[index].Valid();
 {
 spine[index-1].tailContents := [spine[index].data] + spine[index].tailContents;
 	
 index := index - 1;
+
+assert spine[index].spineTCLemma();
 }
 
+assert spine[0].spineTCLemma();
+
 }
+
+
 
 predicate ndValid2ListValidLemma()
 requires Valid();
