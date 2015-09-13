@@ -69,7 +69,7 @@ else [mySeq[0].data] + ndSeq2DataSeq(mySeq[1..])
 }
 
 ///////////////////////////////////
-
+/*
 method update(pos:int, d:Data)
 requires 0 <= pos <= |tailContents|;
 requires Valid();
@@ -132,33 +132,8 @@ assert 0 <= index <= pos
 
 assert spine[index].Valid();
 
-/*
-while index >= 1
-  invariant 0 <= index <= pos;
-	invariant spine == old(spine);
-	invariant listInv(spine);
-	invariant forall nd :: nd in spine ==> nd.footprint == old(nd.footprint) &&
-		nd.spine == old(nd.spine);
-	invariant forall i :: 0 <= i < |spine| ==> spine[i].next == old(spine[i].next);
-	invariant forall i :: 0 <= i < |spine| && i != pos ==> spine[i].data == old(spine[i].data);
-  invariant spine[pos].data == d;
-
-//	invariant ndSeq2DataSeq(spine[index..]) == oldContents[index..pos] + [d] + oldContents[pos+1..];
-
-	invariant spine[index].Valid();
-
-{
-spine[index-1].tailContents := [spine[index].data] + spine[index].tailContents;
-	
-index := index - 1;
-
-//assert spine[index].ValidLemma();
 }
 */
-//assert spine[0].spineTCLemma();
-
-}
-
 
 ////////////////////////////////////////////////////////////////////
 method updateData(d:Data, index:int, tarNd:INode)
@@ -196,6 +171,50 @@ lemma dataSeqCmp(newSeq:seq<Data>, oldSeq:seq<Data>, index:int, d:Data)
 	requires newSeq[index] == d;
 	ensures newSeq == oldSeq[0..index] + [d] + oldSeq[index+1..];
 {}
+
+
+//////////////////////////////////
+ghost method updateSeq4UpdateOp(mySeq:seq<INode>, d:Data, pos:int, oldContents:seq<Data>)
+requires 
+listInv(mySeq)
+&& 0 <= pos < |mySeq|
+  && mySeq[pos].data == d;
+
+requires mySeq[pos].Valid();
+
+requires oldContents == ndSeq2DataSeq(mySeq);
+modifies mySeq;
+{
+	ghost var index := pos;
+	
+while index >= 1
+  invariant 0 <= index <= pos;
+	invariant mySeq == old(mySeq);
+	invariant listInv(mySeq);
+
+	invariant forall nd :: nd in mySeq ==> nd.data == old(nd.data);
+//	invariant forall nd :: nd in mySeq ==> nd.footprint == old(nd.footprint) &&
+//		nd.spine == old(nd.spine);
+//	invariant forall i :: 0 <= i < |mySeq| ==> mySeq[i].next == old(mySeq[i].next);
+//	invariant forall i :: 0 <= i < |mySeq| && i != pos ==> mySeq[i].data == old(mySeq[i].data);
+//  invariant mySeq[pos].data == d;
+
+	invariant oldContents == ndSeq2DataSeq(mySeq);
+
+	invariant mySeq[index].Valid();
+
+{
+mySeq[index-1].tailContents := [mySeq[index].data] + mySeq[index].tailContents;
+mySeq[index-1].footprint := {mySeq[index-1]} + mySeq[index].footprint;
+mySeq[index-1].spine := [mySeq[index-1]] + mySeq[index].spine;
+
+index := index - 1;
+
+//assert mySeq[index].ValidLemma();
+}
+
+//assert mySeq[0].spineTCLemma();
+}
 	
 
 predicate ndValid2ListValidLemma()
