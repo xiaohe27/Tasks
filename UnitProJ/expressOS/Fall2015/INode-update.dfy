@@ -102,26 +102,8 @@ while index >= 1
 	invariant forall i :: 0 <= i < |spine| ==> spine[i].next == old(spine[i].next);
 	invariant forall i :: 0 <= i < |spine| && i != pos ==> spine[i].data == old(spine[i].data);
   invariant spine[pos].data == d;
-
-	invariant forall i :: 0 <= i < index ==> spine[i].tailContents == old(spine[i].tailContents);
-
-  //invariant listCond(spine[0..index]);
-
 	invariant spine[index].Valid();
-
-/*	
-  invariant forall nd :: nd in spine ==> |nd.tailContents| == old(|nd.tailContents|);
-	invariant forall nd :: nd in spine[pos..] ==> nd.tailContents == old(nd.tailContents);
-*/
-//	invariant forall i :: 0 <= i <= pos ==> pos - i <= |spine[i].tailContents|; 
-//	invariant index < pos ==> (spine[index].tailContents == old(spine[index].tailContents[0..pos-index-1])
-//		                               + [d] + old(spine[index].tailContents[pos-index..]) );
-
-
 {
-assert spine[index].ndValid2ListValidLemma();
-assert spine[index].ValidLemma();
-
 spine[index-1].tailContents := [spine[index].data] + spine[index].tailContents;
 	
 index := index - 1;
