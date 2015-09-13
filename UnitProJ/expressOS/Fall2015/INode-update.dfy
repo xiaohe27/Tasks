@@ -69,7 +69,7 @@ else [mySeq[0].data] + ndSeq2DataSeq(mySeq[1..])
 }
 
 ///////////////////////////////////
-/*
+
 method update(pos:int, d:Data)
 requires 0 <= pos <= |tailContents|;
 requires Valid();
@@ -96,27 +96,26 @@ assert ndValid2ListValidLemma();
 assert ValidLemma();
 
 ghost var oldContents := ndSeq2DataSeq(spine);
-//assert oldContents == old([(this.data)] + (tailContents));
-//assert oldContents[1..] == old((tailContents));
 
 while(index < pos)
 invariant 0 <= index <= pos;
 invariant 0 <= index < |spine| ==> curNd != null && curNd.Valid();
 invariant curNd != null ==> |curNd.spine| + index == |spine|;
 invariant 0 <= index <= pos ==> curNd == spine[index];
-invariant listCond(spine);
+invariant validSeqCond(spine);
 {	
 index := index + 1;	
 curNd := curNd.next;
 }
 
-listCondLemma(spine);
 
 //method that performs curNd.data := d;
-ghost var updatedSpineData := updateData(d, index, this, curNd, oldContents);
+updateData(d, pos, curNd);
 
-//ghost var updatedSpineData := ndSeq2DataSeq(spine);
-//assert updatedSpineData == oldContents[0..pos] + [d] + oldContents[pos+1..];
+ghost var updatedSpineDataList := ndSeq2DataSeq(spine);
+dataSeqCmp(updatedSpineDataList, oldContents, pos, d);
+
+assert updatedSpineDataList == oldContents[0..pos] + [d] + oldContents[pos+1..];
 	
 /*
 while index >= 1
@@ -149,10 +148,10 @@ index := index - 1;
 //assert spine[0].spineTCLemma();
 */
 }
-*/
+
 
 ////////////////////////////////////////////////////////////////////
-method updateData(d:Data, index:int, tarNd:INode, oldSpineDataList:seq<Data>)
+method updateData(d:Data, index:int, tarNd:INode)
 	                    
 	requires Valid();
 	requires validSeqCond(spine);
@@ -160,9 +159,6 @@ method updateData(d:Data, index:int, tarNd:INode, oldSpineDataList:seq<Data>)
 	requires spine[index] == tarNd;
 	requires tarNd.Valid();
 
-	requires ndSeq2DataSeq(spine) == oldSpineDataList;
-  requires [data] + tailContents == oldSpineDataList;
-	
 	modifies spine[index];
 	ensures tarNd.Valid();
 	ensures listInv(spine);
@@ -177,10 +173,19 @@ method updateData(d:Data, index:int, tarNd:INode, oldSpineDataList:seq<Data>)
 	ensures tarNd.spine == old(tarNd.spine);
 	ensures spine[index] == tarNd;
 
-	ensures ndSeq2DataSeq(spine) == oldSpineDataList[0..index] + [d] + oldSpineDataList[index+1..];
+	ensures forall i :: 0 <= i < |spine| && i != index ==> ndSeq2DataSeq(spine)[i] == old(ndSeq2DataSeq(spine)[i]);
+	ensures ndSeq2DataSeq(spine)[index] == d;
 {
 	tarNd.data := d;
 }
+
+lemma dataSeqCmp(newSeq:seq<Data>, oldSeq:seq<Data>, index:int, d:Data)
+	requires |newSeq| == |oldSeq|;
+	requires 0 <= index < |newSeq|;
+	requires forall i :: 0 <= i < |newSeq| && i != index ==> newSeq[i] == oldSeq[i];
+	requires newSeq[index] == d;
+	ensures newSeq == oldSeq[0..index] + [d] + oldSeq[index+1..];
+{}
 	
 
 predicate ndValid2ListValidLemma()
