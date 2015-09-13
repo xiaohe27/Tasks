@@ -184,6 +184,9 @@ requires mySeq[pos].Valid();
 
 requires oldContents == ndSeq2DataSeq(mySeq);
 modifies mySeq;
+
+ensures mySeq[0].Valid();
+ensures oldContents == ndSeq2DataSeq(mySeq);
 {
 	ghost var index := pos;
 	
@@ -193,6 +196,7 @@ while index >= 1
 	invariant listInv(mySeq);
 
 	invariant forall nd :: nd in mySeq ==> nd.data == old(nd.data);
+	
 //	invariant forall nd :: nd in mySeq ==> nd.footprint == old(nd.footprint) &&
 //		nd.spine == old(nd.spine);
 //	invariant forall i :: 0 <= i < |mySeq| ==> mySeq[i].next == old(mySeq[i].next);
@@ -210,7 +214,7 @@ mySeq[index-1].spine := [mySeq[index-1]] + mySeq[index].spine;
 
 index := index - 1;
 
-//assert mySeq[index].ValidLemma();
+assert mySeq[index].ValidLemma();
 }
 
 //assert mySeq[0].spineTCLemma();
