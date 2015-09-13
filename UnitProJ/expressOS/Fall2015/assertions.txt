@@ -1,0 +1,10 @@
+/*
+  assert 0 <= index <= pos
+	&& spine == old(spine)
+	&& listInv(spine)
+	&& (forall nd :: nd in spine ==> nd.footprint == old(nd.footprint) &&
+		nd.spine == old(nd.spine))
+	&& (forall i :: 0 <= i < |spine| ==> spine[i].next == old(spine[i].next))
+	&& (forall i :: 0 <= i < |spine| && i != pos ==> spine[i].data == old(spine[i].data))
+  && spine[pos].data == d;
+*/
