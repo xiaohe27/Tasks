@@ -69,7 +69,7 @@ else [mySeq[0].data] + ndSeq2DataSeq(mySeq[1..])
 }
 
 ///////////////////////////////////
-/*
+
 method update(pos:int, d:Data)
 requires 0 <= pos <= |tailContents|;
 requires Valid();
@@ -112,9 +112,8 @@ curNd := curNd.next;
 
 listCondLemma(spine);
 
-//
-
 //curNd.data := d;
+updateData(d, index, this, curNd);
 
 ghost var updatedSpineData := ndSeq2DataSeq(spine);
 //assert updatedSpineData == oldContents[0..pos] + [d] + oldContents[pos+1..];
@@ -150,24 +149,26 @@ index := index - 1;
 //assert spine[0].spineTCLemma();
 */
 }
- */
+
 
 ////////////////////////////////////////////////////////////////////
-method updateData(d:Data, index:int, mySeq:seq<INode>, tarNd:INode)
-	requires validSeqCond(mySeq);
-	requires 0 <= index < |mySeq|;
-	requires mySeq[index] == tarNd;
+method updateData(d:Data, index:int, fstNd:INode, tarNd:INode)
+	requires fstNd != null && fstNd.Valid();
+	requires validSeqCond(fstNd.spine);
+	requires 0 <= index < |fstNd.spine|;
+	requires fstNd.spine[index] == tarNd;
 	requires tarNd.Valid();
-	modifies mySeq[index];
+	modifies fstNd.spine[index];
 	ensures tarNd.Valid();
-	ensures listInv(mySeq);
+	ensures listInv(fstNd.spine);
 	
-	ensures mySeq[index] == tarNd;
 	ensures tarNd.data == d;
 	ensures tarNd.next == old(tarNd.next);
 	ensures tarNd.tailContents == old(tarNd.tailContents);
 	ensures tarNd.footprint == old(tarNd.footprint);
 	ensures tarNd.spine == old(tarNd.spine);
+	ensures fstNd.spine[index] == tarNd;
+
 {
 tarNd.data := d;
 }
