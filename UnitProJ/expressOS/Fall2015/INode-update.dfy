@@ -214,7 +214,6 @@ mySeq[index-1].spine := [mySeq[index-1]] + mySeq[index].spine;
 
 index := index - 1;
 
-assert mySeq[index].ValidLemma();
 }
 
 //assert mySeq[0].spineTCLemma();
