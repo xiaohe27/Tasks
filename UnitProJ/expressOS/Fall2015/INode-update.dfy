@@ -75,16 +75,14 @@ requires 0 <= pos <= |tailContents|;
 requires Valid();
 modifies footprint;
 
-//ensures Valid();
-
-//ensures pos == 0 ==> (data == d && tailContents == old(tailContents));
-
+ensures Valid();
 /*
+ensures pos == 0 ==> (data == d && tailContents == old(tailContents));
+
 ensures pos > 0 ==> (this.data == old(this.data)
 && tailContents == old(tailContents[0..pos-1]) + [d] +
 old(tailContents[pos..]));
- */
-
+*/
 //ensures footprint == old(footprint);
 
 {
@@ -120,9 +118,10 @@ dataSeqCmp(updatedSpineDataList, oldContents, pos, d);
 
 updateSeq4UpdateOp(spine, d, pos, updatedSpineDataList);
 
-assert this.ndValid2ListValidLemma();
-////ensures oldContents == [mySeq[0].data] + mySeq[0].tailContents;
+//assert ndSeq2DataSeq(spine) == updatedSpineDataList; // [this.data] + this.tailContents;
 
+assert this.ndValid2ListValidLemma();
+assert this.spineTCLemma();
 }
 
 
@@ -250,7 +249,8 @@ predicate spineTCLemma()
 	ensures |spine| == |tailContents| + 1;
 	ensures null !in spine;
   ensures spine[0].data == this.data &&
-	forall i :: 0 < i < |spine| ==> spine[i].data == this.tailContents[i-1];
+		forall i :: 0 < i < |spine| ==> spine[i].data == this.tailContents[i-1];
+	ensures ndSeq2DataSeq(this.spine) == [this.data] + tailContents;
 {
 	if next == null then true
 	else spine == [this] + next.spine && tailContents == [next.data] + next.tailContents
