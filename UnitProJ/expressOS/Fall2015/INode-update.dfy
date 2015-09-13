@@ -150,8 +150,19 @@ spine == [this] + next.spine
 }
 
 
-
-
+predicate spineTCLemma()
+	requires Valid();
+	reads this, footprint;
+	ensures spineTCLemma();
+	ensures |spine| == |tailContents| + 1;
+	ensures null !in spine;
+  ensures spine[0].data == this.data &&
+	forall i :: 0 < i < |spine| ==> spine[i].data == this.tailContents[i-1];
+{
+	if next == null then true
+	else spine == [this] + next.spine && tailContents == [next.data] + next.tailContents
+		&& next.spineTCLemma()
+}
 
 
 function getFtprint(nd:INode): set<INode>
