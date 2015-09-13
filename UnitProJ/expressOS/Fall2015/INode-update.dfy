@@ -81,8 +81,6 @@ ensures footprint == old(footprint);
 assert ndValid2ListValidLemma();
 assert ValidLemma();
 
-//assert spineTCLemma();
-
 
 while(index < pos)
 invariant 0 <= index <= pos;
@@ -110,18 +108,30 @@ while index >= 1
 	invariant forall i :: 0 <= i < |spine| && i != pos ==> spine[i].data == old(spine[i].data);
   invariant spine[pos].data == d;
 
-
+	
 	invariant forall i :: pos <= i < |spine|  ==> spine[i].tailContents == old(spine[i].tailContents);
 
+	invariant forall i :: 0 <= i < index ==> spine[i].tailContents == old(spine[i].tailContents);
+
+		invariant spine[index].Valid();
+
+		invariant 0 <= index-1 ==> |spine[index-1].tailContents| >= pos - index + 1 &&
+			(spine[index-1].tailContents[0..pos-index] + [d] +
+			spine[index-1].tailContents[pos-index+1..] == [spine[index].data] + spine[index].tailContents);
 	
-	invariant spine[index].Valid();
+	invariant 0 <= index < pos ==>
+  (|spine[index].tailContents| >= pos - index &&
+		spine[index].tailContents == old(spine[index].tailContents[0..pos-index-1]) +
+		                                                     [d] + old(spine[index].tailContents[pos-index..]));
+		
+
 
 {
 spine[index-1].tailContents := [spine[index].data] + spine[index].tailContents;
 	
 index := index - 1;
 
-//assert spine[index].spineTCLemma();
+assert spine[index].ValidLemma();
 }
 
 //assert spine[0].spineTCLemma();
