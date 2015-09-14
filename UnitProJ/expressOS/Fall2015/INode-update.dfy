@@ -172,7 +172,10 @@ listInv(mySeq)
 
 requires mySeq[pos].Valid();
 
-requires oldContents == ndSeq2DataSeq(mySeq);
+//requires oldContents == ndSeq2DataSeq(mySeq);
+requires |mySeq| == |oldContents|;
+requires forall i :: 0 <= i < |mySeq| ==> mySeq[i].data == oldContents[i];
+requires [mySeq[pos].data] + mySeq[pos].tailContents == oldContents[pos..];
 
 requires forall i :: 0 <= i < |mySeq|-1 ==> (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
  && mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
@@ -181,7 +184,7 @@ modifies mySeq;
 
 ensures mySeq[0].Valid();
 ensures mySeq[0].footprint == old(mySeq[0].footprint);
-ensures oldContents == ndSeq2DataSeq(mySeq);
+//ensures oldContents == ndSeq2DataSeq(mySeq);
 {
 	ghost var index := pos;
 	
@@ -195,8 +198,9 @@ while index >= 1
 
 	invariant forall i :: 0 <= i < |mySeq|-1 ==> (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
  && mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
-	
-	invariant oldContents == ndSeq2DataSeq(mySeq);
+
+ invariant [mySeq[index].data] + mySeq[index].tailContents == oldContents[index..];
+//	invariant oldContents == ndSeq2DataSeq(mySeq);
 
 	invariant mySeq[index].Valid();
 
