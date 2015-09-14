@@ -75,7 +75,7 @@ requires 0 <= pos <= |tailContents|;
 requires Valid();
 modifies footprint;
 
-ensures Valid();
+//ensures Valid();
 /*
 ensures pos == 0 ==> (data == d && tailContents == old(tailContents));
 
@@ -108,13 +108,12 @@ curNd := curNd.next;
 
 
 //method that performs curNd.data := d;
-//curNd.data := d;
-
 
 updateData(d, pos, curNd);
 
 ghost var updatedSpineDataList := ndSeq2DataSeq(spine);
-dataSeqCmp(updatedSpineDataList, oldContents, pos, d);
+
+//dataSeqCmp(updatedSpineDataList, oldContents, pos, d, spine);
 
 //updateSeq4UpdateOp(spine, d, pos, updatedSpineDataList, oldContents[1..]);
 
@@ -150,17 +149,30 @@ method updateData(d:Data, index:int, tarNd:INode)
 	tarNd.data := d;
 }
 
-lemma dataSeqCmp(newSeq:seq<Data>, oldSeq:seq<Data>, pos:int, d:Data)
-	requires |newSeq| == |oldSeq|;
+lemma dataSeqCmp(newSeq:seq<Data>, oldSeq:seq<Data>, pos:int, d:Data, mySeq:seq<INode>)
+	requires |newSeq| == |oldSeq| == |mySeq|;
 	requires 0 <= pos < |newSeq|;
 	requires forall i :: 0 <= i < |newSeq| && i != pos ==> newSeq[i] == oldSeq[i];
 	requires newSeq[pos] == d;
+
+	requires listInv(mySeq) && mySeq[|mySeq|-1].next == null;
+	requires forall i :: 0 <= i < |newSeq| ==> mySeq[i].data == newSeq[i];
+	requires mySeq[pos].spine == mySeq[pos..];
+	requires mySeq[pos].Valid();
+	
 	ensures newSeq == oldSeq[0..pos] + [d] + oldSeq[pos+1..];
-//	ensures 0 < pos < |newSeq| ==>  newSeq == [oldSeq[0]] + oldSeq[1..pos] + [d] + oldSeq[pos+1..];
-{}
+	ensures pos == 0 ==> newSeq == [d] + oldSeq[1..];
+ 	ensures 0 < pos < |newSeq| ==>  newSeq[1..] ==  oldSeq[1..pos] + [d] + oldSeq[pos+1..];
+
+	ensures [mySeq[pos].data] + mySeq[pos].tailContents == newSeq[pos..];
+{
+assert mySeq[pos].spineTCLemma();
+}
 
 
 //////////////////////////////////
+//good
+/*
 ghost method updateSeq4UpdateOp(mySeq:seq<INode>, d:Data, pos:int, newContents:seq<Data>,
 	oldTC:seq<Data>)
 requires 
@@ -211,7 +223,7 @@ index := index - 1;
 }
 
 }
-	
+*/	
 
 predicate ndValid2ListValidLemma()
 requires Valid();
@@ -258,7 +270,7 @@ predicate spineTCLemma()
 	ensures spineTCLemma();
 	ensures |spine| == |tailContents| + 1;
 	ensures null !in spine;
-  ensures spine[0].data == this.data &&
+     ensures spine[0].data == this.data &&
 		forall i :: 0 < i < |spine| ==> spine[i].data == this.tailContents[i-1];
 	ensures ndSeq2DataSeq(this.spine) == [this.data] + tailContents;
 {
