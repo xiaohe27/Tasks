@@ -69,7 +69,7 @@ else [mySeq[0].data] + ndSeq2DataSeq(mySeq[1..])
 }
 
 ///////////////////////////////////
-/*
+
 method update(pos:int, d:Data)
 requires 0 <= pos <= |tailContents|;
 requires Valid();
@@ -116,14 +116,10 @@ updateData(d, pos, curNd);
 ghost var updatedSpineDataList := ndSeq2DataSeq(spine);
 dataSeqCmp(updatedSpineDataList, oldContents, pos, d);
 
-updateSeq4UpdateOp(spine, d, pos, updatedSpineDataList);
+//updateSeq4UpdateOp(spine, d, pos, updatedSpineDataList, oldContents[1..]);
 
-//assert ndSeq2DataSeq(spine) == updatedSpineDataList; // [this.data] + this.tailContents;
-
-assert this.ndValid2ListValidLemma();
-assert this.spineTCLemma();
 }
-*/
+
 
 ////////////////////////////////////////////////////////////////////
 method updateData(d:Data, index:int, tarNd:INode)
@@ -154,12 +150,13 @@ method updateData(d:Data, index:int, tarNd:INode)
 	tarNd.data := d;
 }
 
-lemma dataSeqCmp(newSeq:seq<Data>, oldSeq:seq<Data>, index:int, d:Data)
+lemma dataSeqCmp(newSeq:seq<Data>, oldSeq:seq<Data>, pos:int, d:Data)
 	requires |newSeq| == |oldSeq|;
-	requires 0 <= index < |newSeq|;
-	requires forall i :: 0 <= i < |newSeq| && i != index ==> newSeq[i] == oldSeq[i];
-	requires newSeq[index] == d;
-	ensures newSeq == oldSeq[0..index] + [d] + oldSeq[index+1..];
+	requires 0 <= pos < |newSeq|;
+	requires forall i :: 0 <= i < |newSeq| && i != pos ==> newSeq[i] == oldSeq[i];
+	requires newSeq[pos] == d;
+	ensures newSeq == oldSeq[0..pos] + [d] + oldSeq[pos+1..];
+//	ensures 0 < pos < |newSeq| ==>  newSeq == [oldSeq[0]] + oldSeq[1..pos] + [d] + oldSeq[pos+1..];
 {}
 
 
