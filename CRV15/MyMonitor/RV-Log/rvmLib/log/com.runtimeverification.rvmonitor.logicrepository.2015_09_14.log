@@ -1,0 +1,516 @@
+///////////// A request at 09/14/2015 04:29:04 /////////////
+//// Result Status
+Success
+//// Execution Time
+204ms
+//// Client Name
+RVMonitor
+//// Logic Name
+ltl
+//// Logic Repository Input
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3</Events>
+    <Property>
+        <Logic>ltl</Logic>
+        <Formula>insert2DB2 =&gt; &lt;&gt; insert2DB3</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 1. Logic Plugin Input to ltl
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3</Events>
+    <Property>
+        <Logic>ltl</Logic>
+        <Formula>insert2DB2 =&gt; &lt;&gt; insert2DB3</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 1. Logic Plugin Output from ltl
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0[
+insert2DB2 -&gt; s1
+insert -&gt; s1
+insert2DB3 -&gt; s1
+default s1]
+
+s1[
+insert2DB2 -&gt; s1
+insert -&gt; s1
+insert2DB3 -&gt; s1
+default s1]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 2. Logic Plugin Input to fsm
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0[
+insert2DB2 -&gt; s1
+insert -&gt; s1
+insert2DB3 -&gt; s1
+default s1]
+
+s1[
+insert2DB2 -&gt; s1
+insert -&gt; s1
+insert2DB3 -&gt; s1
+default s1]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 2. Logic Plugin Output from fsm
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0_s1[
+  default s0_s1
+  insert2DB3 -&gt; s0_s1
+  insert2DB2 -&gt; s0_s1
+  insert -&gt; s0_s1
+]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+    <CreationEvents></CreationEvents>
+    <Message>done</Message>
+    <EnableSets>// fail Enables
+{insert2DB3=[], insert2DB2=[], insert=[]}
+// fail Coenables
+{insert2DB3=[], insert2DB2=[], insert=[]}
+</EnableSets>
+</mop>
+
+//// Logic Repository Output
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0_s1[
+  default s0_s1
+  insert2DB3 -&gt; s0_s1
+  insert2DB2 -&gt; s0_s1
+  insert -&gt; s0_s1
+]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+    <CreationEvents></CreationEvents>
+    <Message>done</Message>
+    <EnableSets>// fail Enables
+{insert2DB3=[], insert2DB2=[], insert=[]}
+// fail Coenables
+{insert2DB3=[], insert2DB2=[], insert=[]}
+</EnableSets>
+</mop>
+
+///////////// A request at 09/14/2015 05:45:55 /////////////
+//// Result Status
+Success
+//// Execution Time
+206ms
+//// Client Name
+RVMonitor
+//// Logic Name
+ltl
+//// Logic Repository Input
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3</Events>
+    <Property>
+        <Logic>ltl</Logic>
+        <Formula>insert2DB2 =&gt; &lt;&gt; insert2DB3</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 1. Logic Plugin Input to ltl
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3</Events>
+    <Property>
+        <Logic>ltl</Logic>
+        <Formula>insert2DB2 =&gt; &lt;&gt; insert2DB3</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 1. Logic Plugin Output from ltl
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0[
+insert2DB2 -&gt; s1
+insert -&gt; s1
+insert2DB3 -&gt; s1
+default s1]
+
+s1[
+insert2DB2 -&gt; s1
+insert -&gt; s1
+insert2DB3 -&gt; s1
+default s1]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 2. Logic Plugin Input to fsm
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0[
+insert2DB2 -&gt; s1
+insert -&gt; s1
+insert2DB3 -&gt; s1
+default s1]
+
+s1[
+insert2DB2 -&gt; s1
+insert -&gt; s1
+insert2DB3 -&gt; s1
+default s1]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 2. Logic Plugin Output from fsm
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0_s1[
+  default s0_s1
+  insert2DB3 -&gt; s0_s1
+  insert2DB2 -&gt; s0_s1
+  insert -&gt; s0_s1
+]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+    <CreationEvents></CreationEvents>
+    <Message>done</Message>
+    <EnableSets>// fail Enables
+{insert2DB3=[], insert2DB2=[], insert=[]}
+// fail Coenables
+{insert2DB3=[], insert2DB2=[], insert=[]}
+</EnableSets>
+</mop>
+
+//// Logic Repository Output
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0_s1[
+  default s0_s1
+  insert2DB3 -&gt; s0_s1
+  insert2DB2 -&gt; s0_s1
+  insert -&gt; s0_s1
+]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+    <CreationEvents></CreationEvents>
+    <Message>done</Message>
+    <EnableSets>// fail Enables
+{insert2DB3=[], insert2DB2=[], insert=[]}
+// fail Coenables
+{insert2DB3=[], insert2DB2=[], insert=[]}
+</EnableSets>
+</mop>
+
+///////////// A request at 09/14/2015 05:49:12 /////////////
+//// Result Status
+Success
+//// Execution Time
+206ms
+//// Client Name
+RVMonitor
+//// Logic Name
+ltl
+//// Logic Repository Input
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3</Events>
+    <Property>
+        <Logic>ltl</Logic>
+        <Formula>insert2DB2 =&gt; &lt;&gt; insert2DB3</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 1. Logic Plugin Input to ltl
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3</Events>
+    <Property>
+        <Logic>ltl</Logic>
+        <Formula>insert2DB2 =&gt; &lt;&gt; insert2DB3</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 1. Logic Plugin Output from ltl
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0[
+insert2DB2 -&gt; s1
+insert -&gt; s1
+insert2DB3 -&gt; s1
+default s1]
+
+s1[
+insert2DB2 -&gt; s1
+insert -&gt; s1
+insert2DB3 -&gt; s1
+default s1]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 2. Logic Plugin Input to fsm
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0[
+insert2DB2 -&gt; s1
+insert -&gt; s1
+insert2DB3 -&gt; s1
+default s1]
+
+s1[
+insert2DB2 -&gt; s1
+insert -&gt; s1
+insert2DB3 -&gt; s1
+default s1]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 2. Logic Plugin Output from fsm
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0_s1[
+  default s0_s1
+  insert2DB3 -&gt; s0_s1
+  insert2DB2 -&gt; s0_s1
+  insert -&gt; s0_s1
+]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+    <CreationEvents></CreationEvents>
+    <Message>done</Message>
+    <EnableSets>// fail Enables
+{insert2DB3=[], insert2DB2=[], insert=[]}
+// fail Coenables
+{insert2DB3=[], insert2DB2=[], insert=[]}
+</EnableSets>
+</mop>
+
+//// Logic Repository Output
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0_s1[
+  default s0_s1
+  insert2DB3 -&gt; s0_s1
+  insert2DB2 -&gt; s0_s1
+  insert -&gt; s0_s1
+]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+    <CreationEvents></CreationEvents>
+    <Message>done</Message>
+    <EnableSets>// fail Enables
+{insert2DB3=[], insert2DB2=[], insert=[]}
+// fail Coenables
+{insert2DB3=[], insert2DB2=[], insert=[]}
+</EnableSets>
+</mop>
+
+///////////// A request at 09/14/2015 05:49:45 /////////////
+//// Result Status
+Success
+//// Execution Time
+205ms
+//// Client Name
+RVMonitor
+//// Logic Name
+ltl
+//// Logic Repository Input
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3</Events>
+    <Property>
+        <Logic>ltl</Logic>
+        <Formula>insert2DB2 =&gt; &lt;&gt; insert2DB3</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 1. Logic Plugin Input to ltl
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3</Events>
+    <Property>
+        <Logic>ltl</Logic>
+        <Formula>insert2DB2 =&gt; &lt;&gt; insert2DB3</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 1. Logic Plugin Output from ltl
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0[
+insert2DB2 -&gt; s1
+insert -&gt; s1
+insert2DB3 -&gt; s1
+default s1]
+
+s1[
+insert2DB2 -&gt; s1
+insert -&gt; s1
+insert2DB3 -&gt; s1
+default s1]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 2. Logic Plugin Input to fsm
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0[
+insert2DB2 -&gt; s1
+insert -&gt; s1
+insert2DB3 -&gt; s1
+default s1]
+
+s1[
+insert2DB2 -&gt; s1
+insert -&gt; s1
+insert2DB3 -&gt; s1
+default s1]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 2. Logic Plugin Output from fsm
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0_s1[
+  default s0_s1
+  insert2DB3 -&gt; s0_s1
+  insert2DB2 -&gt; s0_s1
+  insert -&gt; s0_s1
+]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+    <CreationEvents></CreationEvents>
+    <Message>done</Message>
+    <EnableSets>// fail Enables
+{insert2DB3=[], insert2DB2=[], insert=[]}
+// fail Coenables
+{insert2DB3=[], insert2DB2=[], insert=[]}
+</EnableSets>
+</mop>
+
+//// Logic Repository Output
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0_s1[
+  default s0_s1
+  insert2DB3 -&gt; s0_s1
+  insert2DB2 -&gt; s0_s1
+  insert -&gt; s0_s1
+]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+    <CreationEvents></CreationEvents>
+    <Message>done</Message>
+    <EnableSets>// fail Enables
+{insert2DB3=[], insert2DB2=[], insert=[]}
+// fail Coenables
+{insert2DB3=[], insert2DB2=[], insert=[]}
+</EnableSets>
+</mop>
+

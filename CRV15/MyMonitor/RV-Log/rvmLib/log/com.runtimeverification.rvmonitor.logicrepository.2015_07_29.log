@@ -1,0 +1,234 @@
+///////////// A request at 07/29/2015 06:54:17 /////////////
+//// Result Status
+Success
+//// Execution Time
+584ms
+//// Client Name
+RVMonitor
+//// Logic Name
+ltl
+//// Logic Repository Input
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>grant release __END</Events>
+    <Property>
+        <Logic>ltl</Logic>
+        <Formula>true</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 1. Logic Plugin Input to ltl
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>grant release __END</Events>
+    <Property>
+        <Logic>ltl</Logic>
+        <Formula>true</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 1. Logic Plugin Output from ltl
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>grant release __END</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0[
+grant -&gt; s0
+__END -&gt; s0
+release -&gt; s0
+default s0]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 2. Logic Plugin Input to fsm
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>grant release __END</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0[
+grant -&gt; s0
+__END -&gt; s0
+release -&gt; s0
+default s0]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 2. Logic Plugin Output from fsm
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>grant release __END</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0[
+  default s0
+  __END -&gt; s0
+  release -&gt; s0
+  grant -&gt; s0
+]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+    <CreationEvents></CreationEvents>
+    <Message>done</Message>
+    <EnableSets>// fail Enables
+{__END=[], release=[], grant=[]}
+// fail Coenables
+{__END=[], release=[], grant=[]}
+</EnableSets>
+</mop>
+
+//// Logic Repository Output
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>grant release __END</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0[
+  default s0
+  __END -&gt; s0
+  release -&gt; s0
+  grant -&gt; s0
+]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+    <CreationEvents></CreationEvents>
+    <Message>done</Message>
+    <EnableSets>// fail Enables
+{__END=[], release=[], grant=[]}
+// fail Coenables
+{__END=[], release=[], grant=[]}
+</EnableSets>
+</mop>
+
+///////////// A request at 07/29/2015 06:55:12 /////////////
+//// Result Status
+Success
+//// Execution Time
+377ms
+//// Client Name
+RVMonitor
+//// Logic Name
+ltl
+//// Logic Repository Input
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>grant release __END</Events>
+    <Property>
+        <Logic>ltl</Logic>
+        <Formula>true</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 1. Logic Plugin Input to ltl
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>grant release __END</Events>
+    <Property>
+        <Logic>ltl</Logic>
+        <Formula>true</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 1. Logic Plugin Output from ltl
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>grant release __END</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0[
+grant -&gt; s0
+__END -&gt; s0
+release -&gt; s0
+default s0]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 2. Logic Plugin Input to fsm
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>grant release __END</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0[
+grant -&gt; s0
+__END -&gt; s0
+release -&gt; s0
+default s0]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 2. Logic Plugin Output from fsm
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>grant release __END</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0[
+  default s0
+  __END -&gt; s0
+  release -&gt; s0
+  grant -&gt; s0
+]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+    <CreationEvents></CreationEvents>
+    <Message>done</Message>
+    <EnableSets>// fail Enables
+{__END=[], release=[], grant=[]}
+// fail Coenables
+{__END=[], release=[], grant=[]}
+</EnableSets>
+</mop>
+
+//// Logic Repository Output
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>grant release __END</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0[
+  default s0
+  __END -&gt; s0
+  release -&gt; s0
+  grant -&gt; s0
+]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+    <CreationEvents></CreationEvents>
+    <Message>done</Message>
+    <EnableSets>// fail Enables
+{__END=[], release=[], grant=[]}
+// fail Coenables
+{__END=[], release=[], grant=[]}
+</EnableSets>
+</mop>
+

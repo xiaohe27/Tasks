@@ -21,19 +21,36 @@ shift;
 
 #The '-t' option is provided to both rv-log and rv-monitor for specification 'T3B2.rvm'
 TimeProp=""
+Raw=""
+Other=""
+
 if [[ $SpecFile == *"T3B2.rvm"* ]]
 then TimeProp="-t"
 fi
+
+if [[ $SpecFile == *"Insert2.rvm"* ]]
+then TimeProp="-t"
+fi
+
+if [[ $SpecFile == *"T7B1.rvm"* ]]
+then Raw="--raw"
+fi
+
+if [[ $SpecFile == *"T3B4.rvm"* ]]
+then Other="--other"
+fi
+
+
 
 TraceFile="$SRC_ROOT/$TraceFile"
 SpecFile="$SRC_ROOT/$SpecFile"
 
 
-$SRC_ROOT/rv-log $TimeProp $SpecFile >/dev/null
+$SRC_ROOT/rv-log $TimeProp $Raw $Other $SpecFile  # >/dev/null
 
-$SRC_ROOT/rv-monitor -d CustomizedLogReader/rvm/ --indexByVal $TimeProp $@ $SpecFile >/dev/null
+$SRC_ROOT/rv-monitor -d CustomizedLogReader/rvm/ --indexByVal $TimeProp $@ $SpecFile # >/dev/null
 
-javac CustomizedLogReader/rvm/*.java 2>/dev/null
+javac CustomizedLogReader/rvm/*.java  # 2>/dev/null
 cd CustomizedLogReader/
 
-java -d32 -Xms512m -Xmx2g rvm.LogReader $TraceFile
+java -d64 -Xms512m -Xmx4g rvm.LogReader $TraceFile
