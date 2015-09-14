@@ -15,3 +15,11 @@ OR
 insertDB2(someVal2)
 
 (The user field is useless in this example.)
+
+
+Internal (private) event:
+can only be invoked from within the body of other event action method, but 
+not directly invoked by the runtime monitor.
+
+And the private method name does not need to be modified to avoid conflict.
+It should be the spec designers' responsibility to avoid naming conflicts. 
