@@ -1,0 +1,17 @@
+The events about events.
+
+A meta event is not going to generate/index any monitor directly.
+
+Instead, it decides what kind of actual event should be fired based on
+the concrete values of certain fields, and then fire the corresponding more
+concrete events.
+
+For example,
+
+insert(?user, ?db, ?value) is a raw/meta event, based on the value of field db,
+we can fire the actual event 
+insertDB1(someVal1) 
+OR
+insertDB2(someVal2)
+
+(The user field is useless in this example.)
