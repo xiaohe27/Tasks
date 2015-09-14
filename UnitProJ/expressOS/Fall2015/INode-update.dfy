@@ -113,6 +113,7 @@ updateData(d, pos, curNd);
 
 ghost var updatedSpineDataList := ndSeq2DataSeq(spine);
 
+
 //dataSeqCmp(updatedSpineDataList, oldContents, pos, d, spine);
 
 //updateSeq4UpdateOp(spine, d, pos, updatedSpineDataList, oldContents[1..]);
@@ -280,6 +281,7 @@ ensures forall i :: 0 <= i < |spine| ==> spine[i].data == ([data] + tailContents
 }
 
 
+//////////////////////////////////////////////////////////////////
 function getFtprint(nd:INode): set<INode>
 reads nd;
 {
@@ -331,14 +333,21 @@ listCond(mySeq)
 }
 
 //===============================================
+
 predicate validSeqLemma(mySeq: seq<INode>)
-	requires validSeqCond(mySeq);
-	reads mySeq;
+	requires listInv(mySeq);
+	
+	requires mySeq != [] ==>	mySeq[0].Valid() && mySeq[|mySeq|-1].next == null;
+
+	reads mySeq, sumAllFtprint(mySeq);
 	ensures validSeqLemma(mySeq);
 	ensures mySeq != [] ==> (mySeq[0].spine == mySeq);
 {
 	if |mySeq| <= 1 then true
-		else validSeqLemma(mySeq[1..])
+	else
+		mySeq[0].spine[0] == mySeq[0]
+&& mySeq[0].spine == [mySeq[0]] + mySeq[1].spine &&
+		validSeqLemma(mySeq[1..])
 }
 
 }
