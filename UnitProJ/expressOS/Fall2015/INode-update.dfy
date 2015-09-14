@@ -272,7 +272,7 @@ predicate spineTCLemma()
 	ensures null !in spine;
      ensures spine[0].data == this.data &&
 		forall i :: 0 < i < |spine| ==> spine[i].data == this.tailContents[i-1];
-	ensures ndSeq2DataSeq(this.spine) == [this.data] + tailContents;
+ensures forall i :: 0 <= i < |spine| ==> spine[i].data == ([data] + tailContents)[i];
 {
 	if next == null then true
 	else spine == [this] + next.spine && tailContents == [next.data] + next.tailContents
