@@ -69,7 +69,7 @@ else [mySeq[0].data] + ndSeq2DataSeq(mySeq[1..])
 }
 
 ///////////////////////////////////
-
+/*
 method update(pos:int, d:Data)
 requires 0 <= pos <= |tailContents|;
 requires Valid();
@@ -123,7 +123,7 @@ updateSeq4UpdateOp(spine, d, pos, updatedSpineDataList);
 assert this.ndValid2ListValidLemma();
 assert this.spineTCLemma();
 }
-
+*/
 
 ////////////////////////////////////////////////////////////////////
 method updateData(d:Data, index:int, tarNd:INode)
@@ -173,31 +173,36 @@ listInv(mySeq)
 requires mySeq[pos].Valid();
 
 requires oldContents == ndSeq2DataSeq(mySeq);
+
+requires forall i :: 0 <= i < |mySeq|-1 ==> (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
+ && mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
+
 modifies mySeq;
 
 ensures mySeq[0].Valid();
+ensures mySeq[0].footprint == old(mySeq[0].footprint);
 ensures oldContents == ndSeq2DataSeq(mySeq);
 {
 	ghost var index := pos;
 	
 while index >= 1
-      invariant 0 <= index <= pos;
+  invariant 0 <= index <= pos;
 	invariant mySeq == old(mySeq);
 	invariant listInv(mySeq);
 
 	invariant forall nd :: nd in mySeq ==> nd.data == old(nd.data);
+	invariant forall nd :: nd in mySeq ==> nd.footprint == old(nd.footprint);
 
+	invariant forall i :: 0 <= i < |mySeq|-1 ==> (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
+ && mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
+	
 	invariant oldContents == ndSeq2DataSeq(mySeq);
 
 	invariant mySeq[index].Valid();
 
 {
 mySeq[index-1].tailContents := [mySeq[index].data] + mySeq[index].tailContents;
-mySeq[index-1].footprint := {mySeq[index-1]} + mySeq[index].footprint;
-mySeq[index-1].spine := [mySeq[index-1]] + mySeq[index].spine;
-
 index := index - 1;
-
 }
 
 }
