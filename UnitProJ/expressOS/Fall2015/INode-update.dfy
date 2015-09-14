@@ -180,8 +180,8 @@ requires [mySeq[pos].data] + mySeq[pos].tailContents == newContents[pos..];
 requires forall i :: 0 <= i < |mySeq|-1 ==> (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
  && mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
 
- requires pos == 0 ==> newContents == [d] + oldTC;
- requires 0 < pos < |mySeq| ==>  newContents == [mySeq[0].data] + oldTC[0..pos-1] + [d] + oldTC[pos..];
+requires pos == 0 ==> newContents == [d] + oldTC;
+requires 0 < pos < |mySeq| ==>  newContents == [mySeq[0].data] + oldTC[0..pos-1] + [d] + oldTC[pos..];
  
 modifies mySeq;
 
@@ -206,9 +206,8 @@ while index >= 1
 
  invariant  forall i :: 0 <= i < |mySeq| ==> mySeq[i].data == newContents[i];
  invariant [mySeq[index].data] + mySeq[index].tailContents == newContents[index..];
-
+ invariant  0 < pos < |mySeq| ==>  newContents == [mySeq[0].data] + oldTC[0..pos-1] + [d] + oldTC[pos..];
 	invariant mySeq[index].Valid();
-
 {
 mySeq[index-1].tailContents := [mySeq[index].data] + mySeq[index].tailContents;
 index := index - 1;
