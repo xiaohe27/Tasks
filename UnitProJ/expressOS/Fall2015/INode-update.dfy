@@ -115,6 +115,8 @@ curNd := curNd.next;
 
 updateData(d, pos, curNd);
 
+ assert oldContents[1..] == old(tailContents);
+
 ghost var updatedSpineDataList := ndSeq2DataSeq(spine);
 
  //
@@ -123,6 +125,9 @@ ghost var updatedSpineDataList := ndSeq2DataSeq(spine);
  /////////////
  
 dataSeqCmp(updatedSpineDataList, oldContents, pos, d, spine);
+
+ assert oldContents[1..] == old(tailContents);
+
 
 //check pre-cond
  assert 0 < pos < |spine| ==>  dataSeqLemma(oldContents, 1, pos, spine[0].data, d);
