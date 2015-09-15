@@ -120,16 +120,9 @@ dataSeqCmp(updatedSpineDataList, oldContents, pos, d, spine);
 
 //check pre-cond
 
-//assert [spine[pos].data] + spine[pos].tailContents == updatedSpineDataList[pos..]; //this is ok but slow
+ assert 0 < pos < |spine| ==>  dataSeqLemma(oldContents, 1, pos, spine[0].data, d);
 
-//below cannot be verified.
-
- //assert 0 < pos < |spine| ==>  dataSeqLemma(oldContents, 1, pos, spine[0].data, d);
-
-// assert 0 <  pos < |spine| ==>  updatedSpineDataList == [spine[0].data] + oldContents[1..][0..pos-1] + [d] + oldContents[1..][pos..]; //ok but slow
-
-
-//updateSeq4UpdateOp(spine, d, pos, updatedSpineDataList, oldContents[1..]);
+updateSeq4UpdateOp(spine, d, pos, updatedSpineDataList, oldContents[1..]);
 
 }
 
@@ -211,7 +204,7 @@ assert mySeq[pos].spineTCLemma();
 
 //////////////////////////////////
 //good
-/*
+
 ghost method updateSeq4UpdateOp(mySeq:seq<INode>, d:Data, pos:int, newContents:seq<Data>,
 	oldTC:seq<Data>)
 requires 
@@ -262,7 +255,7 @@ index := index - 1;
 }
 
 }
-*/
+
 
 predicate ndValid2ListValidLemma()
 requires Valid();
