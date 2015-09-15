@@ -121,19 +121,6 @@ assert spineTCLemma();
 dataSeqCmp([data] + tailContents, old([data]+tailContents), pos, d);
 }
 
-
-////////////////////////////////////////////////////////////////////
-//data seq lemma
-predicate dataSeqLemma(dataSeq:seq<Data>, start:int, pos:int, beginD:Data, d:Data)
-	requires 0 <= start <= pos < |dataSeq|;
-	reads dataSeq;
-	ensures dataSeq[start..pos] == dataSeq[start..][0..pos-start] && dataSeq[pos+1..] == dataSeq[start..][pos-start+1..];
-	ensures [beginD] + dataSeq[start..pos] + [d] + dataSeq[pos+1..] == [beginD] + dataSeq[start..][0..pos-start] + [d] + dataSeq[start..][pos-start+1..];
-{true}
-
-////////////////////////////////////////////////////////////////////
-
-
 predicate ndValid2ListValidLemma()
 requires Valid();
 reads this, footprint;
@@ -241,10 +228,6 @@ requires listCond(mySeq);
 ensures forall i :: 0 <= i <= |mySeq| ==> listCond(mySeq[0..i]);
 {}
 
-lemma listInvLemma(mySeq: seq<INode>)
-requires listInv(mySeq);
-ensures forall i :: 0 <= i <= |mySeq| ==> listInv(mySeq[i..]);
-{}
 
 predicate validSeqCond(mySeq: seq<INode>)
 reads mySeq, (set nd | nd in mySeq);
@@ -257,13 +240,6 @@ listCond(mySeq)
 }
 
 //===============================================
-predicate listEndLemma(mySeq: seq<INode>, pos:int)
-	requires mySeq != [];
-	requires 0 <= pos < |mySeq|;
-	requires mySeq[|mySeq|-1] != null && mySeq[|mySeq|-1].next == null;
-	reads mySeq;
-	ensures mySeq[pos..][|mySeq[pos..]| - 1].next == null;
-{true}
 
 
 predicate validSeqLemma(mySeq: seq<INode>)
@@ -325,8 +301,6 @@ while index >= 1
 
 	invariant forall i :: 0 <= i < |mySeq|-1 ==> (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
  && mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
-
-// invariant  forall i :: 0 <= i < |mySeq| ==> mySeq[i].data == newContents[i];
 
 	invariant mySeq[index].Valid();
 {
