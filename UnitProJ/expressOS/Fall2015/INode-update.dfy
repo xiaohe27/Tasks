@@ -113,6 +113,8 @@ updateData(d, pos, curNd);
 
 ghost var updatedSpineDataList := ndSeq2DataSeq(spine);
 
+ //listInvLemma(spine);
+assert validSeqLemma(spine[pos..]);
 
 //dataSeqCmp(updatedSpineDataList, oldContents, pos, d, spine);
 
@@ -320,6 +322,11 @@ null !in mySeq && (forall nd :: nd in mySeq ==> nd in nd.footprint) &&
 lemma listCondLemma(mySeq: seq<INode>)
 requires listCond(mySeq);
 ensures forall i :: 0 <= i <= |mySeq| ==> listCond(mySeq[0..i]);
+{}
+
+lemma listInvLemma(mySeq: seq<INode>)
+requires listInv(mySeq);
+ensures forall i :: 0 <= i <= |mySeq| ==> listInv(mySeq[i..]);
 {}
 
 predicate validSeqCond(mySeq: seq<INode>)
