@@ -69,7 +69,7 @@ else [mySeq[0].data] + ndSeq2DataSeq(mySeq[1..])
 }
 
 ///////////////////////////////////
-
+/*
 method update(pos:int, d:Data)
 requires 0 <= pos <= |tailContents|;
 requires Valid();
@@ -116,18 +116,19 @@ ghost var updatedSpineDataList := ndSeq2DataSeq(spine);
  //
 assert validSeqLemma(spine[pos..]);
 
-dataSeqCmp(updatedSpineDataList, oldContents, pos, d, spine);
+//dataSeqCmp(updatedSpineDataList, oldContents, pos, d, spine);
 
 //check pre-cond
 
 //assert [spine[pos].data] + spine[pos].tailContents == updatedSpineDataList[pos..]; //this is ok but slow
 
 //below cannot be verified.
-//assert forall i :: 0 <= i < |spine|-1 ==> (spine[i].footprint == {spine[i]} + spine[i+1].footprint
- //&& spine[i].spine == [spine[i]] + spine[i+1].spine);
+/*
+assert forall i :: 0 <= i < |spine|-1 ==> (spine[i].footprint == {spine[i]} + spine[i+1].footprint
+ && spine[i].spine == [spine[i]] + spine[i+1].spine);
+*/
 
-
- assert 0 < pos < |spine| ==>  dataSeqLemma(oldContents, 1, pos, spine[0].data, d);
+// assert 0 < pos < |spine| ==>  dataSeqLemma(oldContents, 1, pos, spine[0].data, d);
 
 // assert 0 <  pos < |spine| ==>  updatedSpineDataList == [spine[0].data] + oldContents[1..][0..pos-1] + [d] + oldContents[1..][pos..]; //ok but slow
 
@@ -135,6 +136,7 @@ dataSeqCmp(updatedSpineDataList, oldContents, pos, d, spine);
 //updateSeq4UpdateOp(spine, d, pos, updatedSpineDataList, oldContents[1..]);
 
 }
+*/
 
 ////////////////////////////////////////////////////////////////////
 //data seq lemma
@@ -153,7 +155,7 @@ method updateData(d:Data, index:int, tarNd:INode)
 	requires 0 <= index < |spine|;
 	requires spine[index] == tarNd;
 	requires tarNd.Valid();
-
+	
 	modifies spine[index];
 	ensures tarNd.Valid();
 	ensures listInv(spine);
@@ -173,6 +175,9 @@ method updateData(d:Data, index:int, tarNd:INode)
 	ensures forall i :: 0 <= i < |spine| && i != index ==> ndSeq2DataSeq(spine)[i] == old(ndSeq2DataSeq(spine)[i]);
 	ensures ndSeq2DataSeq(spine)[index] == d;
 
+	ensures  forall i :: 0 <= i < |spine|-1 ==> (spine[i].footprint == {spine[i]} + spine[i+1].footprint
+		&& spine[i].spine == [spine[i]] + spine[i+1].spine);
+		
 	ensures listInv(spine[index..]);
 {
 	tarNd.data := d;
@@ -188,6 +193,10 @@ lemma dataSeqCmp(newSeq:seq<Data>, oldSeq:seq<Data>, pos:int, d:Data, mySeq:seq<
 
 	requires listInv(mySeq) && mySeq[|mySeq|-1].next == null;
 	requires forall i :: 0 <= i < |newSeq| ==> mySeq[i].data == newSeq[i];
+
+	requires forall i :: 0 <= i < |mySeq|-1 ==> (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
+ && mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
+	
 	requires mySeq[pos].spine == mySeq[pos..];
 	requires mySeq[pos].Valid();
 	
@@ -195,6 +204,9 @@ lemma dataSeqCmp(newSeq:seq<Data>, oldSeq:seq<Data>, pos:int, d:Data, mySeq:seq<
 	ensures pos == 0 ==> newSeq == [d] + oldSeq[1..];
  	ensures 0 < pos < |newSeq| ==> newSeq ==  [mySeq[0].data] +  oldSeq[1..pos] + [d] + oldSeq[pos+1..];
 
+	ensures  forall i :: 0 <= i < |mySeq|-1 ==> (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
+ && mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
+	
 	ensures [mySeq[pos].data] + mySeq[pos].tailContents == newSeq[pos..];
 {
 assert mySeq[pos].spineTCLemma();
