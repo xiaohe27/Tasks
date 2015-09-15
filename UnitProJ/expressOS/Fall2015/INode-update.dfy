@@ -69,7 +69,7 @@ else [mySeq[0].data] + ndSeq2DataSeq(mySeq[1..])
 }
 
 ///////////////////////////////////
-
+/*
 method update(pos:int, d:Data)
 requires 0 <= pos <= |tailContents|;
 requires Valid();
@@ -116,12 +116,12 @@ ghost var updatedSpineDataList := ndSeq2DataSeq(spine);
  //
 assert validSeqLemma(spine[pos..]);
 
-//dataSeqCmp(updatedSpineDataList, oldContents, pos, d, spine);
+dataSeqCmp(updatedSpineDataList, oldContents, pos, d, spine);
 
 //updateSeq4UpdateOp(spine, d, pos, updatedSpineDataList, oldContents[1..]);
 
 }
-
+*/
 
 ////////////////////////////////////////////////////////////////////
 method updateData(d:Data, index:int, tarNd:INode)
@@ -150,8 +150,13 @@ method updateData(d:Data, index:int, tarNd:INode)
 
 	ensures forall i :: 0 <= i < |spine| && i != index ==> ndSeq2DataSeq(spine)[i] == old(ndSeq2DataSeq(spine)[i]);
 	ensures ndSeq2DataSeq(spine)[index] == d;
+
+	ensures listInv(spine[index..]);
+	ensures spine[index..][|spine[index..]|-1].next == null;
 {
 	tarNd.data := d;
+	listInvLemma(spine);
+   assert listEndLemma(spine);
 }
 
 lemma dataSeqCmp(newSeq:seq<Data>, oldSeq:seq<Data>, pos:int, d:Data, mySeq:seq<INode>)
@@ -228,7 +233,7 @@ index := index - 1;
 }
 
 }
-*/	
+*/
 
 predicate ndValid2ListValidLemma()
 requires Valid();
@@ -342,6 +347,13 @@ listCond(mySeq)
 }
 
 //===============================================
+predicate listEndLemma(mySeq: seq<INode>)
+	requires mySeq != [];
+	requires mySeq[|mySeq|-1] != null && mySeq[|mySeq|-1].next == null;
+	reads mySeq;
+	ensures forall i :: 0 <= i < |mySeq|  ==> mySeq[i..][|mySeq[i..]| - 1].next == null;
+{true}
+
 
 predicate validSeqLemma(mySeq: seq<INode>)
 	requires listInv(mySeq);
