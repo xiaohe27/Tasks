@@ -23,6 +23,7 @@ shift;
 TimeProp=""
 Raw=""
 Other=""
+Format=""
 
 if [[ $SpecFile == *"T3B2.rvm"* ]]
 then TimeProp="-t"
@@ -45,8 +46,9 @@ fi
 TraceFile="$SRC_ROOT/$TraceFile"
 SpecFile="$SRC_ROOT/$SpecFile"
 
+Format="--format=monpoly"
 
-$SRC_ROOT/rv-log $TimeProp $Raw $Other $SpecFile  # >/dev/null
+$SRC_ROOT/rv-log $TimeProp $Raw $Other $Format $SpecFile  # >/dev/null
 
 $SRC_ROOT/rv-monitor -d CustomizedLogReader/rvm/ --indexByVal $TimeProp $@ $SpecFile # >/dev/null
 

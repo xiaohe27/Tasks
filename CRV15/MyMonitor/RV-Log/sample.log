@@ -1,4 +1,4 @@
 Event, user, db, data, time
-insert, u = script, db = db2, d = 501082630, ts = 1304465674
-insert, u = script, db = db2, d = 501082631, ts = 1304465674
+insert, script, db2, 501082630, 1304465674
+insert, script, db2, 501082631, 1304465674
 

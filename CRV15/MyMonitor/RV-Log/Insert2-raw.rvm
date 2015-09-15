@@ -37,4 +37,4 @@ Insert2(String data) {
 	{System.err.println("The data is not propagated to db3 after inserting to db2.");}
 }
 
-}
+
