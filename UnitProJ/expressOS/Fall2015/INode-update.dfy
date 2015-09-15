@@ -75,15 +75,15 @@ requires 0 <= pos <= |tailContents|;
 requires Valid();
 modifies footprint;
 
-//ensures Valid();
-/*
+ensures Valid();
+
 ensures pos == 0 ==> (data == d && tailContents == old(tailContents));
 
 ensures pos > 0 ==> (this.data == old(this.data)
 && tailContents == old(tailContents[0..pos-1]) + [d] +
 old(tailContents[pos..]));
-*/
-//ensures footprint == old(footprint);
+
+ensures footprint == old(footprint);
 
 {
 	
@@ -96,9 +96,7 @@ assert ValidLemma();
 ghost var oldContents := ndSeq2DataSeq(spine);
 
 assert spineTCLemma();
-assert oldContents[1..] == tailContents == old(tailContents);
 
-/*
 while(index < pos)
 invariant 0 <= index <= pos;
 invariant curNd != null && curNd.Valid();
@@ -106,6 +104,8 @@ invariant |curNd.spine| + index == |spine|;
 invariant curNd == spine[index];
 invariant Valid();
 invariant validSeqCond(spine);
+
+invariant  oldContents[1..] == old(tailContents);
 {	
 index := index + 1;	
 curNd := curNd.next;
@@ -126,8 +126,10 @@ dataSeqCmp(updatedSpineDataList, oldContents, pos, d, spine);
 
  assert 0 < pos < |spine| ==>  dataSeqLemma(oldContents, 1, pos, spine[0].data, d);
 
+ //assert oldContents[1..] == old(tailContents);
+
 updateSeq4UpdateOp(spine, d, pos, updatedSpineDataList, oldContents[1..]);
-*/
+
 }
 
 
