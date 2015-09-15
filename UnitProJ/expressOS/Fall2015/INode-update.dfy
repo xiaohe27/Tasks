@@ -95,6 +95,10 @@ assert ValidLemma();
 
 ghost var oldContents := ndSeq2DataSeq(spine);
 
+assert spineTCLemma();
+assert oldContents[1..] == tailContents == old(tailContents);
+
+/*
 while(index < pos)
 invariant 0 <= index <= pos;
 invariant curNd != null && curNd.Valid();
@@ -123,7 +127,7 @@ dataSeqCmp(updatedSpineDataList, oldContents, pos, d, spine);
  assert 0 < pos < |spine| ==>  dataSeqLemma(oldContents, 1, pos, spine[0].data, d);
 
 updateSeq4UpdateOp(spine, d, pos, updatedSpineDataList, oldContents[1..]);
-
+*/
 }
 
 
@@ -304,7 +308,6 @@ predicate spineTCLemma()
 	ensures null !in spine;
      ensures spine[0].data == this.data &&
 		forall i :: 0 < i < |spine| ==> spine[i].data == this.tailContents[i-1];
-ensures forall i :: 0 <= i < |spine| ==> spine[i].data == ([data] + tailContents)[i];
 {
 	if next == null then true
 	else spine == [this] + next.spine && tailContents == [next.data] + next.tailContents
