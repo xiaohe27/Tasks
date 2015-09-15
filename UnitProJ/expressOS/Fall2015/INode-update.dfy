@@ -69,7 +69,7 @@ else [mySeq[0].data] + ndSeq2DataSeq(mySeq[1..])
 }
 
 ///////////////////////////////////
-/*
+
 method update(pos:int, d:Data)
 requires 0 <= pos <= |tailContents|;
 requires Valid();
@@ -113,24 +113,23 @@ curNd := curNd.next;
 
 //updateData(d, pos, curNd);
 	curNd.data := d;
-	listInvLemma(spine);
-   assert listEndLemma(spine, index);
+
+//	listInvLemma(spine);
+//   assert listEndLemma(spine, index);
 
 ghost var updatedSpineDataList := ndSeq2DataSeq(spine);
 
- //
-assert validSeqLemma(spine[pos..]);
-
 updateSeq4UpdateOp(spine, d, pos, updatedSpineDataList);
 
-assert mySeq[0].spineTCLemma();
+//assert ndValid2ListValidLemma();
+//assert mySeq[0].spineTCLemma();
 
- dataSeqCmp(updatedSpineDataList, oldContents, pos, d, spine);
+// dataSeqCmp(updatedSpineDataList, oldContents, pos, d, spine);
 
  //assert 0 < pos < |spine| ==>  dataSeqLemma(oldContents, 1, pos, spine[0].data, d);
  
 }
-*/
+
 
 ////////////////////////////////////////////////////////////////////
 //data seq lemma
@@ -285,12 +284,13 @@ predicate listEndLemma(mySeq: seq<INode>, pos:int)
 
 predicate validSeqLemma(mySeq: seq<INode>)
 	requires listInv(mySeq);
-	
 	requires mySeq != [] ==>	mySeq[0].Valid() && mySeq[|mySeq|-1].next == null;
 
 	reads mySeq, sumAllFtprint(mySeq);
 	ensures validSeqLemma(mySeq);
-	ensures mySeq != [] ==>	mySeq[0].Valid() && mySeq[|mySeq|-1].next == null;
+
+	//ensures mySeq != [] ==>	mySeq[0].Valid() && mySeq[|mySeq|-1].next == null;
+
 	ensures mySeq != [] ==> (mySeq[0].spine == mySeq);
 {
 	if |mySeq| <= 1 then true
