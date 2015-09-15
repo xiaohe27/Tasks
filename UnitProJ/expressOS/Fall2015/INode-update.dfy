@@ -118,6 +118,25 @@ assert validSeqLemma(spine[pos..]);
 
 dataSeqCmp(updatedSpineDataList, oldContents, pos, d, spine);
 
+//check pre-cond
+assert 
+listInv(spine)
+&& 0 <= pos < |spine|
+  && spine[pos].data == d;
+
+assert spine[pos].Valid();
+/*
+assert |spine| == |updatedSpineDataList| == |oldContents[1..]| + 1;
+assert forall i :: 0 <= i < |spine| ==> spine[i].data == updatedSpineDataList[i];
+assert [spine[pos].data] + spine[pos].tailContents == updatedSpineDataList[pos..];
+
+assert forall i :: 0 <= i < |spine|-1 ==> (spine[i].footprint == {spine[i]} + spine[i+1].footprint
+ && spine[i].spine == [spine[i]] + spine[i+1].spine);
+
+assert pos == 0 ==> updatedSpineDataList == [d] + oldContents[1..];
+assert 0 < pos < |spine| ==>  updatedSpineDataList == [spine[0].data] + oldContents[1..][0..pos-1] + [d] + oldContents[1..][pos..];
+*/
+
 //updateSeq4UpdateOp(spine, d, pos, updatedSpineDataList, oldContents[1..]);
 
 }
