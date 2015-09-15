@@ -119,28 +119,31 @@ assert validSeqLemma(spine[pos..]);
 dataSeqCmp(updatedSpineDataList, oldContents, pos, d, spine);
 
 //check pre-cond
-assert 
-listInv(spine)
-&& 0 <= pos < |spine|
-  && spine[pos].data == d;
 
-assert spine[pos].Valid();
-/*
-assert |spine| == |updatedSpineDataList| == |oldContents[1..]| + 1;
-assert forall i :: 0 <= i < |spine| ==> spine[i].data == updatedSpineDataList[i];
-assert [spine[pos].data] + spine[pos].tailContents == updatedSpineDataList[pos..];
+//assert [spine[pos].data] + spine[pos].tailContents == updatedSpineDataList[pos..]; //this is ok but slow
 
-assert forall i :: 0 <= i < |spine|-1 ==> (spine[i].footprint == {spine[i]} + spine[i+1].footprint
- && spine[i].spine == [spine[i]] + spine[i+1].spine);
+//below cannot be verified.
+//assert forall i :: 0 <= i < |spine|-1 ==> (spine[i].footprint == {spine[i]} + spine[i+1].footprint
+ //&& spine[i].spine == [spine[i]] + spine[i+1].spine);
 
-assert pos == 0 ==> updatedSpineDataList == [d] + oldContents[1..];
-assert 0 < pos < |spine| ==>  updatedSpineDataList == [spine[0].data] + oldContents[1..][0..pos-1] + [d] + oldContents[1..][pos..];
-*/
+
+ assert 0 < pos < |spine| ==>  dataSeqLemma(oldContents, 1, pos, spine[0].data, d);
+
+// assert 0 <  pos < |spine| ==>  updatedSpineDataList == [spine[0].data] + oldContents[1..][0..pos-1] + [d] + oldContents[1..][pos..]; //ok but slow
+
 
 //updateSeq4UpdateOp(spine, d, pos, updatedSpineDataList, oldContents[1..]);
 
 }
 
+////////////////////////////////////////////////////////////////////
+//data seq lemma
+predicate dataSeqLemma(dataSeq:seq<Data>, start:int, pos:int, beginD:Data, d:Data)
+	requires 0 <= start <= pos < |dataSeq|;
+	reads dataSeq;
+	ensures dataSeq[start..pos] == dataSeq[start..][0..pos-start] && dataSeq[pos+1..] == dataSeq[start..][pos-start+1..];
+	ensures [beginD] + dataSeq[start..pos] + [d] + dataSeq[pos+1..] == [beginD] + dataSeq[start..][0..pos-start] + [d] + dataSeq[start..][pos-start+1..];
+{true}
 
 ////////////////////////////////////////////////////////////////////
 method updateData(d:Data, index:int, tarNd:INode)
@@ -171,7 +174,6 @@ method updateData(d:Data, index:int, tarNd:INode)
 	ensures ndSeq2DataSeq(spine)[index] == d;
 
 	ensures listInv(spine[index..]);
-	ensures spine[index..][|spine[index..]|-1].next == null;
 {
 	tarNd.data := d;
 	listInvLemma(spine);
@@ -191,7 +193,7 @@ lemma dataSeqCmp(newSeq:seq<Data>, oldSeq:seq<Data>, pos:int, d:Data, mySeq:seq<
 	
 	ensures newSeq == oldSeq[0..pos] + [d] + oldSeq[pos+1..];
 	ensures pos == 0 ==> newSeq == [d] + oldSeq[1..];
- 	ensures 0 < pos < |newSeq| ==>  newSeq[1..] ==  oldSeq[1..pos] + [d] + oldSeq[pos+1..];
+ 	ensures 0 < pos < |newSeq| ==> newSeq ==  [mySeq[0].data] +  oldSeq[1..pos] + [d] + oldSeq[pos+1..];
 
 	ensures [mySeq[pos].data] + mySeq[pos].tailContents == newSeq[pos..];
 {
