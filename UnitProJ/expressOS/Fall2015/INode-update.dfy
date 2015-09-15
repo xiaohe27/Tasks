@@ -113,7 +113,7 @@ updateData(d, pos, curNd);
 
 ghost var updatedSpineDataList := ndSeq2DataSeq(spine);
 
- //listInvLemma(spine);
+ //
 assert validSeqLemma(spine[pos..]);
 
 //dataSeqCmp(updatedSpineDataList, oldContents, pos, d, spine);
@@ -136,6 +136,8 @@ method updateData(d:Data, index:int, tarNd:INode)
 	ensures tarNd.Valid();
 	ensures listInv(spine);
 
+  ensures spine[|spine|-1].next == null;
+	
 	ensures spine == old(spine);
 	ensures forall i :: 0 <= i < |spine| && i != index ==> spine[i].data == old(spine[i].data);
 	
@@ -348,6 +350,7 @@ predicate validSeqLemma(mySeq: seq<INode>)
 
 	reads mySeq, sumAllFtprint(mySeq);
 	ensures validSeqLemma(mySeq);
+	ensures mySeq != [] ==>	mySeq[0].Valid() && mySeq[|mySeq|-1].next == null;
 	ensures mySeq != [] ==> (mySeq[0].spine == mySeq);
 {
 	if |mySeq| <= 1 then true
