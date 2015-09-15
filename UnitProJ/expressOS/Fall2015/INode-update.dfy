@@ -69,7 +69,7 @@ else [mySeq[0].data] + ndSeq2DataSeq(mySeq[1..])
 }
 
 ///////////////////////////////////
-/*
+
 method update(pos:int, d:Data)
 requires 0 <= pos <= |tailContents|;
 requires Valid();
@@ -97,18 +97,18 @@ ghost var oldContents := ndSeq2DataSeq(spine);
 
 while(index < pos)
 invariant 0 <= index <= pos;
-invariant 0 <= index < |spine| ==> curNd != null && curNd.Valid();
-invariant curNd != null ==> |curNd.spine| + index == |spine|;
-invariant 0 <= index <= pos ==> curNd == spine[index];
+invariant curNd != null && curNd.Valid();
+invariant |curNd.spine| + index == |spine|;
+invariant curNd == spine[index];
+invariant Valid();
 invariant validSeqCond(spine);
 {	
 index := index + 1;	
 curNd := curNd.next;
 }
 
-
 //method that performs curNd.data := d;
-
+/*
 updateData(d, pos, curNd);
 
 ghost var updatedSpineDataList := ndSeq2DataSeq(spine);
@@ -116,8 +116,8 @@ ghost var updatedSpineDataList := ndSeq2DataSeq(spine);
  //
 assert validSeqLemma(spine[pos..]);
 
-//dataSeqCmp(updatedSpineDataList, oldContents, pos, d, spine);
-
+dataSeqCmp(updatedSpineDataList, oldContents, pos, d, spine);
+*/
 //check pre-cond
 
 //assert [spine[pos].data] + spine[pos].tailContents == updatedSpineDataList[pos..]; //this is ok but slow
@@ -136,7 +136,7 @@ assert forall i :: 0 <= i < |spine|-1 ==> (spine[i].footprint == {spine[i]} + sp
 //updateSeq4UpdateOp(spine, d, pos, updatedSpineDataList, oldContents[1..]);
 
 }
-*/
+
 
 ////////////////////////////////////////////////////////////////////
 //data seq lemma
