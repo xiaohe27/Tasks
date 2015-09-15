@@ -1,3 +1,3 @@
 echo "%time%"
-Dafny.exe INode.dfy
+Dafny.exe INode-update.dfy
 echo "%time%"
