@@ -108,7 +108,7 @@ curNd := curNd.next;
 }
 
 //method that performs curNd.data := d;
-/*
+
 updateData(d, pos, curNd);
 
 ghost var updatedSpineDataList := ndSeq2DataSeq(spine);
@@ -117,18 +117,14 @@ ghost var updatedSpineDataList := ndSeq2DataSeq(spine);
 assert validSeqLemma(spine[pos..]);
 
 dataSeqCmp(updatedSpineDataList, oldContents, pos, d, spine);
-*/
+
 //check pre-cond
 
 //assert [spine[pos].data] + spine[pos].tailContents == updatedSpineDataList[pos..]; //this is ok but slow
 
 //below cannot be verified.
-/*
-assert forall i :: 0 <= i < |spine|-1 ==> (spine[i].footprint == {spine[i]} + spine[i+1].footprint
- && spine[i].spine == [spine[i]] + spine[i+1].spine);
-*/
 
-// assert 0 < pos < |spine| ==>  dataSeqLemma(oldContents, 1, pos, spine[0].data, d);
+ //assert 0 < pos < |spine| ==>  dataSeqLemma(oldContents, 1, pos, spine[0].data, d);
 
 // assert 0 <  pos < |spine| ==>  updatedSpineDataList == [spine[0].data] + oldContents[1..][0..pos-1] + [d] + oldContents[1..][pos..]; //ok but slow
 
@@ -172,8 +168,8 @@ method updateData(d:Data, index:int, tarNd:INode)
 	ensures tarNd.spine == old(tarNd.spine);
 	ensures spine[index] == tarNd;
 
-	ensures forall i :: 0 <= i < |spine| && i != index ==> ndSeq2DataSeq(spine)[i] == old(ndSeq2DataSeq(spine)[i]);
-	ensures ndSeq2DataSeq(spine)[index] == d;
+//	ensures forall i :: 0 <= i < |spine| && i != index ==> ndSeq2DataSeq(spine)[i] == old(ndSeq2DataSeq(spine)[i]);
+//	ensures ndSeq2DataSeq(spine)[index] == d;
 
 	ensures  forall i :: 0 <= i < |spine|-1 ==> (spine[i].footprint == {spine[i]} + spine[i+1].footprint
 		&& spine[i].spine == [spine[i]] + spine[i+1].spine);
