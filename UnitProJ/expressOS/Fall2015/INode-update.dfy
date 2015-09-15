@@ -111,11 +111,11 @@ index := index + 1;
 curNd := curNd.next;
 }
 
-//method that performs curNd.data := d;
+//updateData(d, pos, curNd);
+	curNd.data := d;
+	listInvLemma(spine);
+   assert listEndLemma(spine, index);
 
-updateData(d, pos, curNd);
-
- assert oldContents[1..] == old(tailContents);
 
 ghost var updatedSpineDataList := ndSeq2DataSeq(spine);
 
@@ -126,15 +126,11 @@ ghost var updatedSpineDataList := ndSeq2DataSeq(spine);
  
 dataSeqCmp(updatedSpineDataList, oldContents, pos, d, spine);
 
- assert oldContents[1..] == old(tailContents);
-
-
 //check pre-cond
  assert 0 < pos < |spine| ==>  dataSeqLemma(oldContents, 1, pos, spine[0].data, d);
  
 updateSeq4UpdateOp(spine, d, pos, updatedSpineDataList, oldContents[1..]);
 
- assert oldContents[1..] == old(tailContents);
 }
 
 
@@ -148,43 +144,6 @@ predicate dataSeqLemma(dataSeq:seq<Data>, start:int, pos:int, beginD:Data, d:Dat
 {true}
 
 ////////////////////////////////////////////////////////////////////
-method updateData(d:Data, index:int, tarNd:INode)
-	                    
-	requires Valid();
-	requires validSeqCond(spine);
-	requires 0 <= index < |spine|;
-	requires spine[index] == tarNd;
-	requires tarNd.Valid();
-	
-	modifies spine[index];
-	ensures tarNd.Valid();
-	ensures listInv(spine);
-
-  ensures spine[|spine|-1].next == null;
-	
-	ensures spine == old(spine);
-	ensures forall i :: 0 <= i < |spine| && i != index ==> spine[i].data == old(spine[i].data);
-	
-	ensures tarNd.data == d;
-	ensures tarNd.next == old(tarNd.next);
-	ensures tarNd.tailContents == old(tarNd.tailContents);
-	ensures tarNd.footprint == old(tarNd.footprint);
-	ensures tarNd.spine == old(tarNd.spine);
-	ensures spine[index] == tarNd;
-
-	ensures forall i :: 0 <= i < |spine| && i != index ==> ndSeq2DataSeq(spine)[i] == old(ndSeq2DataSeq(spine)[i]);
-	ensures ndSeq2DataSeq(spine)[index] == d;
-
-	ensures  forall i :: 0 <= i < |spine|-1 ==> (spine[i].footprint == {spine[i]} + spine[i+1].footprint
-		&& spine[i].spine == [spine[i]] + spine[i+1].spine);
-		
-	ensures listInv(spine[index..]);
-{
-	tarNd.data := d;
-	listInvLemma(spine);
-   assert listEndLemma(spine, index);
-}
-
 
 
 predicate ndValid2ListValidLemma()
@@ -240,9 +199,38 @@ predicate spineTCLemma()
 		&& next.spineTCLemma()
 }
 
+
+lemma dataSeqCmp(newSeq:seq<Data>, oldSeq:seq<Data>, pos:int, d:Data, mySeq:seq<INode>)
+	requires |newSeq| == |oldSeq| == |mySeq|;
+	requires 0 <= pos < |newSeq|;
+	requires forall i :: 0 <= i < |newSeq| && i != pos ==> newSeq[i] == oldSeq[i];
+	requires newSeq[pos] == d;
+
+	requires listInv(mySeq) && mySeq[|mySeq|-1].next == null;
+	requires forall i :: 0 <= i < |newSeq| ==> mySeq[i].data == newSeq[i];
+
+	requires forall i :: 0 <= i < |mySeq|-1 ==> (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
+ && mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
+	
+	requires mySeq[pos].spine == mySeq[pos..];
+	requires mySeq[pos].Valid();
+	
+	ensures newSeq == oldSeq[0..pos] + [d] + oldSeq[pos+1..];
+	ensures pos == 0 ==> newSeq == [d] + oldSeq[1..];
+ 	ensures 0 < pos < |newSeq| ==> newSeq ==  [mySeq[0].data] +  oldSeq[1..pos] + [d] + oldSeq[pos+1..];
+
+	ensures  forall i :: 0 <= i < |mySeq|-1 ==> (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
+ && mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
+	
+	ensures [mySeq[pos].data] + mySeq[pos].tailContents == newSeq[pos..];
+{
+assert mySeq[pos].spineTCLemma();
 }
 
 
+//////////////////////////////////
+//good
+///////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
 function getFtprint(nd:INode): set<INode>
 reads nd;
@@ -257,9 +245,6 @@ ensures forall nd :: nd in mySeq ==>
 {
 if mySeq == [] then {} else getFtprint(mySeq[0]) + sumAllFtprint(mySeq[1..])
 }
-
-
-///////////////////////////////////////////
 
 predicate listInv(mySeq: seq<INode>)
 reads mySeq, (set nd | nd in mySeq);
@@ -328,38 +313,6 @@ predicate validSeqLemma(mySeq: seq<INode>)
 }
 
 
-
-lemma dataSeqCmp(newSeq:seq<Data>, oldSeq:seq<Data>, pos:int, d:Data, mySeq:seq<INode>)
-	requires |newSeq| == |oldSeq| == |mySeq|;
-	requires 0 <= pos < |newSeq|;
-	requires forall i :: 0 <= i < |newSeq| && i != pos ==> newSeq[i] == oldSeq[i];
-	requires newSeq[pos] == d;
-
-	requires listInv(mySeq) && mySeq[|mySeq|-1].next == null;
-	requires forall i :: 0 <= i < |newSeq| ==> mySeq[i].data == newSeq[i];
-
-	requires forall i :: 0 <= i < |mySeq|-1 ==> (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
- && mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
-	
-	requires mySeq[pos].spine == mySeq[pos..];
-	requires mySeq[pos].Valid();
-	
-	ensures newSeq == oldSeq[0..pos] + [d] + oldSeq[pos+1..];
-	ensures pos == 0 ==> newSeq == [d] + oldSeq[1..];
- 	ensures 0 < pos < |newSeq| ==> newSeq ==  [mySeq[0].data] +  oldSeq[1..pos] + [d] + oldSeq[pos+1..];
-
-	ensures  forall i :: 0 <= i < |mySeq|-1 ==> (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
- && mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
-	
-	ensures [mySeq[pos].data] + mySeq[pos].tailContents == newSeq[pos..];
-{
-assert mySeq[pos].spineTCLemma();
-}
-
-
-//////////////////////////////////
-//good
-
 ghost method updateSeq4UpdateOp(mySeq:seq<INode>, d:Data, pos:int, newContents:seq<Data>,
 	oldTC:seq<Data>)
 requires 
@@ -410,3 +363,6 @@ index := index - 1;
 }
 
 }
+
+}
+
