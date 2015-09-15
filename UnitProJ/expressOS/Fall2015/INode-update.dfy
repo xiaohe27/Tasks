@@ -74,7 +74,7 @@ method update(pos:int, d:Data)
 requires 0 <= pos <= |tailContents|;
 requires Valid();
 modifies footprint;
-
+/*
 ensures Valid();
 
 ensures pos == 0 ==> (data == d && tailContents == old(tailContents));
@@ -84,7 +84,7 @@ ensures pos > 0 ==> (this.data == old(this.data)
 old(tailContents[pos..]));
 
 ensures footprint == old(footprint);
-
+*/
 {
 	
 	var index := 0;
@@ -116,21 +116,18 @@ curNd := curNd.next;
 	listInvLemma(spine);
    assert listEndLemma(spine, index);
 
-
 ghost var updatedSpineDataList := ndSeq2DataSeq(spine);
 
  //
- assert validSeqLemma(spine[pos..]);
+assert validSeqLemma(spine[pos..]);
 
- /////////////
+updateSeq4UpdateOp(spine, d, pos, updatedSpineDataList);
+
  
-dataSeqCmp(updatedSpineDataList, oldContents, pos, d, spine);
+//dataSeqCmp(updatedSpineDataList, oldContents, pos, d, spine);
 
-//check pre-cond
- assert 0 < pos < |spine| ==>  dataSeqLemma(oldContents, 1, pos, spine[0].data, d);
+ //assert 0 < pos < |spine| ==>  dataSeqLemma(oldContents, 1, pos, spine[0].data, d);
  
-updateSeq4UpdateOp(spine, d, pos, updatedSpineDataList, oldContents[1..]);
-
 }
 
 
@@ -313,8 +310,7 @@ predicate validSeqLemma(mySeq: seq<INode>)
 }
 
 
-ghost method updateSeq4UpdateOp(mySeq:seq<INode>, d:Data, pos:int, newContents:seq<Data>,
-	oldTC:seq<Data>)
+ghost method updateSeq4UpdateOp(mySeq:seq<INode>, d:Data, pos:int, newContents:seq<Data>)
 requires 
 listInv(mySeq)
 && 0 <= pos < |mySeq|
@@ -322,24 +318,18 @@ listInv(mySeq)
 
 requires mySeq[pos].Valid();
 
-requires |mySeq| == |newContents| == |oldTC| + 1;
+requires |mySeq| == |newContents|;
 requires forall i :: 0 <= i < |mySeq| ==> mySeq[i].data == newContents[i];
-requires [mySeq[pos].data] + mySeq[pos].tailContents == newContents[pos..];
 
 requires forall i :: 0 <= i < |mySeq|-1 ==> (mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
  && mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
 
-requires pos == 0 ==> newContents == [d] + oldTC;
-requires 0 < pos < |mySeq| ==>  newContents == [mySeq[0].data] + oldTC[0..pos-1] + [d] + oldTC[pos..];
- 
 modifies mySeq;
 
 ensures mySeq[0].Valid();
 ensures mySeq[0].footprint == old(mySeq[0].footprint);
 
-ensures pos == 0 ==> mySeq[0].data == d && mySeq[0].tailContents == oldTC;
-ensures 0 < pos < |mySeq| ==> (mySeq[0].data == old(mySeq[0].data)
-	&& mySeq[0].tailContents == oldTC[0..pos-1] + [d] + oldTC[pos..]);
+ensures  forall i :: 0 <= i < |mySeq| ==> mySeq[i].data == newContents[i];
 {
 	ghost var index := pos;
 	
@@ -354,8 +344,7 @@ while index >= 1
  && mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine);
 
  invariant  forall i :: 0 <= i < |mySeq| ==> mySeq[i].data == newContents[i];
- invariant [mySeq[index].data] + mySeq[index].tailContents == newContents[index..];
- invariant  0 < pos < |mySeq| ==>  newContents == [mySeq[0].data] + oldTC[0..pos-1] + [d] + oldTC[pos..];
+
 	invariant mySeq[index].Valid();
 {
 mySeq[index-1].tailContents := [mySeq[index].data] + mySeq[index].tailContents;
