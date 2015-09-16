@@ -81,18 +81,62 @@ spine == [this] + next.spine
 
 
 /////////////////////////////////////////
-method delete(index:int) returns (delNd:INode)
+method delete(pos:int) returns (delNd:INode)
 requires Valid();
-requires 0 < index <= |tailContents|;
+requires 0 < pos <= |tailContents|;
 
 modifies footprint;
+/*
 ensures Valid();
-
 ensures delNd in old(footprint);
-ensures [data] + tailContents == old(([data] + tailContents)[0..index] + ([data] + tailContents)[index+1..] );
+ensures [data] + tailContents == old(([data] + tailContents)[0..pos] + ([data] + tailContents)[pos+1..] );
 ensures footprint == old(footprint) - {delNd};
-{}
+*/
+{
+var curNd := this;
+var curIndex := 0;
 
+assert ValidLemma();
+assert ndValid2ListValidLemma();
+
+while (curIndex < pos-1)
+invariant 0 <= curIndex < pos;
+invariant curNd != null && curNd.Valid();
+invariant listInv(spine);
+invariant |curNd.tailContents| + curIndex == |tailContents|;
+invariant curNd.next != null;
+invariant curNd == spine[curIndex];
+invariant curNd.next == spine[curIndex+1];
+invariant curNd.next.next != null ==> curNd.next.next == spine[curIndex+2];
+{
+curNd := curNd.next;
+curIndex := curIndex + 1;
+}
+
+curNd.next := curNd.next.next;
+
+//assert curNd.next != null ==> curNd.next.Valid();
+
+ghost var newSpine := spine[0..pos] + spine[pos+1..];
+
+//assert listInv(newSpine); //8s
+
+/*
+while(curIndex >= 0)
+	invariant -1 <= curIndex < pos;
+	invariant listInv(newSpine);
+
+//	invariant newSpine[curIndex+1].Valid();
+{
+newSpine[curIndex].tailContents := if newSpine[curIndex].next == null then [] else [newSpine[curIndex].next.data] + newSpine[curIndex].next.tailContents;
+newSpine[curIndex].footprint := if newSpine[curIndex].next == null then {newSpine[curIndex]} else {newSpine[curIndex]} + newSpine[curIndex].next.footprint;
+newSpine[curIndex].spine := if newSpine[curIndex].next == null then [newSpine[curIndex]] else [newSpine[curIndex]] + newSpine[curIndex].next.spine;
+
+curIndex := curIndex - 1;
+}
+*/
+
+}
 
 ////////////////////////////////////////
 
