@@ -1,7 +1,7 @@
 insert+update: 
-59 verified.
+63 verified.
 
 windows:
-2min05s
+2 min 32.5 sec
 
 ubuntu:
