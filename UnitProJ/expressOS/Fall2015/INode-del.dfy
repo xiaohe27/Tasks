@@ -121,11 +121,20 @@ ghost var newSpine := spine[0..pos] + spine[pos+1..];
 
 //assert listInv(newSpine); //8s
 
+if (curNd.next == null)
+{}
+
+else {
+
+}
+
 /*
 while(curIndex >= 0)
 	invariant -1 <= curIndex < pos;
-	invariant listInv(newSpine);
+//	invariant listInv(newSpine);
 
+	invariant forall i :: 0 <= i <= curIndex ==> newSpine[i].tailContents == old(newSpine[i].tailContents) &&
+		newSpine[i].footprint == old(newSpine[i].footprint) && newSpine[i].spine == old(newSpine[i].spine);
 //	invariant newSpine[curIndex+1].Valid();
 {
 newSpine[curIndex].tailContents := if newSpine[curIndex].next == null then [] else [newSpine[curIndex].next.data] + newSpine[curIndex].next.tailContents;
