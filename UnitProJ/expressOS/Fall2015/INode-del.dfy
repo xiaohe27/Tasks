@@ -80,6 +80,21 @@ spine == [this] + next.spine
 }
 
 
+/////////////////////////////////////////
+method delete(index:int) returns (delNd:INode)
+requires Valid();
+requires 0 < index <= |tailContents|;
+
+modifies footprint;
+ensures Valid();
+
+ensures delNd in old(footprint);
+ensures [data] + tailContents == old(([data] + tailContents)[0..index] + ([data] + tailContents)[index+1..] );
+ensures footprint == old(footprint) - {delNd};
+{}
+
+
+////////////////////////////////////////
 
 predicate spineFtprintLemma()
 requires Valid();
