@@ -58,36 +58,6 @@ spine == [this] + next.spine
 }
 
 
-method get(i:int) returns (dataI: Data) 
-requires 0 < i <= |tailContents|;
-requires Valid();
-
-ensures Valid();
-ensures dataI == if i == 0 then data else tailContents[i-1];
-{
-
-var curNd := this;
-var curIndex := 0;
-
-assert ValidLemma();
-assert ndValid2ListValidLemma();
-
-while (curIndex < i)
-	invariant 0 <= curIndex <= i;
-	invariant validSeqCond(spine);
-invariant curNd != null && curNd.Valid();
-invariant |curNd.tailContents| + curIndex == |tailContents|;
-invariant curNd == spine[curIndex];
-{
-curNd := curNd.next;
-curIndex := curIndex + 1;
-}
-
-assert spineTCLemma();
-return curNd.data;
-
-}
-
 
 predicate ndValid2ListValidLemma()
 requires Valid();
@@ -109,19 +79,26 @@ spine == [this] + next.spine
 && next.ndValid2ListValidLemma())
 }
 
-predicate spineTCLemma()
-	requires Valid();
-	reads this, footprint;
-	ensures spineTCLemma();
-	ensures |spine| == |tailContents| + 1;
-	ensures null !in spine;
-     ensures spine[0].data == this.data &&
-		forall i :: 0 < i < |spine| ==> spine[i].data == this.tailContents[i-1];
+
+
+predicate spineFtprintLemma()
+requires Valid();
+reads this, footprint;
+
+ensures spineFtprintLemma();
+ensures forall nd :: nd in spine ==> nd in footprint;
+
+ensures (set nd | nd in spine) == footprint;
 {
-	if next == null then true
-	else spine == [this] + next.spine && tailContents == [next.data] + next.tailContents
-		&& next.spineTCLemma()
+if next == null then (spine == [this] && footprint == {this})
+else (
+spine == [this] + next.spine 
+&& footprint == {this} + next.footprint
+&& next.spineFtprintLemma())
 }
+
+
+
 ////////////////////////////////////////////////////////
 
 function getFtprint(nd:INode): set<INode>
@@ -137,6 +114,7 @@ ensures forall nd :: nd in mySeq ==>
 {
 if mySeq == [] then {} else getFtprint(mySeq[0]) + sumAllFtprint(mySeq[1..])
 }
+
 
 ///////////////////////////////////////////
 
@@ -162,6 +140,10 @@ null !in mySeq && (forall nd :: nd in mySeq ==> nd in nd.footprint) &&
 && (forall i :: 0 <= i < |mySeq| ==> |mySeq|-i-1 <= |mySeq[i].tailContents|)
 }
 
+lemma listCondLemma(mySeq: seq<INode>)
+requires listCond(mySeq);
+ensures forall i :: 0 <= i <= |mySeq| ==> listCond(mySeq[0..i]);
+{}
 
 predicate validSeqCond(mySeq: seq<INode>)
 reads mySeq, (set nd | nd in mySeq);
@@ -174,91 +156,6 @@ listCond(mySeq)
 }
 
 
-}
 
-//The INodes class: a list
-class INodes {
-  var head: INode;
-
-  ghost var contents: seq<Data>;
-  ghost var footprint: set<object>;
-  ghost var spine: set<INode>;
-
-predicate valid()
-reads this, footprint; 
-{
-this in footprint 
-&& spine <= footprint
-&& head in spine 
-&&
-(forall nd :: nd in spine ==> (nd != null && nd.footprint <= footprint - {this})) 
-&&
-(forall nd :: nd in spine ==> nd != null && nd.Valid())
-
-&&
-(forall nd :: nd in spine ==> (nd.next != null ==> nd.next in spine))
-
-&& contents == head.tailContents
-&& head.footprint == spine
-}
-
-method len() returns (len:int)
-requires valid();
-ensures valid();
-ensures len == |contents|;
-{
-var tmp:INode;
-tmp := head;
-len := 0;
-
-while(tmp.next != null)
-decreases tmp.footprint;
-invariant tmp != null && tmp.Valid();
-invariant tmp.next == null ==> tmp.tailContents == [];
-invariant len + |tmp.tailContents| == |contents|;
-{
-len := len + 1;
-
-tmp := tmp.next;
-}
-
-}
-
-
-method get(index:int) returns (d:Data)
-requires valid();
-requires 0 <= index < |contents|;
-
-ensures valid();
-ensures d == contents[index];
-{
-d := head.get(index+1);
-}
-
-
-
-/*
-
-
-method delete(index:int)  returns (delNd:INode)
-requires valid();
-requires 0 <= index < |contents|;
-
-modifies footprint;
-ensures valid();
-ensures contents == old(contents[0..index]) + old(contents[index+1..]);
-ensures footprint == old(footprint) - {delNd};
-ensures spine == old(spine) - {delNd};
-{
-   delNd := head.delete(index+1);
-
-   footprint := footprint - {delNd};
-
-   spine := head.footprint;
-   
-   contents := head.tailContents;
-
-   assert head.allVLemma() && head.ValidLemma();
-}
-*/
+//===============================================
 }
