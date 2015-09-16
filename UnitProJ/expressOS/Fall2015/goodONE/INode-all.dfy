@@ -75,6 +75,36 @@ ensures fresh(footprint - {this});
     spine := [this];
 }
 
+method get(i:int) returns (dataI: Data) 
+requires 0 < i <= |tailContents|;
+requires Valid();
+
+ensures Valid();
+ensures dataI == if i == 0 then data else tailContents[i-1];
+{
+
+var curNd := this;
+var curIndex := 0;
+
+assert ValidLemma();
+assert ndValid2ListValidLemma();
+
+while (curIndex < i)
+	invariant 0 <= curIndex <= i;
+	invariant validSeqCond(spine);
+invariant curNd != null && curNd.Valid();
+invariant |curNd.tailContents| + curIndex == |tailContents|;
+invariant curNd == spine[curIndex];
+{
+curNd := curNd.next;
+curIndex := curIndex + 1;
+}
+
+assert spineTCLemma();
+return curNd.data;
+
+}
+
 method preAppend(d:Data) returns (node:INode)
 requires Valid();
 ensures node != null && node.Valid();
@@ -950,7 +980,7 @@ tmp := tmp.next;
 
 }
 
-/*
+
 method get(index:int) returns (d:Data)
 requires valid();
 requires 0 <= index < |contents|;
@@ -960,7 +990,7 @@ ensures d == contents[index];
 {
 d := head.get(index+1);
 }
-*/
+
 
 
 method add2Front(d:Data)
