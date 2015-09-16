@@ -86,6 +86,7 @@ requires Valid();
 requires 0 < pos <= |tailContents|;
 
 modifies footprint;
+
 /*
 ensures Valid();
 ensures delNd in old(footprint);
@@ -102,7 +103,7 @@ assert ndValid2ListValidLemma();
 while (curIndex < pos-1)
 invariant 0 <= curIndex < pos;
 invariant curNd != null && curNd.Valid();
-invariant listInv(spine);
+invariant validSeqCond(spine);
 invariant |curNd.tailContents| + curIndex == |tailContents|;
 invariant curNd.next != null;
 invariant curNd == spine[curIndex];
@@ -113,35 +114,21 @@ curNd := curNd.next;
 curIndex := curIndex + 1;
 }
 
-curNd.next := curNd.next.next;
+assert validSeqLemma(spine);
 
-//assert curNd.next != null ==> curNd.next.Valid();
+delNd := curNd.next;
+
+curNd.next := curNd.next.next;
 
 ghost var newSpine := spine[0..pos] + spine[pos+1..];
 
-//assert listInv(newSpine); //8s
+//assert listInv(newSpine);
 
-if (curNd.next == null)
-{}
-
-else {
-
-}
+mkNdValid(curNd);
 
 /*
-while(curIndex >= 0)
-	invariant -1 <= curIndex < pos;
-//	invariant listInv(newSpine);
-
-	invariant forall i :: 0 <= i <= curIndex ==> newSpine[i].tailContents == old(newSpine[i].tailContents) &&
-		newSpine[i].footprint == old(newSpine[i].footprint) && newSpine[i].spine == old(newSpine[i].spine);
-//	invariant newSpine[curIndex+1].Valid();
-{
-newSpine[curIndex].tailContents := if newSpine[curIndex].next == null then [] else [newSpine[curIndex].next.data] + newSpine[curIndex].next.tailContents;
-newSpine[curIndex].footprint := if newSpine[curIndex].next == null then {newSpine[curIndex]} else {newSpine[curIndex]} + newSpine[curIndex].next.footprint;
-newSpine[curIndex].spine := if newSpine[curIndex].next == null then [newSpine[curIndex]] else [newSpine[curIndex]] + newSpine[curIndex].next.spine;
-
-curIndex := curIndex - 1;
+if (1 < pos <= |tailContents|) {
+updateSeq4Del(newSpine, delNd, pos);
 }
 */
 
@@ -168,6 +155,28 @@ spine == [this] + next.spine
 
 
 ////////////////////////////////////////////////////////
+method mkNdValid(curNd: INode)
+  requires curNd != null;
+	requires curNd.next != null ==>  curNd.next.Valid() && curNd !in curNd.next.footprint;
+
+	modifies curNd;
+	ensures curNd.Valid();
+	ensures curNd.data == old(curNd.data) && curNd.next == old(curNd.next);
+{
+if (curNd.next == null)
+{
+	curNd.tailContents := [];
+	curNd.footprint := {curNd};
+	curNd.spine := [curNd];
+}
+
+else {
+	curNd.tailContents := [curNd.next.data] + curNd.next.tailContents;
+	curNd.footprint := {curNd} + curNd.next.footprint;
+	curNd.spine := [curNd] + curNd.next.spine;
+}
+}
+	
 
 function getFtprint(nd:INode): set<INode>
 reads nd;
@@ -223,7 +232,40 @@ listCond(mySeq)
 && mySeq[|mySeq|-1].spine == [mySeq[|mySeq|-1]])
 }
 
+predicate validSeqLemma(mySeq: seq<INode>)
+	requires validSeqCond(mySeq);
+	reads mySeq, (set nd | nd in mySeq);
+	ensures forall i :: 0 <= i < |mySeq| ==> listCond(mySeq[0..i]) && validSeqCond(mySeq[i..]);
+{true}
 
 
 //===============================================
+ghost method updateSeq4Del(newSpine: seq<INode>, rmNd:INode, pos: int)
+//	requires listInv(newSpine);
+	requires 1 < pos <= |tailContents|;
+
+ensures Valid();
+ensures rmNd in old(footprint);
+ensures [data] + tailContents == old(([data] + tailContents)[0..pos] + ([data] + tailContents)[pos+1..] );
+ensures footprint == old(footprint) - {rmNd};
+
+{
+/*
+while(curIndex >= 0)
+	invariant -1 <= curIndex < pos;
+//	invariant listInv(newSpine);
+
+	invariant forall i :: 0 <= i <= curIndex ==> newSpine[i].tailContents == old(newSpine[i].tailContents) &&
+		newSpine[i].footprint == old(newSpine[i].footprint) && newSpine[i].spine == old(newSpine[i].spine);
+//	invariant newSpine[curIndex+1].Valid();
+{
+newSpine[curIndex].tailContents := if newSpine[curIndex].next == null then [] else [newSpine[curIndex].next.data] + newSpine[curIndex].next.tailContents;
+newSpine[curIndex].footprint := if newSpine[curIndex].next == null then {newSpine[curIndex]} else {newSpine[curIndex]} + newSpine[curIndex].next.footprint;
+newSpine[curIndex].spine := if newSpine[curIndex].next == null then [newSpine[curIndex]] else [newSpine[curIndex]] + newSpine[curIndex].next.spine;
+
+curIndex := curIndex - 1;
+}
+*/
+}
+
 }
