@@ -232,7 +232,7 @@ else [mySeq[0].data] + ndSeq2DataSeq(mySeq[1..])
 
 ///////////////////////////////////
 
-method update(pos:int, d:Data)
+method update(d:Data, pos:int)
 requires 0 <= pos <= |tailContents|;
 requires Valid();
 modifies footprint;
@@ -1062,7 +1062,7 @@ insertAt(pos, d);
 
 
 
-/*
+
 method update(d:Data, index:int)
 requires 0 <= index < |contents|;
 requires valid();
@@ -1075,10 +1075,10 @@ head.update(d, index+1);
 
 contents := head.tailContents;
 
-assert head.allVLemma() && head.ValidLemma();
+assert head.ValidLemma() && head.ndValid2ListValidLemma();
 }
 
-
+/*
 method delete(index:int)  returns (delNd:INode)
 requires valid();
 requires 0 <= index < |contents|;

@@ -1,0 +1,7 @@
+insert+update: 
+59 verified.
+
+windows:
+2min05s
+
+ubuntu:
