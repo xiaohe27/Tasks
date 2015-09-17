@@ -116,12 +116,17 @@ curIndex := curIndex + 1;
 
 assert validSeqLemma(spine);
 
+
 delNd := curNd.next;
 
 curNd.next := curNd.next.next;
 
 ghost var newSpine := spine[0..pos] + spine[pos+1..];
 
+assert listCond(spine[pos+1..]);
+//assert spine[pos+1..] != [] ==> ((set nd | nd in spine[0..pos]) !! spine[pos+1..][0].footprint);
+
+//assert listInvFrom2Seq(spine[0..pos], spine[pos+1..]);
 //assert listInv(newSpine);
 
 mkNdValid(curNd);
@@ -136,7 +141,7 @@ updateSeq4Del(newSpine, delNd, pos);
 
 ////////////////////////////////////////
 predicate listInvFrom2Seq(seq1:seq<INode>, seq2:seq<INode>)
-	requires listInv(seq1) && validSeqCond(seq2);
+	requires listInv(seq1) && listCond(seq2);
 requires seq1 != [];
 requires seq2 != [] ==> (seq1[|seq1| - 1].next == seq2[0]);
 requires seq2 != [] ==> ((set nd | nd in seq1) !! seq2[0].footprint);
@@ -221,9 +226,6 @@ null !in mySeq && (forall nd :: nd in mySeq ==> nd in nd.footprint) &&
 	&& mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents
 	&& mySeq[i].spine == [mySeq[i]] + mySeq[i+1].spine)
 	&& (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint)
-
-	&& (forall i :: 0 <= i < |mySeq| ==> |mySeq|-i <= |mySeq[i].spine|)
-&& (forall i :: 0 <= i < |mySeq| ==> |mySeq|-i-1 <= |mySeq[i].tailContents|)
 }
 
 predicate  listCondFpLemma(mySeq: seq<INode>)
@@ -254,6 +256,7 @@ predicate validSeqLemma(mySeq: seq<INode>)
 
 
 //===============================================
+/*
 ghost method updateSeq4Del(newSpine: seq<INode>, rmNd:INode, pos: int)
 //	requires listInv(newSpine);
 	requires 1 < pos <= |tailContents|;
@@ -281,5 +284,7 @@ curIndex := curIndex - 1;
 }
 */
 }
+
+*/
 
 }
