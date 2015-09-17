@@ -188,7 +188,7 @@ listCondLemma(spine);
 while (curIndex < i-1)
 invariant 0 <= curIndex < i;
 invariant curNd != null && curNd.Valid();
-invariant listCond(spine[0..i]);
+invariant validSeqCond(spine);
 invariant |curNd.tailContents| + curIndex == |tailContents|;
 invariant curNd.next != null;
 invariant curNd == spine[curIndex];
