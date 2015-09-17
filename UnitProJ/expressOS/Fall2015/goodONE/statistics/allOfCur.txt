@@ -4,4 +4,4 @@ insert+update+get:
 windows:
 1 min 19s
 
-ubuntu:
+ubuntu: 62s
