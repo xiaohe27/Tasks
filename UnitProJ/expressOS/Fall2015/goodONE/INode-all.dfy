@@ -1091,7 +1091,13 @@ insertAt(pos, d);
 }
 
 
-
+predicate dataSeqLemma(oldHd:Data, newHd:Data, oldSeq:seq<Data>, newSeq:seq<Data> , index:int, d:Data)
+	requires |newSeq| == |oldSeq|;
+	requires 1 <= index+1 <= |oldSeq|;
+	requires [newHd] + newSeq == ([oldHd] + oldSeq)[0..index+1] + [d] + ([oldHd] + oldSeq)[index+2..];
+	reads oldHd, newHd, oldSeq, newSeq;
+	ensures newSeq == oldSeq[0..index] + [d] + oldSeq[index+1..];
+{true}
 
 method update(d:Data, index:int)
 requires 0 <= index < |contents|;
@@ -1102,6 +1108,8 @@ ensures contents == old(contents[0..index]) + [d] + old(contents[index+1..]);
 ensures footprint == old(footprint);
 {
 head.update(d, index+1);
+
+assert dataSeqLemma(old(head.data), head.data, old(head.tailContents), head.tailContents, index, d);
 
 contents := head.tailContents;
 
