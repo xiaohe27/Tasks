@@ -289,3 +289,57 @@ index := index - 1;
 
 }
 
+//The INodes class: a list
+class INodes {
+  var head: INode;
+
+  ghost var contents: seq<Data>;
+  ghost var footprint: set<object>;
+  ghost var spine: set<INode>;
+
+predicate valid()
+reads this, footprint; 
+{
+this in footprint 
+&& spine <= footprint
+&& head in spine 
+&&
+(forall nd :: nd in spine ==> (nd != null && nd.footprint <= footprint - {this})) 
+&&
+(forall nd :: nd in spine ==> nd != null && nd.Valid())
+
+&&
+(forall nd :: nd in spine ==> (nd.next != null ==> nd.next in spine))
+
+&& contents == head.tailContents
+&& head.footprint == spine
+}
+
+predicate dataSeqLemma(oldHd:Data, newHd:Data, oldSeq:seq<Data>, newSeq:seq<Data> , index:int, d:Data)
+	requires |newSeq| == |oldSeq|;
+	requires 1 <= index+1 <= |oldSeq|;
+	requires [newHd] + newSeq == ([oldHd] + oldSeq)[0..index+1] + [d] + ([oldHd] + oldSeq)[index+2..];
+	reads oldHd, newHd, oldSeq, newSeq;
+	ensures newSeq == oldSeq[0..index] + [d] + oldSeq[index+1..];
+{true}
+
+method update( index:int, d:Data)
+requires 0 <= index < |contents|;
+requires valid();
+modifies footprint;
+ensures valid();
+ensures contents == old(contents[0..index]) + [d] + old(contents[index+1..]);
+ensures footprint == old(footprint);
+{
+head.update(index+1, d);
+
+assert dataSeqLemma(old(head.data), head.data, old(head.tailContents), head.tailContents, index, d);
+
+contents := head.tailContents;
+
+assert head.ValidLemma() && head.ndValid2ListValidLemma();
+}
+
+}
+
+
