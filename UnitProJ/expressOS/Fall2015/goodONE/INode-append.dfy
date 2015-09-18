@@ -75,7 +75,8 @@ ensures fresh(footprint - {this});
     spine := [this];
 }
 
-/*
+
+
 method append(d:Data)
 requires Valid();
 
@@ -114,7 +115,7 @@ tmpNd.next := node;
 updateSeq(spine, d, node);
 
 }
-*/
+
 
 
 
@@ -298,11 +299,16 @@ mySeq[index].spine := [mySeq[index]] + newNd.spine;
 
 ghost method updateSeq(mySeq:seq<INode>, d:Data, newNd:INode)
 requires mySeq != [];
-requires listCond(mySeq);
+requires listInv(mySeq);
 
 requires newNd !in mySeq;
-requires newNd != null && newNd.Valid() && newNd.data == d;
-requires newNd.footprint !! (set nd | nd in mySeq);
+
+requires forall i :: 0 <= i < |mySeq|-1 ==>
+	   mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
+	&& mySeq[i].tailContents == [mySeq[i+1].data] + mySeq[i+1].tailContents;
+
+
+requires newNd != null && newNd.Valid();
 requires newNd.next == null;	
 
 requires mySeq[|mySeq|-1].next == newNd;
@@ -333,20 +339,16 @@ ghost var index := |mySeq|-1;
 while(index >= 0)
 invariant -1 <= index <= |mySeq|-1;
 
-invariant newNd !in mySeq;
-invariant newNd != null && newNd.Valid() && newNd.data == d;
-invariant newNd.footprint !! (set nd | nd in mySeq);
-
+invariant newNd != null && newNd.Valid();
+invariant newNd.next == null;	
 
 invariant mySeq[|mySeq|-1].next == newNd;
-
 
 invariant index == |mySeq|-1 ==> (mySeq[|mySeq|-1].footprint + {newNd} == 
 	{mySeq[|mySeq|-1]} + newNd.footprint
 
 && mySeq[|mySeq|-1].tailContents + [d] == 
 	[newNd.data] + newNd.tailContents);
-
 
 invariant forall nd :: nd in mySeq ==> nd.data == old(nd.data);
 
