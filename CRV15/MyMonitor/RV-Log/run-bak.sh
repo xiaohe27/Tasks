@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 # The below incantation sets SRC_ROOT to be the canonicalized directory of this script
 SRC_ROOT=$(
 cd -P -- "$(dirname -- "$0")" &&
@@ -56,16 +55,4 @@ $SRC_ROOT/rv-monitor -d CustomizedLogReader/rvm/ --indexByVal $TimeProp $@ $Spec
 javac CustomizedLogReader/rvm/*.java  # 2>/dev/null
 cd CustomizedLogReader/
 
-
-
-Start=$(date +"%s")
-echo "Start time : $Start" > time.txt
-
-
 java -d64 -Xms512m -Xmx4g rvm.LogReader $TraceFile
-
-
-End=$(date +"%s")
-echo "Finish time : $End" >> time.txt
-Diff=$(( $End - $Start ))
-echo "\nIt took my app $Diff seconds to analyze insert2 property in the 9M log ldcc4Monpoly" >> time.txt

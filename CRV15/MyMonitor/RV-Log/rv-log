@@ -8,4 +8,4 @@ SRC_ROOT=`dirname "$SRC_ROOT"`
 
 LIB="$SRC_ROOT/lib"
 
-java -cp "$LIB/*:$CLASSPATH" -ea fsl.uiuc.Main $1 $2
+java -cp "$LIB/*:$CLASSPATH" -ea fsl.uiuc.Main $@
