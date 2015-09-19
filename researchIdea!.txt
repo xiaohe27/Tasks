@@ -1,0 +1,16 @@
+1. split the huge log into n pieces, where n is the number of nodes
+
+2. each node knows the property to be checked and each node checks 
+its piece of log independently. report some violations if found.
+
+3. each node generate a report of its log section (may include the 
+statistics of each events, the time range etc.)
+
+4. according to the property, each node transmit the events (in compressed form)
+that other nodes may need to other nodes.
+
+The routing algo is another topic.
+In bus structure, it can be transferred to left/right
+
+5. each node receive some info from all the necessary other nodes, 
+and do the checking again.
