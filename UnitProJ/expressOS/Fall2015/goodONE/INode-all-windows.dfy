@@ -307,8 +307,8 @@ method setNext(curNd:INode, d:Data, fstNd:INode, i:int)
 	requires data == d;
 
 	requires fstNd != null && fstNd.Valid() && 0 < i <= |fstNd.spine| &&
-		listCond(fstNd.spine[0..i]);
-	requires this !in fstNd.spine[0..i] && footprint !! (set nd | nd in fstNd.spine[0..i]); 
+		validSeqCond(fstNd.spine);
+	requires this !in fstNd.spine && footprint !! (set nd | nd in fstNd.spine); 
   requires curNd == fstNd.spine[i-1];
 
 	requires fstNd !in footprint;
@@ -919,7 +919,7 @@ dataSeqCmp([data] + tailContents, old([data]+tailContents), pos, d);
 
 }
 
-/*
+
 //The INodes class: a list
 class INodes {
   var head: INode;
@@ -1145,4 +1145,4 @@ ensures spine == old(spine) - {delNd};
 }
 */
 }
-*/
+
