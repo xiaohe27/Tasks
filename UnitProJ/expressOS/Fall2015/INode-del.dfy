@@ -114,14 +114,11 @@ curNd := curNd.next;
 curIndex := curIndex + 1;
 }
 
-assert validSeqLemma(spine) && validSeqLemma2(spine);
-
 delNd := curNd.next;
 
-delNext(curNd, delNd);
+delNext(curNd, delNd, this, pos);
 
-//assert curNd.Valid();
-//assert curNd.spine == old([spine[pos-1]]) + old(spine[pos+1..]);
+//assert listCond(spine[0..pos-1]);
 /*
 if (1 < pos <= |tailContents|) {
 updateSeq4Del(newSpine, delNd, pos);
@@ -161,17 +158,31 @@ spine == [this] + next.spine
 
 ////////////////////////////////////////////////////////
 
-method delNext(curNd: INode, delNd:INode)
+method delNext(curNd: INode, delNd:INode, fstNd:INode, pos:int)
   requires curNd != null && curNd.Valid();
   requires curNd.next == delNd && delNd != null && delNd.Valid();
+	requires fstNd != null && fstNd.Valid();
+  requires 0 < pos < |fstNd.spine| && fstNd.spine[pos-1] == curNd;
+  requires validSeqCond(fstNd.spine);
 
+	
 	modifies curNd;
 	ensures curNd.Valid();
 	ensures curNd.data == old(curNd.data) && curNd.next == delNd.next;
 	ensures curNd.footprint == old(curNd.footprint) - {delNd};
 	ensures curNd.tailContents == old(curNd.tailContents[1..]);
 	ensures curNd.spine == old([curNd.spine[0]] + curNd.spine[2..]);
+
+	ensures forall i :: 0 <= i < pos-1 ==> fstNd.spine[i].data == old(fstNd.spine[i].data) &&
+		fstNd.spine[i].next == old(fstNd.spine[i].next) &&
+		fstNd.spine[i].tailContents == old(fstNd.spine[i].tailContents) &&
+		fstNd.spine[i].footprint == old(fstNd.spine[i].footprint) &&
+		fstNd.spine[i].spine == old(fstNd.spine[i].spine);
+
+	ensures listCond(fstNd.spine[0..pos-1]);
 {
+	assert validSeqLemma(fstNd.spine);
+	
 	curNd.next := curNd.next.next;
 
 if (curNd.next == null)
