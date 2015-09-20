@@ -118,6 +118,26 @@ delNd := curNd.next;
 
 delNext(curNd, delNd, this, pos);
 
+
+/*
+while(curIndex >= 0)
+	invariant -1 <= curIndex < pos;
+//	invariant listInv(newSpine);
+
+	invariant forall i :: 0 <= i <= curIndex ==> newSpine[i].tailContents == old(newSpine[i].tailContents) &&
+		newSpine[i].footprint == old(newSpine[i].footprint) && newSpine[i].spine == old(newSpine[i].spine);
+//	invariant newSpine[curIndex+1].Valid();
+{
+newSpine[curIndex].tailContents := if newSpine[curIndex].next == null then [] else [newSpine[curIndex].next.data] + newSpine[curIndex].next.tailContents;
+newSpine[curIndex].footprint := if newSpine[curIndex].next == null then {newSpine[curIndex]} else {newSpine[curIndex]} + newSpine[curIndex].next.footprint;
+newSpine[curIndex].spine := if newSpine[curIndex].next == null then [newSpine[curIndex]] else [newSpine[curIndex]] + newSpine[curIndex].next.spine;
+
+curIndex := curIndex - 1;
+}
+*/
+//////////////////////////
+/////////////////////////
+
 //assert listCond(spine[0..pos-1]);
 /*
 if (1 < pos <= |tailContents|) {
@@ -179,7 +199,8 @@ method delNext(curNd: INode, delNd:INode, fstNd:INode, pos:int)
 		fstNd.spine[i].footprint == old(fstNd.spine[i].footprint) &&
 		fstNd.spine[i].spine == old(fstNd.spine[i].spine);
 
-	ensures listCond(fstNd.spine[0..pos-1]);
+		ensures listCond(fstNd.spine[0..pos-1]);
+		ensures listInv(fstNd.spine[0..pos]);
 {
 	assert validSeqLemma(fstNd.spine);
 	
