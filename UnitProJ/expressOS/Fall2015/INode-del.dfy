@@ -148,15 +148,6 @@ updateSeq4Del(newSpine, delNd, pos);
 }
 
 ////////////////////////////////////////
-predicate listInvFrom2Seq(seq1:seq<INode>, seq2:seq<INode>)
-	requires listInv(seq1) && listCond(seq2);
-requires seq1 != [];
-requires seq2 != [] ==> (seq1[|seq1| - 1].next == seq2[0]);
-requires seq2 != [] ==> ((set nd | nd in seq1) !! seq2[0].footprint);
-reads seq1, seq2, (set nd | nd in seq2);
-ensures listInv(seq1 + seq2);
-{listCondFpLemma(seq2)}
-
 
 predicate spineFtprintLemma()
 requires Valid();
@@ -199,10 +190,9 @@ method delNext(curNd: INode, delNd:INode, fstNd:INode, pos:int)
 		fstNd.spine[i].footprint == old(fstNd.spine[i].footprint) &&
 		fstNd.spine[i].spine == old(fstNd.spine[i].spine);
 
-		ensures listCond(fstNd.spine[0..pos-1]);
 		ensures listInv(fstNd.spine[0..pos]);
 {
-	assert validSeqLemma(fstNd.spine);
+//	assert validSeqLemma(fstNd.spine);
 	
 	curNd.next := curNd.next.next;
 
@@ -243,7 +233,7 @@ reads mySeq, (set nd | nd in mySeq);
 {
 null !in mySeq && (forall nd :: nd in mySeq ==> nd in nd.footprint) &&
 (forall i :: 0 <= i < |mySeq|-1 ==> mySeq[i].next == mySeq[i+1])
-&& (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint)
+&& (forall i, j :: 0 <= i < j < |mySeq| ==> (set nd | nd in mySeq[0..i+1]) !! mySeq[j].footprint)
 }
 
 predicate listCond(mySeq: seq<INode>)
@@ -277,11 +267,13 @@ listCond(mySeq)
 && mySeq[|mySeq|-1].spine == [mySeq[|mySeq|-1]])
 }
 
+/*
 predicate validSeqLemma(mySeq: seq<INode>)
 	requires validSeqCond(mySeq);
 	reads mySeq, (set nd | nd in mySeq);
 	ensures forall i :: 0 <= i < |mySeq| ==> listCond(mySeq[0..i]) && validSeqCond(mySeq[i..]);
 {true}
+*/
 
 predicate validSeqLemma2(mySeq: seq<INode>)
 	requires validSeqCond(mySeq);
