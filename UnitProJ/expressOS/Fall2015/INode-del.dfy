@@ -114,23 +114,14 @@ curNd := curNd.next;
 curIndex := curIndex + 1;
 }
 
-assert validSeqLemma(spine);
-
+assert validSeqLemma(spine) && validSeqLemma2(spine);
 
 delNd := curNd.next;
 
-curNd.next := curNd.next.next;
+delNext(curNd, delNd);
 
-ghost var newSpine := spine[0..pos] + spine[pos+1..];
-
-assert listCond(spine[pos+1..]);
-//assert spine[pos+1..] != [] ==> ((set nd | nd in spine[0..pos]) !! spine[pos+1..][0].footprint);
-
-//assert listInvFrom2Seq(spine[0..pos], spine[pos+1..]);
-//assert listInv(newSpine);
-
-mkNdValid(curNd);
-
+//assert curNd.Valid();
+//assert curNd.spine == old([spine[pos-1]]) + old(spine[pos+1..]);
 /*
 if (1 < pos <= |tailContents|) {
 updateSeq4Del(newSpine, delNd, pos);
@@ -169,14 +160,20 @@ spine == [this] + next.spine
 
 
 ////////////////////////////////////////////////////////
-method mkNdValid(curNd: INode)
-  requires curNd != null;
-	requires curNd.next != null ==>  curNd.next.Valid() && curNd !in curNd.next.footprint;
+
+method delNext(curNd: INode, delNd:INode)
+  requires curNd != null && curNd.Valid();
+  requires curNd.next == delNd && delNd != null && delNd.Valid();
 
 	modifies curNd;
 	ensures curNd.Valid();
-	ensures curNd.data == old(curNd.data) && curNd.next == old(curNd.next);
+	ensures curNd.data == old(curNd.data) && curNd.next == delNd.next;
+	ensures curNd.footprint == old(curNd.footprint) - {delNd};
+	ensures curNd.tailContents == old(curNd.tailContents[1..]);
+	ensures curNd.spine == old([curNd.spine[0]] + curNd.spine[2..]);
 {
+	curNd.next := curNd.next.next;
+
 if (curNd.next == null)
 {
 	curNd.tailContents := [];
@@ -254,10 +251,20 @@ predicate validSeqLemma(mySeq: seq<INode>)
 	ensures forall i :: 0 <= i < |mySeq| ==> listCond(mySeq[0..i]) && validSeqCond(mySeq[i..]);
 {true}
 
+predicate validSeqLemma2(mySeq: seq<INode>)
+	requires validSeqCond(mySeq);
+	reads mySeq, (set nd | nd in mySeq);
+	ensures validSeqLemma2(mySeq);
+	ensures forall i :: 0 <= i < |mySeq| ==> mySeq[i].spine == mySeq[i..];
+{if |mySeq| <= 1 then true
+	else mySeq[0].spine == [mySeq[0]] + mySeq[1].spine
+		&& validSeqLemma2(mySeq[1..])
+}
+
 
 //===============================================
 /*
-ghost method updateSeq4Del(newSpine: seq<INode>, rmNd:INode, pos: int)
+ghost method updateSeq4Del(newSpine: seq<INode>, rmNd:INode, pos: int, newNd:INode)
 //	requires listInv(newSpine);
 	requires 1 < pos <= |tailContents|;
 
