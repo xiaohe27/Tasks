@@ -114,36 +114,31 @@ curNd := curNd.next;
 curIndex := curIndex + 1;
 }
 
+assert validSeqLemma(spine) && validSeqLemma2(spine);
+
 delNd := curNd.next;
 
 delNext(curNd, delNd, this, pos);
 
+ghost var newSpine := spine[0..pos];
 
-/*
-while(curIndex >= 0)
-	invariant -1 <= curIndex < pos;
-//	invariant listInv(newSpine);
+while(curIndex >= 1)
+	invariant 0 <= curIndex < pos;
+	invariant listInv(newSpine);
 
-	invariant forall i :: 0 <= i <= curIndex ==> newSpine[i].tailContents == old(newSpine[i].tailContents) &&
+	invariant forall i :: 0 <= i < curIndex ==> newSpine[i].tailContents == old(newSpine[i].tailContents) &&
 		newSpine[i].footprint == old(newSpine[i].footprint) && newSpine[i].spine == old(newSpine[i].spine);
-//	invariant newSpine[curIndex+1].Valid();
+	invariant newSpine[curIndex].Valid();
 {
-newSpine[curIndex].tailContents := if newSpine[curIndex].next == null then [] else [newSpine[curIndex].next.data] + newSpine[curIndex].next.tailContents;
-newSpine[curIndex].footprint := if newSpine[curIndex].next == null then {newSpine[curIndex]} else {newSpine[curIndex]} + newSpine[curIndex].next.footprint;
-newSpine[curIndex].spine := if newSpine[curIndex].next == null then [newSpine[curIndex]] else [newSpine[curIndex]] + newSpine[curIndex].next.spine;
+newSpine[curIndex-1].tailContents :=  [newSpine[curIndex].data] + newSpine[curIndex].tailContents;
+newSpine[curIndex-1].footprint :=  {newSpine[curIndex-1]} + newSpine[curIndex].footprint;
+newSpine[curIndex-1].spine :=  [newSpine[curIndex-1]] + newSpine[curIndex].spine;
 
 curIndex := curIndex - 1;
 }
-*/
+
 //////////////////////////
 /////////////////////////
-
-//assert listCond(spine[0..pos-1]);
-/*
-if (1 < pos <= |tailContents|) {
-updateSeq4Del(newSpine, delNd, pos);
-}
-*/
 
 }
 
@@ -192,7 +187,6 @@ method delNext(curNd: INode, delNd:INode, fstNd:INode, pos:int)
 
 		ensures listInv(fstNd.spine[0..pos]);
 {
-//	assert validSeqLemma(fstNd.spine);
 	
 	curNd.next := curNd.next.next;
 
@@ -270,7 +264,7 @@ reads mySeq, (set nd | nd in mySeq);
 {
 null !in mySeq && (forall nd :: nd in mySeq ==> nd in nd.footprint) &&
 (forall i :: 0 <= i < |mySeq|-1 ==> mySeq[i].next == mySeq[i+1])
-&& (forall i, j :: 0 <= i < j < |mySeq| ==> (set nd | nd in mySeq[0..i+1]) !! mySeq[j].footprint)
+&& (forall i, j :: 0 <= i < j < |mySeq| ==> mySeq[i] !in mySeq[j].footprint)
 }
 
 predicate listCond(mySeq: seq<INode>)
@@ -322,12 +316,3 @@ predicate validSeqLemma2(mySeq: seq<INode>)
 		&& validSeqLemma2(mySeq[1..])
 }
 
-predicate validSeqLemma3(mySeq: seq<INode>)
-	requires validSeqCond(mySeq);
-	reads mySeq, (set nd | nd in mySeq);
-	ensures validSeqLemma3(mySeq);
-	ensures listInv(mySeq);
-{if |mySeq| <= 1 then true
-	else mySeq[0].spine == [mySeq[0]] + mySeq[1].spine
-		&& validSeqLemma3(mySeq[1..])
-}
