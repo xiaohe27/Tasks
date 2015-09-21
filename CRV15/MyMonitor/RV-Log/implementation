@@ -1,0 +1,9 @@
+*Use stack to maintain the monitors 
+
+*keep an alarm in each local monitor.
+
+*periodically (e.g. every 100 events) remind the top monitor in the stack to check its alarm (the one whose alarm will ring at first)
+
+*if the required event did happen in time, then remove the top item, owise report violation and terminates.
+
+*If at the end of the log the stack of monitor is not empty, then check its top monitor with the latest time.
