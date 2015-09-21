@@ -163,7 +163,200 @@ updateSeqAppend(spine, d, newNd);
 
 }
 
+method insertAt(d:Data, i:int) returns (newNd: INode) 
+requires 0 < i <= |tailContents|;
+requires Valid();
+modifies footprint;
 
+
+ensures Valid();
+ensures this.data == old(this.data);
+ensures tailContents == old(tailContents[0..i-1]) + [d] + old(tailContents[i-1..]);
+ensures footprint == old(footprint) + {newNd};
+ensures fresh(newNd);
+{
+newNd := new INode.init(d);
+
+var curNd := this;
+var curIndex := 0;
+
+assert ValidLemma();
+assert ndValid2ListValidLemma();
+
+listCondLemma(spine);
+
+while (curIndex < i-1)
+invariant 0 <= curIndex < i;
+invariant curNd != null && curNd.Valid();
+invariant validSeqCond(spine);
+invariant |curNd.tailContents| + curIndex == |tailContents|;
+invariant curNd.next != null;
+invariant curNd == spine[curIndex];
+{
+curNd := curNd.next;
+curIndex := curIndex + 1;
+}
+
+newNd.setNext(curNd, d, this, i);
+
+updateSeq(spine[0..i], d, newNd);
+}
+
+
+///////////////////////////////////
+
+method update(d:Data, pos:int)
+requires 0 <= pos <= |tailContents|;
+requires Valid();
+modifies footprint;
+
+ensures Valid();
+
+ensures ([data] + tailContents) == old(([data] + tailContents)[0..pos]) + [d] +
+	                                                          old(([data] + tailContents)[pos+1..]);
+
+ensures footprint == old(footprint);
+
+{
+	
+	var index := 0;
+	var curNd := this;
+
+assert ndValid2ListValidLemma();
+assert ValidLemma();
+
+ghost var oldContents := ndSeq2DataSeq(spine);
+
+assert spineTCLemma();
+
+while(index < pos)
+invariant 0 <= index <= pos;
+invariant curNd != null && curNd.Valid();
+invariant |curNd.spine| + index == |spine|;
+invariant curNd == spine[index];
+invariant Valid();
+invariant validSeqCond(spine);
+
+invariant  oldContents == old([data] + tailContents);
+{	
+index := index + 1;	
+curNd := curNd.next;
+}
+
+//update curNd's data
+	curNd.data := d;
+
+
+ghost var updatedSpineDataList := ndSeq2DataSeq(spine);
+
+updateSeq4UpdateOp(spine, d, pos, updatedSpineDataList);
+
+assert spineTCLemma();
+
+dataSeqCmp([data] + tailContents, old([data]+tailContents), pos, d);
+}
+
+predicate ndValid2ListValidLemma()
+requires Valid();
+reads this, footprint;
+
+ensures ndValid2ListValidLemma();
+ensures forall nd :: nd in spine ==> nd in footprint;
+ensures forall nd :: nd in footprint ==> nd != null && nd.footprint <= footprint;
+
+ensures validSeqCond(spine);
+{
+if next == null then (spine == [this] && footprint == {this}
+					&& tailContents == [])
+else (
+this !in next.footprint &&
+spine == [this] + next.spine 
+&& footprint == {this} + next.footprint
+&& tailContents == [next.data] + next.tailContents
+&& next.ndValid2ListValidLemma())
+}
+
+
+predicate spineFtprintLemma()
+requires Valid();
+reads this, footprint;
+
+ensures spineFtprintLemma();
+ensures forall nd :: nd in spine ==> nd in footprint;
+
+ensures (set nd | nd in spine) == footprint;
+{
+if next == null then (spine == [this] && footprint == {this})
+else (
+spine == [this] + next.spine 
+&& footprint == {this} + next.footprint
+&& next.spineFtprintLemma())
+}
+
+
+predicate spineTCLemma()
+	requires Valid();
+	reads this, footprint;
+	ensures spineTCLemma();
+	ensures |spine| == |tailContents| + 1;
+	ensures null !in spine;
+     ensures spine[0].data == this.data &&
+		forall i :: 0 < i < |spine| ==> spine[i].data == this.tailContents[i-1];
+{
+	if next == null then true
+	else spine == [this] + next.spine && tailContents == [next.data] + next.tailContents
+		&& next.spineTCLemma()
+}
+
+method setNext(curNd:INode, d:Data, fstNd:INode, i:int)
+	requires Valid();
+
+  requires curNd != null && curNd.Valid();
+	requires curNd.next != null;
+	requires this !in curNd.footprint;
+	requires data == d;
+
+	requires fstNd != null && fstNd.Valid() && 0 < i <= |fstNd.spine| &&
+		listCond(fstNd.spine[0..i]);
+	requires this !in fstNd.spine[0..i] && footprint !! (set nd | nd in fstNd.spine[0..i]); 
+  requires curNd == fstNd.spine[i-1];
+
+	requires fstNd !in footprint;
+	
+	modifies this, curNd;
+	ensures Valid();
+	
+	ensures fstNd != null &&
+      fstNd.spine == old(fstNd.spine)
+		&& 0 < i <= |fstNd.spine| &&
+		(forall nd :: nd in fstNd.spine[0..i] ==> (nd != null && nd.footprint == old(nd.footprint)
+		&& nd.tailContents == old(nd.tailContents)
+		)) &&
+		listCond(fstNd.spine[0..i]);
+	ensures this !in fstNd.spine[0..i] && footprint !! (set nd | nd in fstNd.spine[0..i]); 
+	
+	  ensures curNd == fstNd.spine[i-1];
+
+		ensures curNd.next == this;
+		ensures data == d;
+		ensures fstNd.data == old(fstNd.data);
+
+	ensures curNd.footprint + {this} == {curNd} + this.footprint;
+	ensures [d] + curNd.tailContents == [data] + tailContents;
+
+{
+next := curNd.next;
+tailContents := [next.data] + next.tailContents;
+footprint := {this} + next.footprint;
+spine := [this] + next.spine;
+
+curNd.next := this;
+}
+
+
+}
+
+//////////module
 
 ghost method updateCurIndex(mySeq:seq<INode>, index:int,
 			d:Data, newNd:INode)
@@ -339,90 +532,9 @@ index := index - 1;
 }
 
 
-method insertAt(d:Data, i:int) returns (newNd: INode) 
-requires 0 < i <= |tailContents|;
-requires Valid();
-modifies footprint;
 
 
-ensures Valid();
-ensures this.data == old(this.data);
-ensures tailContents == old(tailContents[0..i-1]) + [d] + old(tailContents[i-1..]);
-ensures footprint == old(footprint) + {newNd};
-ensures fresh(newNd);
-{
-newNd := new INode.init(d);
 
-var curNd := this;
-var curIndex := 0;
-
-assert ValidLemma();
-assert ndValid2ListValidLemma();
-
-listCondLemma(spine);
-
-while (curIndex < i-1)
-invariant 0 <= curIndex < i;
-invariant curNd != null && curNd.Valid();
-invariant validSeqCond(spine);
-invariant |curNd.tailContents| + curIndex == |tailContents|;
-invariant curNd.next != null;
-invariant curNd == spine[curIndex];
-{
-curNd := curNd.next;
-curIndex := curIndex + 1;
-}
-
-newNd.setNext(curNd, d, this, i);
-
-updateSeq(spine[0..i], d, newNd);
-}
-
-
-method setNext(curNd:INode, d:Data, fstNd:INode, i:int)
-	requires Valid();
-
-  requires curNd != null && curNd.Valid();
-	requires curNd.next != null;
-	requires this !in curNd.footprint;
-	requires data == d;
-
-	requires fstNd != null && fstNd.Valid() && 0 < i <= |fstNd.spine| &&
-		listCond(fstNd.spine[0..i]);
-	requires this !in fstNd.spine[0..i] && footprint !! (set nd | nd in fstNd.spine[0..i]); 
-  requires curNd == fstNd.spine[i-1];
-
-	requires fstNd !in footprint;
-	
-	modifies this, curNd;
-	ensures Valid();
-	
-	ensures fstNd != null &&
-      fstNd.spine == old(fstNd.spine)
-		&& 0 < i <= |fstNd.spine| &&
-		(forall nd :: nd in fstNd.spine[0..i] ==> (nd != null && nd.footprint == old(nd.footprint)
-		&& nd.tailContents == old(nd.tailContents)
-		)) &&
-		listCond(fstNd.spine[0..i]);
-	ensures this !in fstNd.spine[0..i] && footprint !! (set nd | nd in fstNd.spine[0..i]); 
-	
-	  ensures curNd == fstNd.spine[i-1];
-
-		ensures curNd.next == this;
-		ensures data == d;
-		ensures fstNd.data == old(fstNd.data);
-
-	ensures curNd.footprint + {this} == {curNd} + this.footprint;
-	ensures [d] + curNd.tailContents == [data] + tailContents;
-
-{
-next := curNd.next;
-tailContents := [next.data] + next.tailContents;
-footprint := {this} + next.footprint;
-spine := [this] + next.spine;
-
-curNd.next := this;
-}
 
 
 function ndSeq2DataSeq(mySeq:seq<INode>) : seq<Data>
@@ -436,110 +548,6 @@ if mySeq == [] then []
 else [mySeq[0].data] + ndSeq2DataSeq(mySeq[1..])
 }
 
-///////////////////////////////////
-
-method update(d:Data, pos:int)
-requires 0 <= pos <= |tailContents|;
-requires Valid();
-modifies footprint;
-
-ensures Valid();
-
-ensures ([data] + tailContents) == old(([data] + tailContents)[0..pos]) + [d] +
-	                                                          old(([data] + tailContents)[pos+1..]);
-
-ensures footprint == old(footprint);
-
-{
-	
-	var index := 0;
-	var curNd := this;
-
-assert ndValid2ListValidLemma();
-assert ValidLemma();
-
-ghost var oldContents := ndSeq2DataSeq(spine);
-
-assert spineTCLemma();
-
-while(index < pos)
-invariant 0 <= index <= pos;
-invariant curNd != null && curNd.Valid();
-invariant |curNd.spine| + index == |spine|;
-invariant curNd == spine[index];
-invariant Valid();
-invariant validSeqCond(spine);
-
-invariant  oldContents == old([data] + tailContents);
-{	
-index := index + 1;	
-curNd := curNd.next;
-}
-
-//update curNd's data
-	curNd.data := d;
-
-
-ghost var updatedSpineDataList := ndSeq2DataSeq(spine);
-
-updateSeq4UpdateOp(spine, d, pos, updatedSpineDataList);
-
-assert spineTCLemma();
-
-dataSeqCmp([data] + tailContents, old([data]+tailContents), pos, d);
-}
-
-predicate ndValid2ListValidLemma()
-requires Valid();
-reads this, footprint;
-
-ensures ndValid2ListValidLemma();
-ensures forall nd :: nd in spine ==> nd in footprint;
-ensures forall nd :: nd in footprint ==> nd != null && nd.footprint <= footprint;
-
-ensures validSeqCond(spine);
-{
-if next == null then (spine == [this] && footprint == {this}
-					&& tailContents == [])
-else (
-this !in next.footprint &&
-spine == [this] + next.spine 
-&& footprint == {this} + next.footprint
-&& tailContents == [next.data] + next.tailContents
-&& next.ndValid2ListValidLemma())
-}
-
-
-predicate spineFtprintLemma()
-requires Valid();
-reads this, footprint;
-
-ensures spineFtprintLemma();
-ensures forall nd :: nd in spine ==> nd in footprint;
-
-ensures (set nd | nd in spine) == footprint;
-{
-if next == null then (spine == [this] && footprint == {this})
-else (
-spine == [this] + next.spine 
-&& footprint == {this} + next.footprint
-&& next.spineFtprintLemma())
-}
-
-
-predicate spineTCLemma()
-	requires Valid();
-	reads this, footprint;
-	ensures spineTCLemma();
-	ensures |spine| == |tailContents| + 1;
-	ensures null !in spine;
-     ensures spine[0].data == this.data &&
-		forall i :: 0 < i < |spine| ==> spine[i].data == this.tailContents[i-1];
-{
-	if next == null then true
-	else spine == [this] + next.spine && tailContents == [next.data] + next.tailContents
-		&& next.spineTCLemma()
-}
 
 
 lemma dataSeqCmp(newSeq:seq<Data>, oldSeq:seq<Data>, pos:int, d:Data)
@@ -914,7 +922,6 @@ LIAndNegGuard2Post(mySeq, index, d, newNd,
 
 //===============================================
 
-}
 
 //The INodes class: a list
 class INodes {
