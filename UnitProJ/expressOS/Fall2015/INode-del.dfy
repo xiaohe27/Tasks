@@ -321,3 +321,13 @@ predicate validSeqLemma2(mySeq: seq<INode>)
 	else mySeq[0].spine == [mySeq[0]] + mySeq[1].spine
 		&& validSeqLemma2(mySeq[1..])
 }
+
+predicate validSeqLemma3(mySeq: seq<INode>)
+	requires validSeqCond(mySeq);
+	reads mySeq, (set nd | nd in mySeq);
+	ensures validSeqLemma3(mySeq);
+	ensures listInv(mySeq);
+{if |mySeq| <= 1 then true
+	else mySeq[0].spine == [mySeq[0]] + mySeq[1].spine
+		&& validSeqLemma3(mySeq[1..])
+}
