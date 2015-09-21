@@ -114,14 +114,14 @@ curNd := curNd.next;
 curIndex := curIndex + 1;
 }
 
-assert validSeqLemma(spine) && validSeqLemma2(spine);
-
 delNd := curNd.next;
 
 delNext(curNd, delNd, this, pos);
 
 ghost var newSpine := spine[0..pos];
 
+
+/*
 while(curIndex >= 1)
 	invariant 0 <= curIndex < pos;
 	invariant listInv(newSpine);
@@ -136,7 +136,7 @@ newSpine[curIndex-1].spine :=  [newSpine[curIndex-1]] + newSpine[curIndex].spine
 
 curIndex := curIndex - 1;
 }
-
+*/
 //////////////////////////
 /////////////////////////
 
