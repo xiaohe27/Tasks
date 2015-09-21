@@ -1,3 +1,0 @@
-Start time : 1442519533
-Finish time : 1442519534
-\nIt took my app 1 seconds to analyze insert2 property in the 9M log ldcc4Monpoly
