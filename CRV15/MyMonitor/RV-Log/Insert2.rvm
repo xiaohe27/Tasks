@@ -11,16 +11,16 @@ package rvm;
 * is semi-automated and will be tried on the same property, in another (.mop) file. 
 */
 Insert2(String data) {
-    event insert(String user, String db, String data, long time)
+    event insert(String user, String db, String p, String data, long time)
 	{
 		if (db != null && db.equals("db2"))
 		{
-			Prop_1_event_insert2DB2(data, time);
+			Insert2RuntimeMonitor.insert2DB2Event(data, time);
 		} 
 
 		if (db != null && db.equals("db3"))
 		{
-			Prop_1_event_insert2DB3(data, time);
+			Insert2RuntimeMonitor.insert2DB3Event(data, time);
 		} 
 	}
 
