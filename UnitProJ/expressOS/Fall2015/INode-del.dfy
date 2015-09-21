@@ -121,14 +121,17 @@ delNext(curNd, delNd, this, pos);
 ghost var newSpine := spine[0..pos];
 
 
-/*
 while(curIndex >= 1)
 	invariant 0 <= curIndex < pos;
+
+//  invariant forall nd :: nd in newSpine ==> 
 	invariant listInv(newSpine);
 
 	invariant forall i :: 0 <= i < curIndex ==> newSpine[i].tailContents == old(newSpine[i].tailContents) &&
 		newSpine[i].footprint == old(newSpine[i].footprint) && newSpine[i].spine == old(newSpine[i].spine);
 	invariant newSpine[curIndex].Valid();
+
+	modifies newSpine;
 {
 newSpine[curIndex-1].tailContents :=  [newSpine[curIndex].data] + newSpine[curIndex].tailContents;
 newSpine[curIndex-1].footprint :=  {newSpine[curIndex-1]} + newSpine[curIndex].footprint;
@@ -136,7 +139,7 @@ newSpine[curIndex-1].spine :=  [newSpine[curIndex-1]] + newSpine[curIndex].spine
 
 curIndex := curIndex - 1;
 }
-*/
+
 //////////////////////////
 /////////////////////////
 
