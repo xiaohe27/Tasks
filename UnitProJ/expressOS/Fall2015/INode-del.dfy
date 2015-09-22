@@ -130,12 +130,12 @@ while(curIndex >= 0)
 	invariant |newSpine| > 0 ==> newSpine[|newSpine|-1].next == curNd;
 
 	invariant curNd.Valid();
+	invariant curNd.footprint == old(curNd.footprint) - {delNd};
 
 //	invariant newSpine == old(newSpine);
 	invariant listInv(newSpine);
 
 	//new
-	//invariant forall nd :: nd in newSpine ==> nd.next == old(nd.next);
 	invariant forall i :: curIndex < i <= pos-2 ==> newSpine[i].footprint == old(newSpine[i].footprint) - {delNd};
 	//end new
 
@@ -154,8 +154,7 @@ curIndex := curIndex - 1;
 
 //LI && guard  {iter} LI
 
-//	assert listInv(newSpine);
-		
+assert listInv(newSpine);
 break;
 }
 
