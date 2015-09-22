@@ -118,26 +118,45 @@ delNd := curNd.next;
 
 delNext(curNd, delNd, this, pos);
 
-ghost var newSpine := spine[0..pos];
+ghost var newSpine := spine[0..pos-1];
+curIndex := pos - 2;
+
+/////////pre to LI ok
 
 
-while(curIndex >= 1)
-	invariant 0 <= curIndex < pos;
+while(curIndex >= 0)
+	invariant -1 <= curIndex <= pos-2;
 
-//  invariant forall nd :: nd in newSpine ==> 
+	invariant |newSpine| > 0 ==> newSpine[|newSpine|-1].next == curNd;
+
+	invariant curNd.Valid();
+
+//	invariant newSpine == old(newSpine);
 	invariant listInv(newSpine);
 
-	invariant forall i :: 0 <= i < curIndex ==> newSpine[i].tailContents == old(newSpine[i].tailContents) &&
-		newSpine[i].footprint == old(newSpine[i].footprint) && newSpine[i].spine == old(newSpine[i].spine);
-	invariant newSpine[curIndex].Valid();
+	//new
+	//invariant forall nd :: nd in newSpine ==> nd.next == old(nd.next);
+	invariant forall i :: curIndex < i <= pos-2 ==> newSpine[i].footprint == old(newSpine[i].footprint) - {delNd};
+	//end new
 
+	invariant forall i :: 0 <= i <= curIndex ==> newSpine[i].tailContents == old(newSpine[i].tailContents) &&
+		newSpine[i].footprint == old(newSpine[i].footprint) && newSpine[i].spine == old(newSpine[i].spine);
+		
+    invariant curIndex < pos - 2 ==> newSpine[curIndex+1].Valid();
+		
 	modifies newSpine;
 {
-newSpine[curIndex-1].tailContents :=  [newSpine[curIndex].data] + newSpine[curIndex].tailContents;
-newSpine[curIndex-1].footprint :=  {newSpine[curIndex-1]} + newSpine[curIndex].footprint;
-newSpine[curIndex-1].spine :=  [newSpine[curIndex-1]] + newSpine[curIndex].spine;
+newSpine[curIndex].tailContents :=  [newSpine[curIndex].next.data] + newSpine[curIndex].next.tailContents;
+newSpine[curIndex].footprint :=  {newSpine[curIndex]} + newSpine[curIndex].next.footprint;
+newSpine[curIndex].spine :=  [newSpine[curIndex]] + newSpine[curIndex].next.spine;
 
 curIndex := curIndex - 1;
+
+//LI && guard  {iter} LI
+
+//	assert listInv(newSpine);
+		
+break;
 }
 
 //////////////////////////
