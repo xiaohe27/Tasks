@@ -227,11 +227,12 @@ requires nxtNd.data == oldContents[pos-1];
 requires forall i :: 0 <= i <= pos-2 ==> newSpine[i].data == oldContents[i];
 modifies newSpine;
 
-/*
-ensures Valid();
+
+//ensures Valid();
+ensures  [data] + tailContents == oldContents[0..pos] + oldContents[pos+1..];
 //ensures [data] + tailContents == old(([data] + tailContents)[0..pos] + ([data] + tailContents)[pos+1..] );
-ensures footprint == old(footprint) - {delNd};
-*/
+//ensures footprint == old(footprint) - {delNd};
+
 {
 
 ghost var curIndex := pos - 2;
@@ -351,7 +352,7 @@ listCond(mySeq)
 && mySeq[|mySeq|-1].spine == [mySeq[|mySeq|-1]])
 }
 
-
+/*
 predicate validSeqLemma(mySeq: seq<INode>)
 	requires validSeqCond(mySeq);
 	reads mySeq, (set nd | nd in mySeq);
@@ -369,3 +370,4 @@ predicate validSeqLemma2(mySeq: seq<INode>)
 		&& validSeqLemma2(mySeq[1..])
 }
 
+*/
