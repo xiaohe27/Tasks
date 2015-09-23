@@ -81,15 +81,14 @@ spine == [this] + next.spine
 
 
 /////////////////////////////////////////
+/*ok
 method delete(pos:int) returns (delNd:INode)
 requires Valid();
 requires 0 < pos <= |tailContents|;
 
 modifies footprint;
 
-
 ensures Valid();
-//ensures delNd in old(footprint);
 ensures [data] + tailContents == old(([data] + tailContents)[0..pos] + ([data] + tailContents)[pos+1..] );
 ensures footprint == old(footprint) - {delNd};
 
@@ -127,7 +126,7 @@ updateSeq4Del(newSpine, delNd, pos, curNd);
 /////////////////////////
 
 }
-
+*/
 ////////////////////////////////////////
 
 predicate spineFtprintLemma()
@@ -149,7 +148,7 @@ spine == [this] + next.spine
 
 
 ////////////////////////////////////////////////////////
-
+/* ok
 method delNext(curNd: INode, delNd:INode, fstNd:INode, pos:int)
   requires curNd != null && curNd.Valid();
   requires curNd.next == delNd && delNd != null && delNd.Valid();
@@ -189,7 +188,7 @@ else {
 	curNd.spine := [curNd] + curNd.next.spine;
 }
 }
-	
+*/	
 
 
 
@@ -205,13 +204,15 @@ requires nxtNd != null && nxtNd.Valid();
 requires delNd !in nxtNd.footprint;
 requires newSpine[|newSpine|-1].next == nxtNd;
 
-modifies newSpine;
+//new
+requires newSpine[|newSpine|-1].footprint >= nxtNd.footprint;
 
+modifies newSpine;
+/*
 ensures Valid();
-//ensures delNd in old(footprint);
 ensures [data] + tailContents == old(([data] + tailContents)[0..pos] + ([data] + tailContents)[pos+1..] );
 ensures footprint == old(footprint) - {delNd};
-
+*/
 {
 
 ghost var curIndex := pos - 2;
@@ -225,11 +226,12 @@ while(curIndex >= 0)
 
 	invariant nxtNd.Valid();
 
-//	invariant newSpine == old(newSpine);
+	invariant newSpine == old(newSpine);
 	invariant listInv(newSpine);
 
 	//new
 	invariant forall i :: curIndex < i <= pos-2 ==> newSpine[i].footprint == old(newSpine[i].footprint) - {delNd};
+	invariant 0 <= curIndex <= pos-2 ==> newSpine[curIndex].next.footprint == old(newSpine[curIndex].next.footprint - {delNd});
 	//end new
 
 	invariant forall i :: 0 <= i <= curIndex ==> newSpine[i].tailContents == old(newSpine[i].tailContents) &&
