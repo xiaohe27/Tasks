@@ -268,7 +268,7 @@ invariant nxtNd.data == old(nxtNd.data) && nxtNd.tailContents == old(nxtNd.tailC
 
 invariant 0 <= curIndex <= pos-2 ==>  |newSpine[curIndex].tailContents| >= pos - curIndex;
 
-invariant -1 <= curIndex < pos-2 ==> |newSpine[curIndex+1].tailContents| == old(|newSpine[curIndex+1].tailContents|) - 1;
+//invariant -1 <= curIndex < pos-2 ==> |newSpine[curIndex+1].tailContents| == old(|newSpine[curIndex+1].tailContents|) - 1;
 	//new
 invariant -1 <= curIndex < pos - 2 ==>  [newSpine[curIndex+1].data] + newSpine[curIndex+1].tailContents == oldContents[curIndex+1..pos] + oldContents[pos+1..];
 
