@@ -196,7 +196,7 @@ else {
 //===============================================
 
 ghost method updateSeq4Del(newSpine: seq<INode>, delNd:INode, pos: int, nxtNd:INode)
-	requires listInv(newSpine);
+	requires listCond(newSpine);
 	requires 1 < pos <= |tailContents|;
 requires |newSpine| == pos - 1;
 
@@ -213,9 +213,13 @@ requires newSpine[|newSpine|-1].footprint >= nxtNd.footprint;
 requires delNd != null;
 requires newSpine[|newSpine|-1].tailContents == [nxtNd.data] + [delNd.data] + nxtNd.tailContents;
 
-requires newSpine[|newSpine|-1].footprint == {newSpine[|newSpine|-1]} + nxtNd.footprint - {delNd};
-requires  forall i :: 0 <= i < |newSpine|-1 ==> newSpine[i].footprint == {newSpine[i]} + newSpine[i+1].footprint;
+requires |newSpine[|newSpine|-1].tailContents| >= 2;
 
+requires newSpine[|newSpine|-1].footprint == {newSpine[|newSpine|-1]} + nxtNd.footprint - {delNd};
+requires  forall i :: 0 <= i < |newSpine|-1 ==> newSpine[i].footprint == {newSpine[i]} + newSpine[i+1].footprint &&
+	newSpine[i].tailContents == [newSpine[i+1].data] + newSpine[i+1].tailContents;
+
+requires  forall i :: 0 <= i <= pos-2 ==> (|newSpine[i].tailContents|) >= pos - i;
 modifies newSpine;
 
 ensures Valid();
@@ -229,6 +233,7 @@ ghost var curIndex := pos - 2;
 /////////pre to LI ok
 
 while(curIndex >= 0)
+
 	invariant -1 <= curIndex <= pos-2;
 
 	invariant newSpine[|newSpine|-1].next == nxtNd;
@@ -243,10 +248,26 @@ while(curIndex >= 0)
 		newSpine[i].footprint == old(newSpine[i].footprint) && newSpine[i].spine == old(newSpine[i].spine);
 
 		//new
+		
 		invariant this == newSpine[0];
-		invariant forall i :: 0 <= i < curIndex ==> newSpine[i].footprint == {newSpine[i]} + newSpine[i+1].footprint;
+
+		invariant forall i :: 0 <= i < curIndex ==> newSpine[i].footprint == {newSpine[i]} + newSpine[i+1].footprint &&
+			newSpine[i].tailContents == [newSpine[i+1].data] + newSpine[i+1].tailContents;
+			
 		invariant -1 <= curIndex < pos-2 ==> newSpine[curIndex+1].footprint == old(newSpine[curIndex+1].footprint - {delNd});
-	//end new
+
+//		invariant -1 <= curIndex < pos -2 ==> newSpine[curIndex+1].tailContents[]
+//invariant forall nd :: nd in newSpine ==> nd.data == old(nd.data);
+
+invariant 0 <= curIndex <= pos-2 ==>  |newSpine[curIndex].tailContents| >= pos - curIndex;
+
+invariant -1 <= curIndex < pos-2 ==> |newSpine[curIndex+1].tailContents| == old(|newSpine[curIndex+1].tailContents|) - 1;
+
+/*
+		invariant -1 <= curIndex < pos-2 ==> [newSpine[curIndex+1].data] + newSpine[curIndex+1].tailContents == old(([newSpine[curIndex+1].data] + newSpine[curIndex+1].tailContents)[0..pos-curIndex-1] +
+([newSpine[curIndex+1].data]	+	newSpine[curIndex+1].tailContents)[pos-curIndex..]);
+*/	 
+//end new
 		
     invariant curIndex < pos - 2 ==> newSpine[curIndex+1].Valid();
 		
