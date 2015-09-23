@@ -87,12 +87,12 @@ requires 0 < pos <= |tailContents|;
 
 modifies footprint;
 
-/*
+
 ensures Valid();
-ensures delNd in old(footprint);
+//ensures delNd in old(footprint);
 ensures [data] + tailContents == old(([data] + tailContents)[0..pos] + ([data] + tailContents)[pos+1..] );
 ensures footprint == old(footprint) - {delNd};
-*/
+
 {
 var curNd := this;
 var curIndex := 0;
@@ -118,46 +118,11 @@ delNd := curNd.next;
 
 delNext(curNd, delNd, this, pos);
 
+if(1 < pos <= |tailContents|) {
 ghost var newSpine := spine[0..pos-1];
-curIndex := pos - 2;
 
-/////////pre to LI ok
-
-
-while(curIndex >= 0)
-	invariant -1 <= curIndex <= pos-2;
-
-	invariant |newSpine| > 0 ==> newSpine[|newSpine|-1].next == curNd;
-
-	invariant curNd.Valid();
-	invariant curNd.footprint == old(curNd.footprint) - {delNd};
-
-//	invariant newSpine == old(newSpine);
-	invariant listInv(newSpine);
-
-	//new
-	invariant forall i :: curIndex < i <= pos-2 ==> newSpine[i].footprint == old(newSpine[i].footprint) - {delNd};
-	//end new
-
-	invariant forall i :: 0 <= i <= curIndex ==> newSpine[i].tailContents == old(newSpine[i].tailContents) &&
-		newSpine[i].footprint == old(newSpine[i].footprint) && newSpine[i].spine == old(newSpine[i].spine);
-		
-    invariant curIndex < pos - 2 ==> newSpine[curIndex+1].Valid();
-		
-	modifies newSpine;
-{
-newSpine[curIndex].tailContents :=  [newSpine[curIndex].next.data] + newSpine[curIndex].next.tailContents;
-newSpine[curIndex].footprint :=  {newSpine[curIndex]} + newSpine[curIndex].next.footprint;
-newSpine[curIndex].spine :=  [newSpine[curIndex]] + newSpine[curIndex].next.spine;
-
-curIndex := curIndex - 1;
-
-//LI && guard  {iter} LI
-
-assert listInv(newSpine);
-break;
-}
-
+updateSeq4Del(newSpine, delNd, pos, curNd);
+} else {}
 //////////////////////////
 /////////////////////////
 
@@ -230,36 +195,65 @@ else {
 
 
 //===============================================
-/*
-ghost method updateSeq4Del(newSpine: seq<INode>, rmNd:INode, pos: int, newNd:INode)
-//	requires listInv(newSpine);
+
+ghost method updateSeq4Del(newSpine: seq<INode>, delNd:INode, pos: int, nxtNd:INode)
+	requires listInv(newSpine);
 	requires 1 < pos <= |tailContents|;
+requires |newSpine| == pos - 1;
+
+requires nxtNd != null && nxtNd.Valid();
+requires delNd !in nxtNd.footprint;
+requires newSpine[|newSpine|-1].next == nxtNd;
+
+modifies newSpine;
 
 ensures Valid();
-ensures rmNd in old(footprint);
+//ensures delNd in old(footprint);
 ensures [data] + tailContents == old(([data] + tailContents)[0..pos] + ([data] + tailContents)[pos+1..] );
-ensures footprint == old(footprint) - {rmNd};
+ensures footprint == old(footprint) - {delNd};
 
 {
-/*
+
+ghost var curIndex := pos - 2;
+
+/////////pre to LI ok
+
 while(curIndex >= 0)
-	invariant -1 <= curIndex < pos;
-//	invariant listInv(newSpine);
+	invariant -1 <= curIndex <= pos-2;
+
+	invariant newSpine[|newSpine|-1].next == nxtNd;
+
+	invariant nxtNd.Valid();
+
+//	invariant newSpine == old(newSpine);
+	invariant listInv(newSpine);
+
+	//new
+	invariant forall i :: curIndex < i <= pos-2 ==> newSpine[i].footprint == old(newSpine[i].footprint) - {delNd};
+	//end new
 
 	invariant forall i :: 0 <= i <= curIndex ==> newSpine[i].tailContents == old(newSpine[i].tailContents) &&
 		newSpine[i].footprint == old(newSpine[i].footprint) && newSpine[i].spine == old(newSpine[i].spine);
-//	invariant newSpine[curIndex+1].Valid();
+		
+    invariant curIndex < pos - 2 ==> newSpine[curIndex+1].Valid();
+		
+	modifies newSpine;
 {
-newSpine[curIndex].tailContents := if newSpine[curIndex].next == null then [] else [newSpine[curIndex].next.data] + newSpine[curIndex].next.tailContents;
-newSpine[curIndex].footprint := if newSpine[curIndex].next == null then {newSpine[curIndex]} else {newSpine[curIndex]} + newSpine[curIndex].next.footprint;
-newSpine[curIndex].spine := if newSpine[curIndex].next == null then [newSpine[curIndex]] else [newSpine[curIndex]] + newSpine[curIndex].next.spine;
+newSpine[curIndex].tailContents :=  [newSpine[curIndex].next.data] + newSpine[curIndex].next.tailContents;
+newSpine[curIndex].footprint :=  {newSpine[curIndex]} + newSpine[curIndex].next.footprint;
+newSpine[curIndex].spine :=  [newSpine[curIndex]] + newSpine[curIndex].next.spine;
 
 curIndex := curIndex - 1;
-}
-*/
+
+//LI && guard  {iter} LI
+
+assert listInv(newSpine);
+break;
 }
 
-*/
+}
+
+
 
 }
 
