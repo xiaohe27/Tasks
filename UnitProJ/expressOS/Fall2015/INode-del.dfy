@@ -195,7 +195,7 @@ else {
 
 //===============================================
 
-ghost method updateSeq4Del(newSpine: seq<INode>, delNd:INode, pos: int, nxtNd:INode)
+ghost method updateSeq4Del(newSpine: seq<INode>, delNd:INode, pos: int, nxtNd:INode, oldContents:seq<Data>)
 	requires listCond(newSpine);
 	requires 1 < pos <= |tailContents|;
 requires |newSpine| == pos - 1;
@@ -220,12 +220,18 @@ requires  forall i :: 0 <= i < |newSpine|-1 ==> newSpine[i].footprint == {newSpi
 	newSpine[i].tailContents == [newSpine[i+1].data] + newSpine[i+1].tailContents;
 
 requires  forall i :: 0 <= i <= pos-2 ==> (|newSpine[i].tailContents|) >= pos - i;
+
+requires |oldContents| > pos;
+requires nxtNd.tailContents == oldContents[pos+1..];
+requires nxtNd.data == oldContents[pos-1];
+requires forall i :: 0 <= i <= pos-2 ==> newSpine[i].data == oldContents[i];
 modifies newSpine;
 
+/*
 ensures Valid();
 //ensures [data] + tailContents == old(([data] + tailContents)[0..pos] + ([data] + tailContents)[pos+1..] );
 ensures footprint == old(footprint) - {delNd};
-
+*/
 {
 
 ghost var curIndex := pos - 2;
@@ -257,11 +263,14 @@ while(curIndex >= 0)
 		invariant -1 <= curIndex < pos-2 ==> newSpine[curIndex+1].footprint == old(newSpine[curIndex+1].footprint - {delNd});
 
 //		invariant -1 <= curIndex < pos -2 ==> newSpine[curIndex+1].tailContents[]
-//invariant forall nd :: nd in newSpine ==> nd.data == old(nd.data);
+invariant forall nd :: nd in newSpine ==> nd.data == old(nd.data);
+invariant nxtNd.data == old(nxtNd.data) && nxtNd.tailContents == old(nxtNd.tailContents);
 
 invariant 0 <= curIndex <= pos-2 ==>  |newSpine[curIndex].tailContents| >= pos - curIndex;
 
 invariant -1 <= curIndex < pos-2 ==> |newSpine[curIndex+1].tailContents| == old(|newSpine[curIndex+1].tailContents|) - 1;
+	//new
+invariant -1 <= curIndex < pos - 2 ==>  [newSpine[curIndex+1].data] + newSpine[curIndex+1].tailContents == oldContents[curIndex+1..pos] + oldContents[pos+1..];
 
 /*
 		invariant -1 <= curIndex < pos-2 ==> [newSpine[curIndex+1].data] + newSpine[curIndex+1].tailContents == old(([newSpine[curIndex+1].data] + newSpine[curIndex+1].tailContents)[0..pos-curIndex-1] +
@@ -278,7 +287,6 @@ newSpine[curIndex].footprint :=  {newSpine[curIndex]} + newSpine[curIndex].next.
 newSpine[curIndex].spine :=  [newSpine[curIndex]] + newSpine[curIndex].next.spine;
 
 curIndex := curIndex - 1;
-
 }
 
 }
