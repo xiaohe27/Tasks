@@ -193,107 +193,6 @@ else {
 
 
 
-//===============================================
-
-ghost method updateSeq4Del(newSpine: seq<INode>, delNd:INode, pos: int, nxtNd:INode, oldContents:seq<Data>)
-	requires listCond(newSpine);
-	requires 1 < pos <= |tailContents|;
-requires |newSpine| == pos - 1;
-
-requires nxtNd != null && nxtNd.Valid();
-requires newSpine[|newSpine|-1].next == nxtNd;
-
-//new
-requires this == newSpine[0];
-
-requires delNd !in nxtNd.footprint && delNd !in newSpine;
-
-requires (set nd | nd in newSpine) !! nxtNd.footprint;
-requires newSpine[|newSpine|-1].footprint >= nxtNd.footprint;
-requires delNd != null;
-requires newSpine[|newSpine|-1].tailContents == [nxtNd.data] + [delNd.data] + nxtNd.tailContents;
-
-requires |newSpine[|newSpine|-1].tailContents| >= 2;
-
-requires newSpine[|newSpine|-1].footprint == {newSpine[|newSpine|-1]} + nxtNd.footprint - {delNd};
-requires  forall i :: 0 <= i < |newSpine|-1 ==> newSpine[i].footprint == {newSpine[i]} + newSpine[i+1].footprint &&
-	newSpine[i].tailContents == [newSpine[i+1].data] + newSpine[i+1].tailContents;
-
-requires  forall i :: 0 <= i <= pos-2 ==> (|newSpine[i].tailContents|) >= pos - i;
-
-requires |oldContents| > pos;
-requires nxtNd.tailContents == oldContents[pos+1..];
-requires nxtNd.data == oldContents[pos-1];
-requires forall i :: 0 <= i <= pos-2 ==> newSpine[i].data == oldContents[i];
-modifies newSpine;
-
-
-//ensures Valid();
-ensures  [data] + tailContents == oldContents[0..pos] + oldContents[pos+1..];
-//ensures [data] + tailContents == old(([data] + tailContents)[0..pos] + ([data] + tailContents)[pos+1..] );
-//ensures footprint == old(footprint) - {delNd};
-
-{
-
-ghost var curIndex := pos - 2;
-
-/////////pre to LI ok
-
-while(curIndex >= 0)
-
-	invariant -1 <= curIndex <= pos-2;
-
-	invariant newSpine[|newSpine|-1].next == nxtNd;
-
-	invariant nxtNd.Valid();
-
-	invariant newSpine == old(newSpine);
-	invariant listInv(newSpine);
-
-
-	invariant forall i :: 0 <= i <= curIndex ==> newSpine[i].tailContents == old(newSpine[i].tailContents) &&
-		newSpine[i].footprint == old(newSpine[i].footprint) && newSpine[i].spine == old(newSpine[i].spine);
-
-		//new
-		
-		invariant this == newSpine[0];
-
-		invariant forall i :: 0 <= i < curIndex ==> newSpine[i].footprint == {newSpine[i]} + newSpine[i+1].footprint &&
-			newSpine[i].tailContents == [newSpine[i+1].data] + newSpine[i+1].tailContents;
-			
-		invariant -1 <= curIndex < pos-2 ==> newSpine[curIndex+1].footprint == old(newSpine[curIndex+1].footprint - {delNd});
-
-//		invariant -1 <= curIndex < pos -2 ==> newSpine[curIndex+1].tailContents[]
-invariant forall nd :: nd in newSpine ==> nd.data == old(nd.data);
-invariant nxtNd.data == old(nxtNd.data) && nxtNd.tailContents == old(nxtNd.tailContents);
-
-invariant 0 <= curIndex <= pos-2 ==>  |newSpine[curIndex].tailContents| >= pos - curIndex;
-
-//invariant -1 <= curIndex < pos-2 ==> |newSpine[curIndex+1].tailContents| == old(|newSpine[curIndex+1].tailContents|) - 1;
-	//new
-invariant -1 <= curIndex < pos - 2 ==>  [newSpine[curIndex+1].data] + newSpine[curIndex+1].tailContents == oldContents[curIndex+1..pos] + oldContents[pos+1..];
-
-/*
-		invariant -1 <= curIndex < pos-2 ==> [newSpine[curIndex+1].data] + newSpine[curIndex+1].tailContents == old(([newSpine[curIndex+1].data] + newSpine[curIndex+1].tailContents)[0..pos-curIndex-1] +
-([newSpine[curIndex+1].data]	+	newSpine[curIndex+1].tailContents)[pos-curIndex..]);
-*/	 
-//end new
-		
-    invariant curIndex < pos - 2 ==> newSpine[curIndex+1].Valid();
-		
-	modifies newSpine;
-{
-newSpine[curIndex].tailContents :=  [newSpine[curIndex].next.data] + newSpine[curIndex].next.tailContents;
-newSpine[curIndex].footprint :=  {newSpine[curIndex]} + newSpine[curIndex].next.footprint;
-newSpine[curIndex].spine :=  [newSpine[curIndex]] + newSpine[curIndex].next.spine;
-
-curIndex := curIndex - 1;
-}
-
-}
-
-
-
 }
 
 function getFtprint(nd:INode): set<INode>
@@ -371,3 +270,105 @@ predicate validSeqLemma2(mySeq: seq<INode>)
 }
 
 */
+
+//===============================================
+
+ghost method updateSeq4Del(newSpine: seq<INode>, delNd:INode, pos: int, nxtNd:INode, oldContents:seq<Data>, thisNd:INode)
+	requires listCond(newSpine);
+	requires 1 < pos < |oldContents|;
+requires |newSpine| == pos - 1;
+
+requires nxtNd != null && nxtNd.Valid();
+requires newSpine[|newSpine|-1].next == nxtNd;
+
+//new
+requires thisNd == newSpine[0];
+
+requires delNd !in nxtNd.footprint && delNd !in newSpine;
+
+requires (set nd | nd in newSpine) !! nxtNd.footprint;
+requires newSpine[|newSpine|-1].footprint >= nxtNd.footprint;
+requires delNd != null;
+requires newSpine[|newSpine|-1].tailContents == [nxtNd.data] + [delNd.data] + nxtNd.tailContents;
+
+requires |newSpine[|newSpine|-1].tailContents| >= 2;
+
+requires newSpine[|newSpine|-1].footprint == {newSpine[|newSpine|-1]} + nxtNd.footprint - {delNd};
+requires  forall i :: 0 <= i < |newSpine|-1 ==> newSpine[i].footprint == {newSpine[i]} + newSpine[i+1].footprint &&
+	newSpine[i].tailContents == [newSpine[i+1].data] + newSpine[i+1].tailContents;
+
+requires  forall i :: 0 <= i <= pos-2 ==> (|newSpine[i].tailContents|) >= pos - i;
+
+requires |oldContents| > pos;
+requires nxtNd.tailContents == oldContents[pos+1..];
+requires nxtNd.data == oldContents[pos-1];
+requires forall i :: 0 <= i <= pos-2 ==> newSpine[i].data == oldContents[i];
+modifies newSpine;
+
+ensures thisNd.Valid();
+//ensures  [thisNd.data] + thisNd.tailContents == oldContents[0..pos] + oldContents[pos+1..];
+//ensures newSpine[0].Valid();
+//ensures Valid();
+//ensures  [data] + tailContents == oldContents[0..pos] + oldContents[pos+1..];
+//ensures [data] + tailContents == old(([data] + tailContents)[0..pos] + ([data] + tailContents)[pos+1..] );
+//ensures footprint == old(footprint) - {delNd};
+
+{
+
+ghost var curIndex := pos - 2;
+
+/////////pre to LI ok
+
+while(curIndex >= 0)
+
+	invariant -1 <= curIndex <= pos-2;
+
+	invariant newSpine[|newSpine|-1].next == nxtNd;
+
+	invariant nxtNd.Valid();
+
+  invariant newSpine == old(newSpine);
+	invariant thisNd == newSpine[0];
+
+	invariant listInv(newSpine);
+
+
+	invariant forall i :: 0 <= i <= curIndex ==> newSpine[i].tailContents == old(newSpine[i].tailContents) &&
+		newSpine[i].footprint == old(newSpine[i].footprint) && newSpine[i].spine == old(newSpine[i].spine);
+
+		//new
+		invariant forall i :: 0 <= i < curIndex ==> newSpine[i].footprint == {newSpine[i]} + newSpine[i+1].footprint
+			&&
+			newSpine[i].tailContents == [newSpine[i+1].data] + newSpine[i+1].tailContents;
+			
+		invariant -1 <= curIndex < pos-2 ==> newSpine[curIndex+1].footprint == old(newSpine[curIndex+1].footprint - {delNd});
+		
+invariant forall nd :: nd in newSpine ==> nd.data == old(nd.data);
+invariant nxtNd.data == old(nxtNd.data) && nxtNd.tailContents == old(nxtNd.tailContents);
+
+invariant 0 <= curIndex <= pos-2 ==>  |newSpine[curIndex].tailContents| >= pos - curIndex;
+
+//new
+invariant -1 <= curIndex < pos - 2 ==>  [newSpine[curIndex+1].data] + newSpine[curIndex+1].tailContents == oldContents[curIndex+1..pos] + oldContents[pos+1..];
+
+/*
+		invariant -1 <= curIndex < pos-2 ==> [newSpine[curIndex+1].data] + newSpine[curIndex+1].tailContents == old(([newSpine[curIndex+1].data] + newSpine[curIndex+1].tailContents)[0..pos-curIndex-1] +
+([newSpine[curIndex+1].data]	+	newSpine[curIndex+1].tailContents)[pos-curIndex..]);
+*/	 
+//end new
+		
+ invariant -1 <= curIndex < pos - 2 ==> newSpine[curIndex+1].Valid();
+		
+	modifies newSpine;
+{
+newSpine[curIndex].tailContents :=  [newSpine[curIndex].next.data] + newSpine[curIndex].next.tailContents;
+newSpine[curIndex].footprint :=  {newSpine[curIndex]} + newSpine[curIndex].next.footprint;
+newSpine[curIndex].spine :=  [newSpine[curIndex]] + newSpine[curIndex].next.spine;
+
+curIndex := curIndex - 1;
+}
+
+//assert this == newSpine[0];
+assert curIndex == -1;
+assert newSpine[0].Valid();
+}
