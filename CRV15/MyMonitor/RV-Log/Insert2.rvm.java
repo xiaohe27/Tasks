@@ -1,18 +1,37 @@
-package rvm;
-
 Insert2(String data) {
-static 
+static LinkedList<Insert2RawMonitor> monitorList = new LinkedList<>();
 
-static void updateTime(long time) {}
+static void check(long time){
+        int size=monitorList.size();
 
-static void check(long time) {}
+        while(!monitorList.isEmpty()){
+        Insert2RawMonitor monitor = monitorList.getFirst();
+        if(monitor.deadline>time)
+        return;
+
+        if(monitor.ok)
+           monitorList.removeFirst();
+
+        else{
+        System.out.println("expected data is not inserted into db3 before time " + );
+        }
+        }
+        }
+
+private boolean ok;
+
+private long deadline;
 
     event insert(String user, String db, String p, String data, long time)
 	{
 		if (db != null && db.equals("db2"))
 		{
-			timer.put(data, time+60);
-		} 
+            this.deadline = time+60;
+
+        monitorList.add(this);
+
+        check(time);
+		}
 
 		if (db != null && db.equals("db3"))
 		{
