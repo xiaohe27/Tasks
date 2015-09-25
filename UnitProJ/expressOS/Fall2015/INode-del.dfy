@@ -306,13 +306,9 @@ requires forall i :: 0 <= i <= pos-2 ==> newSpine[i].data == oldContents[i];
 modifies newSpine;
 
 ensures thisNd.Valid();
-//ensures  [thisNd.data] + thisNd.tailContents == oldContents[0..pos] + oldContents[pos+1..];
-//ensures newSpine[0].Valid();
-//ensures Valid();
-//ensures  [data] + tailContents == oldContents[0..pos] + oldContents[pos+1..];
-//ensures [data] + tailContents == old(([data] + tailContents)[0..pos] + ([data] + tailContents)[pos+1..] );
-//ensures footprint == old(footprint) - {delNd};
+ensures  [thisNd.data] + thisNd.tailContents == oldContents[0..pos] + oldContents[pos+1..];
 
+//ensures thisNd.footprint == old(thisNd.footprint) - {delNd};
 {
 
 ghost var curIndex := pos - 2;
@@ -345,6 +341,7 @@ while(curIndex >= 0)
 		
 invariant forall nd :: nd in newSpine ==> nd.data == old(nd.data);
 invariant nxtNd.data == old(nxtNd.data) && nxtNd.tailContents == old(nxtNd.tailContents);
+invariant oldContents == old(oldContents);
 
 invariant 0 <= curIndex <= pos-2 ==>  |newSpine[curIndex].tailContents| >= pos - curIndex;
 
@@ -368,7 +365,10 @@ newSpine[curIndex].spine :=  [newSpine[curIndex]] + newSpine[curIndex].next.spin
 curIndex := curIndex - 1;
 }
 
-//assert this == newSpine[0];
 assert curIndex == -1;
-assert newSpine[0].Valid();
+
+assert newSpine[curIndex+1].Valid();
+
+assert [newSpine[curIndex+1].data] + newSpine[curIndex+1].tailContents == oldContents[curIndex+1..pos] + oldContents[pos+1..];
+
 }
