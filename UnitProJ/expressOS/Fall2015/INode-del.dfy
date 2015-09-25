@@ -308,7 +308,7 @@ modifies newSpine;
 ensures thisNd.Valid();
 ensures  [thisNd.data] + thisNd.tailContents == oldContents[0..pos] + oldContents[pos+1..];
 
-//ensures thisNd.footprint == old(thisNd.footprint) - {delNd};
+ensures thisNd.footprint == old(thisNd.footprint) - {delNd};
 {
 
 ghost var curIndex := pos - 2;
@@ -371,4 +371,6 @@ assert newSpine[curIndex+1].Valid();
 
 assert [newSpine[curIndex+1].data] + newSpine[curIndex+1].tailContents == oldContents[curIndex+1..pos] + oldContents[pos+1..];
 
+assert newSpine[curIndex+1].footprint == old(newSpine[curIndex+1].footprint - {delNd});
+//assert thisNd == newSpine[curIndex+1];
 }
