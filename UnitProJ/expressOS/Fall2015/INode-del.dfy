@@ -128,16 +128,13 @@ ghost var newSpine := spine[0..pos-1];
 
 //new
 
-
-assert newSpine[|newSpine|-1].tailContents == [curNd.data] + [delNd.data] + curNd.tailContents; //47s!
-
 //need lemma show the len of tailContents for all nodes in seq >= last one's tailContents
 //assert  forall i :: 0 <= i <= pos-2 ==> (|newSpine[i].tailContents|) >= pos - i;
-
-//assert curNd.tailContents == oldContents[pos+1..];
-//assert curNd.data == oldContents[pos-1];
-//assert forall i :: 0 <= i <= pos-2 ==> newSpine[i].data == oldContents[i];
-
+/*
+assert curNd.tailContents == oldContents[pos+1..];
+assert curNd.data == oldContents[pos-1];
+assert forall i :: 0 <= i <= pos-2 ==> newSpine[i].data == oldContents[i];
+*/
 //end of precond
 
 //updateSeq4Del(newSpine, delNd, pos, curNd);
@@ -192,8 +189,14 @@ method delNext(curNd: INode, delNd:INode, fstNd:INode, pos:int)
 
 		ensures listInv(fstNd.spine[0..pos]);
 
-		ensures pos > 1 ==> fstNd.spine[0..pos-1][|fstNd.spine[0..pos-1]|-1].tailContents == [curNd.data] + [delNd.data] + curNd.tailContents; 
+		ensures pos > 1 ==> fstNd.spine[0..pos-1][|fstNd.spine[0..pos-1]|-1].tailContents == [curNd.data] + [delNd.data] + curNd.tailContents;
+
+		ensures (curNd.tailContents == old([fstNd.data] + fstNd.tailContents)[pos+1..] &&
+ curNd.data == old([fstNd.data] + fstNd.tailContents)[pos-1] &&
+ forall i :: 0 <= i <= pos-2 ==> fstNd.spine[0..pos-1][i].data == old([fstNd.data] + fstNd.tailContents)[i]);
 {
+	assert curNd.tailContents == [fstNd.data] + fstNd.tailContents[pos..];
+	assert curNd.data ==  ([fstNd.data] + fstNd.tailContents)[pos-1];
 	
 	curNd.next := curNd.next.next;
 
