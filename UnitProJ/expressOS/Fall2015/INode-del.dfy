@@ -116,29 +116,28 @@ curIndex := curIndex + 1;
 
 delNd := curNd.next;
 
+
+
 delNext(curNd, delNd, this, pos);
 
 if(1 < pos <= |tailContents|) {
+ghost var oldContents := old([data] + tailContents); 
 ghost var newSpine := spine[0..pos-1];
-
 //////////////////////////////
 //precond
-ghost var oldContents := old([data] + tailContents); 
 
 //new
 
 
-//assert newSpine[|newSpine|-1].tailContents == [curNd.data] + [delNd.data] + curNd.tailContents; //47s!
+assert newSpine[|newSpine|-1].tailContents == [curNd.data] + [delNd.data] + curNd.tailContents; //47s!
 
 //need lemma show the len of tailContents for all nodes in seq >= last one's tailContents
 //assert  forall i :: 0 <= i <= pos-2 ==> (|newSpine[i].tailContents|) >= pos - i;
 
-/*
-assert |oldContents| > pos;
-assert curNd.tailContents == oldContents[pos+1..];
-assert curNd.data == oldContents[pos-1];
-assert forall i :: 0 <= i <= pos-2 ==> newSpine[i].data == oldContents[i];
-*/
+//assert curNd.tailContents == oldContents[pos+1..];
+//assert curNd.data == oldContents[pos-1];
+//assert forall i :: 0 <= i <= pos-2 ==> newSpine[i].data == oldContents[i];
+
 //end of precond
 
 //updateSeq4Del(newSpine, delNd, pos, curNd);
@@ -192,6 +191,8 @@ method delNext(curNd: INode, delNd:INode, fstNd:INode, pos:int)
 		fstNd.spine[i].spine == old(fstNd.spine[i].spine);
 
 		ensures listInv(fstNd.spine[0..pos]);
+
+		ensures pos > 1 ==> fstNd.spine[0..pos-1][|fstNd.spine[0..pos-1]|-1].tailContents == [curNd.data] + [delNd.data] + curNd.tailContents; 
 {
 	
 	curNd.next := curNd.next.next;
@@ -316,10 +317,10 @@ requires |newSpine[|newSpine|-1].tailContents| >= 2;
 
 	 requires newSpine[|newSpine|-1].footprint == {newSpine[|newSpine|-1]} + nxtNd.footprint - {delNd}; //error! should be + {delNd}
 
-/*	 
+//want to remove	 
 	 requires  forall i :: 0 <= i < |newSpine|-1 ==> newSpine[i].footprint == {newSpine[i]} + newSpine[i+1].footprint &&
 	newSpine[i].tailContents == [newSpine[i+1].data] + newSpine[i+1].tailContents;
-*/	
+//--want to remove
 	 
 requires  forall i :: 0 <= i <= pos-2 ==> (|newSpine[i].tailContents|) >= pos - i;
 
@@ -370,12 +371,7 @@ invariant oldContents == old(oldContents);
 invariant 0 <= curIndex <= pos-2 ==>  |newSpine[curIndex].tailContents| >= pos - curIndex;
 
 //new
-invariant -1 <= curIndex < pos - 2 ==>  [newSpine[curIndex+1].data] + newSpine[curIndex+1].tailContents == oldContents[curIndex+1..pos] + oldContents[pos+1..];
-
-/*
-		invariant -1 <= curIndex < pos-2 ==> [newSpine[curIndex+1].data] + newSpine[curIndex+1].tailContents == old(([newSpine[curIndex+1].data] + newSpine[curIndex+1].tailContents)[0..pos-curIndex-1] +
-([newSpine[curIndex+1].data]	+	newSpine[curIndex+1].tailContents)[pos-curIndex..]);
-*/	 
+invariant -1 <= curIndex < pos - 2 ==>  [newSpine[curIndex+1].data] + newSpine[curIndex+1].tailContents == oldContents[curIndex+1..pos] + oldContents[pos+1..];	 
 //end new
 		
  invariant -1 <= curIndex < pos - 2 ==> newSpine[curIndex+1].Valid();
