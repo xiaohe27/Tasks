@@ -81,7 +81,7 @@ spine == [this] + next.spine
 
 
 /////////////////////////////////////////
-/*ok
+
 method delete(pos:int) returns (delNd:INode)
 requires Valid();
 requires 0 < pos <= |tailContents|;
@@ -120,13 +120,49 @@ delNext(curNd, delNd, this, pos);
 if(1 < pos <= |tailContents|) {
 ghost var newSpine := spine[0..pos-1];
 
-updateSeq4Del(newSpine, delNd, pos, curNd);
+//////////////////////////////
+//precond
+ghost var oldContents := old([data] + tailContents); 
+
+	assert listCond(newSpine);
+	assert 1 < pos < |oldContents|;
+assert |newSpine| == pos - 1;
+
+assert curNd != null && curNd.Valid();
+assert newSpine[|newSpine|-1].next == curNd;
+
+//new
+assert this == newSpine[0];
+
+assert delNd !in curNd.footprint && delNd !in newSpine;
+
+assert (set nd | nd in newSpine) !! curNd.footprint;
+assert newSpine[|newSpine|-1].footprint >= curNd.footprint;
+assert delNd != null;
+assert newSpine[|newSpine|-1].tailContents == [curNd.data] + [delNd.data] + curNd.tailContents;
+
+assert |newSpine[|newSpine|-1].tailContents| >= 2;
+
+assert newSpine[|newSpine|-1].footprint == {newSpine[|newSpine|-1]} + curNd.footprint - {delNd};
+assert  forall i :: 0 <= i < |newSpine|-1 ==> newSpine[i].footprint == {newSpine[i]} + newSpine[i+1].footprint &&
+	newSpine[i].tailContents == [newSpine[i+1].data] + newSpine[i+1].tailContents;
+
+assert  forall i :: 0 <= i <= pos-2 ==> (|newSpine[i].tailContents|) >= pos - i;
+
+assert |oldContents| > pos;
+assert curNd.tailContents == oldContents[pos+1..];
+assert curNd.data == oldContents[pos-1];
+assert forall i :: 0 <= i <= pos-2 ==> newSpine[i].data == oldContents[i];
+
+//end of precond
+
+//updateSeq4Del(newSpine, delNd, pos, curNd);
 } else {}
 //////////////////////////
 /////////////////////////
 
 }
-*/
+
 ////////////////////////////////////////
 
 predicate spineFtprintLemma()
@@ -148,7 +184,7 @@ spine == [this] + next.spine
 
 
 ////////////////////////////////////////////////////////
-/* ok
+
 method delNext(curNd: INode, delNd:INode, fstNd:INode, pos:int)
   requires curNd != null && curNd.Valid();
   requires curNd.next == delNd && delNd != null && delNd.Valid();
@@ -188,7 +224,7 @@ else {
 	curNd.spine := [curNd] + curNd.next.spine;
 }
 }
-*/	
+	
 
 
 
@@ -251,7 +287,7 @@ listCond(mySeq)
 && mySeq[|mySeq|-1].spine == [mySeq[|mySeq|-1]])
 }
 
-/*
+
 predicate validSeqLemma(mySeq: seq<INode>)
 	requires validSeqCond(mySeq);
 	reads mySeq, (set nd | nd in mySeq);
@@ -269,10 +305,10 @@ predicate validSeqLemma2(mySeq: seq<INode>)
 		&& validSeqLemma2(mySeq[1..])
 }
 
-*/
+
 
 //===============================================
-
+/*
 ghost method updateSeq4Del(newSpine: seq<INode>, delNd:INode, pos: int, nxtNd:INode, oldContents:seq<Data>, thisNd:INode)
 	requires listCond(newSpine);
 	requires 1 < pos < |oldContents|;
@@ -374,3 +410,4 @@ assert [newSpine[curIndex+1].data] + newSpine[curIndex+1].tailContents == oldCon
 assert newSpine[curIndex+1].footprint == old(newSpine[curIndex+1].footprint - {delNd});
 //assert thisNd == newSpine[curIndex+1];
 }
+*/
