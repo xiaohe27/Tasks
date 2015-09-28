@@ -13,8 +13,8 @@ Comparator<JzonElement> COMP =
 
 
 		Set<JzonElement> memb = 
-			new TreeSet <JzonElement> (COMP);
-//new TreeSet <JzonElement> ();
+//			new TreeSet <JzonElement> (COMP);
+new TreeSet <JzonElement> ();
 
 memb.add(new JzonElement(22));
 
