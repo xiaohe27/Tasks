@@ -14,9 +14,9 @@ Comparator<JzonElement> COMP =
 
 		Set<JzonElement> memb = 
 			new TreeSet <JzonElement> (COMP);
-//new TreeSet <JzonElement> ();
+//  new TreeSet <JzonElement> ();
 
-memb.add(new JzonElement(22));
+//memb.add(new JzonElement(22));
 
 Collection<JzonElement> aList = new ArrayList<JzonElement>();
 aList.add(new JzonElement(5));
