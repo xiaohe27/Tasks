@@ -277,6 +277,11 @@ public final class Iterator_HasNextRuntimeMonitor implements com.runtimeverifica
 		return collected;
 	}
 
+	static {
+	}
+
+	public static void actionsAtTheEnd(){
+	}
 	// Removing terminated monitors from partitioned sets
 	static {
 		TerminatedMonitorCleaner.start() ;
