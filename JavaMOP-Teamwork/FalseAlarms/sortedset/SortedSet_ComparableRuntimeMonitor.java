@@ -90,7 +90,7 @@ class SortedSet_ComparableRawMonitor extends com.runtimeverification.rvmonitor.j
 		RVM_lastevent = 1;
 		{
 			for (Object elem : c) {
-				if (!(elem instanceof Comparable)) {
+				if (s.comparator() == null && !(elem instanceof Comparable)) {
 					RVMLogging.out.println(Level.CRITICAL, "Specification SortedSet_Comparable has been violated on line " + com.runtimeverification.rvmonitor.java.rt.ViolationRecorder.getLineOfCode() + ". Documentation for this property can be found at http://runtimeverification.com/monitor/annotated-java/__properties/html/mop/SortedSet_Comparable.html");
 					RVMLogging.out.println(Level.CRITICAL, "A non-comparable object is being inserted into a SortedSet object.");
 				}
