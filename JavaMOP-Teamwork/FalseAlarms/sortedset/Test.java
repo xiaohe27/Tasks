@@ -16,7 +16,7 @@ Comparator<JzonElement> COMP =
 			new TreeSet <JzonElement> (COMP);
 //  new TreeSet <JzonElement> ();
 
-//memb.add(new JzonElement(22));
+memb.add(new JzonElement(22));
 
 Collection<JzonElement> aList = new ArrayList<JzonElement>();
 aList.add(new JzonElement(5));
@@ -24,7 +24,6 @@ aList.add(new JzonElement(7));
 
 memb.addAll(aList);
 
-System.out.println("No err found");
 	}
 }
 
