@@ -33,7 +33,7 @@ SortedSet_Comparable() {
 			call(* Collection+.add*(..)) ||
 			call(* Queue+.offer*(..))
 		) && target(SortedSet) && args(e) {
-		if (((SortedSet)thisJoinPoint.getTarget()).comparator() == null && !(e instanceof Comparable)) {
+		if (!(e instanceof Comparable)) {
 			RVMLogging.out.println(Level.CRITICAL, __DEFAULT_MESSAGE);
 			RVMLogging.out.println(Level.CRITICAL, "A non-comparable object is being inserted into a SortedSet object.");
 		}
