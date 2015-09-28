@@ -1,0 +1,18 @@
+1. The format of input is still subject to change.
+
+In general, the input should be the annotated java source code.
+However, the syntax of the annotation has not been decided yet.
+
+2. The choice of Java parser.
+In order to extract useful info from the java source code and gen
+the desired spec, it is essential to get the correct AST from a given java source code.
+
+Potential risks:
+There are several different parsers for java, and we are not familiar with 
+them and do not know the strengths and weaknesses of different available tools.
+
+Suggestion: do a meta study on the available java parsers and then choose the one that
+best fit our project.
+
+3. The underlying spec accepted by K verifier might change.
+Sol: fix the version of K and its verification framework being used in this project.
