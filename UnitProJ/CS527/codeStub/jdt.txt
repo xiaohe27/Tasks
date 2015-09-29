@@ -1,0 +1,5 @@
+<dependency>
+	<groupId>org.eclipse.jdt</groupId>
+	<artifactId>core</artifactId>
+	<version>3.3.0-v_771</version>
+</dependency>
