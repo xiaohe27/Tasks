@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="eclipse">
+    <CLASSES>
+      <root url="file://A:/WorkSpace/eclipse-platform-4.5-win32-x86_64/eclipse/plugins" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://A:/WorkSpace/eclipse-platform-4.5-win32-x86_64/eclipse/plugins" recursive="false" />
+  </library>
+</component>

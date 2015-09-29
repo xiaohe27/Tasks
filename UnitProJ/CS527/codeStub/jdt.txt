@@ -3,3 +3,16 @@
 	<artifactId>core</artifactId>
 	<version>3.3.0-v_771</version>
 </dependency>
+
+<dependency>
+	<groupId>org.eclipse.core</groupId>
+	<artifactId>org.eclipse.core.runtime</artifactId>
+	<version>3.7.0</version>
+</dependency>
+
+<dependency>
+	<groupId>org.eclipse.equinox</groupId>
+	<artifactId>common</artifactId>
+	<version>3.6.200-v20130402-1505</version>
+</dependency>
+

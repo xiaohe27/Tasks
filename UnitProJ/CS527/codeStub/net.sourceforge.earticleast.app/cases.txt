@@ -1,0 +1,50 @@
+static {
+
+	Obj obj;
+	
+	try {
+		obj = new Obj();
+	} catch (Exception e) {
+	 	obj = Obj.Constant;
+	}
+	
+}
+
+
+public void test() {
+
+	Obj obj;
+	
+	try {
+		try {
+			obj = new Obj();
+		} catch (Exception i) {
+			obj = new Obj(7);
+		}
+	} catch (Exception e) {
+	 	obj = Obj.Constant;
+	}
+}
+
+public void test() {  // block
+
+	Obj obj;	// statements
+
+	Obj obj;
+	{ // block 
+		//statements
+		obj = new Obj();
+	} 
+	
+	
+	System.out.println(obj);
+}
+
+public void test() {
+
+	Obj obj;
+	
+	if (z=3) obj=new Obj() 
+	else {
+		obj = new Obj();
+	}

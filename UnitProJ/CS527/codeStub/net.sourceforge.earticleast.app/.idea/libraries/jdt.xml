@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="jdt">
+    <CLASSES>
+      <root url="file://A:/WorkSpace/org.eclipse.jdt-4.5/plugins" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://A:/WorkSpace/org.eclipse.jdt-4.5/plugins" />
+    </SOURCES>
+    <jarDirectory url="file://A:/WorkSpace/org.eclipse.jdt-4.5/plugins" recursive="false" />
+    <jarDirectory url="file://A:/WorkSpace/org.eclipse.jdt-4.5/plugins" recursive="false" type="SOURCES" />
+  </library>
+</component>

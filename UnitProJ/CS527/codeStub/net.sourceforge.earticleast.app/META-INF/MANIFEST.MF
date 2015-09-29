@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Abstract Synax Tree Article, Example Application Plug-in
+Bundle-SymbolicName: net.sourceforge.earticleast.app;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: net.sourceforge.earticleast.app.Activator
+Bundle-Vendor: Thomas Kuhn
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.jdt,
+ org.eclipse.jdt.core,
+ org.eclipse.ui,
+ org.eclipse.ui.workbench,
+ org.eclipse.text,
+ org.eclipse.core.filebuffers,
+ org.eclipse.core.resources
+Eclipse-LazyStart: true
+Import-Package: org.eclipse.jdt.core,
+ org.eclipse.core.runtime
