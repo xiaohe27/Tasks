@@ -13,7 +13,8 @@ static void check(long time){
            monitorList.removeFirst();
 
         else{
-        System.out.println("expected data is not inserted into db3 before time " + );
+        System.err.println("expected data '" + monitor.dat + "' is not inserted into db3 before time " + monitor.deadline);
+	System.exit(1);
         }
         }
         }
@@ -21,40 +22,43 @@ static void check(long time){
 private boolean ok;
 
 private long deadline;
+private String dat;
 
     event insert(String user, String db, String p, String data, long time)
 	{
+        check(time);
+
 		if (db != null && db.equals("db2"))
 		{
+	    this.ok = false;
             this.deadline = time+60;
+	    this.dat = data;
 
         monitorList.add(this);
-
-        check(time);
 		}
 
 		if (db != null && db.equals("db3"))
 		{
-			
+		    ok = true;	
 		} 
 	}
 
 
-event select (String user,String b,String c,String d, long time) {}
+event select (String user,String b,String c,String d, long time) {        check(time);}
 
-event update (String user,String b,String c,String d, long time) {}
+event update (String user,String b,String c,String d, long time) {        check(time);}
 
-event delete (String user,String b,String c,String d, long time) {}
+event delete (String user,String b,String c,String d, long time) {        check(time);}
 
-event script_start (String user, long time) {}
+event script_start (String user, long time) {        check(time);}
 
-event script_end (String user, long time) {}
+event script_end (String user, long time) {        check(time);}
 
-event script_svn (String user,String b,String c,int d,int e, long time) {}
+event script_svn (String user,String b,String c,int d,int e, long time) {        check(time);}
 
-event script_md5 (String user,String b, long time) {}
+event script_md5 (String user,String b, long time) {        check(time);}
 
-event commit (String user,int b, long time) {}
+event commit (String user,int b, long time) {        check(time);}
 
 }
 
