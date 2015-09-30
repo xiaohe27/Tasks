@@ -20,14 +20,22 @@ import java.util.HashSet;
 public class LogReader {
 
     private static HashSet<String> monitoredEventSet = LogReader.initMonitoredEventsSet();
-    protected static int maxNumOfParams = 5;
-    private static HashMap<String, Integer> methodInfo = LogReader.initMethodInfo();
+    protected static int maxNumOfParams = 6;
+    private static HashMap<String, java.lang.Integer> methodInfo = LogReader.initMethodInfo();
 
     private static HashSet<String> initMonitoredEventsSet() {
         HashSet<String> setOfEvents = new HashSet<String>();
+        setOfEvents.add("script_end");
+        setOfEvents.add("script_svn");
+        setOfEvents.add("select");
+        setOfEvents.add("commit");
         setOfEvents.add("insert");
+        setOfEvents.add("update");
         setOfEvents.add("insert2DB3");
         setOfEvents.add("insert2DB2");
+        setOfEvents.add("delete");
+        setOfEvents.add("script_md5");
+        setOfEvents.add("script_start");
         return setOfEvents;
     }
 
@@ -39,11 +47,19 @@ public class LogReader {
         rvm.Insert2RuntimeMonitor.actionsAtTheEnd();
     }
 
-    private static HashMap<String, Integer> initMethodInfo() {
-        HashMap<String, Integer> methodInfoTable = new HashMap<String, Integer>();
+    private static HashMap<String, java.lang.Integer> initMethodInfo() {
+        HashMap<String, java.lang.Integer> methodInfoTable = new HashMap<String, java.lang.Integer>();
+        methodInfoTable.put("script_end", 2);
+        methodInfoTable.put("script_svn", 6);
+        methodInfoTable.put("select", 5);
+        methodInfoTable.put("commit", 3);
         methodInfoTable.put("insert", 5);
+        methodInfoTable.put("update", 5);
         methodInfoTable.put("insert2DB3", 2);
         methodInfoTable.put("insert2DB2", 2);
+        methodInfoTable.put("delete", 5);
+        methodInfoTable.put("script_md5", 3);
+        methodInfoTable.put("script_start", 2);
         return methodInfoTable;
     }
 
@@ -52,14 +68,38 @@ public class LogReader {
 
         public static void invoke(String eventName, String[] data) {
             switch (eventName) {
+                case "script_end":
+                    rvm.Insert2RuntimeMonitor.script_endEvent(data[ 0 ], Long.parseLong(data[ 1 ]));
+                    break;
+                case "script_svn":
+                    rvm.Insert2RuntimeMonitor.script_svnEvent(data[ 0 ], data[ 1 ], data[ 2 ], Integer.parseInt(data[ 3 ]), Integer.parseInt(data[ 4 ]), Long.parseLong(data[ 5 ]));
+                    break;
+                case "select":
+                    rvm.Insert2RuntimeMonitor.selectEvent(data[ 0 ], data[ 1 ], data[ 2 ], data[ 3 ], Long.parseLong(data[ 4 ]));
+                    break;
+                case "commit":
+                    rvm.Insert2RuntimeMonitor.commitEvent(data[ 0 ], Integer.parseInt(data[ 1 ]), Long.parseLong(data[ 2 ]));
+                    break;
                 case "insert":
                     rvm.Insert2RuntimeMonitor.insertEvent(data[ 0 ], data[ 1 ], data[ 2 ], data[ 3 ], Long.parseLong(data[ 4 ]));
+                    break;
+                case "update":
+                    rvm.Insert2RuntimeMonitor.updateEvent(data[ 0 ], data[ 1 ], data[ 2 ], data[ 3 ], Long.parseLong(data[ 4 ]));
                     break;
                 case "insert2DB3":
                     rvm.Insert2RuntimeMonitor.insert2DB3Event(data[ 0 ], Long.parseLong(data[ 1 ]));
                     break;
                 case "insert2DB2":
                     rvm.Insert2RuntimeMonitor.insert2DB2Event(data[ 0 ], Long.parseLong(data[ 1 ]));
+                    break;
+                case "delete":
+                    rvm.Insert2RuntimeMonitor.deleteEvent(data[ 0 ], data[ 1 ], data[ 2 ], data[ 3 ], Long.parseLong(data[ 4 ]));
+                    break;
+                case "script_md5":
+                    rvm.Insert2RuntimeMonitor.script_md5Event(data[ 0 ], data[ 1 ], Long.parseLong(data[ 2 ]));
+                    break;
+                case "script_start":
+                    rvm.Insert2RuntimeMonitor.script_startEvent(data[ 0 ], Long.parseLong(data[ 1 ]));
                     break;
             }
         }
@@ -308,30 +348,6 @@ class LogEntryExtractor implements LogReader.LogExtractor {
             this.refill("Unexpected end of file while removing the white spaces");
         }
     }
-
-    private void rmWhiteSpaceAndComma(boolean mustSucceed) throws IOException {
-        out:
-        while (true) {
-            while (this.posInArr < this.BufSize) {
-                byte b = byteArr[this.posInArr++];
-                if (!isWhiteSpace(b) && b != comma) {
-                    this.posInArr--;
-                    break out;
-                }
-            }
-
-            if (mustSucceed)
-                this.refill("Unexpected end of file while removing the white spaces");
-            else {
-                try {
-                    this.refill("");
-                } catch (Exception e) {
-
-                }
-            }
-        }
-    }
-
 
 
     private void skipComment() throws IOException {
@@ -683,7 +699,6 @@ class LogEntryExtractor implements LogReader.LogExtractor {
 
                 this.paramStartIndex = this.posInArr;
                 argsOfMeth[argsOfMeth.length - 2] = this.getStringFromBuf(rpa);
-                this.rmWhiteSpaceAndComma(false);
 
                 argsOfMeth[argsOfMeth.length - 1] = TimeStamp + "";
             }
