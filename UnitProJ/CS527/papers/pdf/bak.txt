@@ -1,0 +1,1 @@
+paper 1's optimization to output: Canonicalize output expression by reduction rules

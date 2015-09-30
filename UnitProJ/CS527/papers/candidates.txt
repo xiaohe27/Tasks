@@ -1,0 +1,12 @@
+Code Generation in the Polyhedral Model Is Easier Than You Think
+http://dl.acm.org/citation.cfm?id=1025992
+
+Code generation using tree matching and dynamic programming
+http://dl.acm.org/citation.cfm?id=75700
+
+
+Optimal Code Generation for Expression Trees
+http://dl.acm.org/citation.cfm?id=321970
+
+Specification extraction by symbolic execution
+http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=6671323&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D6671323
