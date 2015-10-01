@@ -96,7 +96,7 @@ class Insert2Monitor extends com.runtimeverification.rvmonitor.java.rt.tablebase
 			monitorList.removeFirst();
 
 			else{
-				System.out.println("@" + (deadline - 60) + " : " + monitor.dat);
+				System.out.println("@" + (monitor.deadline - 60) + " : " + monitor.dat);
 				System.err.println("expected data '" + monitor.dat + "' is not inserted into db3 before time " + monitor.deadline);
 				System.exit(1);
 			}
@@ -108,7 +108,7 @@ class Insert2Monitor extends com.runtimeverification.rvmonitor.java.rt.tablebase
 	private long deadline;
 	private String dat;
 
-	CachedStrongReference Ref_data = null;
+	CachedWeakReference Ref_data = null;
 	int Prop_1_state;
 	static final int Prop_1_transition_insert[] = {0, 1};;
 	static final int Prop_1_transition_select[] = {0, 1};;
@@ -170,7 +170,7 @@ class Insert2Monitor extends com.runtimeverification.rvmonitor.java.rt.tablebase
 			}
 		}
 		if(Ref_data == null){
-			Ref_data = new CachedStrongReference(data);
+			Ref_data = new CachedWeakReference(data);
 		}
 		RVM_lastevent = 0;
 
@@ -287,7 +287,7 @@ public final class Insert2RuntimeMonitor implements com.runtimeverification.rvmo
 			Thread.yield();
 		}
 
-		CachedStrongReference wr_data = null;
+		CachedWeakReference wr_data = null;
 		MapOfMonitor<Insert2Monitor> matchedLastMap = null;
 		Insert2Monitor matchedEntry = null;
 		boolean cachehit = false;
@@ -296,7 +296,7 @@ public final class Insert2RuntimeMonitor implements com.runtimeverification.rvmo
 			cachehit = true;
 		}
 		else {
-			wr_data = new CachedStrongReference(data) ;
+			wr_data = new CachedWeakReference(data) ;
 			{
 				// FindOrCreateEntry
 				MapOfMonitor<Insert2Monitor> itmdMap = Insert2_data_Map;
@@ -308,7 +308,7 @@ public final class Insert2RuntimeMonitor implements com.runtimeverification.rvmo
 		// D(X) main:1
 		if ((matchedEntry == null) ) {
 			if ((wr_data == null) ) {
-				wr_data = new CachedStrongReference(data) ;
+				wr_data = new CachedWeakReference(data) ;
 			}
 			{
 				// D(X) createNewMonitorStates:4 when Dom(theta'') = <>
