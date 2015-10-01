@@ -34,6 +34,7 @@ Iterator_HasNext(Iterator i) {
 	@violation {
 		RVMLogging.out.println(Level.WARNING, __DEFAULT_MESSAGE);
 		RVMLogging.out.println(Level.WARNING, "Iterator.hasNext() was not called before calling next().");
+		__RESET;
 	}
 }
 

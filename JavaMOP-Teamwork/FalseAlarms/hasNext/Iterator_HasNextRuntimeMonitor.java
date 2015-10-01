@@ -184,6 +184,7 @@ class Iterator_HasNextMonitor extends com.runtimeverification.rvmonitor.java.rt.
 		{
 			RVMLogging.out.println(Level.WARNING, "Specification Iterator_HasNext has been violated on line " + com.runtimeverification.rvmonitor.java.rt.ViolationRecorder.getLineOfCode() + ". Documentation for this property can be found at http://runtimeverification.com/monitor/annotated-java/__properties/html/mop/Iterator_HasNext.html");
 			RVMLogging.out.println(Level.WARNING, "Iterator.hasNext() was not called before calling next().");
+			this.reset();
 		}
 
 	}
