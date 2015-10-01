@@ -1,0 +1,354 @@
+///////////// A request at 10/01/2015 12:42:17 /////////////
+//// Result Status
+Success
+//// Execution Time
+989ms
+//// Client Name
+RVMonitor
+//// Logic Name
+ltl
+//// Logic Repository Input
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3 select update delete script_start script_end script_svn script_md5 commit</Events>
+    <Property>
+        <Logic>ltl</Logic>
+        <Formula>insert2DB2 =&gt; &lt;&gt; insert2DB3</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 1. Logic Plugin Input to ltl
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3 select update delete script_start script_end script_svn script_md5 commit</Events>
+    <Property>
+        <Logic>ltl</Logic>
+        <Formula>insert2DB2 =&gt; &lt;&gt; insert2DB3</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 1. Logic Plugin Output from ltl
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3 select update delete script_start script_end script_svn script_md5 commit</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0[
+commit -&gt; s1
+delete -&gt; s1
+update -&gt; s1
+insert2DB2 -&gt; s1
+insert -&gt; s1
+script_md5 -&gt; s1
+select -&gt; s1
+insert2DB3 -&gt; s1
+script_svn -&gt; s1
+script_end -&gt; s1
+script_start -&gt; s1
+default s1]
+
+s1[
+commit -&gt; s1
+delete -&gt; s1
+update -&gt; s1
+insert2DB2 -&gt; s1
+insert -&gt; s1
+script_md5 -&gt; s1
+select -&gt; s1
+insert2DB3 -&gt; s1
+script_svn -&gt; s1
+script_end -&gt; s1
+script_start -&gt; s1
+default s1]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 2. Logic Plugin Input to fsm
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3 select update delete script_start script_end script_svn script_md5 commit</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0[
+commit -&gt; s1
+delete -&gt; s1
+update -&gt; s1
+insert2DB2 -&gt; s1
+insert -&gt; s1
+script_md5 -&gt; s1
+select -&gt; s1
+insert2DB3 -&gt; s1
+script_svn -&gt; s1
+script_end -&gt; s1
+script_start -&gt; s1
+default s1]
+
+s1[
+commit -&gt; s1
+delete -&gt; s1
+update -&gt; s1
+insert2DB2 -&gt; s1
+insert -&gt; s1
+script_md5 -&gt; s1
+select -&gt; s1
+insert2DB3 -&gt; s1
+script_svn -&gt; s1
+script_end -&gt; s1
+script_start -&gt; s1
+default s1]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 2. Logic Plugin Output from fsm
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3 select update delete script_start script_end script_svn script_md5 commit</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0_s1[
+  insert2DB2 -&gt; s0_s1
+  insert -&gt; s0_s1
+  default s0_s1
+  commit -&gt; s0_s1
+  delete -&gt; s0_s1
+  select -&gt; s0_s1
+  script_end -&gt; s0_s1
+  script_svn -&gt; s0_s1
+  update -&gt; s0_s1
+  script_md5 -&gt; s0_s1
+  script_start -&gt; s0_s1
+  insert2DB3 -&gt; s0_s1
+]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+    <CreationEvents></CreationEvents>
+    <Message>done</Message>
+    <EnableSets>// fail Enables
+{insert=[], insert2DB2=[], commit=[], select=[], delete=[], script_end=[], script_svn=[], update=[], script_md5=[], script_start=[], insert2DB3=[]}
+// fail Coenables
+{insert=[], insert2DB2=[], commit=[], select=[], delete=[], script_end=[], script_svn=[], update=[], script_md5=[], script_start=[], insert2DB3=[]}
+</EnableSets>
+</mop>
+
+//// Logic Repository Output
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3 select update delete script_start script_end script_svn script_md5 commit</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0_s1[
+  insert2DB2 -&gt; s0_s1
+  insert -&gt; s0_s1
+  default s0_s1
+  commit -&gt; s0_s1
+  delete -&gt; s0_s1
+  select -&gt; s0_s1
+  script_end -&gt; s0_s1
+  script_svn -&gt; s0_s1
+  update -&gt; s0_s1
+  script_md5 -&gt; s0_s1
+  script_start -&gt; s0_s1
+  insert2DB3 -&gt; s0_s1
+]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+    <CreationEvents></CreationEvents>
+    <Message>done</Message>
+    <EnableSets>// fail Enables
+{insert=[], insert2DB2=[], commit=[], select=[], delete=[], script_end=[], script_svn=[], update=[], script_md5=[], script_start=[], insert2DB3=[]}
+// fail Coenables
+{insert=[], insert2DB2=[], commit=[], select=[], delete=[], script_end=[], script_svn=[], update=[], script_md5=[], script_start=[], insert2DB3=[]}
+</EnableSets>
+</mop>
+
+///////////// A request at 10/01/2015 12:42:52 /////////////
+//// Result Status
+Success
+//// Execution Time
+990ms
+//// Client Name
+RVMonitor
+//// Logic Name
+ltl
+//// Logic Repository Input
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3 select update delete script_start script_end script_svn script_md5 commit</Events>
+    <Property>
+        <Logic>ltl</Logic>
+        <Formula>insert2DB2 =&gt; &lt;&gt; insert2DB3</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 1. Logic Plugin Input to ltl
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3 select update delete script_start script_end script_svn script_md5 commit</Events>
+    <Property>
+        <Logic>ltl</Logic>
+        <Formula>insert2DB2 =&gt; &lt;&gt; insert2DB3</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 1. Logic Plugin Output from ltl
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3 select update delete script_start script_end script_svn script_md5 commit</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0[
+commit -&gt; s1
+delete -&gt; s1
+update -&gt; s1
+insert2DB2 -&gt; s1
+insert -&gt; s1
+script_md5 -&gt; s1
+select -&gt; s1
+insert2DB3 -&gt; s1
+script_svn -&gt; s1
+script_end -&gt; s1
+script_start -&gt; s1
+default s1]
+
+s1[
+commit -&gt; s1
+delete -&gt; s1
+update -&gt; s1
+insert2DB2 -&gt; s1
+insert -&gt; s1
+script_md5 -&gt; s1
+select -&gt; s1
+insert2DB3 -&gt; s1
+script_svn -&gt; s1
+script_end -&gt; s1
+script_start -&gt; s1
+default s1]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 2. Logic Plugin Input to fsm
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3 select update delete script_start script_end script_svn script_md5 commit</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0[
+commit -&gt; s1
+delete -&gt; s1
+update -&gt; s1
+insert2DB2 -&gt; s1
+insert -&gt; s1
+script_md5 -&gt; s1
+select -&gt; s1
+insert2DB3 -&gt; s1
+script_svn -&gt; s1
+script_end -&gt; s1
+script_start -&gt; s1
+default s1]
+
+s1[
+commit -&gt; s1
+delete -&gt; s1
+update -&gt; s1
+insert2DB2 -&gt; s1
+insert -&gt; s1
+script_md5 -&gt; s1
+select -&gt; s1
+insert2DB3 -&gt; s1
+script_svn -&gt; s1
+script_end -&gt; s1
+script_start -&gt; s1
+default s1]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 2. Logic Plugin Output from fsm
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3 select update delete script_start script_end script_svn script_md5 commit</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0_s1[
+  insert2DB2 -&gt; s0_s1
+  insert -&gt; s0_s1
+  default s0_s1
+  commit -&gt; s0_s1
+  delete -&gt; s0_s1
+  select -&gt; s0_s1
+  script_end -&gt; s0_s1
+  script_svn -&gt; s0_s1
+  update -&gt; s0_s1
+  script_md5 -&gt; s0_s1
+  script_start -&gt; s0_s1
+  insert2DB3 -&gt; s0_s1
+]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+    <CreationEvents></CreationEvents>
+    <Message>done</Message>
+    <EnableSets>// fail Enables
+{insert=[], insert2DB2=[], commit=[], select=[], delete=[], script_end=[], script_svn=[], update=[], script_md5=[], script_start=[], insert2DB3=[]}
+// fail Coenables
+{insert=[], insert2DB2=[], commit=[], select=[], delete=[], script_end=[], script_svn=[], update=[], script_md5=[], script_start=[], insert2DB3=[]}
+</EnableSets>
+</mop>
+
+//// Logic Repository Output
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert insert2DB2 insert2DB3 select update delete script_start script_end script_svn script_md5 commit</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0_s1[
+  insert2DB2 -&gt; s0_s1
+  insert -&gt; s0_s1
+  default s0_s1
+  commit -&gt; s0_s1
+  delete -&gt; s0_s1
+  select -&gt; s0_s1
+  script_end -&gt; s0_s1
+  script_svn -&gt; s0_s1
+  update -&gt; s0_s1
+  script_md5 -&gt; s0_s1
+  script_start -&gt; s0_s1
+  insert2DB3 -&gt; s0_s1
+]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+    <CreationEvents></CreationEvents>
+    <Message>done</Message>
+    <EnableSets>// fail Enables
+{insert=[], insert2DB2=[], commit=[], select=[], delete=[], script_end=[], script_svn=[], update=[], script_md5=[], script_start=[], insert2DB3=[]}
+// fail Coenables
+{insert=[], insert2DB2=[], commit=[], select=[], delete=[], script_end=[], script_svn=[], update=[], script_md5=[], script_start=[], insert2DB3=[]}
+</EnableSets>
+</mop>
+
