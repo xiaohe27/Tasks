@@ -88,11 +88,11 @@ requires 0 < pos <= |tailContents|;
 
 modifies footprint;
 
-/*
+
 ensures Valid();
 ensures [data] + tailContents == old(([data] + tailContents)[0..pos] + ([data] + tailContents)[pos+1..] );
 ensures footprint == old(footprint) - {delNd};
-*/
+
 {
 var curNd := this;
 var curIndex := 0;
@@ -129,15 +129,15 @@ ghost var newSpine := spine[0..pos-1];
 //new
 
 //need lemma show the len of tailContents for all nodes in seq >= last one's tailContents
-//assert  forall i :: 0 <= i <= pos-2 ==> (|newSpine[i].tailContents|) >= pos - i;
-/*
-assert curNd.tailContents == oldContents[pos+1..];
-assert curNd.data == oldContents[pos-1];
-assert forall i :: 0 <= i <= pos-2 ==> newSpine[i].data == oldContents[i];
-*/
+assume  forall i :: 0 <= i <= pos-2 ==> (|newSpine[i].tailContents|) >= pos - i;
+
+assume curNd.tailContents == oldContents[pos+1..];
+assume curNd.data == oldContents[pos-1];
+assume forall i :: 0 <= i <= pos-2 ==> newSpine[i].data == oldContents[i];
+
 //end of precond
 
-//updateSeq4Del(newSpine, delNd, pos, curNd);
+updateSeq4Del(newSpine, delNd, pos, curNd, oldContents, this);
 } else {}
 //////////////////////////
 /////////////////////////
