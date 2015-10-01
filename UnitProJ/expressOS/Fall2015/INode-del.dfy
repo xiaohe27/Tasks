@@ -324,7 +324,7 @@ requires newSpine[|newSpine|-1].tailContents == [nxtNd.data] + [delNd.data] + nx
 
 requires |newSpine[|newSpine|-1].tailContents| >= 2;
 
-	 requires newSpine[|newSpine|-1].footprint == {newSpine[|newSpine|-1]} + nxtNd.footprint - {delNd}; //error! should be + {delNd}
+requires newSpine[|newSpine|-1].footprint == {newSpine[|newSpine|-1]} + nxtNd.footprint + {delNd}; 
 
 //want to remove	 
 	 requires  forall i :: 0 <= i < |newSpine|-1 ==> newSpine[i].footprint == {newSpine[i]} + newSpine[i+1].footprint &&
