@@ -1,0 +1,12 @@
+
+A:\RV-15\CustomizedLogReader-Property-Insert2>echo " 8:30:15.27" 
+" 8:30:15.27"
+
+A:\RV-15\CustomizedLogReader-Property-Insert2>java rvm.LogReader A:\DATA\ldcc4Monpoly 
+There are 93149 log entries in the log file!!!
+
+A:\RV-15\CustomizedLogReader-Property-Insert2>echo " 8:30:55.32" 
+" 8:30:55.32"
+
+
+expected data '73414784' is not inserted into db3 before time 1277857481

@@ -96,6 +96,7 @@ class Insert2Monitor extends com.runtimeverification.rvmonitor.java.rt.tablebase
 			monitorList.removeFirst();
 
 			else{
+				System.out.println("@" + (deadline - 60) + " : " + monitor.dat);
 				System.err.println("expected data '" + monitor.dat + "' is not inserted into db3 before time " + monitor.deadline);
 				System.exit(1);
 			}
@@ -177,10 +178,6 @@ class Insert2Monitor extends com.runtimeverification.rvmonitor.java.rt.tablebase
 		Prop_1_Category_fail = Prop_1_state == 1;
 		return true;
 	}
-
-
-
-
 
 	final void Prop_1_handler_fail (){
 		{System.err.println("...");}
