@@ -1,3 +1,3 @@
-Start time : 1442504864
-Finish time : 1442504934
-\nIt took 70 seconds to analyze insert2 property in the 9M log ldcc4Monpoly
+Start time : 1443711446
+Finish time : 1443711515
+\nIt took 69 seconds to analyze insert2 property in the 9M log ldcc4Monpoly

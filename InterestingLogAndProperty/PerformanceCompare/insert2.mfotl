@@ -1,2 +1,2 @@
-FORALL ?user. FORALL ?data . (insert(?user, db2, ?p ,?data) AND NOT(?data = "unknown") IMPLIES 
+FORALL ?data . (insert(?user, db2, ?p ,?data) AND NOT(?data = "unknown") IMPLIES 
 (EVENTUALLY[0,60s] EXISTS ?u2 . insert(?u2, db3, ?p, ?data) ) )

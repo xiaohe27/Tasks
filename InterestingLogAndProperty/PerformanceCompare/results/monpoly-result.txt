@@ -1,5 +1,15 @@
+universally quantify both user and data:
+
 Start time : 1442504864
 Finish time : 1442504934
-\nIt took 70 seconds to analyze insert2 property in the 9M log ldcc4Monpoly
+\nIt took Monpoly 70 seconds to analyze insert2 property in the 9M log ldcc4Monpoly
 
 @1277857421 (time-point 93148): (104)
+
+=============================================
+
+Only universally quantify the data field:
+
+Start time : 1443711446
+Finish time : 1443711515
+\nIt took Monpoly 69 seconds to analyze insert2 property in the 9M log ldcc4Monpoly
