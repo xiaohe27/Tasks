@@ -1,3 +1,5 @@
 Start time : 1442504864
 Finish time : 1442504934
 \nIt took 70 seconds to analyze insert2 property in the 9M log ldcc4Monpoly
+
+@1277857421 (time-point 93148): (104)
