@@ -191,12 +191,18 @@ method delNext(curNd: INode, delNd:INode, fstNd:INode, pos:int)
 
 		ensures pos > 1 ==> fstNd.spine[0..pos-1][|fstNd.spine[0..pos-1]|-1].tailContents == [curNd.data] + [delNd.data] + curNd.tailContents;
 
+		/*
 		ensures (curNd.tailContents == old([fstNd.data] + fstNd.tailContents)[pos+1..] &&
  curNd.data == old([fstNd.data] + fstNd.tailContents)[pos-1] &&
  forall i :: 0 <= i <= pos-2 ==> fstNd.spine[0..pos-1][i].data == old([fstNd.data] + fstNd.tailContents)[i]);
+*/
 {
-	assert curNd.tailContents == [fstNd.data] + fstNd.tailContents[pos..];
+	/*
+	assert curNd.tailContents == ([fstNd.data] + fstNd.tailContents)[pos..];
 	assert curNd.data ==  ([fstNd.data] + fstNd.tailContents)[pos-1];
+	assert fstNd.ValidLemma();
+ assert |fstNd.tailContents| == |fstNd.spine| - 1;
+	 */
 	
 	curNd.next := curNd.next.next;
 
@@ -276,7 +282,7 @@ listCond(mySeq)
 && mySeq[|mySeq|-1].spine == [mySeq[|mySeq|-1]])
 }
 
-
+/*
 predicate validSeqLemma(mySeq: seq<INode>)
 	requires validSeqCond(mySeq);
 	reads mySeq, (set nd | nd in mySeq);
@@ -293,7 +299,7 @@ predicate validSeqLemma2(mySeq: seq<INode>)
 	else mySeq[0].spine == [mySeq[0]] + mySeq[1].spine
 		&& validSeqLemma2(mySeq[1..])
 }
-
+*/
 
 
 //===============================================
