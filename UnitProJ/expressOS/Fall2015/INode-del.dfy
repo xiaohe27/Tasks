@@ -126,6 +126,7 @@ assume forall i :: 0 <= i <= pos-2 ==>
 	assume curNd.data == ([data] + tailContents)[pos-1];
 	assume curNd.tailContents == ([data] + tailContents)[pos..];
 
+	assume forall i :: 0 <= i < |spine| ==> spine[i].data == ([data] + tailContents)[i];
 
 delNext(curNd, delNd, pos);
 
@@ -139,7 +140,7 @@ ghost var newSpine := spine[0..pos-1];
 
 //need lemma show the len of tailContents for all nodes in seq >= last one's tailContents
 
-assume forall i :: 0 <= i <= pos-2 ==> newSpine[i].data == oldContents[i];
+//assume forall i :: 0 <= i <= pos-2 ==> newSpine[i].data == oldContents[i];
 
 //end of precond
 
@@ -186,6 +187,9 @@ method delNext(curNd: INode, delNd:INode, pos:int)
 
 	requires curNd.data == ([data] + tailContents)[pos-1];
 	requires curNd.tailContents == ([data] + tailContents)[pos..];
+
+	requires |tailContents| == |spine|-1;
+	requires forall i :: 0 <= i <= pos-2 ==> spine[i].data == ([data] + tailContents)[i];
 	
 	modifies curNd;
 	ensures curNd.Valid();
@@ -208,7 +212,9 @@ method delNext(curNd: INode, delNd:INode, pos:int)
 			(|spine[i].tailContents|) >= pos - i;
 
 			//new
-  ensures	curNd.tailContents == old([data] + tailContents)[pos+1..];
+			ensures	curNd.tailContents == old([data] + tailContents)[pos+1..];
+			
+			ensures forall i :: 0 <= i <= pos-2 ==> spine[i].data == old([data] + tailContents)[i];
 {
 	
 	curNd.next := curNd.next.next;
