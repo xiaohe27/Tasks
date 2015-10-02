@@ -81,7 +81,7 @@ spine == [this] + next.spine
 
 
 /////////////////////////////////////////
-/*
+
 method delete(pos:int) returns (delNd:INode)
 requires Valid();
 requires 0 < pos <= |tailContents|;
@@ -116,6 +116,14 @@ curIndex := curIndex + 1;
 
 delNd := curNd.next;
 
+/**
+new
+*/
+assume forall i :: 0 <= i <= pos-2 ==>
+	(|spine[i].tailContents|) >= pos - i;
+	assume |tailContents| >= pos;
+
+	assume curNd.tailContents == ([data] + tailContents)[pos..];
 
 
 delNext(curNd, delNd, pos);
@@ -130,7 +138,6 @@ ghost var newSpine := spine[0..pos-1];
 
 //need lemma show the len of tailContents for all nodes in seq >= last one's tailContents
 
-assume curNd.tailContents == oldContents[pos+1..];
 assume curNd.data == oldContents[pos-1];
 assume forall i :: 0 <= i <= pos-2 ==> newSpine[i].data == oldContents[i];
 
@@ -142,7 +149,7 @@ updateSeq4Del(newSpine, delNd, pos, curNd, oldContents, this);
 /////////////////////////
 
 }
-*/
+
 ////////////////////////////////////////
 
 predicate spineFtprintLemma()
@@ -174,7 +181,10 @@ method delNext(curNd: INode, delNd:INode, pos:int)
 
 	//new
 	requires forall i :: 0 <= i <= pos-2 ==>
-			(|spine[i].tailContents|) >= pos - i;
+	(|spine[i].tailContents|) >= pos - i;
+	requires |tailContents| >= pos;
+
+	requires curNd.tailContents == ([data] + tailContents)[pos..];
 	
 	modifies curNd;
 	ensures curNd.Valid();
@@ -195,18 +205,10 @@ method delNext(curNd: INode, delNd:INode, pos:int)
 
 		ensures forall i :: 0 <= i <= pos-2 ==>
 			(|spine[i].tailContents|) >= pos - i;
-		/*
-		ensures (curNd.tailContents == old([fstNd.data] + fstNd.tailContents)[pos+1..] &&
- curNd.data == old([fstNd.data] + fstNd.tailContents)[pos-1] &&
- forall i :: 0 <= i <= pos-2 ==> fstNd.spine[0..pos-1][i].data == old([fstNd.data] + fstNd.tailContents)[i]);
-*/
+
+			//new
+  ensures	curNd.tailContents == old([data] + tailContents)[pos+1..];
 {
-	/*
-	assert curNd.tailContents == ([fstNd.data] + fstNd.tailContents)[pos..];
-	assert curNd.data ==  ([fstNd.data] + fstNd.tailContents)[pos-1];
-	assert fstNd.ValidLemma();
- assert |fstNd.tailContents| == |fstNd.spine| - 1;
-	 */
 	
 	curNd.next := curNd.next.next;
 
