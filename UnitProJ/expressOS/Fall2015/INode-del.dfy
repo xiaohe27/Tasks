@@ -129,7 +129,7 @@ ghost var newSpine := spine[0..pos-1];
 //new
 
 //need lemma show the len of tailContents for all nodes in seq >= last one's tailContents
-assume  forall i :: 0 <= i <= pos-2 ==> (|newSpine[i].tailContents|) >= pos - i;
+assert  forall i :: 0 <= i <= pos-2 ==> (|newSpine[i].tailContents|) >= pos - i;
 
 assume curNd.tailContents == oldContents[pos+1..];
 assume curNd.data == oldContents[pos-1];
@@ -191,6 +191,8 @@ method delNext(curNd: INode, delNd:INode, fstNd:INode, pos:int)
 
 		ensures pos > 1 ==> fstNd.spine[0..pos-1][|fstNd.spine[0..pos-1]|-1].tailContents == [curNd.data] + [delNd.data] + curNd.tailContents;
 
+		ensures 1 < pos <= |fstNd.tailContents| ==> forall i :: 0 <= i <= pos-2 ==>
+			(|spine[0..pos-1][i].tailContents|) >= pos - i;
 		/*
 		ensures (curNd.tailContents == old([fstNd.data] + fstNd.tailContents)[pos+1..] &&
  curNd.data == old([fstNd.data] + fstNd.tailContents)[pos-1] &&
