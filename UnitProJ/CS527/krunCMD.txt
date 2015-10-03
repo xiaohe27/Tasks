@@ -1,0 +1,2 @@
+time timeout 120 krun --directory "/home/xiaohe/Unit-Projects/java-semantics/tools/../src/prep" -w none --symbolic-execution --output kast --parser "kj-parse-aggreg.sh" helloWorld.java | sed 's/\s*\([[:graph:]].*[[:graph:]]\)\s*/\1/g' | tr -d '\n' | sed -r 's/.*<program>//g' | sed -r 's/<\/program>.*//g' | sed 's/KListWrap/ListWrap/g'
+time timeout 120 krun --directory "/home/xiaohe/Unit-Projects/java-semantics/tools/../src/exec" -w none --symbolic-execution --output pretty --parser cat -cMainClass="ListItem(\"helloWorld\")" -cDissolveAllExceptOut="true" helloWorld.java.pkast
