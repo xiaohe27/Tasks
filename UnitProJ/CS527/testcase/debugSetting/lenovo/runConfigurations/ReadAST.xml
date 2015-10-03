@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ReadAST" type="Application" factoryName="Application">
+    <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+    <option name="MAIN_CLASS_NAME" value="org.kframework.main.Main" />
+    <option name="VM_PARAMETERS" value="-Djava.awt.headless=true -Xms64m -Xmx1024m -Xss32m -XX:+TieredCompilation -ea -cp &quot;$PROJECT_DIR$/k-distribution/target/release/k/lib/java/*:.&quot;" />
+    <option name="PROGRAM_PARAMETERS" value="-krun --directory &quot;$USER_HOME$/Unit-Projects/java-semantics/src/exec&quot; -w none --symbolic-execution --output pretty --parser cat -cMainClass=&quot;ListItem(\&quot;helloWorld\&quot;)&quot; -cDissolveAllExceptOut=&quot;true&quot; $PROJECT_DIR$/../Tasks/UnitProJ/CS527/testcase/helloWorld.java.pkast" />
+    <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+    <option name="ALTERNATIVE_JRE_PATH" value="" />
+    <option name="ENABLE_SWING_INSPECTOR" value="false" />
+    <option name="ENV_VARIABLES" />
+    <option name="PASS_PARENT_ENVS" value="true" />
+    <module name="k-distribution" />
+    <envs />
+    <method />
+  </configuration>
+</component>
