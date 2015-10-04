@@ -1,0 +1,24 @@
+***
+org.kframework.krun.KRunFrontEnd.run();
+
+Transformation<Void, Void> tool = toolProvider.get();
+
+
+===
+org.kframework.krun.tools.Executor
+
+public static class Tool implements Transformation<Void, KRunResult> {
+...
+public KRunResult execute(Attributes a) 
+throws ParseFailedException, KRunExecutionException 
+{...
+
+L169        result = executor.run(initialConfiguration, false).getFinalState();
+
+  ...
+
+L172	    ASTNode pattern = pattern(options.pattern);
+
+}
+
+}
