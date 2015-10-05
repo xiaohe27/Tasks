@@ -95,7 +95,7 @@ spine == [this] + next.spine
 
 
 /////////////////////////////////////////
-
+/*
 method delete(pos:int) returns (delNd:INode)
 requires Valid();
 requires 0 < pos <= |tailContents|;
@@ -114,6 +114,7 @@ var curIndex := 0;
 assert ValidLemma();
 assert ndValid2ListValidLemma();
 assert validSeqContentsLemma();
+assert validSeqTCLemma(spine);
 
 while (curIndex < pos-1)
 invariant 0 <= curIndex < pos;
@@ -134,28 +135,47 @@ curIndex := curIndex + 1;
 
 delNd := curNd.next;
 
-assert validSeqTCLemma(spine);
-
 delNext(curNd, delNd, pos);
 
-/*
+
 if(1 < pos <= |tailContents|) {
 ghost var oldContents := old([data] + tailContents); 
 ghost var newSpine := spine[0..pos-1];
-//////////////////////////////
-//precond
+
+
+	assert listCond(newSpine);
+//	assert 1 < pos < |oldContents|;
 
 //new
-//end of precond
 
-updateSeq4Del(newSpine, delNd, pos, curNd, oldContents, this);
+
+/*
+assert |newSpine[|newSpine|-1].tailContents| >= 2;
+
+assert newSpine[|newSpine|-1].footprint == {newSpine[|newSpine|-1]} + curNd.footprint + {delNd}; 
+
+//want to remove	 
+	 assert  forall i :: 0 <= i < |newSpine|-1 ==> newSpine[i].footprint == {newSpine[i]} + newSpine[i+1].footprint &&
+	newSpine[i].tailContents == [newSpine[i+1].data] + newSpine[i+1].tailContents;
+//--want to remove
+	 
+assert  forall i :: 0 <= i <= pos-2 ==> (|newSpine[i].tailContents|) >= pos - i;
+
+assert |oldContents| > pos;
+assert curNd.tailContents == oldContents[pos+1..];
+assert curNd.data == oldContents[pos-1];
+assert forall i :: 0 <= i <= pos-2 ==> newSpine[i].data == oldContents[i];
+*/
+
+
+//updateSeq4Del(newSpine, delNd, pos, curNd, oldContents, this);
+
 } else {}
 
-*/
 /////////////////////////
 
 }
-
+*/
 ////////////////////////////////////////
 
 predicate spineFtprintLemma()
@@ -209,7 +229,8 @@ method delNext(curNd: INode, delNd:INode, pos:int)
 		spine[i].footprint == old(spine[i].footprint) &&
 		spine[i].spine == old(spine[i].spine);
 
-		ensures listInv(spine[0..pos]);
+	ensures listInv(spine[0..pos]); 
+  ensures listCond(spine[0..pos-1]);
 
 		ensures pos > 1 ==> spine[pos-2].tailContents == [curNd.data] + [delNd.data] + curNd.tailContents;
 
@@ -332,7 +353,7 @@ predicate validSeqLemma2(mySeq: seq<INode>)
 
 
 //===============================================
-/*
+
 ghost method updateSeq4Del(newSpine: seq<INode>, delNd:INode, pos: int, nxtNd:INode, oldContents:seq<Data>, thisNd:INode)
 	requires listCond(newSpine);
 	requires 1 < pos < |oldContents|;
@@ -355,9 +376,11 @@ requires |newSpine[|newSpine|-1].tailContents| >= 2;
 
 requires newSpine[|newSpine|-1].footprint == {newSpine[|newSpine|-1]} + nxtNd.footprint + {delNd}; 
 
-//want to remove	 
+//want to remove
+/*
 	 requires  forall i :: 0 <= i < |newSpine|-1 ==> newSpine[i].footprint == {newSpine[i]} + newSpine[i+1].footprint &&
 	newSpine[i].tailContents == [newSpine[i+1].data] + newSpine[i+1].tailContents;
+*/
 //--want to remove
 	 
 requires  forall i :: 0 <= i <= pos-2 ==> (|newSpine[i].tailContents|) >= pos - i;
@@ -432,4 +455,3 @@ assert [newSpine[curIndex+1].data] + newSpine[curIndex+1].tailContents == oldCon
 assert newSpine[curIndex+1].footprint == old(newSpine[curIndex+1].footprint - {delNd});
 //assert thisNd == newSpine[curIndex+1];
 }
-*/
