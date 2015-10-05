@@ -116,12 +116,10 @@ curIndex := curIndex + 1;
 
 delNd := curNd.next;
 
+assert validSeqTCLemma(spine);
 /**
 new
  */
-
-assume forall i :: 0 <= i <= pos-2 ==>
-	(|spine[i].tailContents|) >= pos - i;
 
 	assume curNd.data == ([data] + tailContents)[pos-1];
 	assume curNd.tailContents == ([data] + tailContents)[pos..];
@@ -292,13 +290,23 @@ listCond(mySeq)
 && mySeq[|mySeq|-1].spine == [mySeq[|mySeq|-1]])
 }
 
+predicate validSeqTCLemma(mySeq: seq<INode>)
+	requires validSeqCond(mySeq);
+	reads mySeq, (set nd | nd in mySeq);
+
+	ensures validSeqTCLemma(mySeq);
+	ensures forall i :: 0 <= i < |mySeq| ==> |mySeq[i].tailContents| == |mySeq| - 1 - i;
+{if |mySeq| <= 1 then true
+	else mySeq[0].tailContents == [mySeq[1].data] + mySeq[1].tailContents
+		&& validSeqTCLemma(mySeq[1..])
+}
+
 /*
 predicate validSeqLemma(mySeq: seq<INode>)
 	requires validSeqCond(mySeq);
 	reads mySeq, (set nd | nd in mySeq);
 	ensures forall i :: 0 <= i < |mySeq| ==> listCond(mySeq[0..i]) && validSeqCond(mySeq[i..]);
 {true}
-
 
 predicate validSeqLemma2(mySeq: seq<INode>)
 	requires validSeqCond(mySeq);
