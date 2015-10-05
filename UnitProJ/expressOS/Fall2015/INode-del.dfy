@@ -102,11 +102,10 @@ requires 0 < pos <= |tailContents|;
 
 modifies footprint;
 
-/*
 ensures Valid();
 ensures [data] + tailContents == old(([data] + tailContents)[0..pos] + ([data] + tailContents)[pos+1..] );
 ensures footprint == old(footprint) - {delNd};
-*/
+
 {
 var curNd := this;
 var curIndex := 0;
@@ -142,11 +141,11 @@ if(1 < pos <= |tailContents|) {
 ghost var oldContents := old([data] + tailContents); 
 ghost var newSpine := spine[0..pos-1];
 
+assert delNd != null;
+
 updateSeq4Del(newSpine, delNd, pos, curNd, oldContents, this);
 
 } else {}
-
-/////////////////////////
 
 }
 
@@ -191,6 +190,7 @@ method delNext(curNd: INode, delNd:INode, pos:int)
 	requires forall i :: 0 <= i <= pos-2 ==> spine[i].data == ([data] + tailContents)[i];
 	
 	modifies curNd;
+	
 	ensures curNd.Valid();
 	ensures curNd.data == old(curNd.data) && curNd.next == delNd.next;
 	ensures curNd.footprint == old(curNd.footprint) - {delNd};
@@ -213,7 +213,9 @@ method delNext(curNd: INode, delNd:INode, pos:int)
 		ensures pos > 1 ==> spine[pos-2].footprint == {spine[pos-2]} + curNd.footprint + {delNd};
 
 	ensures forall i :: 0 <= i <= pos-2 ==>
-	(|spine[i].tailContents|) >= pos - i;
+		(|spine[i].tailContents|) >= pos - i;
+
+		ensures pos > 1 ==> footprint == old(footprint) && (set nd | nd in spine) <= old(footprint); 
 		//end new
 		
 		ensures forall i :: 0 <= i <= pos-2 ==>
