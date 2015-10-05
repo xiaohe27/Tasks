@@ -127,6 +127,8 @@ invariant  spine[curIndex].data == ([data] + tailContents)[curIndex];
 
 invariant curNd.next == spine[curIndex+1];
 invariant curNd.next.next != null ==> curNd.next.next == spine[curIndex+2];
+
+modifies {};
 {
 curNd := curNd.next;
 curIndex := curIndex + 1;
