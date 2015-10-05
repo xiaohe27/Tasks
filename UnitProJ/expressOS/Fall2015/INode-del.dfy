@@ -58,6 +58,20 @@ spine == [this] + next.spine
 }
 
 
+predicate validSeqContentsLemma()
+	requires Valid();
+	reads this, footprint;
+	ensures validSeqContentsLemma();
+	ensures validSeqCond(spine);
+	ensures |tailContents| == |footprint|-1 == |spine|-1;
+  ensures forall i :: 0 <= i < |spine| ==> spine[i].data == ([data] + tailContents)[i];
+	ensures forall i :: 0 <= i < |spine| ==> spine[i].tailContents ==  ([data] + tailContents)[i+1..];
+{
+	ndValid2ListValidLemma() &&
+		next != null ==> next.validSeqContentsLemma()
+}
+
+
 
 predicate ndValid2ListValidLemma()
 requires Valid();
@@ -99,6 +113,7 @@ var curIndex := 0;
 
 assert ValidLemma();
 assert ndValid2ListValidLemma();
+assert validSeqContentsLemma();
 
 while (curIndex < pos-1)
 invariant 0 <= curIndex < pos;
@@ -107,6 +122,9 @@ invariant validSeqCond(spine);
 invariant |curNd.tailContents| + curIndex == |tailContents|;
 invariant curNd.next != null;
 invariant curNd == spine[curIndex];
+
+invariant  spine[curIndex].data == ([data] + tailContents)[curIndex];
+
 invariant curNd.next == spine[curIndex+1];
 invariant curNd.next.next != null ==> curNd.next.next == spine[curIndex+2];
 {
@@ -117,14 +135,6 @@ curIndex := curIndex + 1;
 delNd := curNd.next;
 
 assert validSeqTCLemma(spine);
-/**
-new
- */
-
-	assume curNd.data == ([data] + tailContents)[pos-1];
-	assume curNd.tailContents == ([data] + tailContents)[pos..];
-
-	assume forall i :: 0 <= i <= pos-2 ==> spine[i].data == ([data] + tailContents)[i];
 
 delNext(curNd, delNd, pos);
 
@@ -301,6 +311,7 @@ predicate validSeqTCLemma(mySeq: seq<INode>)
 		&& validSeqTCLemma(mySeq[1..])
 }
 
+	
 /*
 predicate validSeqLemma(mySeq: seq<INode>)
 	requires validSeqCond(mySeq);
