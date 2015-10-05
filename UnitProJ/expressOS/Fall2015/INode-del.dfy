@@ -178,7 +178,6 @@ method delNext(curNd: INode, delNd:INode, pos:int)
   requires 0 < pos < |spine| && spine[pos-1] == curNd;
   requires validSeqCond(spine);
 
-	//new
 	requires forall i :: 0 <= i <= pos-2 ==>
 	(|spine[i].tailContents|) >= pos - i;
 	requires |tailContents| >= pos;
@@ -188,7 +187,9 @@ method delNext(curNd: INode, delNd:INode, pos:int)
 
 	requires |tailContents| == |spine|-1;
 	requires forall i :: 0 <= i <= pos-2 ==> spine[i].data == ([data] + tailContents)[i];
-	
+
+//new
+requires	 (forall nd :: nd in spine ==> nd in footprint);
 	modifies curNd;
 	
 	ensures curNd.Valid();
@@ -215,8 +216,12 @@ method delNext(curNd: INode, delNd:INode, pos:int)
 	ensures forall i :: 0 <= i <= pos-2 ==>
 		(|spine[i].tailContents|) >= pos - i;
 
-		ensures pos > 1 ==> footprint == old(footprint) && (set nd | nd in spine) <= old(footprint); 
-		//end new
+		//	ensures pos > 1 ==>  footprint == old(footprint) && (set nd | nd in spine) <= old(footprint);
+
+		ensures pos > 1 ==>  footprint == old(footprint) &&
+		spine == old(spine) && (forall nd :: nd in spine ==> nd in footprint);
+		
+	//end new
 		
 		ensures forall i :: 0 <= i <= pos-2 ==>
 			(|spine[i].tailContents|) >= pos - i;
