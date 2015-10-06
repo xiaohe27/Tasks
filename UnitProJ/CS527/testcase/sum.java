@@ -18,6 +18,8 @@ class sum {
         while (n > 0) {
             s = s + n;
             n = n - 1;
+
+        String debug = "findMe!";
         }
 
         return s;
