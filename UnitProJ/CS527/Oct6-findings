@@ -1,20 +1,5 @@
-Seems that AST in K has been re-organized by 
+Seems that AST in K has been re-organized.
 
-instance method first, 
-then static method.
-
-in each category, ordered by alphabetical order.
+Methods are traversed in reversed order!
 
 
-=====================================================
-some structures:
-
-visit 'NoMethodBody
-visit 'ClassBodyDecList
-visit 'MethodDec
-visit 'MethodDecHead
-visit 'accCT
-visit 'Public
-visit 'staticCT
-visit 'None
-visit 'class_
