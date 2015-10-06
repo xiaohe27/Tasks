@@ -2,4 +2,11 @@ Seems that AST in K has been re-organized.
 
 Methods are traversed in reversed order!
 
+===
+The method order extracted in first phase can still be from left to right.
+The total number of methods is stored, so that when the id of the method in the
+second phase can be mapped to the right method in the ast produced by the first phase.
 
+say total number of methods is N
+
+In phase 2, the No. x method is mapped to No. (N - x) method in the output ast of phase 1. 
