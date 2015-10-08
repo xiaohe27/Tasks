@@ -1,0 +1,141 @@
+///////////// A request at 10/08/2015 10:04:05 /////////////
+//// Result Status
+Success
+//// Execution Time
+257ms
+//// Client Name
+RVMonitor
+//// Logic Name
+ltl
+//// Logic Repository Input
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert select update delete script_start script_end script_svn script_md5 commit</Events>
+    <Property>
+        <Logic>ltl</Logic>
+        <Formula>true</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 1. Logic Plugin Input to ltl
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert select update delete script_start script_end script_svn script_md5 commit</Events>
+    <Property>
+        <Logic>ltl</Logic>
+        <Formula>true</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 1. Logic Plugin Output from ltl
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert select update delete script_start script_end script_svn script_md5 commit</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0[
+commit -&gt; s0
+script_end -&gt; s0
+script_start -&gt; s0
+delete -&gt; s0
+script_md5 -&gt; s0
+script_svn -&gt; s0
+insert -&gt; s0
+update -&gt; s0
+select -&gt; s0
+default s0]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 2. Logic Plugin Input to fsm
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert select update delete script_start script_end script_svn script_md5 commit</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0[
+commit -&gt; s0
+script_end -&gt; s0
+script_start -&gt; s0
+delete -&gt; s0
+script_md5 -&gt; s0
+script_svn -&gt; s0
+insert -&gt; s0
+update -&gt; s0
+select -&gt; s0
+default s0]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+</mop>
+
+//// 2. Logic Plugin Output from fsm
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert select update delete script_start script_end script_svn script_md5 commit</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0[
+  default s0
+  commit -&gt; s0
+  script_md5 -&gt; s0
+  delete -&gt; s0
+  script_svn -&gt; s0
+  select -&gt; s0
+  script_end -&gt; s0
+  update -&gt; s0
+  insert -&gt; s0
+  script_start -&gt; s0
+]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+    <CreationEvents></CreationEvents>
+    <Message>done</Message>
+    <EnableSets>// fail Enables
+{commit=[], script_md5=[], delete=[], script_svn=[], select=[], script_end=[], update=[], insert=[], script_start=[]}
+// fail Coenables
+{commit=[], script_md5=[], delete=[], script_svn=[], select=[], script_end=[], update=[], insert=[], script_start=[]}
+</EnableSets>
+</mop>
+
+//// Logic Repository Output
+
+<mop>
+    <Client>RVMonitor</Client>
+    <Events>insert select update delete script_start script_end script_svn script_md5 commit</Events>
+    <Property>
+        <Logic>fsm</Logic>
+        <Formula>s0[
+  default s0
+  commit -&gt; s0
+  script_md5 -&gt; s0
+  delete -&gt; s0
+  script_svn -&gt; s0
+  select -&gt; s0
+  script_end -&gt; s0
+  update -&gt; s0
+  insert -&gt; s0
+  script_start -&gt; s0
+]
+</Formula>
+    </Property>
+    <Categories>fail</Categories>
+    <CreationEvents></CreationEvents>
+    <Message>done</Message>
+    <EnableSets>// fail Enables
+{commit=[], script_md5=[], delete=[], script_svn=[], select=[], script_end=[], update=[], insert=[], script_start=[]}
+// fail Coenables
+{commit=[], script_md5=[], delete=[], script_svn=[], select=[], script_end=[], update=[], insert=[], script_start=[]}
+</EnableSets>
+</mop>
+

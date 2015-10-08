@@ -11,7 +11,7 @@ package rvm;
 * is semi-automated and will be tried on the same property, in another (.mop) file. 
 */
 Insert2(String data) {
-    event insert(String user, String db, String notImportant, String data, long time)
+    event insert(String user, String db, String p, String data, long time)
 	{
 		if (db != null && db.equals("db2"))
 		{
@@ -30,6 +30,23 @@ Insert2(String data) {
 	event insert2DB3(String data, long time)
 	{}
 
+event select (String user,String b,String c,String d, long time) {}
+
+event update (String user,String b,String c,String d, long time) {}
+
+event delete (String user,String b,String c,String d, long time) {}
+
+event script_start (String user, long time) {}
+
+event script_end (String user, long time) {}
+
+event script_svn (String user,String b,String c,int d,int e, long time) {}
+
+event script_md5 (String user,String b, long time) {}
+
+event commit (String user,int b, long time) {}
+
+
 	ltl:
 		insert2DB2 => <>[0,60] insert2DB3
 
@@ -37,4 +54,4 @@ Insert2(String data) {
 	{System.err.println("The data is not propagated to db3 after inserting to db2.");}
 }
 
-}
+

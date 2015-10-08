@@ -30,6 +30,9 @@ if [[ $SpecFile == *"T3B2.rvm"* ]]
 then TimeProp="-t"
 fi
 
+if [[ $SpecFile == *"Insert2.rvm"* ]]
+then TimeProp="-t"
+fi
 
 if [[ $SpecFile == *"T7B1.rvm"* ]]
 then Raw="--raw"
@@ -46,10 +49,23 @@ SpecFile="$SRC_ROOT/$SpecFile"
 
 Format="--format=monpoly"
 
-$SRC_ROOT/rv-log $Raw $Other $Format $SpecFile  # >/dev/null
+$SRC_ROOT/rv-log $TimeProp $Raw $Other $Format $SpecFile  # >/dev/null
 
 $SRC_ROOT/rv-monitor -d CustomizedLogReader/rvm/ --indexByVal $TimeProp $@ $SpecFile # >/dev/null
 
 javac CustomizedLogReader/rvm/*.java  # 2>/dev/null
+cd CustomizedLogReader/
 
 
+
+Start=$(date +"%s")
+echo "Start time : $Start" > time.txt
+
+
+java -d64 -Xms512m -Xmx4g rvm.LogReader $TraceFile
+
+
+End=$(date +"%s")
+echo "Finish time : $End" >> time.txt
+Diff=$(( $End - $Start ))
+echo "\nIt took my app $Diff seconds to analyze insert2 property in the 9M log ldcc4Monpoly" >> time.txt

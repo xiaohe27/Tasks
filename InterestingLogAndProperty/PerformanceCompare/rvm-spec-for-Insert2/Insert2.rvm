@@ -26,7 +26,7 @@ private boolean ok;
 private long deadline;
 private String dat;
 
-    event insert(String user, String db, String p, String data, long time)
+creation event insert(String user, String db, String p, String data, long time)
 	{
         check(time);
 

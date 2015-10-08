@@ -1,3 +1,0 @@
-Start time : 1443710655
-\nFinish time : 1443710655
-\nIt took RV-Log 0 seconds to monitor insert2 property in the 9M log ldcc4Monpoly at siebel
