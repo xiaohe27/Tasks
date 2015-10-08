@@ -1,0 +1,6 @@
+Only creation event can create new instance of monitors
+
+For the offline trace analysis, we do not want any operations, 
+including but not limited to creation and update of monitors
+to be performed.
+
