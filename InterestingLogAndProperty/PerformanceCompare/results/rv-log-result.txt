@@ -4,4 +4,4 @@ expected data '73414784' is not inserted into db3 before time 1277857481
 
 Start time : 1443710763
 \nFinish time : 1443710783
-\nIt took RV-Log 20 seconds to monitor insert2 property in the 9M log ldcc4Monpoly at siebel
+\nIt took RV-Log 17 seconds to monitor insert2 property in the 9M log ldcc4Monpoly at siebel

@@ -42,36 +42,169 @@ final class Insert2Monitor_Set extends com.runtimeverification.rvmonitor.java.rt
 		}
 		size = numAlive;
 	}
+	final void event_select(String user, String b, String c, String d, long time) {
+		int numAlive = 0 ;
+		for(int i = 0; i < this.size; i++){
+			Insert2Monitor monitor = this.elements[i];
+			if(!monitor.isTerminated()){
+				elements[numAlive] = monitor;
+				numAlive++;
 
+				final Insert2Monitor monitorfinalMonitor = monitor;
+				monitor.Prop_1_event_select(user, b, c, d, time);
+				if(monitorfinalMonitor.Prop_1_Category_fail) {
+					monitorfinalMonitor.Prop_1_handler_fail();
+				}
+			}
+		}
+		for(int i = numAlive; i < this.size; i++){
+			this.elements[i] = null;
+		}
+		size = numAlive;
+	}
+	final void event_update(String user, String b, String c, String d, long time) {
+		int numAlive = 0 ;
+		for(int i = 0; i < this.size; i++){
+			Insert2Monitor monitor = this.elements[i];
+			if(!monitor.isTerminated()){
+				elements[numAlive] = monitor;
+				numAlive++;
 
+				final Insert2Monitor monitorfinalMonitor = monitor;
+				monitor.Prop_1_event_update(user, b, c, d, time);
+				if(monitorfinalMonitor.Prop_1_Category_fail) {
+					monitorfinalMonitor.Prop_1_handler_fail();
+				}
+			}
+		}
+		for(int i = numAlive; i < this.size; i++){
+			this.elements[i] = null;
+		}
+		size = numAlive;
+	}
+	final void event_delete(String user, String b, String c, String d, long time) {
+		int numAlive = 0 ;
+		for(int i = 0; i < this.size; i++){
+			Insert2Monitor monitor = this.elements[i];
+			if(!monitor.isTerminated()){
+				elements[numAlive] = monitor;
+				numAlive++;
+
+				final Insert2Monitor monitorfinalMonitor = monitor;
+				monitor.Prop_1_event_delete(user, b, c, d, time);
+				if(monitorfinalMonitor.Prop_1_Category_fail) {
+					monitorfinalMonitor.Prop_1_handler_fail();
+				}
+			}
+		}
+		for(int i = numAlive; i < this.size; i++){
+			this.elements[i] = null;
+		}
+		size = numAlive;
+	}
+	final void event_script_start(String user, long time) {
+		int numAlive = 0 ;
+		for(int i = 0; i < this.size; i++){
+			Insert2Monitor monitor = this.elements[i];
+			if(!monitor.isTerminated()){
+				elements[numAlive] = monitor;
+				numAlive++;
+
+				final Insert2Monitor monitorfinalMonitor = monitor;
+				monitor.Prop_1_event_script_start(user, time);
+				if(monitorfinalMonitor.Prop_1_Category_fail) {
+					monitorfinalMonitor.Prop_1_handler_fail();
+				}
+			}
+		}
+		for(int i = numAlive; i < this.size; i++){
+			this.elements[i] = null;
+		}
+		size = numAlive;
+	}
+	final void event_script_end(String user, long time) {
+		int numAlive = 0 ;
+		for(int i = 0; i < this.size; i++){
+			Insert2Monitor monitor = this.elements[i];
+			if(!monitor.isTerminated()){
+				elements[numAlive] = monitor;
+				numAlive++;
+
+				final Insert2Monitor monitorfinalMonitor = monitor;
+				monitor.Prop_1_event_script_end(user, time);
+				if(monitorfinalMonitor.Prop_1_Category_fail) {
+					monitorfinalMonitor.Prop_1_handler_fail();
+				}
+			}
+		}
+		for(int i = numAlive; i < this.size; i++){
+			this.elements[i] = null;
+		}
+		size = numAlive;
+	}
+	final void event_script_svn(String user, String b, String c, int d, int e, long time) {
+		int numAlive = 0 ;
+		for(int i = 0; i < this.size; i++){
+			Insert2Monitor monitor = this.elements[i];
+			if(!monitor.isTerminated()){
+				elements[numAlive] = monitor;
+				numAlive++;
+
+				final Insert2Monitor monitorfinalMonitor = monitor;
+				monitor.Prop_1_event_script_svn(user, b, c, d, e, time);
+				if(monitorfinalMonitor.Prop_1_Category_fail) {
+					monitorfinalMonitor.Prop_1_handler_fail();
+				}
+			}
+		}
+		for(int i = numAlive; i < this.size; i++){
+			this.elements[i] = null;
+		}
+		size = numAlive;
+	}
+	final void event_script_md5(String user, String b, long time) {
+		int numAlive = 0 ;
+		for(int i = 0; i < this.size; i++){
+			Insert2Monitor monitor = this.elements[i];
+			if(!monitor.isTerminated()){
+				elements[numAlive] = monitor;
+				numAlive++;
+
+				final Insert2Monitor monitorfinalMonitor = monitor;
+				monitor.Prop_1_event_script_md5(user, b, time);
+				if(monitorfinalMonitor.Prop_1_Category_fail) {
+					monitorfinalMonitor.Prop_1_handler_fail();
+				}
+			}
+		}
+		for(int i = numAlive; i < this.size; i++){
+			this.elements[i] = null;
+		}
+		size = numAlive;
+	}
+	final void event_commit(String user, int b, long time) {
+		int numAlive = 0 ;
+		for(int i = 0; i < this.size; i++){
+			Insert2Monitor monitor = this.elements[i];
+			if(!monitor.isTerminated()){
+				elements[numAlive] = monitor;
+				numAlive++;
+
+				final Insert2Monitor monitorfinalMonitor = monitor;
+				monitor.Prop_1_event_commit(user, b, time);
+				if(monitorfinalMonitor.Prop_1_Category_fail) {
+					monitorfinalMonitor.Prop_1_handler_fail();
+				}
+			}
+		}
+		for(int i = numAlive; i < this.size; i++){
+			this.elements[i] = null;
+		}
+		size = numAlive;
+	}
 }
 
-interface IInsert2Monitor extends IMonitor, IDisableHolder {
-}
-
-class Insert2DisableHolder extends DisableHolder implements IInsert2Monitor {
-	Insert2DisableHolder(long tau) {
-		super(tau);
-	}
-
-	@Override
-	public final boolean isTerminated() {
-		return false;
-	}
-
-	@Override
-	public int getLastEvent() {
-		return -1;
-	}
-
-	@Override
-	public int getState() {
-		return -1;
-	}
-
-}
-
-class Insert2Monitor extends com.runtimeverification.rvmonitor.java.rt.tablebase.AbstractSynchronizedMonitor implements Cloneable, com.runtimeverification.rvmonitor.java.rt.RVMObject, IInsert2Monitor {
+class Insert2Monitor extends com.runtimeverification.rvmonitor.java.rt.tablebase.AbstractAtomicMonitor implements Cloneable, com.runtimeverification.rvmonitor.java.rt.RVMObject {
 	protected Object clone() {
 		try {
 			Insert2Monitor ret = (Insert2Monitor) super.clone();
@@ -89,14 +222,13 @@ class Insert2Monitor extends com.runtimeverification.rvmonitor.java.rt.tablebase
 
 		while(!monitorList.isEmpty()){
 			Insert2Monitor monitor = monitorList.getFirst();
-			if(monitor.deadline>time)
+			if(monitor.deadline > time)
 			return;
 
 			if(monitor.ok)
 			monitorList.removeFirst();
 
 			else{
-				System.out.println("@" + (monitor.deadline - 60) + " : " + monitor.dat);
 				System.err.println("expected data '" + monitor.dat + "' is not inserted into db3 before time " + monitor.deadline);
 				System.exit(1);
 			}
@@ -108,8 +240,8 @@ class Insert2Monitor extends com.runtimeverification.rvmonitor.java.rt.tablebase
 	private long deadline;
 	private String dat;
 
-	CachedWeakReference Ref_data = null;
-	int Prop_1_state;
+	WeakReference Ref_data = null;
+
 	static final int Prop_1_transition_insert[] = {0, 1};;
 	static final int Prop_1_transition_select[] = {0, 1};;
 	static final int Prop_1_transition_update[] = {0, 1};;
@@ -120,35 +252,43 @@ class Insert2Monitor extends com.runtimeverification.rvmonitor.java.rt.tablebase
 	static final int Prop_1_transition_script_md5[] = {0, 1};;
 	static final int Prop_1_transition_commit[] = {0, 1};;
 
-	boolean Prop_1_Category_fail = false;
+	volatile boolean Prop_1_Category_fail = false;
 
-	Insert2Monitor(long tau) {
-		this.tau = tau;
-		Prop_1_state = 0;
+	private final AtomicInteger pairValue;
+
+	Insert2Monitor() {
+		this.pairValue = new AtomicInteger(this.calculatePairValue(-1, 0) ) ;
 
 	}
 
-	@Override
-	public final int getState() {
-		return Prop_1_state;
+	@Override public final int getState() {
+		return this.getState(this.pairValue.get() ) ;
+	}
+	@Override public final int getLastEvent() {
+		return this.getLastEvent(this.pairValue.get() ) ;
+	}
+	private final int getState(int pairValue) {
+		return (pairValue & 1) ;
+	}
+	private final int getLastEvent(int pairValue) {
+		return (pairValue >> 1) ;
+	}
+	private final int calculatePairValue(int lastEvent, int state) {
+		return (((lastEvent + 1) << 1) | state) ;
 	}
 
-	private final long tau;
-	private long disable = -1;
-
-	@Override
-	public final long getTau() {
-		return this.tau;
-	}
-
-	@Override
-	public final long getDisable() {
-		return this.disable;
-	}
-
-	@Override
-	public final void setDisable(long value) {
-		this.disable = value;
+	private final int handleEvent(int eventId, int[] table) {
+		int nextstate;
+		while (true) {
+			int oldpairvalue = this.pairValue.get() ;
+			int oldstate = this.getState(oldpairvalue) ;
+			nextstate = table [ oldstate ];
+			int nextpairvalue = this.calculatePairValue(eventId, nextstate) ;
+			if (this.pairValue.compareAndSet(oldpairvalue, nextpairvalue) ) {
+				break;
+			}
+		}
+		return nextstate;
 	}
 
 	final boolean Prop_1_event_insert(String user, String db, String p, String data, long time) {
@@ -170,12 +310,116 @@ class Insert2Monitor extends com.runtimeverification.rvmonitor.java.rt.tablebase
 			}
 		}
 		if(Ref_data == null){
-			Ref_data = new CachedWeakReference(data);
+			Ref_data = new WeakReference(data);
 		}
-		RVM_lastevent = 0;
 
-		Prop_1_state = Prop_1_transition_insert[Prop_1_state];
-		Prop_1_Category_fail = Prop_1_state == 1;
+		int nextstate = this.handleEvent(0, Prop_1_transition_insert) ;
+		this.Prop_1_Category_fail = nextstate == 1;
+
+		return true;
+	}
+
+	final boolean Prop_1_event_select(String user, String b, String c, String d, long time) {
+		String data = null;
+		if(Ref_data != null){
+			data = (String)Ref_data.get();
+		}
+		{        check(time);}
+
+		int nextstate = this.handleEvent(1, Prop_1_transition_select) ;
+		this.Prop_1_Category_fail = nextstate == 1;
+
+		return true;
+	}
+
+	final boolean Prop_1_event_update(String user, String b, String c, String d, long time) {
+		String data = null;
+		if(Ref_data != null){
+			data = (String)Ref_data.get();
+		}
+		{        check(time);}
+
+		int nextstate = this.handleEvent(2, Prop_1_transition_update) ;
+		this.Prop_1_Category_fail = nextstate == 1;
+
+		return true;
+	}
+
+	final boolean Prop_1_event_delete(String user, String b, String c, String d, long time) {
+		String data = null;
+		if(Ref_data != null){
+			data = (String)Ref_data.get();
+		}
+		{        check(time);}
+
+		int nextstate = this.handleEvent(3, Prop_1_transition_delete) ;
+		this.Prop_1_Category_fail = nextstate == 1;
+
+		return true;
+	}
+
+	final boolean Prop_1_event_script_start(String user, long time) {
+		String data = null;
+		if(Ref_data != null){
+			data = (String)Ref_data.get();
+		}
+		{        check(time);}
+
+		int nextstate = this.handleEvent(4, Prop_1_transition_script_start) ;
+		this.Prop_1_Category_fail = nextstate == 1;
+
+		return true;
+	}
+
+	final boolean Prop_1_event_script_end(String user, long time) {
+		String data = null;
+		if(Ref_data != null){
+			data = (String)Ref_data.get();
+		}
+		{        check(time);}
+
+		int nextstate = this.handleEvent(5, Prop_1_transition_script_end) ;
+		this.Prop_1_Category_fail = nextstate == 1;
+
+		return true;
+	}
+
+	final boolean Prop_1_event_script_svn(String user, String b, String c, int d, int e, long time) {
+		String data = null;
+		if(Ref_data != null){
+			data = (String)Ref_data.get();
+		}
+		{        check(time);}
+
+		int nextstate = this.handleEvent(6, Prop_1_transition_script_svn) ;
+		this.Prop_1_Category_fail = nextstate == 1;
+
+		return true;
+	}
+
+	final boolean Prop_1_event_script_md5(String user, String b, long time) {
+		String data = null;
+		if(Ref_data != null){
+			data = (String)Ref_data.get();
+		}
+		{        check(time);}
+
+		int nextstate = this.handleEvent(7, Prop_1_transition_script_md5) ;
+		this.Prop_1_Category_fail = nextstate == 1;
+
+		return true;
+	}
+
+	final boolean Prop_1_event_commit(String user, int b, long time) {
+		String data = null;
+		if(Ref_data != null){
+			data = (String)Ref_data.get();
+		}
+		{        check(time);}
+
+		int nextstate = this.handleEvent(8, Prop_1_transition_commit) ;
+		this.Prop_1_Category_fail = nextstate == 1;
+
 		return true;
 	}
 
@@ -185,8 +429,8 @@ class Insert2Monitor extends com.runtimeverification.rvmonitor.java.rt.tablebase
 	}
 
 	final void reset() {
-		RVM_lastevent = -1;
-		Prop_1_state = 0;
+		this.pairValue.set(this.calculatePairValue(-1, 0) ) ;
+
 		Prop_1_Category_fail = false;
 	}
 
@@ -194,11 +438,13 @@ class Insert2Monitor extends com.runtimeverification.rvmonitor.java.rt.tablebase
 
 	@Override
 	protected final void terminateInternal(int idnum) {
+		int lastEvent = this.getLastEvent();
+
 		switch(idnum){
 			case 0:
 			break;
 		}
-		switch(RVM_lastevent) {
+		switch(lastEvent) {
 			case -1:
 			return;
 			case 0:
@@ -253,16 +499,13 @@ public final class Insert2RuntimeMonitor implements com.runtimeverification.rvmo
 	static final ReentrantLock Insert2_RVMLock = new ReentrantLock();
 	static final Condition Insert2_RVMLock_cond = Insert2_RVMLock.newCondition();
 
-	// Declarations for Timestamps
-	private static long Insert2_timestamp = 1;
-
 	private static boolean Insert2_activated = false;
 
 	// Declarations for Indexing Trees
 	private static Object Insert2_data_Map_cachekey_data;
 	private static Insert2Monitor Insert2_data_Map_cachevalue;
-	private static final Tuple2<Insert2Monitor_Set, Insert2Monitor> Insert2__Map = new Tuple2<Insert2Monitor_Set, Insert2Monitor>(new Insert2Monitor_Set() , null) ;
 	private static final MapOfMonitor<Insert2Monitor> Insert2_data_Map = new MapOfMonitor<Insert2Monitor>(0) ;
+	private static final Insert2Monitor_Set Insert2__Map = new Insert2Monitor_Set() ;
 
 	public static int cleanUp() {
 		int collected = 0;
@@ -271,6 +514,12 @@ public final class Insert2RuntimeMonitor implements com.runtimeverification.rvmo
 		return collected;
 	}
 
+	static {
+	}
+
+	public static void actionsAtTheEnd(){
+Insert2Monitor.check(Long.MAX_VALUE);
+	}
 	// Removing terminated monitors from partitioned sets
 	static {
 		TerminatedMonitorCleaner.start() ;
@@ -291,7 +540,7 @@ public final class Insert2RuntimeMonitor implements com.runtimeverification.rvmo
 		MapOfMonitor<Insert2Monitor> matchedLastMap = null;
 		Insert2Monitor matchedEntry = null;
 		boolean cachehit = false;
-		if ((data .equals( Insert2_data_Map_cachekey_data) ) ) {
+		if ((data == Insert2_data_Map_cachekey_data) ) {
 			matchedEntry = Insert2_data_Map_cachevalue;
 			cachehit = true;
 		}
@@ -310,54 +559,16 @@ public final class Insert2RuntimeMonitor implements com.runtimeverification.rvmo
 			if ((wr_data == null) ) {
 				wr_data = new CachedWeakReference(data) ;
 			}
+			// D(X) main:4
+			Insert2Monitor created = new Insert2Monitor() ;
+			matchedEntry = created;
+			matchedLastMap.putNode(wr_data, created) ;
+			// D(X) defineNew:5 for <>
 			{
-				// D(X) createNewMonitorStates:4 when Dom(theta'') = <>
-				Insert2Monitor sourceLeaf = null;
-				{
-					// FindCode
-					Insert2Monitor itmdLeaf = Insert2__Map.getValue2() ;
-					sourceLeaf = itmdLeaf;
-				}
-				if ((sourceLeaf != null) ) {
-					boolean definable = true;
-					// D(X) defineTo:1--5 for <data>
-					if (definable) {
-						// FindCode
-						Insert2Monitor node_data = Insert2_data_Map.getNodeEquivalent(wr_data) ;
-						if ((node_data != null) ) {
-							if (((node_data.getDisable() > sourceLeaf.getTau() ) || ((node_data.getTau() > 0) && (node_data.getTau() < sourceLeaf.getTau() ) ) ) ) {
-								definable = false;
-							}
-						}
-					}
-					if (definable) {
-						// D(X) defineTo:6
-						Insert2Monitor created = (Insert2Monitor)sourceLeaf.clone() ;
-						matchedEntry = created;
-						matchedLastMap.putNode(wr_data, created) ;
-						// D(X) defineTo:7 for <>
-						{
-							// InsertMonitor
-							Insert2Monitor_Set targetSet = Insert2__Map.getValue1() ;
-							targetSet.add(created) ;
-						}
-					}
-				}
+				// InsertMonitor
+				Insert2Monitor_Set targetSet = Insert2__Map;
+				targetSet.add(created) ;
 			}
-			if ((matchedEntry == null) ) {
-				// D(X) main:4
-				Insert2Monitor created = new Insert2Monitor(Insert2_timestamp++) ;
-				matchedEntry = created;
-				matchedLastMap.putNode(wr_data, created) ;
-				// D(X) defineNew:5 for <>
-				{
-					// InsertMonitor
-					Insert2Monitor_Set targetSet = Insert2__Map.getValue1() ;
-					targetSet.add(created) ;
-				}
-			}
-			// D(X) main:6
-			matchedEntry.setDisable(Insert2_timestamp++) ;
 		}
 		// D(X) main:8--9
 		final Insert2Monitor matchedEntryfinalMonitor = matchedEntry;
@@ -375,7 +586,7 @@ public final class Insert2RuntimeMonitor implements com.runtimeverification.rvmo
 	}
 
 	public static final void selectEvent(String user, String b, String c, String d, long time) {
-Insert2Monitor.check(time);
+		Insert2Monitor.check(time);
 	}
 
 	public static final void updateEvent(String user, String b, String c, String d, long time) {
@@ -383,30 +594,27 @@ Insert2Monitor.check(time);
 	}
 
 	public static final void deleteEvent(String user, String b, String c, String d, long time) {
-	Insert2Monitor.check(time);
+		Insert2Monitor.check(time);
 	}
 
 	public static final void script_startEvent(String user, long time) {
-	Insert2Monitor.check(time);
+		Insert2Monitor.check(time);
 	}
 
 	public static final void script_endEvent(String user, long time) {
-	Insert2Monitor.check(time);
+		Insert2Monitor.check(time);
 	}
 
 	public static final void script_svnEvent(String user, String b, String c, int d, int e, long time) {
-Insert2Monitor.check(time);
+		Insert2Monitor.check(time);
 	}
 
 	public static final void script_md5Event(String user, String b, long time) {
-Insert2Monitor.check(time);
+		Insert2Monitor.check(time);
 	}
 
 	public static final void commitEvent(String user, int b, long time) {
 		Insert2Monitor.check(time);
 	}
 
-public static void actionsAtTheEnd() {
-Insert2Monitor.check(Long.MAX_VALUE);
-}
 }

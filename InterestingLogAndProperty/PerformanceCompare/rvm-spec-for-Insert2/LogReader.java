@@ -107,6 +107,10 @@ public class LogReader {
         LogExtractor lee = new LogEntryExtractor(methodInfo, path2Log, 6);
         lee.startReadingEventsByteByByte();
 	endEvent();
+    if (com.runtimeverification.rvmonitor.java.rt.RVMStat.statisticsManager != null 
+&& ! com.runtimeverification.rvmonitor.java.rt.RVMStat.statisticsManager.hasAlreadyReported()) {
+com.runtimeverification.rvmonitor.java.rt.RVMStat.statisticsManager.printStats();
+}
 System.out.println("Property Satisfied");
 
 }
