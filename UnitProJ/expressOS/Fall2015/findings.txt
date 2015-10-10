@@ -2,3 +2,7 @@ If two correct lemmas (defined in the same class), and neither is used,
 then only one unused lemma can be verified quickly.
 
 If they are defined in module level, then no problem at all.
+
+======
+Important:
+ensure for each while loop, specifying the modifies frame accurately!!!
