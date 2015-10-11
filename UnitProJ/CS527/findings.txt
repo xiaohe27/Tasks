@@ -1,0 +1,5 @@
+K's AST traversal will include a few irrelevant method which is not inside original pgm.
+We need to use method name to create the correspondence.
+
+***
+Javadoc and comments will not appear in the AST read by K
