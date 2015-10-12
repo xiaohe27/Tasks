@@ -4,7 +4,9 @@ insert( script, db2, 501082630, 1304465674)
 @36
 insert( script, db3, 501082630, 1304465674)
 
-@270
+@255
 insert( script, db3, 501082630, 1304495674)
 
-@1279303651 delete (user17,db1,172,81031312)
+@270 delete (user17,db1,172,81031312)
+
+@300 delete (user7,db2,172,81031312)
