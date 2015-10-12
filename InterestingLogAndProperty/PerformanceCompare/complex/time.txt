@@ -1,3 +1,3 @@
-Start time : 1444681988
-Finish time : 1444681988
+Start time : 1444682242
+Finish time : 1444682242
 \nIt took 0 seconds to analyze insert2 property in the log sample.log
