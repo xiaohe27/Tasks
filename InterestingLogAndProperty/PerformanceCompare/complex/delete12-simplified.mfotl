@@ -1,0 +1,2 @@
+FORALL ?user . FORALL ?data . (delete(?user, db1, ?p, ?data) AND NOT(?data = "unknown")) IMPLIES 
+(EVENTUALLY[0,3s] EXISTS ?u2 . delete(?u2, db2, ?p, ?data)) 

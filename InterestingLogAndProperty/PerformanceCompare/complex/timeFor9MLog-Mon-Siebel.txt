@@ -1,3 +1,3 @@
-Start time : 1444684378
-Finish time : 1444684422
-\nIt took Monpoly (opt) 44 seconds to output all violations of delete-1-2 Property in the 308MB log file!
+Start time : 1444685029
+Finish time : 1444685046
+\nIt took Monpoly (opt) 17 seconds to output all violations of delete-1-2 Property in the 308MB log file!

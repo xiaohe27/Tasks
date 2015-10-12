@@ -8,7 +8,9 @@ echo "Start time : $Start" > $Out
 #/home/xiaohe/SW/offline-log-analysis/30MB-Log/oneM-fault-end.log
 #/home/xiaohe/SW/offline-log-analysis/30MB-Log/oneM-fault-begin.log
 
-/home/xiaohe/SW/offline-log-analysis/existingApp/monpoly-1.1.2/monpoly -sig delete.sig -formula delete12.mfotl -negate -log /home/xiaohe/SW/offline-log-analysis/ldcc4Monpoly 
+FORMULA=delete12-simplified.mfotl
+
+/home/xiaohe/SW/offline-log-analysis/existingApp/monpoly-1.1.2/monpoly -sig delete.sig -formula $FORMULA -negate -log /home/xiaohe/SW/offline-log-analysis/ldcc4Monpoly 
 
 End=$(date +"%s")
 echo "Finish time : $End" >> $Out

@@ -15,3 +15,12 @@ interval [0, 60s]
 44 seconds
 
 There are not many delete events in the log, which is also a reason why it is faster than the insert2 property
+
+
+=============================================================
+
+For the simplied formula and 308 MB log file:
+FORALL ?user . FORALL ?data . (delete(?user, db1, ?p, ?data) AND NOT(?data = "unknown")) IMPLIES 
+(EVENTUALLY[0,3s] EXISTS ?u2 . delete(?u2, db2, ?p, ?data)) 
+
+17 seconds
