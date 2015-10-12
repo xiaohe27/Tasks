@@ -1,0 +1,6 @@
+There are 93150 log entries in the log file!!!
+Violation: @1279303651 delete (user17, db1, 81031312)
+
+Start time : 1444680926
+\nFinish time : 1444680935
+\nIt took RV-Log 9 seconds to monitor del-1-2 property in the 9M log ldcc4Monpoly at siebel
