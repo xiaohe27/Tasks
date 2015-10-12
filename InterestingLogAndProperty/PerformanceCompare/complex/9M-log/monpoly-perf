@@ -1,5 +1,17 @@
+interval: [0, 3s] or [0, 1s]
+
 Start time : 1444683395
 Finish time : 1444683433
 \nIt took Monpoly (opt) 38 seconds to output all violations of delete-1-2 Property in the 308MB log file!
 
 @1279303651 (time-point 93149): (172)
+
+
+
+interval [0,30s]
+43 seconds
+
+interval [0, 60s]
+44 seconds
+
+There are not many delete events in the log, which is also a reason why it is faster than the insert2 property
