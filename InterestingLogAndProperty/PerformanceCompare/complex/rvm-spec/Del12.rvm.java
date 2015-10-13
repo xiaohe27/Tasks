@@ -18,7 +18,7 @@ public static boolean withinBackwardBound(long baseT, long curT) {
 
 
 public static class Record {
-final long createTime;
+final long dueTime;
 
     boolean delDataFromDB2;
 final boolean insertedToDB1;
@@ -27,7 +27,7 @@ final boolean allPastNotInsertedToDB2;
     boolean alwaysNotInsertedToDB2;
 
 public Record(long cTime) {
-this.createTime = cTime;
+this.dueTime = cTime + timeBound;
 
 this.delDataFromDB2 = (cTime == del_db2_time);
 this.insertedToDB1 = withinBackwardBound(cTime, ins_db1_time);
@@ -39,18 +39,36 @@ this.alwaysNotInsertedToDB2 = (cTime != ins_db2_time);
     public boolean isSAT () {
 	return delDataFromDB2 || (insertedToDB1 && allPastNotInsertedToDB2 && alwaysNotInsertedToDB2);
     }
+
+    public String toString() {
+	return "Del " + data + " from db1 @" + (dueTime - timeBound) + "\n"; 
+    }
     
 }
 
-public static check(long time) {
-    
+public static void check(long time) {
+    for (int i = 0; i < monitors.size(); i++) {
+	Del2Monitor monitor = monitors.get(i);
+	
+	if (time < monitor.firstDueTime) {return;}
+
+	monitor.checkLocalRecords(time);
+
+	if (monitor.del_db1_records.isEmpty()) {
+	    monitors.remove(i);
+	    i--;
+	} 
+    }
 }
 
-private long monitorInitTime;
+private long firstDueTime;
 
 private long ins_db1_time = -1;
 private long ins_db2_time = -1;
 private long del_db2_time = -1;
+
+//for debugging purpose.
+private String data;
 
 private ArrayList<Record> del_db1_records = new ArrayList<>();
 
@@ -62,7 +80,28 @@ public static final String DB2 = "db2";
 public static final String UNKNOWN = "[unknown]";
 
 
+public void checkLocalRecords(long curT) {
+    for (int i = 0; i < this.del_db1_records.size(); i++) {
+	Record record = this.del_db1_records.get(i);
+	boolean due = (curT >= record.dueTime);
 
+	if (due) {
+	    if (record.isSAT()) {
+		this.del_db1_records.remove(i);
+		i--;
+	    }
+	    
+	    else {
+		System.err.println("Property violated!");
+		System.err.println(record);
+		System.exit(2);
+	    }
+	}
+
+	else {return;}
+    }
+
+}
 
 creation event insert(String user, String db, String p, String data, long time)
 {
@@ -77,6 +116,10 @@ creation event delete (String user,String db,String p,String data, long time)
     check(time);
 
      if (UNKNOWN.equals(data)) {return;}
+
+     //can be removed to improve efficiency.
+     this.data = data;
+     
     
     if (db.equals(DB1)) {
 	
@@ -85,7 +128,7 @@ creation event delete (String user,String db,String p,String data, long time)
 	if (!monitors.contains(this))
        {
 	   monitors.add(this);
-	   this.monitorInitTime = time;
+	   this.firstDueTime = time + timeBound;
 	}
 
     } else if (db.equals(DB2)) {
