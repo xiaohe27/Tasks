@@ -103,6 +103,21 @@ public void checkLocalRecords(long curT) {
 
 }
 
+private void  update_del_db2(long time) {
+    //in time interval (time-timeBound, time], deleteDataFromDB2 is satisfied.
+    //delDataFromDB2
+    for (int i = 0; i < this.del_db1_records.size(); i++) {
+	Record record = this.del_db1_records.get(i);
+
+	if (time < record.dueTime) {
+	    for (int j = i; j < this.del_db1_records.size(); j++) {	       
+		this.del_db1_records[j].delDataFromDB2 = true;
+	    }
+	    return;
+	}
+    }
+}
+
 creation event insert(String user, String db, String p, String data, long time)
 {
     check(time);
@@ -134,7 +149,8 @@ creation event delete (String user,String db,String p,String data, long time)
     } else if (db.equals(DB2)) {
 	this.del_db2_time = time;
 
-	//update: all the records within [0, timeBound) in the past can be satisfied now. 
+	//update: all the records within [0, timeBound) in the past can be satisfied now.
+	update_del_db2(time);
     }
 
     
