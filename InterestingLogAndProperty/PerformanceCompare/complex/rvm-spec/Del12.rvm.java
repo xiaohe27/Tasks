@@ -118,11 +118,35 @@ private void  update_del_db2(long time) {
     }
 }
 
+
+private void  update_ins_db2(long time) {
+    //in time interval (time-timeBound, time],  alwaysNotInsertedToDB2 is falsified.
+    // alwaysNotInsertedToDB2
+    for (int i = 0; i < this.del_db1_records.size(); i++) {
+	Record record = this.del_db1_records.get(i);
+
+	if (time < record.dueTime) {
+	    for (int j = i; j < this.del_db1_records.size(); j++) {	       
+		this.del_db1_records[j].alwaysNotInsertedToDB2 = false;
+	    }
+	    return;
+	}
+    }
+}
+
+
 creation event insert(String user, String db, String p, String data, long time)
 {
     check(time);
 
     if (UNKNOWN.equals(data)) {return;}
+
+    if (DB1.equals(db)) {
+	this. ins_db1_time = time;
+    } else if (DB2.equals(db)) {
+	this.ins_db2_time = time;
+	this.update_ins_db2(time);
+    }
 
 }
 
