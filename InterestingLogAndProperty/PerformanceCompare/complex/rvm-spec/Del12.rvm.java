@@ -30,24 +30,37 @@ this.allPastNotInsertedToDB2 = !withinBackwardBound(cTime, ins_db2_time);
 }
 }
 
+public static check(long time) {
+    
+}
+
+
 private long ins_db1_time = -1;
 private long ins_db2_time = -1;
 private long del_db2_time = -1;
 
 private ArrayList<Record> del_db1_records = new ArrayList<>();
 
+private static final ArrayList<Del12Monitor> monitors = new ArrayList<>();
+
+
 public static final String DB1 = "db1";
 public static final String DB2 = "db2";
+public static final String UNKNOWN = "[unknown]";
 
 creation event insert(String user, String db, String p, String data, long time)
 {
     check(time);
+
+    if (UNKNOWN.equals(data)) {return;}
 
 }
 
 creation event delete (String user,String db,String p,String data, long time) 
 {
     check(time);
+
+     if (UNKNOWN.equals(data)) {return;}
     
     if (db.equals(DB1)) {
 	this.del_db1_records.add(new Record(time));
