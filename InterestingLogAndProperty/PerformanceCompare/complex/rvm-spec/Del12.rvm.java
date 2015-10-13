@@ -18,22 +18,35 @@ public static boolean withinBackwardBound(long baseT, long curT) {
 
 
 public static class Record {
-long createTime;
-boolean insertedToDB1;
-boolean allPastNotInsertedToDB2;
+final long createTime;
+
+    boolean delDataFromDB2;
+final boolean insertedToDB1;
+final boolean allPastNotInsertedToDB2;
+
+    boolean alwaysNotInsertedToDB2;
 
 public Record(long cTime) {
 this.createTime = cTime;
 
+this.delDataFromDB2 = (cTime == del_db2_time);
 this.insertedToDB1 = withinBackwardBound(cTime, ins_db1_time);
 this.allPastNotInsertedToDB2 = !withinBackwardBound(cTime, ins_db2_time);
+
+this.alwaysNotInsertedToDB2 = (cTime != ins_db2_time);
 }
+
+    public boolean isSAT () {
+	return delDataFromDB2 || (insertedToDB1 && allPastNotInsertedToDB2 && alwaysNotInsertedToDB2);
+    }
+    
 }
 
 public static check(long time) {
     
 }
 
+private long monitorInitTime;
 
 private long ins_db1_time = -1;
 private long ins_db2_time = -1;
@@ -47,6 +60,9 @@ private static final ArrayList<Del12Monitor> monitors = new ArrayList<>();
 public static final String DB1 = "db1";
 public static final String DB2 = "db2";
 public static final String UNKNOWN = "[unknown]";
+
+
+
 
 creation event insert(String user, String db, String p, String data, long time)
 {
@@ -63,8 +79,22 @@ creation event delete (String user,String db,String p,String data, long time)
      if (UNKNOWN.equals(data)) {return;}
     
     if (db.equals(DB1)) {
+	
 	this.del_db1_records.add(new Record(time));
+
+	if (!monitors.contains(this))
+       {
+	   monitors.add(this);
+	   this.monitorInitTime = time;
+	}
+
+    } else if (db.equals(DB2)) {
+	this.del_db2_time = time;
+
+	//update: all the records within [0, timeBound) in the past can be satisfied now. 
     }
+
+    
 }
 
 
