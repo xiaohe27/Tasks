@@ -142,7 +142,7 @@ creation event insert(String user, String db, String p, String data, long time)
     if (UNKNOWN.equals(data)) {return;}
 
     if (DB1.equals(db)) {
-	this. ins_db1_time = time;
+	this.ins_db1_time = time;
     } else if (DB2.equals(db)) {
 	this.ins_db2_time = time;
 	this.update_ins_db2(time);
@@ -162,7 +162,7 @@ creation event delete (String user,String db,String p,String data, long time)
     
     if (db.equals(DB1)) {
 	
-	this.del_db1_records.add(new Record(time));
+	this.del_db1_records.add(new Del12.Record(time));
 
 	if (!monitors.contains(this))
        {
