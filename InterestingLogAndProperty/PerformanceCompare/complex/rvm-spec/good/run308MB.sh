@@ -5,7 +5,7 @@ echo "Start time : $Start" > $Out
 
 #108000 is 30h
 #/home/xiaohe/SW/offline-log-analysis/ldcc4Monpoly
-java rvm.LogReader /home/xiaohe/SW/offline-log-analysis/ldcc4Monpoly > violation.txt
+java rvm.LogReader /home/xiaohe/SW/offline-log-analysis/ldcc4Monpoly 2> violation.txt
 
 End=$(date +"%s")
 echo "\nFinish time : $End" >> $Out
