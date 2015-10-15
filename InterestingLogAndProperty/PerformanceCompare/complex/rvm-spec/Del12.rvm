@@ -5,19 +5,17 @@ import java.util.*;
 
 Del12(String data) {
 
-public static final long timeBound = 30 * 60 * 60; // 30h = 30 * 60 * 60 seconds.
+	public static final long timeBound = 30 * 60 * 60; // 30h = 30 * 60 * 60 seconds.
 
-public static boolean withinForwardBound(long baseT, long curT) {
-    return curT >= baseT && curT < baseT + timeBound;
-}
+	public static boolean withinForwardBound(long baseT, long curT) {
+		return curT >= baseT && curT < baseT + timeBound;
+	}
 
-public static boolean withinBackwardBound(long baseT, long curT) {
-    return curT >= 0 &&  curT > baseT - timeBound && curT <= baseT;
-}
+	public static boolean withinBackwardBound(long baseT, long curT) {
+		return curT >= 0 &&  curT > baseT - timeBound && curT <= baseT;
+	}
 
-
-
-public static class Record {
+ class Record {
 final long dueTime;
 
     boolean delDataFromDB2;
@@ -41,14 +39,14 @@ this.alwaysNotInsertedToDB2 = (cTime != ins_db2_time);
     }
 
     public String toString() {
-	return "Del " + data + " from db1 @" + (dueTime - timeBound) + "\n"; 
+		return "Del " + data + " from db1 @" + (dueTime - timeBound) + "\n"; 
     }
     
 }
 
 public static void check(long time) {
     for (int i = 0; i < monitors.size(); i++) {
-	Del2Monitor monitor = monitors.get(i);
+	Del12Monitor monitor = monitors.get(i);
 	
 	if (time < monitor.firstDueTime) {return;}
 
@@ -111,7 +109,7 @@ private void  update_del_db2(long time) {
 
 	if (time < record.dueTime) {
 	    for (int j = i; j < this.del_db1_records.size(); j++) {	       
-		this.del_db1_records[j].delDataFromDB2 = true;
+		this.del_db1_records.get(j).delDataFromDB2 = true;
 	    }
 	    return;
 	}
@@ -127,7 +125,7 @@ private void  update_ins_db2(long time) {
 
 	if (time < record.dueTime) {
 	    for (int j = i; j < this.del_db1_records.size(); j++) {	       
-		this.del_db1_records[j].alwaysNotInsertedToDB2 = false;
+		this.del_db1_records.get(j).alwaysNotInsertedToDB2 = false;
 	    }
 	    return;
 	}
@@ -159,10 +157,9 @@ creation event delete (String user,String db,String p,String data, long time)
      //can be removed to improve efficiency.
      this.data = data;
      
-    
     if (db.equals(DB1)) {
 	
-	this.del_db1_records.add(new Del12.Record(time));
+	this.del_db1_records.add(new Record(time));
 
 	if (!monitors.contains(this))
        {

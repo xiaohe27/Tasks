@@ -226,7 +226,7 @@ class Del12Monitor extends com.runtimeverification.rvmonitor.java.rt.tablebase.A
 		return curT >= 0 &&  curT > baseT - timeBound && curT <= baseT;
 	}
 
-	public static class Record {
+	class Record {
 		final long dueTime;
 
 		boolean delDataFromDB2;
@@ -257,7 +257,7 @@ class Del12Monitor extends com.runtimeverification.rvmonitor.java.rt.tablebase.A
 
 	public static void check(long time) {
 		for (int i = 0; i < monitors.size(); i++) {
-			Del2Monitor monitor = monitors.get(i);
+			Del12Monitor monitor = monitors.get(i);
 
 			if (time < monitor.firstDueTime) {return;}
 
@@ -316,7 +316,7 @@ class Del12Monitor extends com.runtimeverification.rvmonitor.java.rt.tablebase.A
 
 			if (time < record.dueTime) {
 				for (int j = i; j < this.del_db1_records.size(); j++) {
-					this.del_db1_records[j].delDataFromDB2 = true;
+					this.del_db1_records.get(j).delDataFromDB2 = true;
 				}
 				return;
 			}
@@ -330,7 +330,7 @@ class Del12Monitor extends com.runtimeverification.rvmonitor.java.rt.tablebase.A
 
 			if (time < record.dueTime) {
 				for (int j = i; j < this.del_db1_records.size(); j++) {
-					this.del_db1_records[j].alwaysNotInsertedToDB2 = false;
+					this.del_db1_records.get(j).alwaysNotInsertedToDB2 = false;
 				}
 				return;
 			}
@@ -422,7 +422,7 @@ class Del12Monitor extends com.runtimeverification.rvmonitor.java.rt.tablebase.A
 
 			if (db.equals(DB1)) {
 
-				this.del_db1_records.add(new Del12.Record(time));
+				this.del_db1_records.add(new Record(time));
 
 				if (!monitors.contains(this))
 				{
@@ -640,6 +640,10 @@ public final class Del12RuntimeMonitor implements com.runtimeverification.rvmoni
 	static {
 		RuntimeOption.enableFineGrainedLock(false) ;
 		RuntimeOption.setIndexByVal(true) ;
+	}
+
+	public static void actionsAtTheEnd() {
+		Del12Monitor.check(-1);
 	}
 
 	public static final void insertEvent(String user, String db, String p, String data, long time) {
