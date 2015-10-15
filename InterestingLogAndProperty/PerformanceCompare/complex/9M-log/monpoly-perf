@@ -62,6 +62,19 @@ FORALL ?user . FORALL ?data . (delete(?user, db1, ?p, ?data) AND NOT(?data = "un
 After 10494 seconds, it was killed by kernel.
 ./300M-Log-delete-1-2.sh: line 14: 12636 Killed                  /home/xiaohe/SW/offline-log-analysis/existingApp/monpoly-1.1.2/monpoly -sig delete.sig -formula $FORMULA -negate -log /home/xiaohe/SW/offline-log-analysis/ldcc4Monpoly
 
+======================
+The updated ldcc log
+
+FORALL ?user . FORALL ?data . (delete(?user, db1, ?p, ?data) AND NOT(?data = "unknown")) IMPLIES 
+(EVENTUALLY[0,30h] EXISTS ?u2 . delete(?u2, db2, ?p, ?data)) OR 
+( ONCE[0,30h] (EXISTS ?u2 . insert(?u2, db1, ?p, ?data)) AND
+(PAST_ALWAYS[0,3s] (ALWAYS[0,3s] NOT (EXISTS ?u2 . insert(?u2, db2, ?p, ?data) ) ) ) )
+
+@1277749421 (time-point 83209): (172)
+
+45s
+
+
 
 
 
