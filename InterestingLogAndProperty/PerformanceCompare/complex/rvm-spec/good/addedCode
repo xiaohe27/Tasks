@@ -1,0 +1,5 @@
+	public static void actionsAtTheEnd() {
+		Del12Monitor.check(Long.MAX_VALUE);
+	}
+
+insert above code to Del12RuntimeMonitor
