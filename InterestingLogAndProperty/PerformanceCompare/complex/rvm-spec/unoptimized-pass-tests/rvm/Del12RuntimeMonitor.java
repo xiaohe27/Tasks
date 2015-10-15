@@ -643,7 +643,7 @@ public final class Del12RuntimeMonitor implements com.runtimeverification.rvmoni
 	}
 
 	public static void actionsAtTheEnd() {
-		Del12Monitor.check(-1);
+		Del12Monitor.check(Long.MAX_VALUE);
 	}
 
 	public static final void insertEvent(String user, String db, String p, String data, long time) {
