@@ -5,7 +5,7 @@ import java.util.*;
 
 Del12(String data) {
 
-public static final timeBound = 30 * 60 * 60; // 30h = 30 * 60 * 60 seconds.
+public static final long timeBound = 30 * 60 * 60; // 30h = 30 * 60 * 60 seconds.
 
 public static boolean withinForwardBound(long baseT, long curT) {
     return curT >= baseT && curT < baseT + timeBound;
