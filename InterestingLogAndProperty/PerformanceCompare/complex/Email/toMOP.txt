@@ -19,4 +19,7 @@ I came up with a raw specification to express the same property used by Monpoly 
 
 In this hand-crafted rvm-spec, I took advantage of the decentralized paradigm of rv-monitor when constructing the data structures 
 for holding states. Instead of a cumbersome central huge HashMap which is both slow to update and retrieve, I simply added some 
-extra fields to the local monitor so that the monitoring of the property can be performed independently at each local monitor.
+extra fields to the local monitor so that the assertion of the property can be performed independently by only querying local information
+at each local monitor.
+
+
