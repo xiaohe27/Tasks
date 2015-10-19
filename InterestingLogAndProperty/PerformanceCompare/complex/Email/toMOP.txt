@@ -22,4 +22,22 @@ for holding states. Instead of a cumbersome central huge HashMap which is both s
 extra fields to the local monitor so that the assertion of the property can be performed independently by only querying local information
 at each local monitor.
 
+Each time when an event that deletes some data "d" from db1 was 
+observed, we can create a reminder inside the monitor instance
+corresponds to "d", which records the expected deadline. Some 
+sub-formula like [*][0, 30h)!exists u'. insert(u', db2, data)
+can be checked at the reminder's creation time, so that
+the truth values for several sub-formulas can be finalized at the beginning.
 
+Each time when an event that inserts some known data d
+into db2 was observed, the sub-formula 
+[][0,30h)!exists u'. insert(u', db2, data)
+will be falsified from all the reminders that haven't been expired.
+
+Each time a new event was observed, the global time will be updated and
+every expired reminder will be checked; If its associated
+property is evaluated to false (by combining all its sub-formulae),
+then a violation was reported.  
+
+Finally, when all the log entries have been read, an additional 
+check was performed to ensure the bounded-liveness property is verified correctly. 
