@@ -1,0 +1,22 @@
+I did some experiments on the most complex MFOTL provided in ETH's papers.
+N.B. I remove the inaccuracy-tolerance part of the original formula to make the experiment easier to conduct.
+
+I identified its most time consuming sub-formula, which is in the form:
+
+ [*][0, 30h)[][0,30h)!exists u'. insert(u', db2, data)
+
+It would take Monpoly extremely long time (3 hours+ on my machine) to analyze the 308 MB log file 
+if the monitored radius is 30 hours (represented by 30h in the formula);
+
+Monpoly's monitoring time would reduce to 45 seconds if I shrank the radius to 60 seconds.
+
+My hypothesis for this difference of execution times is that in wider time interval, more states need to be 
+kept track of (in Monpoly) in order to assert the formula. 
+================================================================
+
+I came up with a raw specification to express the same property used by Monpoly and get at least 4 times faster.
+9s for the 30 hours radius (RV-Log), versus 45s for the 60-seconds radius.
+
+In this hand-crafted rvm-spec, I took advantage of the decentralized paradigm of rv-monitor when constructing the data structures 
+for holding states. Instead of a cumbersome central huge HashMap which is both slow to update and retrieve, I simply added some 
+extra fields to the local monitor so that the monitoring of the property can be performed independently at each local monitor.
