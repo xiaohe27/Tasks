@@ -1,0 +1,4 @@
+0. instructorAnswerQ : efficient way of sharing answers to all the students.
+
+1. endorseStudentAnswer : encourage students
+motivation of student: being acknowledged 
