@@ -1,0 +1,1 @@
+csv2log 4 lldcc.csv | monpoly -sig sig -formula formula
