@@ -75,6 +75,12 @@ FORALL ?user . FORALL ?data . (delete(?user, db1, ?p, ?data) AND NOT(?data = "un
 45s
 
 
+====================!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!==========================================
+Using csv2log to transform the csv format to Monpoly format:
+
+Start time : 1445881631
+Finish time : 1445881699
+\nIt took csv2log and Monpoly (opt) 68 seconds to output all violations of delete-1-2 Property in the 308MB log file!
 
 
 

@@ -13,9 +13,9 @@ FORMULA=delete12.mfotl
 
 #/home/xiaohe/SW/offline-log-analysis/existingApp/rv13/monpoly/monpoly
 
-/home/xiaohe/SW/offline-log-analysis/existingApp/monpoly-1.1.2/monpoly -sig delete.sig -formula $FORMULA -negate -log /home/xiaohe/SW/offline-log-analysis/ldcc4Monpoly 
+/home/xiaohe/SW/offline-log-analysis/existingApp/rv13/monpoly/monpoly -sig delete.sig -formula $FORMULA -negate -log /home/xiaohe/SW/offline-log-analysis/ldcc4Monpoly 
 
 End=$(date +"%s")
 echo "Finish time : $End" >> $Out
 Diff=$(( $End - $Start ))
-echo "\nIt took Monpoly (opt) $Diff seconds to output all violations of delete-1-2 Property in the 308MB log file!" >> $Out
+echo "\nIt took rv-13 Monpoly (opt) $Diff seconds to output all violations of delete-1-2 Property in the 308MB log file!" >> $Out
