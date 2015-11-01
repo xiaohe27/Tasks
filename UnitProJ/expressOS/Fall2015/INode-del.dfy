@@ -318,29 +318,11 @@ predicate validSeqTCLemma(mySeq: seq<INode>)
 
 	ensures validSeqTCLemma(mySeq);
 	ensures forall i :: 0 <= i < |mySeq| ==> |mySeq[i].tailContents| == |mySeq| - 1 - i;
-{if |mySeq| <= 1 then true
+{
+if |mySeq| <= 1 then true
 	else mySeq[0].tailContents == [mySeq[1].data] + mySeq[1].tailContents
 		&& validSeqTCLemma(mySeq[1..])
 }
-
-	
-/*
-predicate validSeqLemma(mySeq: seq<INode>)
-	requires validSeqCond(mySeq);
-	reads mySeq, (set nd | nd in mySeq);
-	ensures forall i :: 0 <= i < |mySeq| ==> listCond(mySeq[0..i]) && validSeqCond(mySeq[i..]);
-{true}
-
-predicate validSeqLemma2(mySeq: seq<INode>)
-	requires validSeqCond(mySeq);
-	reads mySeq, (set nd | nd in mySeq);
-	ensures validSeqLemma2(mySeq);
-	ensures forall i :: 0 <= i < |mySeq| ==> mySeq[i].spine == mySeq[i..];
-{if |mySeq| <= 1 then true
-	else mySeq[0].spine == [mySeq[0]] + mySeq[1].spine
-		&& validSeqLemma2(mySeq[1..])
-}
-*/
 
 
 //===============================================
