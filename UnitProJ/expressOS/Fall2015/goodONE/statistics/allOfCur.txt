@@ -1,7 +1,0 @@
-insert+update+get: 
-64 verified.
-
-windows:
-1 min 19s
-
-ubuntu: 37s

@@ -1,0 +1,21 @@
+insert+update+get: 
+64 verified.
+
+windows:
+1 min 19s
+
+ubuntu: 37s
+
+
+==================
+plus delete:
+
+ubuntu :
+
+Start time : 1446408029
+Dafny program verifier version 1.9.5.20511, Copyright (c) 2003-2015, Microsoft.
+
+Dafny program verifier finished with 74 verified, 0 errors
+Compiled assembly into INode-all.dll
+Finish time : 1446408627
+It took Dafny 598 seconds to verify the program!
