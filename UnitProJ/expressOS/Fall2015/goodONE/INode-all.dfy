@@ -18,7 +18,6 @@ if next == null then 1 else 1 + next.len()
 }
 
 
-
 predicate good()
 reads this, footprint;
 {
@@ -87,6 +86,53 @@ ensures fresh(footprint - {this});
 	footprint := {this};
     spine := [this];
 }
+
+method setNext(curNd:INode, d:Data, fstNd:INode, i:int)
+	requires Valid();
+
+  requires curNd != null && curNd.Valid();
+	requires curNd.next != null;
+	requires this !in curNd.footprint;
+	requires data == d;
+
+	requires fstNd != null && fstNd.Valid() && 0 < i <= |fstNd.spine| &&
+		listCond(fstNd.spine[0..i]);
+	requires this !in fstNd.spine[0..i] && footprint !! (set nd | nd in fstNd.spine[0..i]); 
+  requires curNd == fstNd.spine[i-1];
+
+	requires fstNd !in footprint;
+	
+	modifies this, curNd;
+	ensures Valid();
+	
+	ensures fstNd != null &&
+      fstNd.spine == old(fstNd.spine)
+		&& 0 < i <= |fstNd.spine| &&
+		(forall nd :: nd in fstNd.spine[0..i] ==> (nd != null && nd.footprint == old(nd.footprint)
+		&& nd.tailContents == old(nd.tailContents)
+		)) &&
+		listCond(fstNd.spine[0..i]);
+	ensures this !in fstNd.spine[0..i] && footprint !! (set nd | nd in fstNd.spine[0..i]); 
+	
+	  ensures curNd == fstNd.spine[i-1];
+
+		ensures curNd.next == this;
+		ensures data == d;
+		ensures fstNd.data == old(fstNd.data);
+
+	ensures curNd.footprint + {this} == {curNd} + this.footprint;
+	ensures [d] + curNd.tailContents == [data] + tailContents;
+
+{
+next := curNd.next;
+tailContents := [next.data] + next.tailContents;
+footprint := {this} + next.footprint;
+spine := [this] + next.spine;
+
+curNd.next := this;
+}
+
+
 
 method get(i:int) returns (dataI: Data) 
 requires 0 < i <= |tailContents|;
@@ -269,7 +315,6 @@ assert spineTCLemma();
 dataSeqCmp([data] + tailContents, old([data]+tailContents), pos, d);
 }
 
-
 /////////////////////////////////////////
 
 method delete(pos:int) returns (delNd:INode)
@@ -326,110 +371,6 @@ updateSeq4Del(newSpine, delNd, pos, curNd, oldContents, this);
 } else {}
 
 }
-
-
-
-predicate ndValid2ListValidLemma()
-requires Valid();
-reads this, footprint;
-
-ensures ndValid2ListValidLemma();
-ensures forall nd :: nd in spine ==> nd in footprint;
-ensures forall nd :: nd in footprint ==> nd != null && nd.footprint <= footprint;
-
-ensures validSeqCond(spine);
-{
-if next == null then (spine == [this] && footprint == {this}
-					&& tailContents == [])
-else (
-this !in next.footprint &&
-spine == [this] + next.spine 
-&& footprint == {this} + next.footprint
-&& tailContents == [next.data] + next.tailContents
-&& next.ndValid2ListValidLemma())
-}
-
-
-predicate spineFtprintLemma()
-requires Valid();
-reads this, footprint;
-
-ensures spineFtprintLemma();
-ensures forall nd :: nd in spine ==> nd in footprint;
-
-ensures (set nd | nd in spine) == footprint;
-{
-if next == null then (spine == [this] && footprint == {this})
-else (
-spine == [this] + next.spine 
-&& footprint == {this} + next.footprint
-&& next.spineFtprintLemma())
-}
-
-
-predicate spineTCLemma()
-	requires Valid();
-	reads this, footprint;
-	ensures spineTCLemma();
-	ensures |spine| == |tailContents| + 1;
-	ensures null !in spine;
-     ensures spine[0].data == this.data &&
-		forall i :: 0 < i < |spine| ==> spine[i].data == this.tailContents[i-1];
-{
-	if next == null then true
-	else spine == [this] + next.spine && tailContents == [next.data] + next.tailContents
-		&& next.spineTCLemma()
-}
-
-method setNext(curNd:INode, d:Data, fstNd:INode, i:int)
-	requires Valid();
-
-  requires curNd != null && curNd.Valid();
-	requires curNd.next != null;
-	requires this !in curNd.footprint;
-	requires data == d;
-
-	requires fstNd != null && fstNd.Valid() && 0 < i <= |fstNd.spine| &&
-		listCond(fstNd.spine[0..i]);
-	requires this !in fstNd.spine[0..i] && footprint !! (set nd | nd in fstNd.spine[0..i]); 
-  requires curNd == fstNd.spine[i-1];
-
-	requires fstNd !in footprint;
-	
-	modifies this, curNd;
-	ensures Valid();
-	
-	ensures fstNd != null &&
-      fstNd.spine == old(fstNd.spine)
-		&& 0 < i <= |fstNd.spine| &&
-		(forall nd :: nd in fstNd.spine[0..i] ==> (nd != null && nd.footprint == old(nd.footprint)
-		&& nd.tailContents == old(nd.tailContents)
-		)) &&
-		listCond(fstNd.spine[0..i]);
-	ensures this !in fstNd.spine[0..i] && footprint !! (set nd | nd in fstNd.spine[0..i]); 
-	
-	  ensures curNd == fstNd.spine[i-1];
-
-		ensures curNd.next == this;
-		ensures data == d;
-		ensures fstNd.data == old(fstNd.data);
-
-	ensures curNd.footprint + {this} == {curNd} + this.footprint;
-	ensures [d] + curNd.tailContents == [data] + tailContents;
-
-{
-next := curNd.next;
-tailContents := [next.data] + next.tailContents;
-footprint := {this} + next.footprint;
-spine := [this] + next.spine;
-
-curNd.next := this;
-}
-
-
-}
-
-//////////module
 
 ///////////////////////////////
 method delNext(curNd: INode, delNd:INode, pos:int)
@@ -509,6 +450,61 @@ else {
 }
 }
 
+predicate ndValid2ListValidLemma()
+requires Valid();
+reads this, footprint;
+
+ensures ndValid2ListValidLemma();
+ensures forall nd :: nd in spine ==> nd in footprint;
+ensures forall nd :: nd in footprint ==> nd != null && nd.footprint <= footprint;
+
+ensures validSeqCond(spine);
+{
+if next == null then (spine == [this] && footprint == {this}
+					&& tailContents == [])
+else (
+this !in next.footprint &&
+spine == [this] + next.spine 
+&& footprint == {this} + next.footprint
+&& tailContents == [next.data] + next.tailContents
+&& next.ndValid2ListValidLemma())
+}
+
+
+predicate spineFtprintLemma()
+requires Valid();
+reads this, footprint;
+
+ensures spineFtprintLemma();
+ensures forall nd :: nd in spine ==> nd in footprint;
+
+ensures (set nd | nd in spine) == footprint;
+{
+if next == null then (spine == [this] && footprint == {this})
+else (
+spine == [this] + next.spine 
+&& footprint == {this} + next.footprint
+&& next.spineFtprintLemma())
+}
+
+
+predicate spineTCLemma()
+	requires Valid();
+	reads this, footprint;
+	ensures spineTCLemma();
+	ensures |spine| == |tailContents| + 1;
+	ensures null !in spine;
+     ensures spine[0].data == this.data &&
+		forall i :: 0 < i < |spine| ==> spine[i].data == this.tailContents[i-1];
+{
+	if next == null then true
+	else spine == [this] + next.spine && tailContents == [next.data] + next.tailContents
+		&& next.spineTCLemma()
+}
+
+}
+
+//////////module
 
 
 ///////////////////////////////
@@ -768,6 +764,7 @@ index := index - 1;
 
 }
 
+
 ////////////////////////////////////////////////////////
 
 function getFtprint(nd:INode): set<INode>
@@ -838,6 +835,7 @@ if |mySeq| <= 1 then true
 
 
 //===============================================
+
 //LI
 predicate LI(mySeq:seq<INode>, index:int, d:Data, newNd:INode,
 			oldNewD:Data, oldNewNext:INode, oldNewFp:set<INode>, 
@@ -1083,6 +1081,7 @@ LIAndNegGuard2Post(mySeq, index, d, newNd,
 		oldD, oldNext, oldFp, oldTC, oldSpine);
 
 }
+
 
 /////////////////////////////////////////////////////
 
@@ -1392,7 +1391,7 @@ requires 0 <= index < |contents|;
 
 modifies footprint;
 ensures valid();
-ensures contents == old(contents[0..index]) + old(contents[index+1..]);
+ensures contents == old(contents[0..index] + contents[index+1..]);
 ensures footprint == old(footprint) - {delNd};
 ensures spine == old(spine) - {delNd};
 {
