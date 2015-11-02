@@ -60,16 +60,19 @@ spine == [this] + next.spine
 
 method indexOf(tarNd:INode) returns (index:int)
 	requires tarNd != null;
-	requires tarNd in footprint;
 	requires Valid();
 
 	modifies {};
 	ensures Valid();
 	ensures |footprint| == |spine| == |tailContents| + 1;
-	ensures 0 <= index < |footprint|;
-  ensures spine[index] == tarNd;
-	ensures if index == 0 then tarNd.data == data
-                else tarNd.data == tailContents[index-1];
+	ensures
+tarNd in footprint ==> (
+		0 <= index < |footprint|
+  && spine[index] == tarNd
+	&& if index == 0 then tarNd.data == data
+else tarNd.data == tailContents[index-1]);
+
+	ensures tarNd !in footprint ==> index == -1;
 {
 
 var curNd := this;
@@ -78,21 +81,27 @@ index := 0;
 assert ValidLemma();
 assert ndValid2ListValidLemma();
 
-while(curNd != tarNd)
-invariant 0 <= index < |footprint|;
-invariant spine[index] == curNd;
-invariant curNd != null && curNd.Valid();
-invariant tarNd in curNd.footprint;
-invariant |footprint| == index + |curNd.footprint| == |tailContents| + 1;
+var length := len();
 
-	decreases curNd.footprint;
+while(index < length)
+invariant 0 <= index <= length;
+invariant index != length ==> spine[index] == curNd;
+invariant curNd != null ==> curNd.Valid();
+invariant (curNd != null &&  tarNd in curNd.footprint) <==> tarNd in footprint;
+invariant curNd != null ==> ( length == index + |curNd.footprint| == |tailContents| + 1);
 {
+	if (tarNd == curNd)
+	{
+assert spineTCLemma();
+return index;
+	}
+	
 	curNd := curNd.next;
 	index := index + 1;
 }
 
-assert spineTCLemma();
-return index;
+assert tarNd !in footprint;
+return -1;
 }
 
 
