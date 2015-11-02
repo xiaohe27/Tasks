@@ -211,23 +211,23 @@ this in footprint
 
 
 //////////////////////////////////
-
+/*
 method indexOf(tarNd:INode) returns (index:int)
 	requires valid();
-	requires tarNd != null && tarNd != head && tarNd in head.footprint;
+	requires tarNd != null && tarNd != head;
 	modifies {};
 	ensures valid();
-	ensures 0 <= index < |contents|;
-//  ensures head.spine[index+1] == tarNd;
-	ensures tarNd.data == contents[index];
+	ensures
+		  tarNd in head.footprint ==> (
+		0 <= index < |head.spine| - 1
+  && head.spine[index+1] == tarNd
+	&& |contents| == |head.tailContents| == |head.spine| - 1
+	&& tarNd.data == contents[index] );
 {
-  assert head.ValidLemma() && head.ndValid2ListValidLemma();
 	index := head.indexOf(tarNd);
-
 	index := index - 1;
-
 }
-
+*/
 
 
 
