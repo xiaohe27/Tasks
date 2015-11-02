@@ -57,6 +57,20 @@ spine == [this] + next.spine
 && next.ValidLemma())
 }
 
+method contains(tarNd:INode) returns (isIn:bool)
+	requires tarNd != null;
+	requires Valid();
+	modifies {};
+	ensures Valid();
+	ensures isIn <==> tarNd in footprint;
+{
+	var index := indexOf(tarNd);
+
+	if (index == -1) {isIn := false;}
+	else {isIn := true;}
+
+	return isIn;
+}
 
 method indexOf(tarNd:INode) returns (index:int)
 	requires tarNd != null;
