@@ -7,3 +7,6 @@ Dafny.exe /trace $1
 #just verify
 dafny /compile\:0 /nologo $1
 
+
+#gen the c# code
+/spillTargetCode:1
