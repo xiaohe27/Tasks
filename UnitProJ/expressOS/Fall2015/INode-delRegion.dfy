@@ -132,7 +132,7 @@ return -1;
 }
 
 /////////////////////////////////////////
-/*
+
 method delete(pos:int) returns (delNd:INode)
 requires Valid();
 requires 0 < pos <= |tailContents|;
@@ -266,7 +266,7 @@ else {
 	curNd.spine := [curNd] + curNd.next.spine;
 }
 }
-*/
+
 ////////////////////////////////////////
 
 
@@ -535,7 +535,7 @@ method indexOf(tarNd:INode) returns (index:int)
 	}
 }
 
-/*
+
 method delete(index:int)  returns (delNd:INode)
 requires valid();
 requires 0 <= index < |contents|;
@@ -582,7 +582,7 @@ method delNd(tarNd:INode)
 		assert deletedNode == tarNd;
 	}
 }
-*/
+
 
 
 }
