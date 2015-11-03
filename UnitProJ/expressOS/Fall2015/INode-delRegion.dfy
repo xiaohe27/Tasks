@@ -181,7 +181,8 @@ if(1 < pos <= |tailContents|) {
 ghost var oldContents := old([data] + tailContents); 
 ghost var newSpine := spine[0..pos-1];
 
-assert shrinkLemma(spine, pos);
+assert |oldContents| == old(|tailContents| + 1);
+assert shrinkLemma(spine, pos, oldContents);
 
 assert delNd != null;
 
@@ -322,11 +323,14 @@ ensures forall nd :: nd in mySeq ==>
 if mySeq == [] then {} else getFtprint(mySeq[0]) + sumAllFtprint(mySeq[1..])
 }
 
-predicate shrinkLemma(oldSpine:seq<INode>, pos: int)
+predicate shrinkLemma(oldSpine:seq<INode>, pos: int, oldContents:seq<Data>)
   requires 0 <= pos < |oldSpine|;
+	requires pos - 2 < |oldContents|;
 	requires forall i :: 0 <= i <= pos-2 ==> oldSpine[i] != null && |oldSpine[i].tailContents| >= pos - i;
+	requires forall i :: 0 <= i <= pos-2 ==> oldSpine[i].data == oldContents[i];
 	reads oldSpine;
 	ensures forall i :: 0 <= i <= pos-2 ==> (|oldSpine[0..pos-1][i].tailContents|) >= pos - i;
+	ensures forall i :: 0 <= i <= pos-2 ==> oldSpine[0..pos-1][i].data == oldContents[i];
 {
 true
 }	
