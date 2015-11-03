@@ -85,6 +85,18 @@ method contains(tarNd:INode) returns (isIn:bool)
 	return isIn;
 }
 
+predicate fpLemma(tarNd:INode)
+	requires Valid();
+	requires tarNd in footprint;
+	reads footprint;
+ensures fpLemma(tarNd);
+	ensures tarNd != null && tarNd.next != null ==> tarNd.next in footprint;
+{
+	if this == tarNd then true
+	else if next != null then next.fpLemma(tarNd)
+		else false
+}
+
 method indexOf(tarNd:INode) returns (index:int)
 	requires tarNd != null;
 	requires Valid();
@@ -144,6 +156,10 @@ ensures [data] + tailContents == old(([data] + tailContents)[0..pos] + ([data] +
 ensures footprint == old(footprint) - {delNd};
 ensures old(|tailContents| == |spine| - 1 && 0 < pos < |spine|);
 ensures delNd == old(spine[pos]);
+
+//new
+ensures delNd != null && delNd.Valid();
+ensures delNd.footprint == old(delNd.footprint);
 {
 var curNd := this;
 var curIndex := 0;
@@ -244,13 +260,14 @@ requires	 (forall nd :: nd in spine ==> nd in footprint);
 
 		ensures pos > 1 ==>  footprint == old(footprint) &&
 		spine == old(spine) && (forall nd :: nd in spine ==> nd in footprint);
-		
-	//end new
-		
+				
 			ensures	curNd.tailContents == old([data] + tailContents)[pos+1..];
 			
 			ensures forall i :: 0 <= i <= pos-2 ==> spine[i].data == old([data] + tailContents)[i];
 
+	//end new
+ensures delNd == old(delNd) && delNd != null && delNd.Valid();
+ensures delNd.footprint == old(delNd.footprint);
 {
 	
 	curNd.next := curNd.next.next;
@@ -352,7 +369,10 @@ requires delNd !in nxtNd.footprint && delNd !in newSpine;
 
 requires (set nd | nd in newSpine) !! nxtNd.footprint;
 requires newSpine[|newSpine|-1].footprint >= nxtNd.footprint;
-requires delNd != null;
+
+//new
+requires delNd != null && delNd.Valid();
+
 requires newSpine[|newSpine|-1].tailContents == [nxtNd.data] + [delNd.data] + nxtNd.tailContents;
 
 requires |newSpine[|newSpine|-1].tailContents| >= 2;
@@ -371,6 +391,9 @@ ensures thisNd.Valid();
 ensures  [thisNd.data] + thisNd.tailContents == oldContents[0..pos] + oldContents[pos+1..];
 
 ensures thisNd.footprint == old(thisNd.footprint) - {delNd};
+
+//new
+ensures delNd != null && delNd.Valid() && delNd.footprint == old(delNd.footprint);
 {
 
 ghost var curIndex := pos - 2;
@@ -548,6 +571,7 @@ requires valid();
 requires 0 <= index < |contents|;
 
 modifies footprint;
+
 ensures valid();
 ensures contents == old(contents[0..index] + contents[index+1..]);
 
@@ -555,6 +579,10 @@ ensures 1 <= index + 1 < old(|head.spine|);
 ensures delNd == old(head.spine[index+1]);
 ensures footprint == old(footprint) - {delNd};
 ensures spine == old(spine) - {delNd};
+
+//new
+ensures delNd != null && delNd.Valid();
+ensures delNd.footprint == old(delNd.footprint);
 {
    delNd := head.delete(index+1);
 
@@ -572,10 +600,15 @@ assert head.ValidLemma() && head.ndValid2ListValidLemma();
 method delNd(tarNd:INode)
 	requires valid();
 	requires tarNd != null && tarNd != head;
+
+	requires {tarNd} * footprint <= head.footprint;
 	
 	modifies footprint;
 	ensures valid();
 	ensures footprint == old(footprint) - {tarNd};
+
+	//new
+	ensures tarNd.footprint == old(tarNd.footprint); 
 {
 	var index := indexOf(tarNd);
 
@@ -589,6 +622,42 @@ method delNd(tarNd:INode)
 	}
 }
 
+function method isIn(nd:INode, ndSet:set<INode>):bool
+	ensures isIn(nd, ndSet) <==> nd in ndSet;
+{
+nd in ndSet
+}
+
+
+method delSetOfNd(ndSet:set<INode>)
+	requires valid();
+	requires footprint * ndSet <= head.footprint - {head};
+	modifies footprint;
+	ensures valid();
+	ensures footprint !! ndSet;
+{
+	var tmpSet := ndSet;
+
+	var curNd := head.next;
+	
+	while (curNd != null)
+		invariant valid();
+		invariant curNd != null ==> curNd in head.footprint;
+invariant  footprint * ndSet <= head.footprint - {head};
+invariant curNd != null ==> curNd.Valid();
+invariant  (footprint - getFtprint(curNd)) !! ndSet;
+
+decreases getFtprint(curNd);		
+	{
+		assert head.fpLemma(curNd);
+			
+		if (isIn(curNd, ndSet)) {
+			delNd(curNd);
+		}
+
+		curNd := curNd.next;
+	}
+}
 
 }
 
