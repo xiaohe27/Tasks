@@ -132,7 +132,7 @@ return -1;
 }
 
 /////////////////////////////////////////
-
+/*
 method delete(pos:int) returns (delNd:INode)
 requires Valid();
 requires 0 < pos <= |tailContents|;
@@ -265,6 +265,8 @@ else {
 	curNd.spine := [curNd] + curNd.next.spine;
 }
 }
+
+*/
 ////////////////////////////////////////
 
 
@@ -329,7 +331,7 @@ predicate shrinkLemma(oldSpine:seq<INode>, pos: int)
 true
 }	
 
-
+/*
 ghost method updateSeq4Del(newSpine: seq<INode>, delNd:INode, pos: int, nxtNd:INode, oldContents:seq<Data>, thisNd:INode)
 	requires listCond(newSpine);
 	requires 1 < pos < |oldContents|;
@@ -424,6 +426,7 @@ assert [newSpine[curIndex+1].data] + newSpine[curIndex+1].tailContents == oldCon
 assert newSpine[curIndex+1].footprint == old(newSpine[curIndex+1].footprint - {delNd});
 
 }
+*/
 
 predicate validSeqTCLemma(mySeq: seq<INode>)
 	requires validSeqCond(mySeq);
@@ -515,17 +518,22 @@ method indexOf(tarNd:INode) returns (index:int)
 	modifies {};
 	ensures valid();
 	ensures
-		  tarNd in head.footprint ==> (
+		  tarNd in head.footprint <==> (
 		0 <= index < |head.spine| - 1
   && head.spine[index+1] == tarNd
 	&& |contents| == |head.tailContents| == |head.spine| - 1
 	&& tarNd.data == contents[index] );
-	ensures tarNd !in head.footprint ==> index == -2;
+	ensures tarNd !in head.footprint <==> index == -1;
 {
 	index := head.indexOf(tarNd);
-	index := index - 1;
+
+	assert index > 0 || index == -1;
+	if(index != -1) {
+		index := index - 1;
+	}
 }
 
+/*
 method delete(index:int)  returns (delNd:INode)
 requires valid();
 requires 0 <= index < |contents|;
@@ -563,13 +571,14 @@ method delNd(tarNd:INode)
 //	(exists x :: 0 <= x < old(|contents|) ==> old(head.spine[x+1] == tarNd) && contents == old(contents[0..x] + contents[x+1..]));
 	
 {
-	var index := head.indexOf(tarNd);
+	var index := indexOf(tarNd);
 	if(index != -1) {
-		var deletedNode := delete(index-1);
+		var deletedNode := delete(index);
 		assert deletedNode == tarNd;
 	}
 }
- 
+
+ */
 
 }
 
