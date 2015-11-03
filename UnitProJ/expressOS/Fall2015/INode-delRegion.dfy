@@ -142,7 +142,8 @@ modifies footprint;
 ensures Valid();
 ensures [data] + tailContents == old(([data] + tailContents)[0..pos] + ([data] + tailContents)[pos+1..] );
 ensures footprint == old(footprint) - {delNd};
-
+ensures old(|tailContents| == |spine| - 1 && 0 < pos < |spine|);
+ensures delNd == old(spine[pos]);
 {
 var curNd := this;
 var curIndex := 0;
@@ -565,7 +566,7 @@ method delNd(tarNd:INode)
 	
 	modifies footprint;
 	ensures valid();
-	ensures footprint == old(footprint) - {tarNd};
+//	ensures footprint == old(footprint) - {tarNd};
 	//content list at most has one difference
 
 //	ensures old(|head.spine|) == old(|contents|) + 1;
