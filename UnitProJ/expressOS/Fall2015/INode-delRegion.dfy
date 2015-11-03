@@ -470,7 +470,7 @@ listCond(mySeq)
 && mySeq[|mySeq|-1].spine == [mySeq[|mySeq|-1]])
 }
 
-/*
+
 //The INodes class: a list
 class INodes {
   var head: INode;
@@ -548,7 +548,7 @@ assert head.ValidLemma() && head.ndValid2ListValidLemma();
 }
 
 //del the given tarNd from the list
-/*
+
 method delNd(tarNd:INode)
 	requires valid();
 	requires tarNd != null && tarNd != head;
@@ -565,11 +565,11 @@ method delNd(tarNd:INode)
 {
 	var index := head.indexOf(tarNd);
 	if(index != -1) {
-		var deletedNode := head.delete(index);
+		var deletedNode := delete(index-1);
 		assert deletedNode == tarNd;
 	}
 }
- */
+ 
 
 }
-*/
+
