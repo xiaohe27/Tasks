@@ -326,8 +326,7 @@ modifies footprint;
 ensures Valid();
 ensures [data] + tailContents == old(([data] + tailContents)[0..pos] + ([data] + tailContents)[pos+1..] );
 ensures footprint == old(footprint) - {delNd};
-ensures old(|tailContents| == |spine| - 1 && 0 < pos < |spine|);
-ensures delNd == old(spine[pos]);
+
 {
 var curNd := this;
 var curIndex := 0;
@@ -365,17 +364,13 @@ if(1 < pos <= |tailContents|) {
 ghost var oldContents := old([data] + tailContents); 
 ghost var newSpine := spine[0..pos-1];
 
-assert shrinkLemma(spine, pos);
-
 assert delNd != null;
 
 updateSeq4Del(newSpine, delNd, pos, curNd, oldContents, this);
 
 } else {}
- 
 
 }
-
 
 ///////////////////////////////
 method delNext(curNd: INode, delNd:INode, pos:int)
@@ -429,6 +424,9 @@ requires	 (forall nd :: nd in spine ==> nd in footprint);
 		spine == old(spine) && (forall nd :: nd in spine ==> nd in footprint);
 		
 	//end new
+		
+		ensures forall i :: 0 <= i <= pos-2 ==>
+			(|spine[i].tailContents|) >= pos - i;
 
 			ensures	curNd.tailContents == old([data] + tailContents)[pos+1..];
 			
@@ -783,14 +781,6 @@ ensures forall nd :: nd in mySeq ==>
 if mySeq == [] then {} else getFtprint(mySeq[0]) + sumAllFtprint(mySeq[1..])
 }
 
-predicate shrinkLemma(oldSpine:seq<INode>, pos: int)
-  requires 0 <= pos < |oldSpine|;
-	requires forall i :: 0 <= i <= pos-2 ==> oldSpine[i] != null && |oldSpine[i].tailContents| >= pos - i;
-	reads oldSpine;
-	ensures forall i :: 0 <= i <= pos-2 ==> (|oldSpine[0..pos-1][i].tailContents|) >= pos - i;
-{
-true
-}
 
 ///////////////////////////////////////////
 
@@ -1402,9 +1392,6 @@ requires 0 <= index < |contents|;
 modifies footprint;
 ensures valid();
 ensures contents == old(contents[0..index] + contents[index+1..]);
-
-ensures 1 <= index + 1 < old(|head.spine|);
-ensures delNd == old(head.spine[index+1]);
 ensures footprint == old(footprint) - {delNd};
 ensures spine == old(spine) - {delNd};
 {
