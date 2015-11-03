@@ -93,13 +93,13 @@ method indexOf(tarNd:INode) returns (index:int)
 	ensures Valid();
 	ensures |footprint| == |spine| == |tailContents| + 1;
 	ensures
-tarNd in footprint ==> (
+ tarNd in footprint <==> (
 		0 <= index < |footprint|
   && spine[index] == tarNd
 	&& if index == 0 then tarNd.data == data
 else tarNd.data == tailContents[index-1]);
 
-	ensures tarNd !in footprint ==> index == -1;
+	ensures tarNd !in footprint <==> index == -1;
 {
 
 var curNd := this;
@@ -132,7 +132,7 @@ return -1;
 }
 
 /////////////////////////////////////////
-
+/*
 method delete(pos:int) returns (delNd:INode)
 requires Valid();
 requires 0 < pos <= |tailContents|;
@@ -266,7 +266,7 @@ else {
 	curNd.spine := [curNd] + curNd.next.spine;
 }
 }
-
+*/
 ////////////////////////////////////////
 
 
@@ -518,7 +518,8 @@ method indexOf(tarNd:INode) returns (index:int)
 	modifies {};
 
 	ensures valid();
-	ensures tarNd in head.footprint <==> index != -1
+	ensures tarNd !in head.footprint <==> index == -1;
+	ensures tarNd in head.footprint 
 	 <==> (
 		0 <= index < |head.spine| - 1
   && head.spine[index+1] == tarNd
@@ -534,7 +535,7 @@ method indexOf(tarNd:INode) returns (index:int)
 	}
 }
 
-
+/*
 method delete(index:int)  returns (delNd:INode)
 requires valid();
 requires 0 <= index < |contents|;
@@ -581,7 +582,7 @@ method delNd(tarNd:INode)
 		assert deletedNode == tarNd;
 	}
 }
-
+*/
 
 
 }
