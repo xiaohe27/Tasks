@@ -132,7 +132,7 @@ return -1;
 }
 
 /////////////////////////////////////////
-/*
+
 method delete(pos:int) returns (delNd:INode)
 requires Valid();
 requires 0 < pos <= |tailContents|;
@@ -266,7 +266,6 @@ else {
 }
 }
 
-*/
 ////////////////////////////////////////
 
 
@@ -331,7 +330,7 @@ predicate shrinkLemma(oldSpine:seq<INode>, pos: int)
 true
 }	
 
-/*
+
 ghost method updateSeq4Del(newSpine: seq<INode>, delNd:INode, pos: int, nxtNd:INode, oldContents:seq<Data>, thisNd:INode)
 	requires listCond(newSpine);
 	requires 1 < pos < |oldContents|;
@@ -426,7 +425,7 @@ assert [newSpine[curIndex+1].data] + newSpine[curIndex+1].tailContents == oldCon
 assert newSpine[curIndex+1].footprint == old(newSpine[curIndex+1].footprint - {delNd});
 
 }
-*/
+
 
 predicate validSeqTCLemma(mySeq: seq<INode>)
 	requires validSeqCond(mySeq);
@@ -533,7 +532,7 @@ method indexOf(tarNd:INode) returns (index:int)
 	}
 }
 
-/*
+
 method delete(index:int)  returns (delNd:INode)
 requires valid();
 requires 0 <= index < |contents|;
@@ -578,7 +577,7 @@ method delNd(tarNd:INode)
 	}
 }
 
- */
+
 
 }
 
