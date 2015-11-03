@@ -132,7 +132,7 @@ return -1;
 }
 
 /////////////////////////////////////////
-
+/*
 method delete(pos:int) returns (delNd:INode)
 requires Valid();
 requires 0 < pos <= |tailContents|;
@@ -182,6 +182,7 @@ ghost var oldContents := old([data] + tailContents);
 ghost var newSpine := spine[0..pos-1];
 
 assert |oldContents| == old(|tailContents| + 1);
+
 assert shrinkLemma(spine, pos, oldContents);
 
 assert delNd != null;
@@ -267,7 +268,7 @@ else {
 	curNd.spine := [curNd] + curNd.next.spine;
 }
 }
-
+*/
 ////////////////////////////////////////
 
 
@@ -500,6 +501,7 @@ this in footprint
 &&
 (forall nd :: nd in spine ==> (nd.next != null ==> nd.next in spine))
 
+&& (!exists nd :: nd !in head.footprint && nd in footprint)
 && contents == head.tailContents
 && head.footprint == spine
 }
@@ -523,8 +525,8 @@ method indexOf(tarNd:INode) returns (index:int)
 
 	ensures footprint == old(footprint);
 	ensures valid();
-	ensures tarNd !in head.footprint <==> index == -1;
-	ensures tarNd in head.footprint 
+	ensures tarNd !in footprint <==> index == -1;
+	ensures tarNd in footprint 
 	 <==> (
 		0 <= index < |head.spine| - 1
   && head.spine[index+1] == tarNd
@@ -540,7 +542,7 @@ method indexOf(tarNd:INode) returns (index:int)
 	}
 }
 
-
+/*
 method delete(index:int)  returns (delNd:INode)
 requires valid();
 requires 0 <= index < |contents|;
@@ -573,22 +575,24 @@ method delNd(tarNd:INode)
 	
 	modifies footprint;
 	ensures valid();
-//	ensures footprint == old(footprint) - {tarNd};
+	ensures tarNd in head.footprint ==> footprint == old(footprint) - {tarNd};
+	ensures tarNd !in head.footprint ==> footprint == old(footprint);
 	//content list at most has one difference
-
-//	ensures old(|head.spine|) == old(|contents|) + 1;
-//	ensures tarNd in old(footprint) ==>
-//	(exists x :: 0 <= x < old(|contents|) ==> old(head.spine[x+1] == tarNd) && contents == old(contents[0..x] + contents[x+1..]));
 	
 {
 	var index := indexOf(tarNd);
+	assert  footprint == old(footprint);
+
 	if(index != -1) {
+		assert tarNd in head.footprint;
 		var deletedNode := delete(index);
 		assert deletedNode == tarNd;
 		assert  footprint == old(footprint) - {tarNd};
+	} else {
+		assert tarNd !in head.footprint;
 	}
 }
-
+*/
 
 
 }
