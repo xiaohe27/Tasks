@@ -516,14 +516,15 @@ method indexOf(tarNd:INode) returns (index:int)
 	requires valid();
 	requires tarNd != null && tarNd != head;
 	modifies {};
+
 	ensures valid();
-	ensures
-		  tarNd in head.footprint <==> (
+	ensures tarNd in head.footprint <==> index != -1
+	 <==> (
 		0 <= index < |head.spine| - 1
   && head.spine[index+1] == tarNd
 	&& |contents| == |head.tailContents| == |head.spine| - 1
 	&& tarNd.data == contents[index] );
-	ensures tarNd !in head.footprint <==> index == -1;
+
 {
 	index := head.indexOf(tarNd);
 
