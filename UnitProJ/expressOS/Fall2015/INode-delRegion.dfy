@@ -540,6 +540,9 @@ requires 0 <= index < |contents|;
 modifies footprint;
 ensures valid();
 ensures contents == old(contents[0..index] + contents[index+1..]);
+
+ensures 1 <= index + 1 < old(|head.spine|);
+ensures delNd == old(head.spine[index+1]);
 ensures footprint == old(footprint) - {delNd};
 ensures spine == old(spine) - {delNd};
 {
