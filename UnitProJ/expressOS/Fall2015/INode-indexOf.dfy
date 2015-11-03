@@ -234,7 +234,7 @@ this in footprint
 
 
 //////////////////////////////////
-/*
+
 method indexOf(tarNd:INode) returns (index:int)
 	requires valid();
 	requires tarNd != null && tarNd != head;
@@ -246,11 +246,12 @@ method indexOf(tarNd:INode) returns (index:int)
   && head.spine[index+1] == tarNd
 	&& |contents| == |head.tailContents| == |head.spine| - 1
 	&& tarNd.data == contents[index] );
+	ensures tarNd !in head.footprint ==> index == -2;
 {
 	index := head.indexOf(tarNd);
 	index := index - 1;
 }
-*/
+
 
 
 
