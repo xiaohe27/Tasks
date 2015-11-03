@@ -3,6 +3,9 @@ then only one unused lemma can be verified quickly.
 
 If they are defined in module level, then no problem at all.
 
-======
+=======
+Timeout occur if too many lemmas are put inside the class level,
+move them to module level is fine.
+=======
 Important:
 ensure for each while loop, specifying the modifies frame accurately!!!
