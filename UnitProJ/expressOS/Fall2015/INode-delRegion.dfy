@@ -138,11 +138,11 @@ requires Valid();
 requires 0 < pos <= |tailContents|;
 
 modifies footprint;
-
+/*
 ensures Valid();
 ensures [data] + tailContents == old(([data] + tailContents)[0..pos] + ([data] + tailContents)[pos+1..] );
 ensures footprint == old(footprint) - {delNd};
-
+*/
 {
 var curNd := this;
 var curIndex := 0;
@@ -175,16 +175,22 @@ delNd := curNd.next;
 
 delNext(curNd, delNd, pos);
 
+assert forall i :: 0 <= i <= pos-2 ==> (|spine[i].tailContents|) >= pos - i;
+
 
 if(1 < pos <= |tailContents|) {
 ghost var oldContents := old([data] + tailContents); 
 ghost var newSpine := spine[0..pos-1];
 
+assert shrinkLemma(spine, pos);
+assert forall i :: 0 <= i <= pos-2 ==> (|newSpine[i].tailContents|) >= pos - i;
+
 assert delNd != null;
 
-updateSeq4Del(newSpine, delNd, pos, curNd, oldContents, this);
+//updateSeq4Del(newSpine, delNd, pos, curNd, oldContents, this);
 
 } else {}
+ 
 
 }
 
@@ -241,9 +247,6 @@ requires	 (forall nd :: nd in spine ==> nd in footprint);
 		
 	//end new
 		
-		ensures forall i :: 0 <= i <= pos-2 ==>
-			(|spine[i].tailContents|) >= pos - i;
-
 			ensures	curNd.tailContents == old([data] + tailContents)[pos+1..];
 			
 			ensures forall i :: 0 <= i <= pos-2 ==> spine[i].data == old([data] + tailContents)[i];
@@ -319,6 +322,16 @@ ensures forall nd :: nd in mySeq ==>
 {
 if mySeq == [] then {} else getFtprint(mySeq[0]) + sumAllFtprint(mySeq[1..])
 }
+
+predicate shrinkLemma(oldSpine:seq<INode>, pos: int)
+  requires 0 <= pos < |oldSpine|;
+	requires forall i :: 0 <= i <= pos-2 ==> oldSpine[i] != null && |oldSpine[i].tailContents| >= pos - i;
+	reads oldSpine;
+	ensures forall i :: 0 <= i <= pos-2 ==> (|oldSpine[0..pos-1][i].tailContents|) >= pos - i;
+{
+true
+}	
+
 
 ghost method updateSeq4Del(newSpine: seq<INode>, delNd:INode, pos: int, nxtNd:INode, oldContents:seq<Data>, thisNd:INode)
 	requires listCond(newSpine);
@@ -460,7 +473,7 @@ listCond(mySeq)
 && mySeq[|mySeq|-1].spine == [mySeq[|mySeq|-1]])
 }
 
-
+/*
 //The INodes class: a list
 class INodes {
   var head: INode;
@@ -562,3 +575,4 @@ method delNd(tarNd:INode)
  */
 
 }
+*/
