@@ -517,6 +517,7 @@ method indexOf(tarNd:INode) returns (index:int)
 	requires tarNd != null && tarNd != head;
 	modifies {};
 
+	ensures footprint == old(footprint);
 	ensures valid();
 	ensures tarNd !in head.footprint <==> index == -1;
 	ensures tarNd in head.footprint 
@@ -580,6 +581,7 @@ method delNd(tarNd:INode)
 	if(index != -1) {
 		var deletedNode := delete(index);
 		assert deletedNode == tarNd;
+		assert  footprint == old(footprint) - {tarNd};
 	}
 }
 

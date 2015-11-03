@@ -505,7 +505,7 @@ predicate spineTCLemma()
 }
 
 }
-
+//END of CLASS
 //////////module
 
 
@@ -657,7 +657,7 @@ invariant forall nd :: nd in mySeq ==> nd.data == old(nd.data);
 invariant listInv(mySeq);
 
 invariant forall i :: 0 <= i <= index ==> mySeq[i].tailContents == old(mySeq[i].tailContents)
-								 	 				 			 		 && mySeq[i].footprint == old(mySeq[i].footprint);
+&& mySeq[i].footprint == old(mySeq[i].footprint);
 
 invariant forall i :: 0 <= i < index ==>
 	   mySeq[i].footprint == {mySeq[i]} + mySeq[i+1].footprint
