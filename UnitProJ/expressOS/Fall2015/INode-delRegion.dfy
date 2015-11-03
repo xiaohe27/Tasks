@@ -138,11 +138,11 @@ requires Valid();
 requires 0 < pos <= |tailContents|;
 
 modifies footprint;
-/*
+
 ensures Valid();
 ensures [data] + tailContents == old(([data] + tailContents)[0..pos] + ([data] + tailContents)[pos+1..] );
 ensures footprint == old(footprint) - {delNd};
-*/
+
 {
 var curNd := this;
 var curIndex := 0;
@@ -175,19 +175,16 @@ delNd := curNd.next;
 
 delNext(curNd, delNd, pos);
 
-assert forall i :: 0 <= i <= pos-2 ==> (|spine[i].tailContents|) >= pos - i;
-
 
 if(1 < pos <= |tailContents|) {
 ghost var oldContents := old([data] + tailContents); 
 ghost var newSpine := spine[0..pos-1];
 
 assert shrinkLemma(spine, pos);
-assert forall i :: 0 <= i <= pos-2 ==> (|newSpine[i].tailContents|) >= pos - i;
 
 assert delNd != null;
 
-//updateSeq4Del(newSpine, delNd, pos, curNd, oldContents, this);
+updateSeq4Del(newSpine, delNd, pos, curNd, oldContents, this);
 
 } else {}
  
