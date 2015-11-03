@@ -132,7 +132,7 @@ return -1;
 }
 
 /////////////////////////////////////////
-/*
+
 method delete(pos:int) returns (delNd:INode)
 requires Valid();
 requires 0 < pos <= |tailContents|;
@@ -268,7 +268,7 @@ else {
 	curNd.spine := [curNd] + curNd.next.spine;
 }
 }
-*/
+
 ////////////////////////////////////////
 
 
@@ -542,7 +542,7 @@ method indexOf(tarNd:INode) returns (index:int)
 	}
 }
 
-/*
+
 method delete(index:int)  returns (delNd:INode)
 requires valid();
 requires 0 <= index < |contents|;
@@ -575,24 +575,19 @@ method delNd(tarNd:INode)
 	
 	modifies footprint;
 	ensures valid();
-	ensures tarNd in head.footprint ==> footprint == old(footprint) - {tarNd};
-	ensures tarNd !in head.footprint ==> footprint == old(footprint);
-	//content list at most has one difference
-	
+	ensures footprint == old(footprint) - {tarNd};
 {
 	var index := indexOf(tarNd);
-	assert  footprint == old(footprint);
 
 	if(index != -1) {
-		assert tarNd in head.footprint;
+
 		var deletedNode := delete(index);
 		assert deletedNode == tarNd;
-		assert  footprint == old(footprint) - {tarNd};
+
 	} else {
-		assert tarNd !in head.footprint;
+
 	}
 }
-*/
 
 
 }
