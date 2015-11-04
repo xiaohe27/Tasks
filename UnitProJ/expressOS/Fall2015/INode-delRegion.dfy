@@ -606,6 +606,14 @@ function method isIn(nd:INode, ndSet:set<INode>):bool
 nd in ndSet
 }
 
+method delListOfNd(ndList: list<INode>)
+	requires valid();
+	modifies footprint * (set nd | nd in ndList);
+	ensures valid();
+	
+{}
+
+/*
 method delRegion(begin:int, end:int) returns (delSet:set<INode>)
 	requires valid();
 	requires 0 <= begin < end <= |spine|;
@@ -615,7 +623,8 @@ method delRegion(begin:int, end:int) returns (delSet:set<INode>)
 {
 
 }
-	
+*/	
+
 
 /*
 method delSetOfNd(ndSet:set<INode>)
