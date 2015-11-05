@@ -1,0 +1,31 @@
+class EnforceTestEnforcementMonitor extends com.runtimeverification.rvmonitor.java.rt.tablebase.AbstractAtomicMonitor implements Cloneable, com.runtimeverification.rvmonitor.java.rt.RVMObject {
+	protected Object clone() {
+		
+		EnforceTestEnforcementMonitor ret = this.clone(this);
+		return ret;
+		
+	}
+
+        private EnforceTestEnforcementMonitor clone(EnforceTestEnforcementMonitor old) {
+		return new EnforceTestEnforcementMonitor(old);
+	}
+
+	static final int Prop_1_transition_oneBegin[] = {3, 5, 5, 3, 5, 5};;
+	static final int Prop_1_transition_oneEnd[] = {5, 5, 2, 2, 5, 5};;
+	static final int Prop_1_transition_twoBegin[] = {5, 5, 4, 5, 4, 5};;
+	static final int Prop_1_transition_twoEnd[] = {5, 1, 5, 5, 1, 5};;
+
+	volatile boolean Prop_1_Category_nonfail = false;
+
+	private AtomicInteger pairValue;
+
+	EnforceTestEnforcementMonitor(EnforceTestEnforcementMonitor old) {
+		this.pairValue = new AtomicInteger(old.pairValue.get()) ;
+		this.Prop_1_Category_nonfail = old.Prop_1_Category_nonfail;
+	}
+
+	EnforceTestEnforcementMonitor() {
+		this.pairValue = new AtomicInteger(this.calculatePairValue(-1, 0) ) ;
+
+	}
+
