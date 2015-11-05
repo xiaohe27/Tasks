@@ -606,6 +606,7 @@ function method isIn(nd:INode, ndSet:set<INode>):bool
 nd in ndSet
 }
 
+
 method delListOfNd(ndList: seq<INode>)
 	requires valid();
 
@@ -615,7 +616,6 @@ method delListOfNd(ndList: seq<INode>)
 	
 	modifies footprint;
 	ensures valid();
-	ensures footprint == old(footprint) - (set x | x in ndList);
 {
 	if (ndList == []) {}
 	else if (|ndList| == 1) {delNd(ndList[0]);}

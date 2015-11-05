@@ -604,74 +604,7 @@ function method isIn(nd:INode, ndSet:set<INode>):bool
 	ensures isIn(nd, ndSet) <==> nd in ndSet;
 {
 nd in ndSet
-}
-
-method delListOfNd(ndList: seq<INode>)
-	requires valid();
-
-	requires null !in ndList && head !in ndList && (footprint * (set x | x in ndList) <= head.footprint);
-	
-	requires |ndList| <= 1;
-	
-	modifies footprint;
-	ensures valid();
-	ensures footprint == old(footprint) - (set x | x in ndList);
-{
-	if (ndList == []) {}
-	else if (|ndList| == 1) {delNd(ndList[0]);}
-	else {}
-	
-}
-
-/*
-method delRegion(begin:int, end:int) returns (delSet:set<INode>)
-	requires valid();
-	requires 0 <= begin < end <= |spine|;
-	modifies footprint;
-//	ensures spine !! delSet;
-//	ensures |delSet| == end - begin;
-{
-
-}
-*/	
-
-
-/*
-method delSetOfNd(ndSet:set<INode>)
-	requires valid();
-	requires footprint * ndSet <= head.footprint - {head};
-	modifies footprint;
-	ensures valid();
-//	ensures footprint !! ndSet;
-{
-	var tmpSet := ndSet;
-
-	var curNd := head;
-	var index := 0;
-  var len := head.len();
-	
-	while (index < len)
-		invariant 0 <= index <= len;
-		invariant valid();
-//		invariant curNd != null ==> curNd in head.footprint;
-		invariant curNd != null ==> curNd.Valid();
-		invariant curNd != null ==> index + |curNd.footprint| == len;
-		//		invariant curNd == head.spine[index];
-//invariant  (footprint - getFtprint(curNd)) !! ndSet;
-
-	{
-			
-		if (isIn(curNd, ndSet)) {
-			delNd(curNd);
-		}
-
-		if(curNd != null) {
-			curNd := curNd.next;
-		}
-		index := index + 1;
-	}
-}
-*/ 
+} 
 
 }
 
