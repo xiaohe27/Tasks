@@ -57,22 +57,24 @@ spine == [this] + next.spine
 && next.ValidLemma())
 }
 
-method contains(tarNd:INode) returns (isIn:bool)
+
+method hasPathTo(tarNd:INode) returns (hasPath:bool)
 	requires tarNd != null;
 	requires Valid();
 	modifies {};
 	ensures Valid();
-	ensures isIn <==> tarNd in footprint;
+	ensures hasPath <==> tarNd in footprint;
 {
 	var index := indexOf(tarNd);
 
-	if (index == -1) {isIn := false;}
-	else {isIn := true;}
+	if (index == -1) {hasPath := false;}
+	else {hasPath := true;}
 
-	return isIn;
+	return hasPath;
 }
 
-method indexOf(tarNd:INode) returns (index:int)
+
+method indexOf(tarNd:INode) returns (pos:int)
 	requires tarNd != null;
 	requires Valid();
 
@@ -80,38 +82,38 @@ method indexOf(tarNd:INode) returns (index:int)
 	ensures Valid();
 	ensures |footprint| == |spine| == |tailContents| + 1;
 	ensures
-tarNd in footprint ==> (
-		0 <= index < |footprint|
-  && spine[index] == tarNd
-	&& if index == 0 then tarNd.data == data
-else tarNd.data == tailContents[index-1]);
+ tarNd in footprint <==> (
+		0 <= pos < |footprint|
+  && spine[pos] == tarNd
+	&& if pos == 0 then tarNd.data == data
+else tarNd.data == tailContents[pos-1]);
 
-	ensures tarNd !in footprint ==> index == -1;
+	ensures tarNd !in footprint <==> pos == -1;
 {
 
 var curNd := this;
-index := 0;
+pos := 0;
 
 assert ValidLemma();
 assert ndValid2ListValidLemma();
 
 var length := len();
 
-while(index < length)
-invariant 0 <= index <= length;
-invariant index != length ==> spine[index] == curNd;
+while(pos < length)
+invariant 0 <= pos <= length;
+invariant pos != length ==> spine[pos] == curNd;
 invariant curNd != null ==> curNd.Valid();
 invariant (curNd != null &&  tarNd in curNd.footprint) <==> tarNd in footprint;
-invariant curNd != null ==> ( length == index + |curNd.footprint| == |tailContents| + 1);
+invariant curNd != null ==> ( length == pos + |curNd.footprint| == |tailContents| + 1);
 {
 	if (tarNd == curNd)
 	{
 assert spineTCLemma();
-return index;
+return pos;
 	}
 	
 	curNd := curNd.next;
-	index := index + 1;
+	pos := pos + 1;
 }
 
 assert tarNd !in footprint;
@@ -234,6 +236,7 @@ this in footprint
 
 
 //////////////////////////////////
+
 method contains(tarNd:INode) returns (isIn:bool)
 	requires valid();
 	requires tarNd != null;
@@ -241,26 +244,33 @@ method contains(tarNd:INode) returns (isIn:bool)
 	ensures valid();
 	ensures isIn <==> tarNd in head.footprint;
 {
-isIn := head.contains(tarNd);
+isIn := head.hasPathTo(tarNd);
 }
+
 
 method indexOf(tarNd:INode) returns (index:int)
 	requires valid();
-	requires tarNd != null && tarNd != head;
+	requires tarNd != null && tarNd != head && {tarNd} * footprint <= head.footprint;
 	modifies {};
+
+	ensures footprint == old(footprint);
 	ensures valid();
-	ensures
-		  tarNd in head.footprint ==> (
+	ensures tarNd !in footprint <==> index == -1;
+	ensures tarNd in footprint 
+	 <==> (
 		0 <= index < |head.spine| - 1
   && head.spine[index+1] == tarNd
 	&& |contents| == |head.tailContents| == |head.spine| - 1
 	&& tarNd.data == contents[index] );
-	ensures tarNd !in head.footprint ==> index == -2;
+
 {
 	index := head.indexOf(tarNd);
-	index := index - 1;
-}
 
+	assert index > 0 || index == -1;
+	if(index != -1) {
+		index := index - 1;
+	} else {}
+}
 
 
 
