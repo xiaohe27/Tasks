@@ -1,0 +1,14 @@
+1. class RVMProcessor
+public String process(RVMSpecFile rvmSpecFile) throws RVMException {...};
+
+2. LogicPluginShellFactory
+static public LogicPluginShellResult process(
+            LogicRepositoryType logicOutput, String events,
+            String outputLanguage) throws RVMException {...}
+
+
+static public LogicPluginShell findLogicShellPlugin(String packageName,
+            String monitorType, String outputLanguage)
+
+
+3. RVMOutputCode
