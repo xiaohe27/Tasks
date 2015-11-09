@@ -192,10 +192,10 @@ class EnforceTestEnforcementMonitor extends com.runtimeverification.rvmonitor.ja
 		}
 	}
 
-	static final int Prop_1_transition_oneBegin[] = {2, 5, 2, 5, 5, 5};;
-	static final int Prop_1_transition_oneEnd[] = {5, 1, 1, 5, 5, 5};;
-	static final int Prop_1_transition_twoBegin[] = {5, 3, 5, 3, 5, 5};;
-	static final int Prop_1_transition_twoEnd[] = {5, 5, 5, 4, 4, 5};;
+	static final int Prop_1_transition_oneBegin[] = {1, 5, 5, 5, 5, 5};;
+	static final int Prop_1_transition_oneEnd[] = {5, 3, 5, 5, 5, 5};;
+	static final int Prop_1_transition_twoBegin[] = {5, 5, 5, 4, 5, 5};;
+	static final int Prop_1_transition_twoEnd[] = {5, 5, 5, 5, 2, 5};;
 
 	volatile boolean Prop_1_Category_nonfail = false;
 
@@ -242,7 +242,6 @@ class EnforceTestEnforcementMonitor extends com.runtimeverification.rvmonitor.ja
 				return false;
 			}
 			{
-				System.out.println("1");
 			}
 		}
 
@@ -274,7 +273,6 @@ class EnforceTestEnforcementMonitor extends com.runtimeverification.rvmonitor.ja
 				return false;
 			}
 			{
-				System.out.println("2");
 			}
 		}
 

@@ -6,7 +6,6 @@ enforce EnforceTest() {
 			return false;
 		}
 		{
-			System.out.println("1");
 		}
 	}
 	event oneEnd(){
@@ -22,7 +21,6 @@ enforce EnforceTest() {
 			return false;
 		}
 		{
-			System.out.println("2");
 		}
 	}
 	event twoEnd(){
@@ -33,7 +31,7 @@ enforce EnforceTest() {
 			System.out.println("2 end");
 		}
 	}
-	ere:  oneBegin+ oneEnd+ twoBegin+ twoEnd+
+	ere:  oneBegin oneEnd twoBegin twoEnd
 
 	@deadlock
 	{

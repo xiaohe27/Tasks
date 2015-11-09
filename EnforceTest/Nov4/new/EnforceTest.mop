@@ -3,7 +3,7 @@ package mop;
 enforce EnforceTest() {
     event oneBegin before():
         execution(* SimpleRunnable1.run(..)) && threadName("T1") {
-		System.out.println("1");
+//		System.out.println("1");
         }
    event oneEnd after():
         execution(* SimpleRunnable1.run(..)) && threadName("T1") {
@@ -11,13 +11,13 @@ enforce EnforceTest() {
         }
     event twoBegin before():
         execution(* SimpleRunnable2.run(..)) && threadName("T2") {
-		System.out.println("2");
+//		System.out.println("2");
         }
     event twoEnd after():
         execution(* SimpleRunnable2.run(..)) && threadName("T2") {
 		System.out.println("2 end");
         }
-    ere : oneBegin+ oneEnd+ twoBegin+ twoEnd+ 
+    ere : oneBegin oneEnd twoBegin twoEnd 
 
     @nonfail {
         System.out.println("success!");

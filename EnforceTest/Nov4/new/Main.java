@@ -1,12 +1,12 @@
 class SimpleRunnable1 implements Runnable{
     public void run(){
-        System.out.println("Thread " + Thread.currentThread().getName());
+        System.out.println("Thread " + Thread.currentThread().getName() + " begins!");
     }
 }
 
 class SimpleRunnable2 implements Runnable{
     public void run(){
-        System.out.println("Thread " + Thread.currentThread().getName());
+        System.out.println("Thread " + Thread.currentThread().getName() + " begins!");
     }
 }
 
