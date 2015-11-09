@@ -1,0 +1,23 @@
+com.runtimeverification.rvmonitor.java.rvj.output.combinedoutputcode.event.itf;
+
+EventMethodBody class;
+
+
+public void generateCode() ...  
+
+      //if the event definition is static, then we will preserve the user provided code, but
+        //not generating new code in the event action block.
+        if (super.event.isStaticEvent()) {
+            RVMJavaCode eventActionCode = this.monitorClass.getRVMJavaCode(super.event, super.monitorName);
+            stmts.add(CodeStmt.fromLegacy(eventActionCode.toString()));
+
+            if (this.getMonitorFeatures().isStabilized()) {
+                CodeSimplifier simplifier = new CodeSimplifier(stmts);
+                simplifier.simplify();
+                this.generatedCode = stmts;
+            }
+
+            System.out.println("Monitor name of the static event is " + super.monitorName);
+            System.out.println("static event gen code succ!!!");
+            return;
+        }

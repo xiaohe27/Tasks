@@ -1,0 +1,28 @@
+//package com.runtimeverification.rvmonitor.java.rvj.output.monitor;
+  
+   public RVMJavaCode getRVMJavaCode(EventDefinition event, RVMVariable theMonitorName) {
+        RVMJavaCode eventAction = null;
+        if (event.getAction() != null) {
+            String eventActionStr = event.getAction();
+
+            if (!Main.generateVoidMethods) {
+                eventActionStr = eventActionStr.replaceAll("return;",
+                        "return true;");
+            }
+            eventActionStr = eventActionStr.replaceAll("__RESET",
+                    "this.reset()");
+            eventActionStr = eventActionStr.replaceAll("__DEFAULT_MESSAGE",
+                    defaultMessage);
+            // __DEFAULT_MESSAGE may contain __LOC, make sure to sub in
+            // __DEFAULT_MESSAGE first
+            // -P
+            eventActionStr = eventActionStr.replaceAll("__LOC",
+                    Util.defaultLocation);
+            // "this." + loc);
+            eventActionStr = eventActionStr.replaceAll("__ACTIVITY",
+                    "this." + activity);
+
+            eventAction = new RVMJavaCode(eventActionStr, theMonitorName);
+        }
+        return eventAction;
+    }
