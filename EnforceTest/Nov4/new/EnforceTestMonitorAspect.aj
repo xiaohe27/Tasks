@@ -32,21 +32,18 @@ public aspect EnforceTestMonitorAspect implements com.runtimeverification.rvmoni
 	static Condition EnforceTest_MOPLock_cond = EnforceTest_MOPLock.newCondition();
 
 	pointcut MOP_CommonPointCut() : !within(com.runtimeverification.rvmonitor.java.rt.RVMObject+) && !adviceexecution() && BaseAspect.notwithin();
-	pointcut EnforceTest_twoBegin() : (execution(* SimpleRunnable2.run(..))) && MOP_CommonPointCut();
-	before () : EnforceTest_twoBegin() {
-		EnforceTestRuntimeMonitor.twoBeginEvent();
-	}
-
-	pointcut EnforceTest_oneBegin() : (execution(* SimpleRunnable1.run(..))) && MOP_CommonPointCut();
+	pointcut EnforceTest_oneBegin() : (execution(* SimpleRunnable.run(..))) && MOP_CommonPointCut();
 	before () : EnforceTest_oneBegin() {
+		//EnforceTest_twoBegin
+		EnforceTestRuntimeMonitor.twoBeginEvent();
+		//EnforceTest_oneBegin
 		EnforceTestRuntimeMonitor.oneBeginEvent();
 	}
 
 	after () : EnforceTest_oneBegin() {
+		//EnforceTest_oneEnd
 		EnforceTestRuntimeMonitor.oneEndEvent();
-	}
-
-	after () : EnforceTest_twoBegin() {
+		//EnforceTest_twoEnd
 		EnforceTestRuntimeMonitor.twoEndEvent();
 	}
 
