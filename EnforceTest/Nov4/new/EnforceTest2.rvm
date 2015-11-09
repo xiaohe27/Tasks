@@ -1,0 +1,44 @@
+package mop;
+
+enforce EnforceTest2() {
+	event oneBegin(){
+		if ( ! (Thread.currentThread().getName().equals("T1")) ) {
+			return false;
+		}
+		{
+		}
+	}
+	event oneEnd(){
+		if ( ! (Thread.currentThread().getName().equals("T1")) ) {
+			return false;
+		}
+		{
+			System.out.println("1 end");
+		}
+	}
+	event twoBegin(){
+		if ( ! (Thread.currentThread().getName().equals("T2")) ) {
+			return false;
+		}
+		{
+		}
+	}
+	event twoEnd(){
+		if ( ! (Thread.currentThread().getName().equals("T2")) ) {
+			return false;
+		}
+		{
+			System.out.println("2 end");
+		}
+	}
+	ere:  twoBegin twoEnd oneBegin oneEnd
+
+	@deadlock
+	{
+		System.out.println("deadlock!");
+	}
+	@nonfail
+	{
+		System.out.println("success!");
+	}
+}
