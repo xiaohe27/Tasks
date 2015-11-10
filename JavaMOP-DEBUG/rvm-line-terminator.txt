@@ -1,0 +1,9 @@
+Several test cases in current ere plugin project use '\n' as line terminator in the 
+expected string value. This is fine for unix like systems because the line terminator on 
+those systems is haphazardly also '\n'. But on windows it is "\r\n", which makes the tests 
+fail. 
+
+Different system may have their different line terminator, therefore, this should be 
+designed as plat-form dependent instead of hard-coded using the convention on one 
+particular platform.
+This PR addressed this issue.  
