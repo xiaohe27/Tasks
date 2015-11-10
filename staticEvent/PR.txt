@@ -1,0 +1,32 @@
+This pull request implemented the feature of static event, which was previously discussed in the mop meeting @grosu .
+The semantics of the static event can be illustrated through the following example.
+
+HasNext(Iterator i) {
+static int counter;
+    event hasnext(Iterator i) {}
+    event next(Iterator i) {}
+
+    static event inc() {
+        @MONITORCLASS.counter++;
+    }   
+
+    ere : (hasnext hasnext* next)*
+ ...
+}
+in the generated monitor library, the code for the static event inc() is
+
+public static final void incEvent() {
+        HasNext_activated = true;
+        while (!HasNext_RVMLock.tryLock()) {
+            Thread.yield();
+        }
+
+        {
+            HasNextMonitor.counter++;
+        }
+
+        HasNext_RVMLock.unlock();
+    }
+As shown by this example, there is no monitor creation or retrieval in the incEvent()
+method; the user defined event action is not related to any particular monitor instance, 
+and therefore it is directly placed in the static method of the runtime monitor.
