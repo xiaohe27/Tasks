@@ -586,6 +586,7 @@ ensures spine == old(spine) - {delNd};
 //new
 ensures delNd != null && delNd.Valid();
 ensures delNd.footprint == old(delNd.footprint);
+ensures head.footprint == old(head.footprint) - {delNd};
 {
    delNd := head.delete(index+1);
 
@@ -609,6 +610,7 @@ method delNd(tarNd:INode)
 	modifies footprint;
 	ensures valid();
 	ensures footprint == old(footprint) - {tarNd};
+	ensures head.footprint == old(head.footprint) - {tarNd};
 
 	//new
 	ensures tarNd.footprint == old(tarNd.footprint); 
@@ -643,6 +645,7 @@ method delSeqOfNd(ndList:seq<INode>)
 	ensures valid();
 
 	ensures forall nd :: nd in ndList ==> nd !in footprint;
+	ensures footprint == old(footprint) - (set nd | nd in ndList);
 {
 	if (ndList == [])
 	{}
@@ -652,9 +655,12 @@ method delSeqOfNd(ndList:seq<INode>)
 
 	assert |ndList| == 1 ==> forall nd :: nd in ndList ==> nd == ndList[0];
 
+	assert footprint == old(footprint) - {ndList[0]};
+	
 delSeqOfNd(ndList[1..]);
 assert forall nd :: nd in ndList[1..] ==> nd !in footprint;
- }
+assert forall nd :: nd in ndList ==> nd !in footprint;
+	}
 
 }
 
