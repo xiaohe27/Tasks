@@ -638,7 +638,7 @@ method delSeqOfNd(ndList:seq<INode>)
 	requires null !in ndList;
 	requires forall nd :: nd in ndList && nd in footprint ==> nd in  head.footprint - {head};
 
-requires |ndList| <= 1;
+requires |ndList| == 1;
 	
 	modifies footprint;
 	ensures valid();
@@ -650,7 +650,7 @@ requires |ndList| <= 1;
 	else if (|ndList| == 1)
 	{delNd(ndList[0]);
 assert ndList[0] !in footprint;
-assert forall nd :: nd in ndList <==> nd == ndList[0];
+assert forall nd :: nd in ndList ==> nd == ndList[0];
 	}
 
 	else {}
