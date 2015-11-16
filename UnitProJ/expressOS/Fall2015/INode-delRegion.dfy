@@ -645,7 +645,7 @@ predicate delSeqHelperLemma(oldList:seq<INode>, oldFp:set<INode>, oldHdFp:set<IN
 	ensures forall nd:: nd in newList && nd in newFp ==> nd in newHdFp - {hd};
 {true}
 
-/*
+
 method delSeqOfNd(ndList:seq<INode>)
 	requires valid();
 	requires null !in ndList;
@@ -677,7 +677,7 @@ assert forall nd :: nd in ndList ==> nd !in footprint;
 	}
 
 }
-*/
+
 
 
 }
