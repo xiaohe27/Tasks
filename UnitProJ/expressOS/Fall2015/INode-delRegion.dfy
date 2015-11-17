@@ -287,7 +287,9 @@ else {
 }
 
 ////////////////////////////////////////
-
+//delete the range [start, end)
+method deleteRange(start:int, end:int)
+	requires 0 <= start < end <= |footprint|;
 
 ///////////////////////////////////////
 
@@ -633,7 +635,7 @@ function method isIn(nd:INode, ndSet:set<INode>):bool
 nd in ndSet
 }
 
-
+/*
 predicate delSeqHelperLemma(oldList:seq<INode>, oldFp:set<INode>, oldHdFp:set<INode>, hd:INode,newList:seq<INode>, newFp:set<INode>, newHdFp:set<INode>, fstNd:INode)
 	requires hd !in oldList && hd in oldFp && hd in oldHdFp;
 	requires forall nd:: nd in oldList && nd in oldFp ==> nd in oldHdFp - {hd};
@@ -677,7 +679,7 @@ assert forall nd :: nd in ndList ==> nd !in footprint;
 	}
 
 }
-
+*/
 
 
 }
