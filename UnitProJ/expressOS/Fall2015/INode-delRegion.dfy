@@ -88,7 +88,7 @@ method contains(tarNd:INode) returns (isIn:bool)
 predicate fpLemma(tarNd:INode)
 	requires Valid();
 	requires tarNd in footprint;
-	reads footprint;
+	reads this, footprint;
 ensures fpLemma(tarNd);
 	ensures tarNd != null && tarNd.next != null ==> tarNd.next in footprint;
 {
@@ -144,7 +144,7 @@ return -1;
 }
 
 /////////////////////////////////////////
-
+/*
 method delete(pos:int) returns (delNd:INode)
 requires Valid();
 requires 0 < pos <= |tailContents|;
@@ -154,6 +154,12 @@ modifies footprint;
 ensures Valid();
 ensures [data] + tailContents == old(([data] + tailContents)[0..pos] + ([data] + tailContents)[pos+1..] );
 ensures footprint == old(footprint) - {delNd};
+
+//new
+ensures delNd in old(footprint);
+ensures |footprint| == old(|footprint|) - 1;
+//endNew
+
 ensures old(|tailContents| == |spine| - 1 && 0 < pos < |spine|);
 ensures delNd == old(spine[pos]);
 
@@ -285,11 +291,31 @@ else {
 	curNd.spine := [curNd] + curNd.next.spine;
 }
 }
-
+*/
 ////////////////////////////////////////
 //delete the range [start, end)
 method deleteRange(start:int, end:int)
-	requires 0 <= start < end <= |footprint|;
+	requires 0 < start < end <= |tailContents| + 1;
+	requires Valid();
+	modifies footprint;
+	ensures Valid();
+	ensures [data] + tailContents == old(([data] + tailContents)[0..start] + ([data] + tailContents)[end..]);
+{
+	assert ValidLemma();
+	assert |footprint| == |spine|;
+	
+//	var rmNd := delete(start);
+assume [data] + tailContents == old(([data] + tailContents)[0..start] + ([data] + tailContents)[start+1..]);
+      assume |footprint| == old(|footprint|) - 1;
+	assume |footprint| == |spine|;
+	
+	assume |spine| == old(|spine|) - 1;
+	if (start + 1 == end) {
+assert  [data] + tailContents == old(([data] + tailContents)[0..start] + ([data] + tailContents)[end..]);
+	} else {
+		deleteRange(start, end - 1);
+	}
+}
 
 ///////////////////////////////////////
 
@@ -506,7 +532,7 @@ listCond(mySeq)
 && mySeq[|mySeq|-1].spine == [mySeq[|mySeq|-1]])
 }
 
-
+/*
 //The INodes class: a list
 class INodes {
   var head: INode;
@@ -683,4 +709,4 @@ assert forall nd :: nd in ndList ==> nd !in footprint;
 
 
 }
-
+*/
