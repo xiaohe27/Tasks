@@ -70,6 +70,21 @@ predicate validSeqContentsLemma()
 		next != null ==> next.validSeqContentsLemma()
 }
 
+method contains(tarNd:INode) returns (isIn:bool)
+	requires tarNd != null;
+	requires Valid();
+	modifies {};
+	ensures Valid();
+	ensures isIn <==> tarNd in footprint;
+{
+	var index := indexOf(tarNd);
+
+	if (index == -1) {isIn := false;}
+	else {isIn := true;}
+
+	return isIn;
+}
+
 predicate fpLemma(tarNd:INode)
 	requires Valid();
 	requires tarNd in footprint;
@@ -82,7 +97,6 @@ ensures fpLemma(tarNd);
 		else false
 }
 
-/*
 method indexOf(tarNd:INode) returns (index:int)
 	requires tarNd != null;
 	requires Valid();
@@ -130,7 +144,6 @@ return -1;
 }
 
 /////////////////////////////////////////
-
 method delete(pos:int) returns (delNd:INode)
 requires Valid();
 requires 0 < pos <= |tailContents|;
@@ -140,12 +153,6 @@ modifies footprint;
 ensures Valid();
 ensures [data] + tailContents == old(([data] + tailContents)[0..pos] + ([data] + tailContents)[pos+1..] );
 ensures footprint == old(footprint) - {delNd};
-
-//new
-ensures delNd in old(footprint);
-ensures |footprint| == old(|footprint|) - 1;
-//endNew
-
 ensures old(|tailContents| == |spine| - 1 && 0 < pos < |spine|);
 ensures delNd == old(spine[pos]);
 
@@ -279,46 +286,8 @@ else {
 }
 
 ////////////////////////////////////////
-method delSeqOfNd(ndList:seq<INode>)
-	requires Valid();
-	requires null !in ndList && (set nd | nd in ndList) <= footprint;
-	
-	modifies footprint;
-	ensures Valid();
 
-	ensures forall nd :: nd in ndList ==> nd !in footprint;
-	ensures footprint == old(footprint) - (set nd | nd in ndList);
-{
-assume ndList == [];
 
-}
-*/
-
-/*
-//delete the range [start, end)
-method deleteRange(start:int, end:int)
-	requires 0 < start < end <= |tailContents| + 1;
-	requires Valid();
-	modifies footprint;
-	ensures Valid();
-	ensures [data] + tailContents == old(([data] + tailContents)[0..start] + ([data] + tailContents)[end..]);
-{
-	assert ValidLemma();
-	assert |footprint| == |spine|;
-	
-//	var rmNd := delete(start);
-assume [data] + tailContents == old(([data] + tailContents)[0..start] + ([data] + tailContents)[start+1..]);
-      assume |footprint| == old(|footprint|) - 1;
-	assume |footprint| == |spine|;
-	
-	assume |spine| == old(|spine|) - 1;
-	if (start + 1 == end) {
-assert  [data] + tailContents == old(([data] + tailContents)[0..start] + ([data] + tailContents)[end..]);
-	} else {
-		deleteRange(start, end - 1);
-	}
-}
-*/
 ///////////////////////////////////////
 
 
@@ -386,6 +355,7 @@ predicate shrinkLemma(oldSpine:seq<INode>, pos: int, oldContents:seq<Data>)
 true
 }	
 
+
 ghost method updateSeq4Del(newSpine: seq<INode>, delNd:INode, pos: int, nxtNd:INode, oldContents:seq<Data>, thisNd:INode)
 	requires listCond(newSpine);
 	requires 1 < pos < |oldContents|;
@@ -401,7 +371,10 @@ requires delNd !in nxtNd.footprint && delNd !in newSpine;
 
 requires (set nd | nd in newSpine) !! nxtNd.footprint;
 requires newSpine[|newSpine|-1].footprint >= nxtNd.footprint;
-requires delNd != null;
+
+//new
+requires delNd != null && delNd.Valid();
+
 requires newSpine[|newSpine|-1].tailContents == [nxtNd.data] + [delNd.data] + nxtNd.tailContents;
 
 requires |newSpine[|newSpine|-1].tailContents| >= 2;
@@ -420,6 +393,9 @@ ensures thisNd.Valid();
 ensures  [thisNd.data] + thisNd.tailContents == oldContents[0..pos] + oldContents[pos+1..];
 
 ensures thisNd.footprint == old(thisNd.footprint) - {delNd};
+
+//new
+ensures delNd != null && delNd.Valid() && delNd.footprint == old(delNd.footprint);
 {
 
 ghost var curIndex := pos - 2;
@@ -479,8 +455,8 @@ assert [newSpine[curIndex+1].data] + newSpine[curIndex+1].tailContents == oldCon
 
 assert newSpine[curIndex+1].footprint == old(newSpine[curIndex+1].footprint - {delNd});
 
+assume delNd != null && delNd.Valid() && delNd.footprint == old(delNd.footprint);
 }
-
 
 
 predicate validSeqTCLemma(mySeq: seq<INode>)
@@ -529,7 +505,6 @@ listCond(mySeq)
 }
 
 
-/*
 //The INodes class: a list
 class INodes {
   var head: INode;
@@ -559,6 +534,15 @@ this in footprint
 
 
 //////////////////////////////////
+method contains(tarNd:INode) returns (isIn:bool)
+	requires valid();
+	requires tarNd != null && tarNd != head;
+	modifies {};
+	ensures valid();
+	ensures isIn <==> tarNd in head.footprint - {head};
+{
+isIn := head.contains(tarNd);
+}
 
 method indexOf(tarNd:INode) returns (index:int)
 	requires valid();
@@ -602,7 +586,6 @@ ensures spine == old(spine) - {delNd};
 //new
 ensures delNd != null && delNd.Valid();
 ensures delNd.footprint == old(delNd.footprint);
-ensures head.footprint == old(head.footprint) - {delNd};
 {
    delNd := head.delete(index+1);
 
@@ -626,9 +609,9 @@ method delNd(tarNd:INode)
 	modifies footprint;
 	ensures valid();
 	ensures footprint == old(footprint) - {tarNd};
-	ensures head.footprint == old(head.footprint) - {tarNd};
 
 	//new
+	ensures head.footprint == old(head.footprint) - {tarNd};
 	ensures tarNd.footprint == old(tarNd.footprint); 
 {
 	var index := indexOf(tarNd);
@@ -649,52 +632,37 @@ function method isIn(nd:INode, ndSet:set<INode>):bool
 nd in ndSet
 }
 
-/*
-predicate delSeqHelperLemma(oldList:seq<INode>, oldFp:set<INode>, oldHdFp:set<INode>, hd:INode,newList:seq<INode>, newFp:set<INode>, newHdFp:set<INode>, fstNd:INode)
-	requires hd !in oldList && hd in oldFp && hd in oldHdFp;
-	requires forall nd:: nd in oldList && nd in oldFp ==> nd in oldHdFp - {hd};
-	requires oldList == [fstNd] + newList &&
-		oldFp - {fstNd} == newFp &&
-		oldHdFp - {fstNd} == newHdFp;
-		
-	reads oldList, oldFp, oldHdFp, hd, newList, newFp, newHdFp;
-	ensures forall nd:: nd in newList && nd in newFp ==> nd in newHdFp - {hd};
-{true}
 
 
 method delSeqOfNd(ndList:seq<INode>)
 	requires valid();
-	requires null !in ndList;
-	requires forall nd :: nd in ndList && nd in footprint ==> nd in  head.footprint - {head};
+	requires forall i :: 0 <= i < |ndList| ==> ndList[i] !in ndList[0..i] && ndList[i] !in ndList[i+1..];
 
+	requires null !in ndList && forall nd :: nd in ndList ==> nd in  head.footprint - {head};
 	
 	modifies footprint;
 	ensures valid();
 
 	ensures forall nd :: nd in ndList ==> nd !in footprint;
-	ensures footprint == old(footprint) - (set nd | nd in ndList);
 {
 	if (ndList == [])
 	{}
-	else 
-	{delNd(ndList[0]);
-	assert ndList[0] !in footprint;
 
-	assert |ndList| == 1 ==> forall nd :: nd in ndList ==> nd == ndList[0];
+	else {
+		delNd(ndList[0]);
+		assert ndList[0] !in footprint && ndList[0] !in head.footprint;
+		assert head.footprint == old(head.footprint) - {ndList[0]};
+		assert ndList[0] !in ndList[1..];
+		assert forall nd :: nd in ndList[1..] ==> nd != ndList[0] && nd in ndList;
+		
+		delSeqOfNd(ndList[1..]);
 
-	assert footprint == old(footprint) - {ndList[0]};
-	assert head.footprint == old(head.footprint) - {ndList[0]};
-
-	assert delSeqHelperLemma(ndList, old(footprint), old(head.footprint), head, ndList[1..], footprint, head.footprint, ndList[0]);
-	
-delSeqOfNd(ndList[1..]);
-assert forall nd :: nd in ndList[1..] ==> nd !in footprint;
-assert forall nd :: nd in ndList ==> nd !in footprint;
+		assert forall nd :: nd in ndList[1..] ==> nd !in footprint;
 	}
 
 }
-*/
+
 
 
 }
-*/
+
