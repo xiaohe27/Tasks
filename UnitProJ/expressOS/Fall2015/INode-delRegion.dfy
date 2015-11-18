@@ -633,12 +633,23 @@ nd in ndSet
 }
 
 
+lemma delSeqHelper(ndList:seq<INode>, ndSet:set<INode>)
+	requires null !in ndList;
+	requires forall i :: 0 <= i < |ndList| ==> ndList[i] !in ndList[0..i] && ndList[i] !in ndList[i+1..];
+	requires forall nd :: nd in ndList ==> nd in  ndSet;
+
+	ensures forall i :: 0 <= i < |ndList| ==> (forall nd :: nd in ndList[i..] ==> nd in ndSet - (set node | node in ndList[0..i]));
+{
+assert forall i :: 0 <= i < |ndList| ==> (set nd | nd in ndList[0..i]) !! (set nd2 | nd2 in ndList[i..]);
+}
+
 
 method delSeqOfNd(ndList:seq<INode>)
 	requires valid();
+	requires null !in ndList;
 	requires forall i :: 0 <= i < |ndList| ==> ndList[i] !in ndList[0..i] && ndList[i] !in ndList[i+1..];
 
-	requires null !in ndList && forall nd :: nd in ndList ==> nd in  head.footprint - {head};
+	requires forall nd :: nd in ndList ==> nd in  head.footprint - {head};
 	
 	modifies footprint;
 	ensures valid();
@@ -649,12 +660,14 @@ method delSeqOfNd(ndList:seq<INode>)
 	{}
 
 	else {
+		delSeqHelper(ndList, head.footprint - {head});
+
 		delNd(ndList[0]);
 		assert ndList[0] !in footprint && ndList[0] !in head.footprint;
 		assert head.footprint == old(head.footprint) - {ndList[0]};
 		assert ndList[0] !in ndList[1..];
 		assert forall nd :: nd in ndList[1..] ==> nd != ndList[0] && nd in ndList;
-		
+
 		delSeqOfNd(ndList[1..]);
 
 		assert forall nd :: nd in ndList[1..] ==> nd !in footprint;
