@@ -82,6 +82,7 @@ ensures fpLemma(tarNd);
 		else false
 }
 
+/*
 method indexOf(tarNd:INode) returns (index:int)
 	requires tarNd != null;
 	requires Valid();
@@ -278,6 +279,21 @@ else {
 }
 
 ////////////////////////////////////////
+method delSeqOfNd(ndList:seq<INode>)
+	requires Valid();
+	requires null !in ndList && (set nd | nd in ndList) <= footprint;
+	
+	modifies footprint;
+	ensures Valid();
+
+	ensures forall nd :: nd in ndList ==> nd !in footprint;
+	ensures footprint == old(footprint) - (set nd | nd in ndList);
+{
+assume ndList == [];
+
+}
+*/
+
 /*
 //delete the range [start, end)
 method deleteRange(start:int, end:int)
@@ -370,7 +386,6 @@ predicate shrinkLemma(oldSpine:seq<INode>, pos: int, oldContents:seq<Data>)
 true
 }	
 
-
 ghost method updateSeq4Del(newSpine: seq<INode>, delNd:INode, pos: int, nxtNd:INode, oldContents:seq<Data>, thisNd:INode)
 	requires listCond(newSpine);
 	requires 1 < pos < |oldContents|;
@@ -386,10 +401,7 @@ requires delNd !in nxtNd.footprint && delNd !in newSpine;
 
 requires (set nd | nd in newSpine) !! nxtNd.footprint;
 requires newSpine[|newSpine|-1].footprint >= nxtNd.footprint;
-
-//new
-requires delNd != null && delNd.Valid();
-
+requires delNd != null;
 requires newSpine[|newSpine|-1].tailContents == [nxtNd.data] + [delNd.data] + nxtNd.tailContents;
 
 requires |newSpine[|newSpine|-1].tailContents| >= 2;
@@ -408,9 +420,6 @@ ensures thisNd.Valid();
 ensures  [thisNd.data] + thisNd.tailContents == oldContents[0..pos] + oldContents[pos+1..];
 
 ensures thisNd.footprint == old(thisNd.footprint) - {delNd};
-
-//new
-ensures delNd != null && delNd.Valid() && delNd.footprint == old(delNd.footprint);
 {
 
 ghost var curIndex := pos - 2;
@@ -473,6 +482,7 @@ assert newSpine[curIndex+1].footprint == old(newSpine[curIndex+1].footprint - {d
 }
 
 
+
 predicate validSeqTCLemma(mySeq: seq<INode>)
 	requires validSeqCond(mySeq);
 	reads mySeq, (set nd | nd in mySeq);
@@ -517,6 +527,7 @@ listCond(mySeq)
 && mySeq[|mySeq|-1].tailContents == []
 && mySeq[|mySeq|-1].spine == [mySeq[|mySeq|-1]])
 }
+
 
 /*
 //The INodes class: a list

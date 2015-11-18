@@ -9,3 +9,7 @@ move them to module level is fine.
 =======
 Important:
 ensure for each while loop, specifying the modifies frame accurately!!!
+
+===========
+ensure updateSeq works
+
