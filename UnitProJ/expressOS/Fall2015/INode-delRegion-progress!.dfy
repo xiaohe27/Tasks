@@ -88,7 +88,7 @@ method contains(tarNd:INode) returns (isIn:bool)
 predicate fpLemma(tarNd:INode)
 	requires Valid();
 	requires tarNd in footprint;
-	reads footprint;
+	reads this, footprint;
 ensures fpLemma(tarNd);
 	ensures tarNd != null && tarNd.next != null ==> tarNd.next in footprint;
 {

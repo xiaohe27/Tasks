@@ -129,7 +129,7 @@ return -1;
 }
 
 /////////////////////////////////////////
-/*
+
 method delete(pos:int) returns (delNd:INode)
 requires Valid();
 requires 0 < pos <= |tailContents|;
@@ -276,7 +276,7 @@ else {
 	curNd.spine := [curNd] + curNd.next.spine;
 }
 }
-*/
+
 ////////////////////////////////////////
 /*
 //delete the range [start, end)
