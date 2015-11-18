@@ -1,0 +1,2 @@
+prove a stronger prop:
+given the deleted nodes are all inside fp.
