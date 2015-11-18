@@ -685,5 +685,16 @@ assert forall nd :: nd in ndList ==> nd !in footprint;
 */
 
 
+//another option
+lemma delSeqHelper(ndList:seq<INode>, ndSet:set<INode>)
+	requires null !in ndList;
+	requires forall i :: 0 <= i < |ndList| ==> ndList[i] !in ndList[0..i] && ndList[i] !in ndList[i+1..];
+	requires forall nd :: nd in ndList ==> nd in  ndSet;
+
+	ensures forall i :: 0 <= i < |ndList| ==> (forall nd :: nd in ndList[i..] ==> nd in ndSet - (set node | node in ndList[0..i]));
+{
+assert forall i :: 0 <= i < |ndList| ==> (set nd | nd in ndList[0..i]) !! (set nd2 | nd2 in ndList[i..]);
+}
+
 }
 */

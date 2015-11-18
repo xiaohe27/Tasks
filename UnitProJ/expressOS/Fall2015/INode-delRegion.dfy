@@ -633,44 +633,46 @@ nd in ndSet
 }
 
 
-lemma delSeqHelper(ndList:seq<INode>, ndSet:set<INode>)
-	requires null !in ndList;
-	requires forall i :: 0 <= i < |ndList| ==> ndList[i] !in ndList[0..i] && ndList[i] !in ndList[i+1..];
-	requires forall nd :: nd in ndList ==> nd in  ndSet;
-
-	ensures forall i :: 0 <= i < |ndList| ==> (forall nd :: nd in ndList[i..] ==> nd in ndSet - (set node | node in ndList[0..i]));
-{
-assert forall i :: 0 <= i < |ndList| ==> (set nd | nd in ndList[0..i]) !! (set nd2 | nd2 in ndList[i..]);
-}
+predicate delSeqHelperLemma(oldList:seq<INode>, oldFp:set<INode>, oldHdFp:set<INode>, hd:INode,newList:seq<INode>, newFp:set<INode>, newHdFp:set<INode>, fstNd:INode)
+	requires hd !in oldList && hd in oldFp && hd in oldHdFp;
+	requires forall nd:: nd in oldList && nd in oldFp ==> nd in oldHdFp - {hd};
+	requires oldList == [fstNd] + newList &&
+		oldFp - {fstNd} == newFp &&
+		oldHdFp - {fstNd} == newHdFp;
+		
+	reads oldList, oldFp, oldHdFp, hd, newList, newFp, newHdFp;
+	ensures forall nd:: nd in newList && nd in newFp ==> nd in newHdFp - {hd};
+{true}
 
 
 method delSeqOfNd(ndList:seq<INode>)
 	requires valid();
 	requires null !in ndList;
-	requires forall i :: 0 <= i < |ndList| ==> ndList[i] !in ndList[0..i] && ndList[i] !in ndList[i+1..];
-
 	requires forall nd :: nd in ndList ==> nd in  head.footprint - {head};
+
 	
 	modifies footprint;
 	ensures valid();
 
 	ensures forall nd :: nd in ndList ==> nd !in footprint;
+	ensures footprint == old(footprint) - (set nd | nd in ndList);
 {
 	if (ndList == [])
 	{}
+	else 
+	{delNd(ndList[0]);
+	assert ndList[0] !in footprint;
 
-	else {
-		delSeqHelper(ndList, head.footprint - {head});
+	assert |ndList| == 1 ==> forall nd :: nd in ndList ==> nd == ndList[0];
 
-		delNd(ndList[0]);
-		assert ndList[0] !in footprint && ndList[0] !in head.footprint;
-		assert head.footprint == old(head.footprint) - {ndList[0]};
-		assert ndList[0] !in ndList[1..];
-		assert forall nd :: nd in ndList[1..] ==> nd != ndList[0] && nd in ndList;
+	assert footprint == old(footprint) - {ndList[0]};
+	assert head.footprint == old(head.footprint) - {ndList[0]};
 
-		delSeqOfNd(ndList[1..]);
-
-		assert forall nd :: nd in ndList[1..] ==> nd !in footprint;
+	assert delSeqHelperLemma(ndList, old(footprint), old(head.footprint), head, ndList[1..], footprint, head.footprint, ndList[0]);
+	
+delSeqOfNd(ndList[1..]);
+assert forall nd :: nd in ndList[1..] ==> nd !in footprint;
+assert forall nd :: nd in ndList ==> nd !in footprint;
 	}
 
 }
