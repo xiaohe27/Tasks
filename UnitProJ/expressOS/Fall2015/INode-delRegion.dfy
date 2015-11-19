@@ -100,18 +100,15 @@ ensures fpLemma(tarNd);
 method indexOf(tarNd:INode) returns (index:int)
 	requires tarNd != null;
 	requires Valid();
-
+	requires tarNd in footprint - {this};
+	
 	modifies {};
 	ensures Valid();
 	ensures |footprint| == |spine| == |tailContents| + 1;
 	ensures
- tarNd in footprint <==> (
-		0 <= index < |footprint|
+		0 < index < |footprint|
   && spine[index] == tarNd
-	&& if index == 0 then tarNd.data == data
-else tarNd.data == tailContents[index-1]);
-
-	ensures tarNd !in footprint <==> index == -1;
+	&&  tarNd.data == tailContents[index-1];
 {
 
 var curNd := this;
@@ -139,8 +136,7 @@ return index;
 	index := index + 1;
 }
 
-assert tarNd !in footprint;
-return -1;
+assert false;
 }
 
 /////////////////////////////////////////
@@ -393,7 +389,7 @@ requires (set nd | nd in newSpine) !! nxtNd.footprint;
 requires newSpine[|newSpine|-1].footprint >= nxtNd.footprint;
 
 //new
-requires delNd != null && delNd.Valid();
+requires delNd != null;
 
 requires newSpine[|newSpine|-1].tailContents == [nxtNd.data] + [delNd.data] + nxtNd.tailContents;
 
@@ -414,8 +410,6 @@ ensures  [thisNd.data] + thisNd.tailContents == oldContents[0..pos] + oldContent
 
 ensures thisNd.footprint == old(thisNd.footprint) - {delNd};
 
-//new
-ensures delNd != null && delNd.Valid() && delNd.footprint == old(delNd.footprint);
 {
 
 ghost var curIndex := pos - 2;
@@ -475,7 +469,6 @@ assert [newSpine[curIndex+1].data] + newSpine[curIndex+1].tailContents == oldCon
 
 assert newSpine[curIndex+1].footprint == old(newSpine[curIndex+1].footprint - {delNd});
 
-assume delNd != null && delNd.Valid() && delNd.footprint == old(delNd.footprint);
 }
 
 
