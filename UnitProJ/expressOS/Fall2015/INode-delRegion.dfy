@@ -140,7 +140,7 @@ assert false;
 }
 
 /////////////////////////////////////////
-/*
+
 method delete(pos:int) returns (delNd:INode)
 requires Valid();
 requires 0 < pos <= |tailContents|;
@@ -154,8 +154,7 @@ ensures old(|tailContents| == |spine| - 1 && 0 < pos < |spine|);
 ensures delNd == old(spine[pos]);
 
 //new
-ensures delNd != null && delNd.Valid();
-ensures delNd.footprint == old(delNd.footprint);
+ensures delNd != null;
 {
 var curNd := this;
 var curIndex := 0;
@@ -262,8 +261,8 @@ requires	 (forall nd :: nd in spine ==> nd in footprint);
 			ensures forall i :: 0 <= i <= pos-2 ==> spine[i].data == old([data] + tailContents)[i];
 
 	//end new
-ensures delNd == old(delNd) && delNd != null && delNd.Valid();
-ensures delNd.footprint == old(delNd.footprint);
+ensures delNd == old(delNd) && delNd != null;
+//ensures delNd.footprint == old(delNd.footprint);
 {
 	
 	curNd.next := curNd.next.next;
@@ -283,6 +282,7 @@ else {
 }
 
 ////////////////////////////////////////
+/*
 //delete the range [start, end)
 method deleteRange(start:int, end:int)
 	requires 0 < start < end <= |tailContents| + 1;
