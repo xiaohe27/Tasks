@@ -519,7 +519,7 @@ listCond(mySeq)
 
 
 
-/*
+
 //The INodes class: a list
 class INodes {
   var head: INode;
@@ -561,26 +561,22 @@ isIn := head.contains(tarNd);
 
 method indexOf(tarNd:INode) returns (index:int)
 	requires valid();
-	requires tarNd != null && tarNd != head;
+	requires tarNd != null && tarNd in head.footprint - {head};
 	modifies {};
 
 	ensures footprint == old(footprint);
 	ensures valid();
-	ensures tarNd !in footprint <==> index == -1;
-	ensures tarNd in footprint 
-	 <==> (
+	ensures 
 		0 <= index < |head.spine| - 1
   && head.spine[index+1] == tarNd
 	&& |contents| == |head.tailContents| == |head.spine| - 1
-	&& tarNd.data == contents[index] );
+	&& tarNd.data == contents[index];
 
 {
 	index := head.indexOf(tarNd);
 
-	assert index > 0 || index == -1;
-	if(index != -1) {
-		index := index - 1;
-	}
+	assert index > 0;
+	index := index - 1;
 }
 
 
@@ -592,15 +588,8 @@ modifies footprint;
 
 ensures valid();
 ensures contents == old(contents[0..index] + contents[index+1..]);
-
-ensures 1 <= index + 1 < old(|head.spine|);
-ensures delNd == old(head.spine[index+1]);
 ensures footprint == old(footprint) - {delNd};
-ensures spine == old(spine) - {delNd};
 
-//new
-ensures delNd != null && delNd.Valid();
-ensures delNd.footprint == old(delNd.footprint);
 {
    delNd := head.delete(index+1);
 
@@ -617,28 +606,17 @@ assert head.ValidLemma() && head.ndValid2ListValidLemma();
 
 method delNd(tarNd:INode)
 	requires valid();
-	requires tarNd != null && tarNd != head;
+	requires tarNd != null;
 
-	requires {tarNd} * footprint <= head.footprint;
+	requires tarNd in  head.footprint - {head};
 	
 	modifies footprint;
 	ensures valid();
 	ensures footprint == old(footprint) - {tarNd};
-
-	//new
-	ensures head.footprint == old(head.footprint) - {tarNd};
-	ensures tarNd.footprint == old(tarNd.footprint); 
 {
-	var index := indexOf(tarNd);
-
-	if(index != -1) {
+	  var index := indexOf(tarNd);
 
 		var deletedNode := delete(index);
-		assert deletedNode == tarNd;
-
-	} else {
-
-	}
 }
 
 function method isIn(nd:INode, ndSet:set<INode>):bool
@@ -648,4 +626,4 @@ nd in ndSet
 }
 
 }
-*/
+
