@@ -1,0 +1,7 @@
+Adding an assertion (through pre/post or assert statement in the method body) at method A may have significant influence on the time used to prove some other method B.
+
+This is quite annoying and unpredictable if not look into the source code of Dafny.
+
+additional lemmas may slow down the proof dramatically.
+
+using assertions sometimes speedup, sometimes slows down the proof.
