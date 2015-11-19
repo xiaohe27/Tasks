@@ -604,6 +604,22 @@ ensures delNd == old(head.spine[index+1]);
 assert head.ValidLemma() && head.ndValid2ListValidLemma();
 }
 
+method deleteRange(start:int, end:int)
+	requires valid();
+	requires 0 <= start < end <= |contents|;
+	modifies footprint;
+
+	ensures valid();
+	ensures contents == old(contents[0..start] + contents[end..]);
+{
+	head.deleteRange(start+1, end+1);
+
+	footprint := footprint - (set nd | nd in old(head.spine[start+1..end+1]));
+	spine := head.footprint;
+	contents := head.tailContents;
+
+	assert head.ValidLemma() && head.ndValid2ListValidLemma();
+}
 
 function method isIn(nd:INode, ndSet:set<INode>):bool
 	ensures isIn(nd, ndSet) <==> nd in ndSet;
