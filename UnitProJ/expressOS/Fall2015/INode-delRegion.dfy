@@ -604,23 +604,6 @@ ensures delNd == old(head.spine[index+1]);
 assert head.ValidLemma() && head.ndValid2ListValidLemma();
 }
 
-//del the given tarNd from the list
-/*
-method delNd(tarNd:INode)
-	requires valid();
-	requires tarNd != null;
-
-	requires tarNd in  head.footprint - {head};
-	
-	modifies footprint;
-	ensures valid();
-	ensures footprint == old(footprint) - {tarNd};
-{
-	  var index := indexOf(tarNd);
-
-		var deletedNode := delete(index);
-}
-*/
 
 function method isIn(nd:INode, ndSet:set<INode>):bool
 	ensures isIn(nd, ndSet) <==> nd in ndSet;
