@@ -76,13 +76,13 @@ method contains(tarNd:INode) returns (isIn:bool)
 	modifies {};
 	ensures Valid();
 	ensures isIn <==> tarNd in footprint;
+	decreases footprint;
 {
-	var index := indexOf(tarNd);
-
-	if (index == -1) {isIn := false;}
-	else {isIn := true;}
-
-	return isIn;
+	if (this == tarNd) {isIn := true;}
+	else {
+		if (next == null) {isIn := false;}
+		else {isIn := next.contains(tarNd);}
+	}
 }
 
 predicate fpLemma(tarNd:INode)
@@ -144,6 +144,7 @@ return -1;
 }
 
 /////////////////////////////////////////
+/*
 method delete(pos:int) returns (delNd:INode)
 requires Valid();
 requires 0 < pos <= |tailContents|;
@@ -306,7 +307,7 @@ assert  [data] + tailContents == old(([data] + tailContents)[0..start] + ([data]
 		deleteRange(start, end - 1);
 	}
 }
-
+*/
 ///////////////////////////////////////
 
 
@@ -524,6 +525,8 @@ listCond(mySeq)
 }
 
 
+
+/*
 //The INodes class: a list
 class INodes {
   var head: INode;
@@ -652,4 +655,4 @@ nd in ndSet
 }
 
 }
-
+*/
