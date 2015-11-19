@@ -11,5 +11,5 @@ Important:
 ensure for each while loop, specifying the modifies frame accurately!!!
 
 ===========
-ensure updateSeq works
+separate delNd and delRegion
 
