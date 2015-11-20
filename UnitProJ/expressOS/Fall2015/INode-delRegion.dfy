@@ -284,23 +284,34 @@ else {
 ////////////////////////////////////////
 
 //delete the range [start, end)
-method deleteRange(start:int, end:int)
+method deleteRange(start:int, end:int)  returns (delSet:set<INode>)
 	requires 0 < start < end <= |tailContents| + 1;
 	requires Valid();
 	modifies footprint;
 	ensures Valid();
 	ensures [data] + tailContents == old(([data] + tailContents)[0..start] + ([data] + tailContents)[end..]);
+
+	//new
+	ensures footprint == old(footprint) - delSet;
 {
 	assert ValidLemma();
 	assert |footprint| == |spine|;
 	
-var rmNd := delete(start);
+	var rmNd := delete(start);
+
+	//new
+	delSet := {rmNd};
+	//endNew
+	
 assert [data] + tailContents == old(([data] + tailContents)[0..start] + ([data] + tailContents)[start+1..]);
 
 	if (start + 1 == end) {
 assert  [data] + tailContents == old(([data] + tailContents)[0..start] + ([data] + tailContents)[end..]);
+assert delSet == {rmNd};
 	} else {
-		deleteRange(start, end - 1);
+	 var delSet2	:= deleteRange(start, end - 1);
+
+		delSet := delSet + delSet2;
 	}
 }
 
@@ -519,7 +530,7 @@ listCond(mySeq)
 
 
 
-
+/*
 //The INodes class: a list
 class INodes {
   var head: INode;
@@ -604,12 +615,13 @@ ensures delNd == old(head.spine[index+1]);
 assert head.ValidLemma() && head.ndValid2ListValidLemma();
 }
 
+/*
 method deleteRange(start:int, end:int)
 	requires valid();
 	requires 0 <= start < end <= |contents|;
 	modifies footprint;
 
-	ensures valid();
+//	ensures valid();
 	ensures contents == old(contents[0..start] + contents[end..]);
 {
 	head.deleteRange(start+1, end+1);
@@ -620,6 +632,7 @@ method deleteRange(start:int, end:int)
 
 	assert head.ValidLemma() && head.ndValid2ListValidLemma();
 }
+*/
 
 function method isIn(nd:INode, ndSet:set<INode>):bool
 	ensures isIn(nd, ndSet) <==> nd in ndSet;
@@ -628,4 +641,4 @@ nd in ndSet
 }
 
 }
-
+*/
