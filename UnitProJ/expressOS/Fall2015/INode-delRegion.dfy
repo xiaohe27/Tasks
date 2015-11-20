@@ -530,7 +530,6 @@ listCond(mySeq)
 
 
 
-/*
 //The INodes class: a list
 class INodes {
   var head: INode;
@@ -615,24 +614,25 @@ ensures delNd == old(head.spine[index+1]);
 assert head.ValidLemma() && head.ndValid2ListValidLemma();
 }
 
-/*
-method deleteRange(start:int, end:int)
+
+method deleteRange(start:int, end:int) returns (delSet:set<INode>)
 	requires valid();
 	requires 0 <= start < end <= |contents|;
 	modifies footprint;
 
-//	ensures valid();
+  ensures valid();
 	ensures contents == old(contents[0..start] + contents[end..]);
+	ensures footprint == old(footprint) - delSet;
 {
-	head.deleteRange(start+1, end+1);
+	delSet := head.deleteRange(start+1, end+1);
 
-	footprint := footprint - (set nd | nd in old(head.spine[start+1..end+1]));
+	footprint := footprint - delSet;
 	spine := head.footprint;
 	contents := head.tailContents;
 
 	assert head.ValidLemma() && head.ndValid2ListValidLemma();
 }
-*/
+
 
 function method isIn(nd:INode, ndSet:set<INode>):bool
 	ensures isIn(nd, ndSet) <==> nd in ndSet;
@@ -641,4 +641,4 @@ nd in ndSet
 }
 
 }
-*/
+
