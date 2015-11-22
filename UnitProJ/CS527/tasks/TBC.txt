@@ -1,0 +1,1 @@
+1. test whether the multiple pre/post clauses are supported in k-spec
