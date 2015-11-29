@@ -33,7 +33,6 @@ reads this, footprint;
 				&& spine == [this])
 }
 
-
 predicate Valid()
 reads this, footprint;
 {

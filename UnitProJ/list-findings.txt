@@ -1,3 +1,0 @@
-when you insert a new node, it breaks the existing valid property.
-because there is no guarantee that the node is valid, modifying its 
-ghost field may not provide us the expected effects.
