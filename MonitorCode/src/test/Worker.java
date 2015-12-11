@@ -9,11 +9,11 @@ import java.nio.file.StandardOpenOption;
  * Created by xiaohe on 12/11/15.
  */
 public class Worker extends Thread {
-    private Path outputPath;
 
+    private FilePath outputPath;
     public Worker(String name, Path outputPath) {
         super(name);
-        this.outputPath = outputPath;
+        this.outputPath = new FilePath(outputPath);
     }
 
     @Override
@@ -22,7 +22,8 @@ public class Worker extends Thread {
 
         while (true) {
             try {
-                Files.write(this.outputPath, content.getBytes(), StandardOpenOption.APPEND);
+                Path path = this.outputPath.getOutputPath();
+                Files.write(path, content.getBytes(), StandardOpenOption.APPEND);
                 Thread.sleep(1500);
             } catch (IOException e) {
                 e.printStackTrace();
