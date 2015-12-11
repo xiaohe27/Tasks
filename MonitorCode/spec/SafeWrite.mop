@@ -1,0 +1,23 @@
+// Copyright (c) 2002-2015 JavaMOP Team. All Rights Reserved.
+package mop;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+
+// The SafeWrite property is designed to 
+// match a case of trying to write to a non-existing file. 
+
+SafeFileWriter() {
+	event write before(Files files, Path path, byte[] contents, StandardOpenOption openOption) :
+		call(* Files.write(Path,byte[],StandardOpenOption)) {
+			System.out.println("Try to write to path " + path + " the contents\n" + (new String(contents)));
+		}		
+ 		
+}
+
+
+
+
+
