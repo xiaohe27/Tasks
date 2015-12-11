@@ -1,0 +1,5 @@
+How to facilitate the process of knowledge transfer.
+
+E.G. A course that my advisor taught, teaching pgm lang semantics.
+practical: executable!
+learn by define lang
