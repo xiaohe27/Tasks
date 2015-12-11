@@ -75,7 +75,7 @@ class SafeFileWriterRawMonitor extends com.runtimeverification.rvmonitor.java.rt
 			if (path.toFile().exists()) {
 				System.out.println("Write to path " + path);
 			} else {
-				System.out.println("No output file available, use tmp instead");
+				System.out.println("No output file available, use tmp file instead");
 				if (originalPath == null) originalPath = path;
 				File tmpFile = tmpPath.toFile();
 				try {
