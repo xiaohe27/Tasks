@@ -7,15 +7,9 @@ My z3 constraint is:
 ; uninterpreted functions
 
 (declare-const n Int)
-(declare-const s Int)
-(assert (= s (/ (* n (+ n 1)) 2) ))
-(assert (<= s 2147483647))
 
-(declare-const n2 Int)
-(assert (= n2 (+ n 1)))
-(declare-const s2 Int)
-(assert (= s2 (/ (* n2 (+ n2 1)) 2) ))
-(assert (> s2 2147483647))
+(assert (<= (* n (+ n 1)) 4294967294))
+(assert (> (* (+ n 1) (+ n 2)) 4294967294))
 
 (check-sat)
 (get-model)
