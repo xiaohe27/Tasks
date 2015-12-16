@@ -1,0 +1,187 @@
+\documentclass[twoside]{icldt}
+\usepackage{fixltx2e}
+\usepackage{amssymb}
+\usepackage{natbib}
+\usepackage{url}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{floatrow}
+\renewcommand{\thesection}{\arabic{section}}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{changepage}
+\usepackage{lipsum}
+\usepackage{wrapfig}
+\usepackage{sidecap}
+\usepackage{caption}
+\usepackage{color}
+\definecolor{name}{rgb}{0.5,0.5,0.5}
+
+
+
+\usepackage{listings}
+
+\lstset{ %
+  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+  basicstyle=\footnotesize,        % the size of the fonts that are used for the code
+  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+%  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{green},    % comment style
+  morecomment=[s][\color{green}]{/*}{*/},
+  deletekeywords={...},            % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  frame=single,                    % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+  language=c,                 % the language of the code
+  morekeywords={MPI_Send, MPI_Recv,MPI_Isend,MPI_Irecv,MPI_Bcast,MPI_Reduce,MPI_Allreduce,MPI_Barrier,MPI_Wait,MPI_Gather,MPI_Finalize},            % if you want to add more keywords to the set
+  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  numberstyle=\footnotesize, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{red},     % string literal style
+  tabsize=2,                       % sets default tabsize to 2 spaces
+  framexbottommargin=4pt,
+  belowcaptionskip=-2em,
+}
+
+
+\DeclareCaptionFont{white}{ \color{white} }
+\DeclareCaptionFormat{listing}{
+\begin{flushleft}
+   \colorbox{cyan}{
+    \parbox{\textwidth}{\hspace{0pt}#1#2#3} 
+  }
+\end{flushleft}
+}
+\captionsetup[lstlisting]{ format=listing, labelfont=white, textfont=white,justification=justified, singlelinecheck=false, margin=-10pt, font={bf,footnotesize} }
+
+
+
+\graphicspath{{./diagrams/}}
+\DeclareGraphicsExtensions{.pdf,.jpeg,.png,.jpg} 
+\setlength\parindent{0pt}
+
+\usepackage{bookmark,hyperref}
+\usepackage[all]{hypcap}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
+
+% Title Page
+
+
+
+\title{Session Types Extractor for MPI Programs}
+\author{He Xiao}
+\date{September 2013}
+\department{Computing}
+\supervisor{Professor Nobuko Yoshida}
+
+
+
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The MPI (Message Passing Interface) languages are very popular all over of the world and there are a few theoretical works on data flow analysis in MPI programs \cite{formalAnalysisOfMPI, pgmFlowGraph, pCFG, dataflow}. It is both beneficial and risky to use MPI paradigm in parallel computing. The performance of an MPI program can be extremely high if it is used properly; however, considerable amount of energy may be lost due to communication errors in MPI programs. In order to make full use of MPI paradigm and avoid the potential runtime errors, some static type checking is desired. However, to analyse a real MPI source code at compile time is difficult in general because of the lack of easy-to-use analysis tool.  A reasonable approach to solve this problem is to develop user friendly analysis tools in the framework of Session Type Theory \cite{Honda98lang, langRevisited}. Session type theory aims to ensure runtime communication safety through statically analyse the session types of the programs and it also shows interest in analysing MPI programs. There is a previous application \cite{prevProj} which can judge whether an MPI program conforms to a given protocol; however, it suffers from the soundness problem and its underlying basis -- the session type theory has evolved. In order to capture the latest parameterised feature \cite{parameterised} of session type theory, this project developed a stand-alone and portable analysis tool for MPI programs. The tool is able to extract parameterised protocol from a C project (which may involve multiple source files), which specifies the communication pattern of the target MPI program. It can not only extract the abstract structure of the source program, but also analyse the basic semantics of MPI operations behind their lexical representations. The semantics analysis is achieved by simulating the execution of target MPI program and it enhances the precision of analysis. Apart from the software application, there are also several theoretical innovations: LFP (least fixed point) of protocols \ref{lfp}, strength of matching \ref{matching} and concepts of \emph{ranges} and \emph{conditions} \ref{ranAndCondManipulation}. In this report, the design and evaluation of the session type extractor application will be explained in detail.
+\end{abstract}
+ 
+
+\tableofcontents
+
+\listoffigures
+
+\listoftables
+
+\chapter{Introduction}
+\input{intro}
+\input{ThisProj}
+\input{motive}
+\input{Contributions}
+\input{Orgnization}
+
+\chapter{Background}
+\section{Session Types}
+\input{Motivation}
+\input{basicConcept}
+\input{protocol}
+\input{op}
+\input{type}
+\input{evolution}
+
+\section{Pabble}
+\input{pabble}
+
+\input{mpi}
+
+\section{static type checking}
+\input{staticTypeCheckingReason}
+\input{traditionalAnalysis}
+\input{mpiCFG}
+\input{pcfg}
+
+\section{MPI and Parameterised Session Type Protocols}
+\input{associate}
+
+
+\chapter{Design \& Implementation}
+\input{terms}
+\input{Toolset}
+\input{DesignGoal}
+\input{Unsupported}
+\input{io}
+\input{readMultiFiles}
+\input{Architecture}
+
+\newpage
+\section{In-depth explanation of Range and Condition}
+\input{ranCond}
+\newpage
+\section{Data Structures Used In The Application}
+\input{AST}
+\input{CommTree}
+\input{MPITree}
+\input{optimize}
+
+\input{Simulation}
+
+\input{extract}
+\input{langConstruct}
+
+\input{mpiPrimitive}
+\input{matching}
+\input{output}
+
+\input{challenge}
+
+\chapter{Test \& Evaluation}
+\input{eval}
+\input{compare}
+\input{test}
+
+
+
+\chapter{Conclusion}
+\input{conclusion}
+\input{future}
+\input{ack}
+
+
+\bibliographystyle{plain}
+\bibliography{dblp}
+
+\appendix
+\input{appendix}
+\end{document}          
