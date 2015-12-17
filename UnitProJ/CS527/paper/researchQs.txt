@@ -1,0 +1,8 @@
+Is the generated spec correct? or in other words, whether the approach is sound?
+
+Is the approach of automatic generation of specs more efficient 
+than writing the specs manually.
+
+Is the approach complete? If not, to what extent it can generate spec automatically?
+
+What complexity level of programs can be handled by the tool?
