@@ -1,0 +1,2 @@
+How to express this property?
+Any map should only invoke the method createColl once.
