@@ -1,4 +1,4 @@
-Modifier of javamop spec (full-list)
+Modifier of javamop spec (full-list), found in javamop.jj
 
 {
 	(
