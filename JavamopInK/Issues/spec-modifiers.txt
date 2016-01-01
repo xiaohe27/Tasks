@@ -1,0 +1,22 @@
+Modifier of javamop spec (full-list)
+
+{
+	(
+	"unsynchronized" { modifiers = javamop.parser.ast.body.ModifierSet.addModifier(modifiers, SpecModifierSet.UNSYNC); }
+	|
+	"decentralized" { modifiers = javamop.parser.ast.body.ModifierSet.addModifier(modifiers, SpecModifierSet.DECENTRL); }
+	|
+	"perthread" { modifiers = javamop.parser.ast.body.ModifierSet.addModifier(modifiers, SpecModifierSet.PERTHREAD); }
+	|
+	"suffix" { modifiers = javamop.parser.ast.body.ModifierSet.addModifier(modifiers, SpecModifierSet.SUFFIX); }
+	|
+	"full-binding" { modifiers = javamop.parser.ast.body.ModifierSet.addModifier(modifiers, SpecModifierSet.FULLBINDING); }
+        |
+	"avoid" { modifiers = javamop.parser.ast.body.ModifierSet.addModifier(modifiers, SpecModifierSet.AVOID); }
+	|
+        "enforce" { modifiers = javamop.parser.ast.body.ModifierSet.addModifier(modifiers, SpecModifierSet.ENFORCE); }
+	|
+	"connected" { modifiers = javamop.parser.ast.body.ModifierSet.addModifier(modifiers, SpecModifierSet.CONNECTED); }
+	)* 
+	{return modifiers;}
+}
