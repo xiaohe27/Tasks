@@ -1,0 +1,33 @@
+Two applicable domains:
+A: online monitoring: use real world time
+B: offline monitoring: use the timestamps associated with the event.
+
+info from the tfsm formula:
+time interval within which an event is fireable in a given state.
+
+tfsm :
+     start [
+        next ->[0,5] unsafe
+        hasnext ->[0,5] safe
+     ]
+     safe [
+        next ->[2,15] start
+        hasnext ->[0,5] safe 
+     ]
+     unsafe [
+        next -> unsafe
+        hasnext -> safe
+     ]
+
+The max fire time is associated with each state.
+If no event occurs before that max time, then no event will be fireable.
+
+For each timed event check whether the associated time fall inside the fireable time interval. 
+
+idea for online monitoring:
+Start a separate thread for counting time when a new monitor is created.
+
+idea for offline monitoring:
+Each time a timed event is observed, check the global monitor timetables to decide whether any timeout occurs
+
+ 
