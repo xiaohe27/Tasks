@@ -1,0 +1,3 @@
+*Universal api for event actions that incorporate the time attribute.
+As a result, both online/offline clients can provide timed events
+via the same methods.
