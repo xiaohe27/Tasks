@@ -26,6 +26,9 @@ For each timed event check whether the associated time fall inside the fireable 
 
 idea for online monitoring:
 Start a separate thread for counting time when a new monitor is created.
+In order to minimize the impact of the monitoring on original system, 
+the timer thread should immediately yield to other threads once it finds
+that there is still time left.
 
 idea for offline monitoring:
 Each time a timed event is observed, check the global monitor timetables to decide whether any timeout occurs
