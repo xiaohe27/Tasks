@@ -1,3 +1,9 @@
 *Universal api for event actions that incorporate the time attribute.
 As a result, both online/offline clients can provide timed events
 via the same methods.
+
+Implement a decision procedure in rvm.rt such that
+given the event name and its occurrence time point,
+it can decide whether that event happens at the valid 
+time interval. The monitor keeps track of the current 
+state and a map that whose sig is state * event -> time interval
