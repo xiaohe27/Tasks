@@ -1,0 +1,13 @@
+Multiple processors:
+
+For monitoring multiple-properties 
+*Applicability:
+Each processor responsible for monitoring one property.
+Naive parallelism does not work.
+Not applicable for online monitoring.
+Though there is no comm overheads, each processor needs to run
+at least original system's execution time.
+There is no benefits if the proportion of monitoring overheads 
+is very low in the original monitoring system.
+
+For offline monitoring, there should be a way to make use of SPMD paradigm.
