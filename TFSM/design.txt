@@ -7,3 +7,7 @@ given the event name and its occurrence time point,
 it can decide whether that event happens at the valid 
 time interval. The monitor keeps track of the current 
 state and a map that whose sig is state * event -> time interval
+
+
+*The new syntax for timed automata should be parsed within TFSM plugin,
+where the independent unit test should be given.
