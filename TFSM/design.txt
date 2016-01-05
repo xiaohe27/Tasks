@@ -8,6 +8,10 @@ it can decide whether that event happens at the valid
 time interval. The monitor keeps track of the current 
 state and a map that whose sig is state * event -> time interval
 
+*The end users should not be aware of the changes in event action methods' signatures.
+There should not be any change in the spec's event methods' sig.
+The presence of time attributes can be inferred from the other parts of the spec,
+e.g. the formula which contains time constraints.
 
 *The new syntax for timed automata should be parsed within TFSM plugin,
 where the independent unit test should be given.
