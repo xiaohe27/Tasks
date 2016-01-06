@@ -1,0 +1,5 @@
+The time constraints can be encoded inside the monitor 
+in a way similar to states.
+
+for each event, two long arrays can encode the lower bound and
+upper bound of fire time of events in different states respectively.
