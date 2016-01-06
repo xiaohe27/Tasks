@@ -3,3 +3,13 @@ it if some transition starting from that state does NOT have any time constraint
 
 Even though all the other transitions will NOT be able to happen due to 
 violations of the time constraints, the unrestricted transition might happen eventually.
+
+***
+The monitors maintain a field 'curTime', which is initialized by the
+timestamp of its creation time. 
+
+In some special case where the transition starting from start state 
+has a lower bound of fire time, special check is needed for the 
+very first event to avoid false positives.
+
+For all the other cases, no sepcial checks are needed.
