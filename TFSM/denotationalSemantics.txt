@@ -1,0 +1,38 @@
+The logic plugin uses denotational semantics to encode monitors.
+In HasNext property, two kinds of events, namely hasnext and next are monitored.
+The observation of the events indicate the execution of corresponding program commands.
+We know that in denotational semantics, program commands can be viewed as 
+state transformation functions, which map the input states to output states.
+
+We have defined the structure of the automaton in rvm spec, which will be used to
+construct the actual monitor.
+
+The states are encoded by integers in the monitor.
+So the state transformation function is: int -> int
+notice that the int to int function can be encoded elegantly as integer array,
+which maps the index to the value pointed by the index.
+
+//The fsm formula in the rvm spec
+   tfsm :
+     start [
+        next -> unsafe
+        hasnext -> safe
+     ]
+     safe [
+        next -50> start
+        hasnext -> safe 
+     ]
+     unsafe [
+        next -> unsafe
+        hasnext -> safe
+     ]
+
+//Therefore, the states 'start', 'safe', 'unsafe' will be represented
+//as 0, 1, 2 respectively. so two bits can cover all the cases.
+
+//The code snippet below defines the hasnext and next event
+//as state transformation functions.
+//because two bits are used, so '11' is an unused state which correspond to dec 3.
+
+	static final int Prop_1_transition_hasnext[] = {1, 1, 1, 3};;
+	static final int Prop_1_transition_next[] = {2, 0, 2, 3};;
