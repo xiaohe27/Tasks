@@ -1,0 +1,5 @@
+For a given state, there won't be any overall time constraint associated with 
+it if some transition starting from that state does NOT have any time constraint.
+
+Even though all the other transitions will NOT be able to happen due to 
+violations of the time constraints, the unrestricted transition might happen eventually.
