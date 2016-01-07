@@ -18,12 +18,12 @@ full-binding HasNext(Iterator i) {
         hasnext -100> safe
      ]
      safe [
-        next -50> start
+        next -200> start
         hasnext -> safe 
      ]
      unsafe [
         next -> unsafe
-        hasnext -100>20> safe
+        hasnext -200>20> safe
      ]
 
      alias match = unsafe

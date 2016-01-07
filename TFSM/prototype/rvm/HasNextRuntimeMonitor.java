@@ -82,9 +82,9 @@ class HasNextMonitor extends com.runtimeverification.rvmonitor.java.rt.tablebase
 
     //lower and upperbound for fire time of events in different states
     static final long LB_fireTime_hasnext[] = {0L, 0L, 20L, 0L};
-    static final long UB_fireTime_hasnext[] = {100L, Long.MAX_VALUE, 100L, Long.MAX_VALUE};
+    static final long UB_fireTime_hasnext[] = {100L, Long.MAX_VALUE, 200L, Long.MAX_VALUE};
     static final long LB_fireTime_next[] = {0L, 0L, 0L, 0L};
-    static final long UB_fireTime_next[] = {Long.MAX_VALUE, 50L, Long.MAX_VALUE, Long.MAX_VALUE};
+    static final long UB_fireTime_next[] = {Long.MAX_VALUE, 200L, Long.MAX_VALUE, Long.MAX_VALUE};
 
     static final long[][] LB_fireTime = {LB_fireTime_hasnext, LB_fireTime_next};
     static final long[][] UB_fireTime = {UB_fireTime_hasnext, UB_fireTime_next};
@@ -122,13 +122,17 @@ class HasNextMonitor extends com.runtimeverification.rvmonitor.java.rt.tablebase
         long ub = UB_fireTime[eventId][curState];
 
         System.out.println("[" + lb + ", " + ub + "]");
-        if (time < this.curTime + lb)
+        System.out.println("use " + (time - this.curTime) + " ms.");
+
+        if (System.currentTimeMillis() < this.curTime + lb)
             System.out.println("Event " + eventId + " should happen after " + lb + " ms since state "
             + this.getState());
 
         if (time > this.curTime + ub)
             System.out.println("Event " + eventId + " should happen within " + ub + " ms since state "
             + this.getState());
+
+        this.curTime = System.currentTimeMillis();
     }
 
 	private final int handleEvent(int eventId, int[] table) {
