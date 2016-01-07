@@ -1,0 +1,41 @@
+This pull request shows the current progress on the timed fsm logic plugin.
+Based on previous discussion @grosu about the tfsm plugin, a prototype has been designed.
+The plugin is still under development, but the following things have been done:
+
+1. parsing of TFSM syntax proposed by @grosu
+
+2. some unit test that checks the syntax parsing.
+
+3. a hand-crafted example (with manually written monitoring code) that demonstrates the online monitoring with time constraints.
+
+E.g. to illustrate the syntax of TFSM:
+
+   tfsm :
+     start [
+        next -> unsafe
+        hasnext -100> safe
+     ]
+     safe [
+        next -200> start
+        hasnext -> safe 
+     ]
+     unsafe [
+        next -> unsafe
+        hasnext -200>20> safe
+     ]
+
+In the unsafe state part, 
+transition hasnext -200>20> safe means the event hasnext 
+is expected to happen within the time interval [20, 200] since the system enters unsafe state.
+
+Things going to do:
+
+1. Monitor Code generation
+
+2. Example of monitoring offline logs with timed events
+
+The design intent is to provide a uniform api for both online and offline monitoring by 
+adding an additional time field to the event methods when the TFSM plugin is used, so that 
+the timed events can be accepted by monitors no matter how the time-stamps of the events 
+are obtained: in on-line monitoring, clients can query the current time; in offline 
+monitoring, the time of events can be directly parsed from the log entry.
