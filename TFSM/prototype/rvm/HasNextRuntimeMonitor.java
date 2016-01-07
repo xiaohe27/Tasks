@@ -116,7 +116,7 @@ class HasNextMonitor extends com.runtimeverification.rvmonitor.java.rt.tablebase
 		return (((lastEvent + 1) << 2) | state) ;
 	}
 
-    private void checkTime(long time, int eventId) {
+    private void checkAndUpdateTime(long time, int eventId) {
         int curState = getState();
         long lb = LB_fireTime[eventId][curState];
         long ub = UB_fireTime[eventId][curState];
@@ -150,7 +150,7 @@ class HasNextMonitor extends com.runtimeverification.rvmonitor.java.rt.tablebase
 	}
 
 	final boolean Prop_1_event_hasnext(Iterator i, long time) {
-		{checkTime(time, 0);}
+		{checkAndUpdateTime(time, 0);}
 
 		int nextstate = this.handleEvent(0, Prop_1_transition_hasnext) ;
 		this.Prop_1_Category_match = nextstate == 2;
@@ -159,7 +159,7 @@ class HasNextMonitor extends com.runtimeverification.rvmonitor.java.rt.tablebase
 	}
 
 	final boolean Prop_1_event_next(Iterator i, long time) {
-		{checkTime(time, 1);}
+		{checkAndUpdateTime(time, 1);}
 
 		int nextstate = this.handleEvent(1, Prop_1_transition_next) ;
 		this.Prop_1_Category_match = nextstate == 2;
