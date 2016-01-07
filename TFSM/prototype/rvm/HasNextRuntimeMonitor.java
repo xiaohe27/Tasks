@@ -93,11 +93,11 @@ class HasNextMonitor extends com.runtimeverification.rvmonitor.java.rt.tablebase
 
 	private AtomicInteger pairValue;
 
-    private long curTime;
+    private long prevTimePoint;
 
 	HasNextMonitor() {
 		this.pairValue = new AtomicInteger(this.calculatePairValue(-1, 0) ) ;
-        this.curTime = System.currentTimeMillis();
+        this.prevTimePoint = System.currentTimeMillis();
 	}
 
 	@Override public final int getState() {
@@ -121,18 +121,31 @@ class HasNextMonitor extends com.runtimeverification.rvmonitor.java.rt.tablebase
         long lb = LB_fireTime[eventId][curState];
         long ub = UB_fireTime[eventId][curState];
 
-        System.out.println("[" + lb + ", " + ub + "]");
-        System.out.println("use " + (time - this.curTime) + " ms.");
+        String eventName = eventId == 0 ? "hasnext" : (eventId == 1 ? "next" : "unknown");
+        String stateName = "unknown";
+        switch (curState) {
+            case 0 : stateName = "start";
+                break;
+            case 1 : stateName = "safe";
+                break;
+            case 2 : stateName = "unsafe";
+                break;
+        }
 
-        if (System.currentTimeMillis() < this.curTime + lb)
+        System.out.println("Time constraint of event "
+                + eventName + " at state " + stateName + " is [" + lb + ", " + ub + "]");
+        System.out.println("Event " + eventName + " uses " + (time - this.prevTimePoint) + " ms.");
+
+        long curTime = System.currentTimeMillis();
+        if (curTime < this.prevTimePoint + lb)
             System.out.println("Event " + eventId + " should happen after " + lb + " ms since state "
             + this.getState());
 
-        if (time > this.curTime + ub)
+        if (time > this.prevTimePoint + ub)
             System.out.println("Event " + eventId + " should happen within " + ub + " ms since state "
             + this.getState());
 
-        this.curTime = System.currentTimeMillis();
+        this.prevTimePoint = curTime;
     }
 
 	private final int handleEvent(int eventId, int[] table) {
