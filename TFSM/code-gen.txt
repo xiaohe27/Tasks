@@ -3,3 +3,6 @@ A:\Projects\rv-monitor\rv-monitor\src\main\javacc\com\runtimeverification\rvmoni
 tfsm\parser\FSMParser.jj
 
 JavaTFSM.java
+
+LogicRepository proj
+Main.java
