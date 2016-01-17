@@ -1,0 +1,5 @@
+time-out handler:
+execute user-provided time-out handling code
+
+verbose mode:
+print more detailed debugging info
