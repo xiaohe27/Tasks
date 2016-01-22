@@ -6,3 +6,9 @@ JavaTFSM.java
 
 LogicRepository proj
 Main.java
+
+FSMInput is a seq of FSMItem,
+which is in the form of 
+
+state [event1 -> state1 
+event2 -> state2]
