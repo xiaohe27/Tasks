@@ -242,7 +242,6 @@ class EnforceTestEnforcementMonitor extends com.runtimeverification.rvmonitor.ja
 				return false;
 			}
 			{
-				System.out.println("1");
 			}
 		}
 
@@ -274,7 +273,6 @@ class EnforceTestEnforcementMonitor extends com.runtimeverification.rvmonitor.ja
 				return false;
 			}
 			{
-				System.out.println("2");
 			}
 		}
 

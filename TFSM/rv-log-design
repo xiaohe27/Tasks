@@ -1,0 +1,2 @@
+Incorporate the stats functions in rv-log
+Remove its dependency on rv-monitor 

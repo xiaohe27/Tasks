@@ -1,0 +1,22 @@
+time-out handler:
+execute user-provided time-out handling code
+
+verbose mode:
+print more detailed debugging info
+
+
+        String eventName = eventId == 0 ? "hasnext" : (eventId == 1 ? "next" : "unknown");
+        String stateName = "unknown";
+        switch (curState) {
+            case 0 : stateName = "start";
+                break;
+            case 1 : stateName = "safe";
+                break;
+            case 2 : stateName = "unsafe";
+                break;
+        }
+
+
+        String errInfo = "Time constraint of event "
+                + eventName + " at state " + stateName + " is [" + lb + ", " + ub + "]\n";
+        errInfo += "Event " + eventName + " uses " + (curTime - this.prevTimePoint) + " ms.\n";

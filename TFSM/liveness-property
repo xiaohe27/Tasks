@@ -1,0 +1,12 @@
+The time constraints can be considered as liveness property.
+In interactive systems where the system does not halt, the liveness property is undecidable in gengeral.
+E.G. for a property with no time constraint on event A at state S, 
+even if the event B at state S has time constraints; we cannot decide whether the system stuck at state S violate the liveness property.
+
+If the spec is ideal in the sense that all events at all states are properly annotated with time constraints.
+Then we can actively monitor the time constraints.
+* start a timer for each monitor, after the max transition time passed, it begin to alarm.
+
+If the program terminates, we may also use the lazy approach:
+* when the program terminates, invoke an additional time check with the current time (or maybe the max time which is represented as Long.MAX_VALUE) and
+ check whether any active monitors can find some violation. 

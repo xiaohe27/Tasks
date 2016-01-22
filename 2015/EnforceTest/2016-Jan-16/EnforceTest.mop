@@ -2,19 +2,17 @@ package mop;
 
 enforce EnforceTest() {
     event oneBegin before():
-        execution(* SimpleRunnable1.run(..)) && threadName("T1") {
-		System.out.println("1");
+        execution(* Runnable.run(..)) && threadName("T1") {
         }
    event oneEnd after():
-        execution(* SimpleRunnable1.run(..)) && threadName("T1") {
+        execution(* Runnable.run(..)) && threadName("T1") {
 		System.out.println("1 end");
         }
     event twoBegin before():
-        execution(* SimpleRunnable2.run(..)) && threadName("T2") {
-		System.out.println("2");
+        execution(* Runnable.run(..)) && threadName("T2") {
         }
     event twoEnd after():
-        execution(* SimpleRunnable2.run(..)) && threadName("T2") {
+        execution(* Runnable.run(..)) && threadName("T2") {
 		System.out.println("2 end");
         }
     ere : twoBegin+ twoEnd+ oneBegin+ oneEnd+ 
