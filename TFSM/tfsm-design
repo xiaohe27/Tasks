@@ -1,0 +1,6 @@
+special timeout event which will be triggered automatically 
+if none of the other events are fireable.
+
+two modes:
+one with watchdog (time-driven, active monitoring), 
+and the other use event-driven approach (passive monitoring, suitable for offline monitoring). 
