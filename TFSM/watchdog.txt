@@ -1,3 +1,25 @@
 Implementation of apache
 https://commons.apache.org/proper/commons-exec/apidocs/org/apache/commons/exec/Watchdog.html
 https://commons.apache.org/proper/commons-exec/apidocs/org/apache/commons/exec/TimeoutObserver.html
+
+Design:
+For each state, at most one watchdog will be created based on the least upper bound of the max waiting time of the events.
+
+say at state s,
+s [
+e1 ->[2,7] s1
+e2 ->[3,9] s2
+timeout -> s3
+] 
+
+the timeout will occur after 9 ms in state s
+
+If some event does not have a finite max waiting time, then no watchdog will be created.
+
+Assume there are totally 5 states,
+then at most 5 watchdogs need to be created for each monitor.
+
+
+suppose monitor m change state from s to s',
+then it will be removed from the watchdog for state s and 
+added to watchdog for state s'
