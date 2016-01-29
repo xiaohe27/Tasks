@@ -23,3 +23,15 @@ then at most 5 watchdogs need to be created for each monitor.
 suppose monitor m change state from s to s',
 then it will be removed from the watchdog for state s and 
 added to watchdog for state s'
+
+
+###
+The above implementation incurs too much overheads.
+Implement the watchdog from scratch is better.
+Can use the same interface.
+Can have one watchdog responsible for notifying multiple monitors
+whether timeout occurs in one specific state.
+In this way, the number of additional threads can be minimized, which means the 
+overheads will not be too large.
+
+
