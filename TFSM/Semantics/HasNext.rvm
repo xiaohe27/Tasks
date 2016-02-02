@@ -1,0 +1,59 @@
+package rvm;
+import java.io.*;
+import java.util.*;
+
+// This property specifies that a program does
+// not call the hasnext method  before the next
+// method of an iterator. 
+// This property is borrowed from tracematches 
+// (see ECOOP'07 http://abc.comlab.ox.ac.uk/papers)
+
+full-binding HasNext(Iterator i) {
+   event hasnext(Iterator i) {} // after
+   event next(Iterator i) {} // before 
+   event timeout(Iterator i) {
+	System.err.println("Time Out on iterator " + i);
+	System.exit(1);
+   }
+
+   tfsm :
+     start [
+        next ->[20, 200] unsafe
+        hasnext ->[0,100) safe
+	timeout -> unsafe 
+	//when there is no event happened in 200 ms (the upperbound of 100 and 200),
+	//the timeout event should be triggered automatically.
+	//For the online monitoring, we can use watchdogs to actively 
+	//monitor the time constraints (notice the violation immediately).
+	//For offline monitoring, we can use event-driven approach:
+	//whenever some event comes, then we can judge whether the property is
+	//violated. If there is no event happened, then state remained the same.
+	//Seems that these two approaches should not have the same semantics:
+	//If the state needs to change periodically, then it will be undecidable 
+	//what state it will be in at the end of the system execution.
+	//Because we are not sure when is the end time?!
+     ]
+     safe [
+        next ->[0,200] start
+        hasnext -> safe 
+     ]
+     unsafe [
+        next ->[20,1000] unsafe
+        hasnext ->[200,500] safe
+     ]
+
+     alias match = unsafe
+	
+   @match {
+      System.out.println("next called without hasNext!");
+   }
+}
+
+
+
+
+
+
+
+
+
