@@ -4,3 +4,11 @@ if none of the other events are fireable.
 two modes:
 one with watchdog (time-driven, active monitoring), 
 and the other use event-driven approach (passive monitoring, suitable for offline monitoring). 
+
+My opinion:
+It is hard to achieve the same semantics for time-driven (real time) and event-driven (logical time).
+
+Consider in the event-driven approach the lazy check method:
+whenever some timed event comes, append its id to the a queue, where the elements in the queue
+will be periodically picked up to check time. if there is no timeout happened, then do not remove,
+otherwise remove it.
