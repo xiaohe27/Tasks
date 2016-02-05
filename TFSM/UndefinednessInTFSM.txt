@@ -1,0 +1,30 @@
+what would happen if:
+
+s0 [
+e0 ->[2,5] s1
+timeout -> s2
+]
+
+s1 [
+e1 -> [0,2] s2
+timeout -> s0
+]
+
+s2 [
+e2 ->[3,7] s0
+timeout -> s1
+]
+
+In online monitoring, we can use watchdog to react accordingly in time.
+But in offline monitoring, we receive the timed info via reading logs,
+so the next received time stamp may accross multiple transitions as defined
+in the above semantics.
+
+think about the trace:
+s0 (e0,3)-> s1
+it is normal well defined transition.
+
+But what if we receive the event e0 after time 100?
+error msg for each time-out?
+too many err msg caused by the same timeout may distract the users
+if they want to find all the unique timeout events.
