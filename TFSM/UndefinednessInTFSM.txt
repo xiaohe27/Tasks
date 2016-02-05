@@ -1,7 +1,7 @@
 what would happen if:
 
 s0 [
-e0 ->[2,5] s1
+e0 ->[5,9] s1
 timeout -> s2
 ]
 
@@ -28,3 +28,31 @@ But what if we receive the event e0 after time 100?
 error msg for each time-out?
 too many err msg caused by the same timeout may distract the users
 if they want to find all the unique timeout events.
+
+Suppose there are 100 transitions need to be performed, 
+should we honestly perform all the 100 event actions associated with the 'timeout' events?
+That would be a performance punishment.
+
+###
+Do the transitions for all the potential events.
+Still undecidable...
+
+The thing is in the online monitoring, we can do the time-out transition immediately.
+But in offline, we use the event-driven approach, which may not capture the time-out event in time.
+And the time we entered to the new state will subsequently decide the final state that we may finally entered.
+
+Think about the timed trace for online monitoring below:
+s0, (timeout, 10), s2, (e2, 12), s0
+
+for offline monitoring, if there is no such timeout event in the log, then the events visible to RV-Log is:
+(e2, 12),
+and then the possible states will be s0 (use the same transition as online monitoring) or s2 (using the time constraints for timeout).
+
+The root cause for the non-determinism is in offline monitoring, we have some info lost compared to online monitoring: watchdog can gen timeout events immediately,
+but in offline log analysis, we can only know the time from timed events. 
+
+Two possible ways to get around:
+1) do not use watchdog in online monitoring
+2) insert timeout events to the logs
+
+These should guarantee the events seen by online/offline monitors are exactly the same.
