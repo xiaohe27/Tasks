@@ -1,11 +1,35 @@
 in tfsm.maude
 
-***A specific monitor.
+***(
+   A specific monitor equivalent to the one below:
+   tfsm :
+     start [
+        next ->[50,100] unsafe
+        hasnext ->[0,100] safe
+	timeout -> unsafe
+     ]
+     safe [
+        next ->[100,200] start
+        hasnext ->[10,20] safe 
+	timeout -> safe
+     ]
+     unsafe [
+        next ->[2,5] unsafe
+        hasnext ->[20,30] safe
+	timeout -> unsafe
+     ]
+
+//start : 0, safe : 1, unsafe : 2
+)
 
 mod Monitor is
 protecting TFSM .
 
-
+ops start safe unsafe : -> Loc .
+ 
+rl [l0] : l(0) => start .
+rl [l1] : l(1) => safe .
+rl [l2] : l(2) => unsafe .
 
 var T1 T2 : Nat .
 
@@ -16,8 +40,8 @@ endm
 **********************************
 *** Test some functions.
 
-red transit(l(0), 'a) .
+rew transit(l(0), 'next) .
 
-red I(l(0), 'a) .
+rew I(l(0), 'a) .
 
-red D(l(5) @ 7, 'b @ 12, (2, 28)) .
+rew D(l(5) @ 7, 'b @ 12, (2, 28)) .
