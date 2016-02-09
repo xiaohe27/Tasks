@@ -16,7 +16,7 @@ op _@_ : Event Nat -> TEvent [ctor] .
 
 sort Loc .
 
-op s_ : Nat -> Loc [ctor] .
+op l(_) : Nat -> Loc [ctor] .
 
 sort State .
 
@@ -28,13 +28,13 @@ op _@_ : Loc Nat -> State [ctor] .
 
 sort TInterval .
 
-op <_ _> : Nat Nat -> TInterval [ctor] .
+op (_,_) : Nat Nat -> TInterval [ctor] .
 
-op I __ : Loc Event -> TInterval .
+op I(_,_) : Loc Event -> TInterval .
 
 ************************************************
 
-op D _ _ _ : State TEvent TInterval -> State .
+op D(_,_,_) : State TEvent TInterval -> State .
 
 var T1 T2 : Nat .
 
