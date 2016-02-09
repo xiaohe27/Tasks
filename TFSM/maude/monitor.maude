@@ -1,0 +1,17 @@
+in tfsm.maude
+
+mod Monitor is
+protecting TFSM .
+
+var T1 T2 : Nat .
+
+
+endm
+
+
+**********************************
+*** Test some functions.
+
+red I(l(0), 'a) .
+
+red D(l(5) @ 7, 'b @ 12, (2, 28)) .

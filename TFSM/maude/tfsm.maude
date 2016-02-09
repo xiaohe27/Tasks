@@ -36,8 +36,5 @@ op I(_,_) : Loc Event -> TInterval .
 
 op D(_,_,_) : State TEvent TInterval -> State .
 
-var T1 T2 : Nat .
-
-
 
 endfm
