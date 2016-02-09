@@ -27,11 +27,12 @@ protecting TFSM .
 
 ops start safe unsafe : -> Loc .
  
-rl [l0] : l(0) => start .
-rl [l1] : l(1) => safe .
-rl [l2] : l(2) => unsafe .
+rl [l0] : start => l(0)  .
+rl [l1] : safe => l(1) .
+rl [l2] : unsafe => l(2) .
 
 var T1 T2 : Nat .
+
 
 
 endm
@@ -40,8 +41,8 @@ endm
 **********************************
 *** Test some functions.
 
-rew transit(l(0), 'next) .
+rew transit(start, 'next) .
 
-rew I(l(0), 'a) .
+rew I(start, 'a) .
 
 rew D(l(5) @ 7, 'b @ 12, (2, 28)) .
