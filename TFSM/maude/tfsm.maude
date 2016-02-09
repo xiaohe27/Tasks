@@ -1,0 +1,43 @@
+fmod TFSM is
+protecting QID .
+protecting NAT .
+
+sort Event .
+subsort Qid < Event .
+
+op timeout : -> Event [ctor] .
+
+sort TEvent .
+*** Timed event.
+
+op _@_ : Event Nat -> TEvent [ctor] .
+
+************************************************
+
+sort Loc .
+
+op s_ : Nat -> Loc [ctor] .
+
+sort State .
+
+op _@_ : Loc Nat -> State [ctor] .
+
+************************************************
+
+*** Time constraint function: given loc and event, returns the associated time interval.
+
+sort TInterval .
+
+op <_ _> : Nat Nat -> TInterval [ctor] .
+
+op I __ : Loc Event -> TInterval .
+
+************************************************
+
+op D _ _ _ : State TEvent TInterval -> State .
+
+var T1 T2 : Nat .
+
+
+
+endfm
