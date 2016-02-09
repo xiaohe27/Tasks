@@ -25,11 +25,14 @@ in tfsm.maude
 mod Monitor is
 protecting TFSM .
 
+
+***(
 ops start safe unsafe : -> Loc .
  
 rl [l0] : start => l(0)  .
 rl [l1] : safe => l(1) .
 rl [l2] : unsafe => l(2) .
+)
 
 var T1 T2 : Nat .
 

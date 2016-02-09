@@ -18,9 +18,11 @@ sort Loc .
 
 op l(_) : Nat -> Loc [ctor] .
 
-sort State .
+sorts State TState .
 
-op _@_ : Loc Nat -> State [ctor] .
+op _@_ : Loc Nat -> TState [ctor] .
+
+op loc(_) : State -> Loc .
 
 ************************************************
 
@@ -37,7 +39,7 @@ op I(_,_) : Loc Event -> TInterval .
 op transit(_,_) : Loc Event -> Loc .
 
 ***The timed transition function
-op D(_,_,_) : State TEvent TInterval -> State .
+op D(_,_,_) : TState TEvent TInterval -> TState .
 
 
 endfm
