@@ -33,7 +33,10 @@ op (_,_) : Nat Nat -> TInterval [ctor] .
 op I(_,_) : Loc Event -> TInterval .
 
 ************************************************
+***The normal transition function
+op transit(_,_) : Loc Event -> Loc .
 
+***The timed transition function
 op D(_,_,_) : State TEvent TInterval -> State .
 
 

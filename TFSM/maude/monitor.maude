@@ -1,7 +1,11 @@
 in tfsm.maude
 
+***A specific monitor.
+
 mod Monitor is
 protecting TFSM .
+
+
 
 var T1 T2 : Nat .
 
@@ -11,6 +15,8 @@ endm
 
 **********************************
 *** Test some functions.
+
+red transit(l(0), 'a) .
 
 red I(l(0), 'a) .
 
