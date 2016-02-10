@@ -61,9 +61,11 @@ op err : -> TState .
 ************************************************************************
 op readTrace(_,_) : TState Trace -> TState .
 
-sorts InitS FinalS . ***Need to be instantiated by the monitor.
-subsorts InitS < TState FinalS < TState .
-op isInit(_) : TState -> Bool .
+sort FinalS . ***Need to be instantiated by the monitor.
+
+subsort FinalS < TState .
+
+op initS : -> TState .
 op isFinal(_) : TState -> Bool .
 
 op accept(_) : Trace -> Bool .
@@ -76,7 +78,6 @@ var TS : TState .
 var TE : TEvent .
 var TI : TInterval .
 var TR : Trace .
-var INIT : InitS .
 
 eq state(S @ T) = S .
 
@@ -90,12 +91,10 @@ eq transit(TS, TE) = D1(state(TS), time(TS), event(TE), time(TE)) .
 
 eq D1(S, OldT, E, EventT) = D2(S, OldT, E, EventT, I(S, E)) .
 
-
-
 ceq D2(S, OldT, E, EventT, TI) = (transit(S, E) @ EventT) if inBet(EventT, addBase(OldT, TI)) . 
 
 eq D2(S, OldT, E, EventT, TI) = err [owise] .
 
-eq accept(TR) = isFinal(readTrace(INIT, TR)) .
+eq accept(TR) = isFinal(readTrace(initS, TR)) .
 
 endfm
