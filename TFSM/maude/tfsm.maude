@@ -16,6 +16,11 @@ op _@_ : Event Nat -> TEvent [ctor] .
 op event(_) : TEvent -> Event .
 op time(_) : TEvent -> Nat .
 
+sort Trace .
+subsort TEvent < Trace .
+
+op nil : -> Trace .
+op _::_ : TEvent Trace -> Trace [id: nil ctor] .
 ************************************************
 
 sorts State TState .
@@ -53,6 +58,10 @@ op D1(_,_,_,_) : State Nat Event Nat -> TState .
 op D2(_,_,_,_,_) : State Nat Event Nat TInterval -> TState .
 
 op err : -> TState .
+************************************************************************
+***op readTrace
+
+
 ************************************************************************
 var S : State .
 var E : Event .

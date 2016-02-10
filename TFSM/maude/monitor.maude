@@ -56,9 +56,6 @@ eq transit(unsafe, 'hasnext) = safe .
 eq transit(unsafe, timeout) = unsafe .
 **********************************
 
-var T1 T2 : Nat .
-
-
 
 endm
 
