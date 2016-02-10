@@ -5,10 +5,23 @@ judges whether a given non-parameterized trace satisfies the property described 
 make some predefined transitions. We should NOT make decisions for the users. I prefer the design of 'garbage in garbage out'.
 Whether we should provide a hint when no total automata can be produced from the given spec is a separate issue.
 
+E.G. Even if we can define a special event which will be triggered when either
+1) right events NOT happened within the right time interval.
+2) wrong events happend at wrong time.
+
+The problem is that, even though we can define the previously undefined domain; things will still be 
+undefined if we do not define this special event/transition.
+
+My suggestion is providing an option to the users:
+--total which indicates that they want a totalized automata which does not have undefined domain.
+
+Then we can do some syntactic checking to reject the specs which do not define the special event/transition.
+  
+
 3. Given the time intervals associated with each event are disjoint, the produced automata should be deterministic.
 However, in online and offline monitoring, it is difficult to obtain the same trace based on the current design.
 
 The online monitoring uses watch-dog, which will generate an explicit timeout event;
 if that timeout event is not present in the offline log, then the online trace will differ from the offline trace. 
 
-
+Therefore, even if we use the same decision procedure, we cannot guarantee that the same result can be obtained from the two slightly different traces.
