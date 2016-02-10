@@ -4,8 +4,8 @@ in tfsm.maude
    A specific monitor equivalent to the one below:
    tfsm :
      start [
-        next ->[50,100] unsafe
-        hasnext ->[0,100] safe
+        next ->[50,100) unsafe
+        hasnext ->[0,100) safe
 	timeout -> unsafe
      ]
      safe [
@@ -33,6 +33,16 @@ rl [l0] : start => l(0)  .
 rl [l1] : safe => l(1) .
 rl [l2] : unsafe => l(2) .
 )
+
+eq I(l(0), 'next) = (50, 100) .
+eq I(l(0), 'hasnext) = (0, 100) .
+eq I(l(0), timeout) = (100,0) .
+
+
+**********************************
+eq transit(start, 'next) = unsafe .
+
+**********************************
 
 var T1 T2 : Nat .
 

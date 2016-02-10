@@ -36,7 +36,7 @@ op I(_,_) : Loc Event -> TInterval .
 
 ************************************************
 ***The normal transition function
-op transit(_,_) : Loc Event -> Loc .
+op transit(_,_) : State Event -> State .
 
 ***The timed transition function
 op D(_,_,_) : TState TEvent TInterval -> TState .
