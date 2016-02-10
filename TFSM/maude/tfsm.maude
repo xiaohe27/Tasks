@@ -25,6 +25,8 @@ op _::_ : TEvent Trace -> Trace [id: nil ctor] .
 
 sorts State TState .
 
+op err : -> State .
+
 op _@_ : State Nat -> TState [ctor] .
 
 op state(_) : TState -> State .
@@ -57,7 +59,6 @@ op D1(_,_,_,_) : State Nat Event Nat -> TState .
 
 op D2(_,_,_,_,_) : State Nat Event Nat TInterval -> TState .
 
-op err : -> TState .
 ************************************************************************
 op readTrace(_,_) : TState Trace -> TState .
 
@@ -97,9 +98,9 @@ eq transit(TS, TE) = D1(state(TS), time(TS), event(TE), time(TE)) .
 
 eq D1(S, OldT, E, EventT) = D2(S, OldT, E, EventT, I(S, E)) .
 
+***Events happened in the right time interval.
 ceq D2(S, OldT, E, EventT, TI) = (transit(S, E) @ EventT) if inBet(EventT, addBase(OldT, TI)) . 
 
-eq D2(S, OldT, E, EventT, TI) = err [owise] .
 
 ***readTrace's implementation.
 
