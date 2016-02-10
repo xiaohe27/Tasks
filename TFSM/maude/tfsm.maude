@@ -12,34 +12,66 @@ sort TEvent .
 
 op _@_ : Event Nat -> TEvent [ctor] .
 
+eq event(_) : TEvent -> Event .
+eq time(_) : TEvent -> Nat .
+
 ************************************************
-
-sort Loc .
-
-op l(_) : Nat -> Loc [ctor] .
 
 sorts State TState .
 
-op _@_ : Loc Nat -> TState [ctor] .
+op _@_ : State Nat -> TState [ctor] .
 
-op loc(_) : State -> Loc .
+op state(_) : TState -> State .
+op time(_) : TState -> Nat .
+
+var T : Nat .
+var S : State .
+
+eq state(S @ T) = S .
+
+eq time(S @ T) = T .
 
 ************************************************
 
-*** Time constraint function: given loc and event, returns the associated time interval.
+*** Time constraint function: given state and event, returns the associated time interval.
 
 sort TInterval .
 
 op (_,_) : Nat Nat -> TInterval [ctor] .
 
-op I(_,_) : Loc Event -> TInterval .
+*** Need info of the rvm spec.
+op I(_,_) : State Event -> TInterval .
+
+op inBet(_,_) : Nat TInterval -> Bool .
 
 ************************************************
-***The normal transition function
+***The normal transition function, need info of rvm spec to instantiate.
 op transit(_,_) : State Event -> State .
 
 ***The timed transition function
-op D(_,_,_) : TState TEvent TInterval -> TState .
+op transit(_,_) : TState TEvent -> TState .
+
+op D1(_,_,_,_) : State Nat Event Nat -> TState .
+
+op D2(_,_,_,_,_) : State Nat Event Nat TInterval -> TState .
+
+
+vars LB UB OldT EventT TDiff : Nat .
+var TS : TState .
+var TE : TEvent .
+var E : Event .
+var TI : TInterval .
+
+eq transit(TS, TE) = D1(state(TS), time(TS), event(TE), time(TE)) .
+
+eq D1(S, OldT, E, EventT) = D2(S, OldT, E, EventT, I(S, E)) .
+
+eq inBet(TDiff, (LB, UB)) = (TDiff >= LB) /\ (TDiff < UB) .
+
+ceq D2(S, OldT, E, EventT, TI) = transit(S, E) @ EventT if inBet(EventT - OldT, TI) . 
+
+
+
 
 
 endfm
