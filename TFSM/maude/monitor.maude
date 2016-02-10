@@ -4,8 +4,8 @@ in tfsm.maude
    A specific monitor equivalent to the one below:
    tfsm :
      start [
-        next ->[50,100) unsafe
-        hasnext ->[0,100) safe
+        next ->[50,100] unsafe
+        hasnext ->[0,100] safe
 	timeout -> unsafe
      ]
      safe [
@@ -19,7 +19,7 @@ in tfsm.maude
 	timeout -> unsafe
      ]
 
-//start : 0, safe : 1, unsafe : 2
+***start : 0, safe : 1, unsafe : 2
 )
 
 mod Monitor is
@@ -27,15 +27,11 @@ protecting TFSM .
 
 
 ops start safe unsafe : -> State .
-
-eq loc(start) = l(0) .
-eq loc(safe) = l(1) .
-eq loc(unsafe) = l(2) .
  
 
-eq I(l(0), 'next) = (50, 100) .
-eq I(l(0), 'hasnext) = (0, 100) .
-eq I(l(0), timeout) = (100,0) .
+eq I(start, 'next) = (50, 100) .
+eq I(start, 'hasnext) = (0, 100) .
+eq I(start, timeout) = (100,0) .
 
 
 **********************************
@@ -53,8 +49,7 @@ endm
 **********************************
 *** Test some functions.
 
-rew transit(start, 'next) .
+red transit(start, 'next) .
 
-rew I(start, 'a) .
+red I(start, 'hasnext) .
 
-rew D(l(5) @ 7, 'b @ 12, (2, 28)) .
