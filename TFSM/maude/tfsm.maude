@@ -25,12 +25,6 @@ op _@_ : State Nat -> TState [ctor] .
 op state(_) : TState -> State .
 op time(_) : TState -> Nat .
 
-var T : Nat .
-var S : State .
-
-eq state(S @ T) = S .
-
-eq time(S @ T) = T .
 
 ************************************************
 
@@ -58,12 +52,19 @@ op D1(_,_,_,_) : State Nat Event Nat -> TState .
 
 op D2(_,_,_,_,_) : State Nat Event Nat TInterval -> TState .
 
-
-vars LB UB OldT EventT : Nat .
+op err : -> TState .
+************************************************************************
+var S : State .
+var E : Event .
+vars T LB UB OldT EventT : Nat .
 var TS : TState .
 var TE : TEvent .
-var E : Event .
 var TI : TInterval .
+
+
+eq state(S @ T) = S .
+
+eq time(S @ T) = T .
 
 eq addBase(T, (LB,UB)) = (LB + T, UB + T) .
 ceq inBet(T, (LB, UB)) = true if (T >= LB) /\ (T < UB) .
@@ -77,7 +78,7 @@ eq D1(S, OldT, E, EventT) = D2(S, OldT, E, EventT, I(S, E)) .
 
 ceq D2(S, OldT, E, EventT, TI) = (transit(S, E) @ EventT) if inBet(EventT, addBase(OldT, TI)) . 
 
-
+eq D2(S, OldT, E, EventT, TI) = err [owise] .
 
 
 endfm

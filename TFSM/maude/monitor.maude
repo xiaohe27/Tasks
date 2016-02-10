@@ -27,16 +27,33 @@ protecting TFSM .
 
 
 ops start safe unsafe : -> State .
- 
+op inf : -> Nat .
 
+*** The time constraint helper functions 
 eq I(start, 'next) = (50, 100) .
 eq I(start, 'hasnext) = (0, 100) .
-eq I(start, timeout) = (100,0) .
+eq I(start, timeout) = (100,inf) .
 
+eq I(safe, 'next) = (100, 200) .
+eq I(safe, 'hasnext) = (10, 20) .
+eq I(safe, timeout) = (200,inf) .
+
+eq I(unsafe, 'next) = (2, 5) .
+eq I(unsafe, 'hasnext) = (20, 30) .
+eq I(unsafe, timeout) = (30,inf) .
 
 **********************************
 eq transit(start, 'next) = unsafe .
+eq transit(start, 'hasnext) = safe .
+eq transit(start, timeout) = unsafe .
 
+eq transit(safe, 'next) = start .
+eq transit(safe, 'hasnext) = safe .
+eq transit(safe, timeout) = safe .
+
+eq transit(unsafe, 'next) = unsafe .
+eq transit(unsafe, 'hasnext) = safe .
+eq transit(unsafe, timeout) = unsafe .
 **********************************
 
 var T1 T2 : Nat .
