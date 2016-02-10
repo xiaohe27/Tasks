@@ -1,0 +1,14 @@
+1. Logic plugin is an non-parameterized automata generator. It reads an rvm spec as input and produces an automata which behaves as a decision procedure that 
+judges whether a given non-parameterized trace satisfies the property described in the spec.
+
+2. Whether we can get a total automata depends heavily on the spec that rv-monitor reads; and I strongly argue that it is NOT a good idea to 
+make some predefined transitions. We should NOT make decisions for the users. I prefer the design of 'garbage in garbage out'.
+Whether we should provide a hint when no total automata can be produced from the given spec is a separate issue.
+
+3. Given the time intervals associated with each event are disjoint, the produced automata should be deterministic.
+However, in online and offline monitoring, it is difficult to obtain the same trace based on the current design.
+
+The online monitoring uses watch-dog, which will generate an explicit timeout event;
+if that timeout event is not present in the offline log, then the online trace will differ from the offline trace. 
+
+
