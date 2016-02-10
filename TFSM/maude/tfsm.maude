@@ -1,6 +1,7 @@
 fmod TFSM is
 protecting QID .
 protecting NAT .
+protecting BOOL .
 
 sort Event .
 subsort Qid < Event .
@@ -12,8 +13,8 @@ sort TEvent .
 
 op _@_ : Event Nat -> TEvent [ctor] .
 
-eq event(_) : TEvent -> Event .
-eq time(_) : TEvent -> Nat .
+op event(_) : TEvent -> Event .
+op time(_) : TEvent -> Nat .
 
 ************************************************
 
@@ -44,6 +45,8 @@ op I(_,_) : State Event -> TInterval .
 
 op inBet(_,_) : Nat TInterval -> Bool .
 
+op addBase(_,_) : Nat TInterval -> TInterval .
+
 ************************************************
 ***The normal transition function, need info of rvm spec to instantiate.
 op transit(_,_) : State Event -> State .
@@ -56,20 +59,23 @@ op D1(_,_,_,_) : State Nat Event Nat -> TState .
 op D2(_,_,_,_,_) : State Nat Event Nat TInterval -> TState .
 
 
-vars LB UB OldT EventT TDiff : Nat .
+vars LB UB OldT EventT : Nat .
 var TS : TState .
 var TE : TEvent .
 var E : Event .
 var TI : TInterval .
 
+eq addBase(T, (LB,UB)) = (LB + T, UB + T) .
+ceq inBet(T, (LB, UB)) = true if (T >= LB) /\ (T < UB) .
+eq inBet(T,TI) = false [owise] .
+
 eq transit(TS, TE) = D1(state(TS), time(TS), event(TE), time(TE)) .
 
 eq D1(S, OldT, E, EventT) = D2(S, OldT, E, EventT, I(S, E)) .
 
-eq inBet(TDiff, (LB, UB)) = (TDiff >= LB) /\ (TDiff < UB) .
 
-ceq D2(S, OldT, E, EventT, TI) = transit(S, E) @ EventT if inBet(EventT - OldT, TI) . 
 
+ceq D2(S, OldT, E, EventT, TI) = (transit(S, E) @ EventT) if inBet(EventT, addBase(OldT, TI)) . 
 
 
 
