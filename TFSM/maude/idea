@@ -24,6 +24,12 @@ right-time  normal-transition		error
   
 wrong-time  special-transition		special-transition
 
+***
+In the case where a wrong-event happened earlier than the valid-time-interval, which will be good?
+directly apply the special-transition function? we may miss some right-event which happened at the valid time-interval later.
+
+My preference is to view the "wrong-event" as identity function which does NOT affect the state of the system.
+
 3. Given the time intervals associated with each event are disjoint, the produced automata should be deterministic.
 However, in online and offline monitoring, it is difficult to obtain the same trace based on the current design.
 
