@@ -26,13 +26,12 @@ mod Monitor is
 protecting TFSM .
 
 
-***(
-ops start safe unsafe : -> Loc .
+ops start safe unsafe : -> State .
+
+eq loc(start) = l(0) .
+eq loc(safe) = l(1) .
+eq loc(unsafe) = l(2) .
  
-rl [l0] : start => l(0)  .
-rl [l1] : safe => l(1) .
-rl [l2] : unsafe => l(2) .
-)
 
 eq I(l(0), 'next) = (50, 100) .
 eq I(l(0), 'hasnext) = (0, 100) .
