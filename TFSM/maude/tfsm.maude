@@ -96,11 +96,12 @@ eq inBet(T,TI) = false [owise] .
 
 eq transit(TS, TE) = D1(state(TS), time(TS), event(TE), time(TE)) .
 
+eq D1(S, OldT, timeout, EventT) = transit(S, timeout) @ EventT .
+
 eq D1(S, OldT, E, EventT) = D2(S, OldT, E, EventT, I(S, E)) .
 
 ***Events happened in the right time interval.
 ceq D2(S, OldT, E, EventT, TI) = (transit(S, E) @ EventT) if inBet(EventT, addBase(OldT, TI)) . 
-
 
 ***readTrace's implementation.
 

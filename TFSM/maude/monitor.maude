@@ -42,18 +42,18 @@ crl [specialTime] : D2(S, OldT, E, EventT, TI) => D2(S, OldT, timeout, EventT, T
 						if not(inBet(EventT, addBase(OldT, TI))) . 
 
 
+***consider to rewrite to err if no transition is applicable.
+
 *** The time constraint helper functions 
 eq I(start, 'next) = (50, 100) .
 eq I(start, 'hasnext) = (0, 100) .
-eq I(start, timeout) = (100,inf) .
 
 eq I(safe, 'next) = (100, 200) .
 eq I(safe, 'hasnext) = (10, 20) .
-eq I(safe, timeout) = (200,inf) .
 
 eq I(unsafe, 'next) = (2, 5) .
 eq I(unsafe, 'hasnext) = (20, 30) .
-eq I(unsafe, timeout) = (30,inf) .
+
 
 **********************************
 eq transit(start, 'next) = unsafe .
