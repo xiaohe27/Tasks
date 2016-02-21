@@ -1,0 +1,20 @@
+package rvm;
+
+ABeforeB(String s, Integer i) {
+//event a(String s) {}
+
+//event b(Integer i) {}
+
+event a(String s, Integer i) {}
+
+event b(Integer i) {}
+
+ltl:
+b => (*) a
+
+@fail
+{
+System.out.println("a should happen before b");
+}
+ 
+}

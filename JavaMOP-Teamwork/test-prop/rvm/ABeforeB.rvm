@@ -1,0 +1,42 @@
+package rvm;
+
+ABeforeB(String s, Integer i) {
+
+event a(String s, Integer i) {}
+
+event b(Integer i) {}
+
+event c(String s) {}
+
+fsm:
+
+start [
+a -> s1
+b -> s2
+c -> s3
+]
+
+s1 [
+b -> start
+c -> start
+]
+
+s2 [
+]
+
+s3 [
+b -> s2
+]
+
+
+@s2
+{
+System.out.println("pattern b or cb is detected");
+}
+
+@fail
+{
+System.err.println("Fail!");
+}
+ 
+}
