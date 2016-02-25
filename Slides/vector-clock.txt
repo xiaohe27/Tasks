@@ -1,0 +1,28 @@
+vector clock is a good way to represent HB relation.
+
+In my opinion, it mainly reduces the communication overheads.
+
+In the case of a global synchronization:
+Even if you only attach each thread's own timestamp to the msg 
+being sent, by an all-to-all broadcasting, every thread is still
+able to know the every other's time, n * (n-1) meesages are needed
+in the system.
+
+If each thread keeps a best estimation of the whole system's time,
+then each time we receive some other thread's info, we also get
+the sender's best knowledge of the system time so that we can update
+ours. So in a n-cube (architecture)topology, only n*log(n) messages
+need to be sent in the whole system. And each message is of len n because
+we perform a reduction when we receive the vector time.
+
+the time complexity of the scenario using 
+vector clock (n * log(n) rounds, each round time: s + d + n)
+is usually much less than that of 
+
+'single clock' (n * (n-1) rounds, each round time: s+ d + 1).
+
+s: start delay, d: time for first byte to arrive the destination.
+
+
+If the distance is long or start delay is high compared to the message passing
+time (msg length/msg travel speed). 

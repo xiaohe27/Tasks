@@ -1,0 +1,47 @@
+summary:
+This paper introduces the concept of a commutativity race, and 
+presents a dynamic commutativity race detector, together with
+a new logical fragment for specifying commutativity conditions.
+
+The proposed dynamic commutativity race detector is based on
+a novel combination of classic vector clocks for tracking the
+happens-before relation with a structural representation of a
+commutativity specification;
+
+It generalizes traditional race detection to richer, 
+more abstract notions of conflict, beyond the level of basic reads and writes,
+with overhead comparable to state-of-the-art, low-level race detectors.
+
+Main contributions:
+1. A dynamic commutativity race detector.
+
+2. A logical fragment, called ECL, which captures useful commutativity conditions (e.g. 
+maps), yet allows the analysis to perform a constant number of operations per method 
+invocation, as opposed to linear with arbitrary specifications
+
+3. A translation procedure from ECL to the structural representation used by the analysis
+
+==Good point
+Increase the abstraction level so that programmers can concentrate on 
+the commutativity races at the library interface level if the 
+thread-safe operations can guarantee the absence of races within 
+the methods. 
+
+==Bad point
+In my opinion, their evaluation is quite weak.
+According to their race detection algorithm's formal guarantee,
+their algorithm reports race iff the observed trace contains a race.
+i.e. If there is no race, then the algorithm will not report a race.
+But if there is some race, then some race will be reported
+(not necessarily the same one, but the first reported is guaranteed 
+to be a true race in general).
+
+So in this sense, the proposed algorithm makes effort towards verification
+instead of falsification. Therefore, they should be able to catch every 
+commutativity race, but maybe some are false alarms. However, in the evaluation
+section, they focus on the tool's ability to find some bugs and do not  
+discuss anything about false positives at all. They only mentioned via one
+sentence that most races are highly redundant (occur on the same memory locations
+or on the same concurrent hash map objects). This gives me a feeling that 
+they did some experiments and obtained some data, but they did not explain/interpret
+the results well.

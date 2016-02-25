@@ -1,0 +1,17 @@
+Title: Commutativity Race Detection
+
+Abstract:
+I will give a presentation of a PLDI '14 paper which introduced
+the concept of commutativity races.
+
+I will begin by a simple example from the paper to illustrate the
+look and feel of a commutativity race. Then I'll use a slightly
+larger example to show how to use commutativity specification and
+vector clocks to check whether a program execution trace has 
+commutativity races. After that, I will present the main algorithm
+for commutativity race detection and discuss how the difference in
+commutativity specification's representation can affect the complexity
+of the algorithm. Finally, I will briefly introduce the logical fragment ECL, 
+which is proposed by the authors to describe the commutativity specification;
+and also the procedure that translates the ECL specification to the actual 
+data structures that are used in the commutativity race detection algorithm.
