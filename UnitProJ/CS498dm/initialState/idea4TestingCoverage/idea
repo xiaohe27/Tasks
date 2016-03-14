@@ -1,0 +1,6 @@
+set env var in the pom (failsafe plugin, config environmentvariables, tag:key, val:value):
+
+i) path to the jacoco agent
+ii) path of the generated exec file
+
+in the javamop script file, use these env vars to start the jacoco's javaagent

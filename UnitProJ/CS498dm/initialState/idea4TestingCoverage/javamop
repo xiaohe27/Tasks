@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# The below incantation sets SRC_ROOT to be the canonicalized directory of this script
+SRC_ROOT=$(
+cd -P -- "$(dirname -- "$0")" &&
+printf '%s\n' "$(pwd -P)/$(basename -- "$0")"
+) || exit 1
+SRC_ROOT=`dirname "$SRC_ROOT"`
+
+# Move up into the actual source root directory
+SRC_ROOT="$SRC_ROOT/../"
+
+RELEASE="$SRC_ROOT/lib"
+
+PLUGINS_CLASSPATH="$RELEASE/plugins/*"
+
+Jacoco="/home/xiaohe/.m2/repository/org/jacoco/org.jacoco.agent/0.7.5.201505241946/org.jacoco.agent-0.7.5.201505241946-runtime.jar=destfile=/home/xiaohe/Projects/javamop/target/jacoco-it.exec"
+LOGICPLUGINPATH="$RELEASE/plugins/" java -javaagent:"$Jacoco" -cp "$RELEASE/*:$CLASSPATH":"$PLUGINS_CLASSPATH" javamop.JavaMOPMain $@
+
