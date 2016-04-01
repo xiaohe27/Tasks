@@ -1,0 +1,20 @@
+xiaohe@hexiaoLabPC:~/Projects/rvm-parser/test/rvm$ kast --directory /home/xiaohe/Projects/rvm-parser/src/rvm/visitor  -s RVM Test.rvm 
+
+kast:
+
+`___`(`'PackageDec`(`'PackageName`(`'IdList`(#token("rvm","Id"),`.List{"'IdList"}`(.KList)))),`'ImportDecList`(`'TypeImportOnDemandDec`(`'PackageName`(`'IdList`(#token("java","Id"),`'IdList`(#token("io","Id"),`.List{"'IdList"}`(.KList))))),`.List{"'ImportDecList"}`(.KList)),`__`(`_(_)`(#token("Test","Id"),`'FormalParamList`(`__`(`'TypeName`(#token("int","Id")),`__`(#token("o","Id"),`.List{"__"}`(.KList))),`.List{"'FormalParamList"}`(.KList))),`{___}`(#token("","DecBubbleList"),`__`(`__`(`_event_(_)`(`'None`(.KList),#token("create","Id"),`.List{"'FormalParamList"}`(.KList)),#token("{\n\t\tint i;\n\t}","BlockBubble")),`__`(`__`(`_event_(_)`(`'None`(.KList),#token("close","Id"),`.List{"'FormalParamList"}`(.KList)),#token("{\n    \t\tint i;\n    }","BlockBubble")),`.List{"__"}`(.KList))),`'PropertyDecList`(`__`(`_:_`(ere(.KList),`'EREAnd`(`'EREAtom`(#token("x","Id")),`'EREAtom`(#token("x","Id")))),`'HandlerDecList`(`__`(`@_`(match(.KList)),#token("{\n\t\tint j;\n\t}","BlockBubble")),`.List{"'HandlerDecList"}`(.KList))),`.List{"'PropertyDecList"}`(.KList)))))
+
+
+============
+krun --directory /home/xiaohe/Projects/rvm-parser/src/rvm/visitor Test.rvm
+
+krun:
+
+<T> <k> package rvm . .IdList ; ( import java . ( io . .IdList ) . * ;  .ImportDecList ) ( Test ( ( int ( o .Dims ) ) , .Params ) {  (  event create ( .Params ) {
+		int i;
+	} ) ( (  event close ( .Params ) {
+    		int i;
+    } ) .Dims ) ( ( ere : ( x & x ) ) ( ( ( @ match ) {
+		int j;
+	} )  .HandlerDecList ) )  .PropertyDecList } ) </k> <events> .Map </events> </T>
+
