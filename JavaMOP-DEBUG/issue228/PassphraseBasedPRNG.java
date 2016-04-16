@@ -95,7 +95,7 @@ public class PassphraseBasedPRNG extends Random {
         return newRng;
     }
     
-///*
+/*
     @Override
     protected int next(int bits) {
         int value = 0;

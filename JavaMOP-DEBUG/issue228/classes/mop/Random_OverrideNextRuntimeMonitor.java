@@ -66,7 +66,7 @@ class Random_OverrideNextRawMonitor extends com.runtimeverification.rvmonitor.ja
 			Class klass = initsig.getDeclaringType();
 			if (klass != null) {
 				try {
-					Method nextmethod = klass.getDeclaredMethod("next", Integer.class);
+					Method nextmethod = klass.getDeclaredMethod("next", int.class);
 				} catch (NoSuchMethodException e) {
 					RVMLogging.out.println(RVMLogging.Level.CRITICAL, "Specification Random_OverrideNext has been violated on line " + com.runtimeverification.rvmonitor.java.rt.ViolationRecorder.getLineOfCode() + ". Documentation for this property can be found at http://runtimeverification.com/monitor/annotated-java/__properties/html/mop/Random_OverrideNext.html");
 					RVMLogging.out.println(RVMLogging.Level.CRITICAL, klass.getName() + " does not override int next(int bits).");

@@ -10,7 +10,7 @@ Random_OverrideNext() {
 		Class klass = initsig.getDeclaringType();
 		if (klass != null) {
 			try {
-				Method nextmethod = klass.getDeclaredMethod("next", Integer.class);
+				Method nextmethod = klass.getDeclaredMethod("next", int.class);
 			} catch (NoSuchMethodException e) {
 				RVMLogging.out.println(RVMLogging.Level.CRITICAL, __DEFAULT_MESSAGE);
 				RVMLogging.out.println(RVMLogging.Level.CRITICAL, klass.getName() + " does not override int next(int bits).");
