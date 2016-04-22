@@ -1,0 +1,10 @@
+The monitors generated from an rvm spec containing multiple properties are not correct.
+E.G. Given two fsm formulas in one spec, two transition functions will be generated, however,
+the update of the monitor states is messed up: only one state var is keeping track of monitor states 
+instead of two. 
+
+Conceptually, the event alphabets are shared among the fsm, the correct monitoring should be:
+when an event 'a' occurs, both fsm1 and fsm2 use it to update their internal states.
+
+In the current implementation, only one state var is used, so the effect is eq to 
+a single fsm receive two consecutive event 'a'
